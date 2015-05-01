@@ -52,6 +52,10 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         if (resovled != null) {
             return resovled;
         }
+        resovled = resolveSimpleComponent(exp, contextMap, container);
+        if (resovled != null) {
+            return resovled;
+        }
         resovled = resolveExistsResource(exp, contextMap, container);
         if (resovled != null) {
             return resovled;
