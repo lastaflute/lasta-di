@@ -250,10 +250,10 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
             final String definedPath = componentDef.getContainer().getPath();
             br.addElement("name=" + componentName + ", type=" + typeName + ", path=" + definedPath);
         }
-        br.addItem("Property Definition");
-        br.addElement(propertyDef);
         br.addItem("Property Owner");
         br.addElement(component);
+        br.addItem("Property Definition");
+        br.addElement(propertyDef);
         final String msg = br.buildExceptionMessage();
         throw new IllegalPropertyDefinitionException(msg, cause);
     }

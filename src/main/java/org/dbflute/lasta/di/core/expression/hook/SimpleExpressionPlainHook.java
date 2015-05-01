@@ -23,6 +23,7 @@ import org.dbflute.lasta.di.helper.beans.PropertyDesc;
 import org.dbflute.lasta.di.helper.beans.factory.BeanDescFactory;
 import org.dbflute.lasta.di.util.LdiClassUtil;
 import org.dbflute.lasta.di.util.LdiResourceUtil;
+import org.dbflute.lasta.di.util.LdiSrl;
 import org.dbflute.lasta.di.util.LdiStringUtil;
 
 /**
@@ -47,11 +48,11 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveExistsResource(exp, contextMap, container);
+        resovled = resolveSimpleType(exp, contextMap, container);
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleType(exp, contextMap, container);
+        resovled = resolveExistsResource(exp, contextMap, container);
         if (resovled != null) {
             return resovled;
         }
@@ -102,20 +103,29 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         return null;
     }
 
+    protected Object resolveSimpleType(String exp, Map<String, ? extends Object> contextMap, LaContainer container) {
+        if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END)) {
+            final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END));
+            return LdiClassUtil.forName(className);
+        }
+        return null;
+    }
+
+    protected Object resolveSimpleComponent(String exp, Map<String, ? extends Object> contextMap, LaContainer container) {
+        if (!LdiSrl.containsAny(exp, ".", ",", "'", "\"", "@", "#")) { // main except, just in case
+            if (container.hasComponentDef(exp)) {
+                return container.getComponent(exp);
+            }
+        }
+        return null;
+    }
+
     protected Object resolveExistsResource(String exp, Map<String, ? extends Object> contextMap, LaContainer container) {
         if (exp.startsWith(EXISTS_BEGIN) && exp.endsWith(EXISTS_END)) {
             final String path = exp.substring(EXISTS_BEGIN.length(), exp.lastIndexOf(EXISTS_END));
             if (!path.contains(SQ)) {
                 return LdiResourceUtil.exists(path);
             }
-        }
-        return null;
-    }
-
-    protected Object resolveSimpleType(String exp, Map<String, ? extends Object> contextMap, LaContainer container) {
-        if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END)) {
-            final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END));
-            return LdiClassUtil.forName(className);
         }
         return null;
     }
