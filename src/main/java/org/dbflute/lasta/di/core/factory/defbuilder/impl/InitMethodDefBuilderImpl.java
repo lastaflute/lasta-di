@@ -28,7 +28,7 @@ import org.dbflute.lasta.di.core.meta.impl.InitMethodDefImpl;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class LdiInitMethodDefBuilder implements InitMethodDefBuilder {
+public class InitMethodDefBuilderImpl implements InitMethodDefBuilder {
 
     @Override
     public void appendInitMethodDef(AnnotationHandler annotationHandler, ComponentDef componentDef) {

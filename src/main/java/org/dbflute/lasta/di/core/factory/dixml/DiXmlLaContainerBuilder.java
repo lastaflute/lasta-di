@@ -42,7 +42,7 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
     public static final String PUBLIC_ID10 = "-//DBFLUTE//DTD LastaDi 1.0//EN";
     public static final String DTD_PATH10 = "org/dbflute/lasta/di/lastadi10.dtd";
 
-    protected LdiContainerTagHandlerRule rule = new LdiContainerTagHandlerRule();
+    protected DiXmlTagHandlerRule rule = new DiXmlTagHandlerRule();
     protected final Map<String, String> dtdMap = new HashMap<String, String>();
 
     public DiXmlLaContainerBuilder() {
@@ -118,11 +118,11 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
-    public LdiContainerTagHandlerRule getRule() {
+    public DiXmlTagHandlerRule getRule() {
         return rule;
     }
 
-    public void setRule(final LdiContainerTagHandlerRule rule) {
+    public void setRule(final DiXmlTagHandlerRule rule) {
         this.rule = rule;
     }
 }

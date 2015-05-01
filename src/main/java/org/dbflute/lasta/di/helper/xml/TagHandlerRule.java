@@ -20,40 +20,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * {@link TagHandler}を登録するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class TagHandlerRule implements Serializable {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    private Map tagHandlers = new HashMap();
+    private Map<String, TagHandler> tagHandlers = new HashMap<String, TagHandler>();
 
-    /**
-     * {@link TagHandlerRule}を作成します。
-     */
     public TagHandlerRule() {
     }
 
-    /**
-     * {@link TagHandler}を追加します。
-     * 
-     * @param path
-     * @param tagHandler
-     */
     public final void addTagHandler(String path, TagHandler tagHandler) {
         tagHandlers.put(path, tagHandler);
     }
 
-    /**
-     * {@link TagHandler}を返します。
-     * 
-     * @param path
-     * @return {@link TagHandler}
-     */
     public final TagHandler getTagHandler(String path) {
-        return (TagHandler) tagHandlers.get(path);
+        return tagHandlers.get(path);
     }
 }

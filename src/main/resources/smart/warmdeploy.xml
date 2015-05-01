@@ -10,7 +10,7 @@
 	
 	<component name="defaultBuilder" class="org.dbflute.lasta.di.core.factory.dixml.DiXmlLaContainerBuilder">
 		<property name="rule">
-			<component class="org.dbflute.lasta.di.core.factory.dixml.LaContainerTagHandlerRule">
+			<component class="org.dbflute.lasta.di.core.factory.dixml.DiXmlTagHandlerRule">
 				<postConstruct name="addTagHandler">
 					<arg>"/components"</arg>
 					<arg>

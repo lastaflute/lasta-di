@@ -30,11 +30,11 @@ import org.dbflute.lasta.di.helper.xml.TagHandlerRule;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class LdiContainerTagHandlerRule extends TagHandlerRule {
+public class DiXmlTagHandlerRule extends TagHandlerRule {
 
     private static final long serialVersionUID = 1L;
 
-    public LdiContainerTagHandlerRule() {
+    public DiXmlTagHandlerRule() {
         addTagHandler("/components", new ComponentsTagHandler());
         addTagHandler("component", new ComponentTagHandler());
         addTagHandler("arg", new ArgTagHandler());

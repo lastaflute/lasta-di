@@ -34,8 +34,8 @@ import org.dbflute.lasta.di.core.factory.defbuilder.PropertyDefBuilder;
 import org.dbflute.lasta.di.core.factory.defbuilder.impl.AspectAnnotationAspectDefBuilder;
 import org.dbflute.lasta.di.core.factory.defbuilder.impl.MetaAnnotationAspectDefBuilder;
 import org.dbflute.lasta.di.core.factory.defbuilder.impl.ResourcePropertyDefBuilder;
-import org.dbflute.lasta.di.core.factory.defbuilder.impl.LdiDestroyMethodDefBuilder;
-import org.dbflute.lasta.di.core.factory.defbuilder.impl.LdiInitMethodDefBuilder;
+import org.dbflute.lasta.di.core.factory.defbuilder.impl.DestroyMethodDefBuilderImpl;
+import org.dbflute.lasta.di.core.factory.defbuilder.impl.InitMethodDefBuilderImpl;
 import org.dbflute.lasta.di.core.factory.defbuilder.impl.S2IntertypeDefBuilder;
 import org.dbflute.lasta.di.core.meta.AutoBindingDef;
 import org.dbflute.lasta.di.core.meta.InstanceDef;
@@ -272,7 +272,7 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
      * デフォルトの{@link InitMethodDefBuilder}を追加します。
      */
     public static void loadDefaultInitMethodDefBuilder() {
-        initMethodDefBuilders.add(new LdiInitMethodDefBuilder());
+        initMethodDefBuilders.add(new InitMethodDefBuilderImpl());
     }
 
     /**
@@ -294,7 +294,7 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
     }
 
     public static void loadDefaultDestroyMethodDefBuilder() {
-        destroyMethodDefBuilders.add(new LdiDestroyMethodDefBuilder());
+        destroyMethodDefBuilders.add(new DestroyMethodDefBuilderImpl());
     }
 
     public static void addDestroyMethodDefBuilder(final DestroyMethodDefBuilder builder) {

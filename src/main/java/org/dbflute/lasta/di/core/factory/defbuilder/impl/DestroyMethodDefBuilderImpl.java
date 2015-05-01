@@ -28,7 +28,7 @@ import org.dbflute.lasta.di.core.meta.impl.DestroyMethodDefImpl;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class LdiDestroyMethodDefBuilder implements DestroyMethodDefBuilder {
+public class DestroyMethodDefBuilderImpl implements DestroyMethodDefBuilder {
 
     @Override
     public void appendDestroyMethodDef(AnnotationHandler annotationHandler, ComponentDef componentDef) {
