@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN" 
+	"http://dbflute.org/meta/lastadi10.dtd">
+<components>
+	<include path="tx_customizer.xml"/>
+
+	<component name="actionCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
+	<component name="assistCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
+	<component name="logicCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	  	<postConstruct name="addCustomizer">
+			<arg>
+				<component class="org.dbflute.lasta.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
+			</arg>
+	  	</postConstruct>
+	</component>
+	<component name="serviceCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	  	<postConstruct name="addCustomizer">
+			<arg>
+				<component class="org.dbflute.lasta.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
+			</arg>
+	  	</postConstruct>
+	</component>
+	<component name="helperCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
+	<component name="validatorCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
+	<component name="converterCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
+	<component name="interceptorCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
+</components>

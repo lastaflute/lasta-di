@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN" 
+	"http://dbflute.org/meta/lastadi10.dtd">
+-->
+<!ELEMENT components (
+        description?,
+        include*,
+        (component | meta | xi:include)*
+)>
+
+<!ATTLIST components namespace CDATA #IMPLIED>
+<!ATTLIST components initializeOnCreate (true | false) "false">
+<!ATTLIST components xmlns:xi  CDATA #FIXED "http://www.w3.org/2001/XInclude">
+
+<!ELEMENT description (
+        #PCDATA
+)>
+
+<!ELEMENT include EMPTY>
+<!ATTLIST include path CDATA #REQUIRED>
+<!ATTLIST include condition CDATA #IMPLIED>
+
+
+<!ELEMENT component (
+  #PCDATA | description | arg | property | meta |
+            postConstruct | preDestroy | aspect | interType)*>
+<!ATTLIST component instance (
+  singleton | prototype | outer | request | session | application) "singleton">
+<!ATTLIST component class CDATA #IMPLIED>
+<!ATTLIST component name CDATA #IMPLIED>
+<!ATTLIST component autoBinding (auto | constructor | property | semiauto | none) "auto">
+<!ATTLIST component externalBinding (true | false) "false">
+
+<!ELEMENT arg (
+        #PCDATA | description | component | meta
+)*>
+
+<!ELEMENT property (
+        #PCDATA | description | component | meta
+)*>
+
+<!ATTLIST property name CDATA #REQUIRED>
+
+<!ATTLIST property bindingType (must | should | may | none) "should">
+
+<!ELEMENT aspect (
+        #PCDATA | description | component)*>
+<!ATTLIST aspect pointcut CDATA #IMPLIED>
+
+<!ELEMENT interType (
+		#PCDATA | description | component)*>
+
+<!ELEMENT postConstruct (
+        #PCDATA | description | arg
+)*>
+<!ATTLIST postConstruct name CDATA #IMPLIED>
+
+<!ELEMENT preDestroy (
+        #PCDATA | description | arg
+)*>
+<!ATTLIST preDestroy name CDATA #IMPLIED>
+
+<!ELEMENT meta (
+        #PCDATA | description | component | meta
+)*>
+
+<!ATTLIST meta name CDATA #IMPLIED>
+
+<!ELEMENT xi:include (xi:fallback?)>
+<!ATTLIST xi:include
+    xmlns:xi        CDATA       #FIXED    "http://www.w3.org/2001/XInclude"
+    href            CDATA       #IMPLIED
+    parse           (xml|text)  "xml"
+    xpointer        CDATA       #IMPLIED
+    encoding        CDATA       #IMPLIED
+    accept          CDATA       #IMPLIED
+    accept-language CDATA       #IMPLIED
+>
+
+<!ELEMENT xi:fallback ANY>
+<!ATTLIST xi:fallback
+    xmlns:xi   CDATA   #FIXED   "http://www.w3.org/2001/XInclude"
+>

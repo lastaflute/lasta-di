@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN" 
+	"http://dbflute.org/meta/lastadi10.dtd">
+<components>
+	<component name="requiredTxCustomizer" class="org.dbflute.lasta.di.core.customizer.AspectCustomizer">
+		<property name="interceptorName">"tx_aop.requiredTx"</property>
+	</component>
+	<component name="requiresNewTxCustomizer" class="org.dbflute.lasta.di.core.customizer.AspectCustomizer">
+		<property name="interceptorName">"tx_aop.requiresNewTx"</property>
+	</component>
+	<component name="mandatoryTxCustomizer" class="org.dbflute.lasta.di.core.customizer.AspectCustomizer">
+		<property name="interceptorName">"tx_aop.mandatoryTx"</property>
+	</component>
+	<component name="notSupportedTxCustomizer" class="org.dbflute.lasta.di.core.customizer.AspectCustomizer">
+		<property name="interceptorName">"tx_aop.notSupportedTx"</property>
+	</component>
+	<component name="neverTxCustomizer" class="org.dbflute.lasta.di.core.customizer.AspectCustomizer">
+		<property name="interceptorName">"tx_aop.neverTx"</property>
+	</component>
+</components>

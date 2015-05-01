@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+	"http://dbflute.org/meta/lastadi10.dtd">
+<components>
+    <include condition="#SMART == 'cool'" path="smart/cooldeploy.xml"/>
+    <include condition="#SMART == 'hot'" path="smart/hotdeploy.xml"/>
+    <include condition="#SMART == 'warm'" path="smart/warmdeploy.xml"/>
+</components>

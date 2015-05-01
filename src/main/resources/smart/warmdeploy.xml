@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN" 
+	"http://dbflute.org/meta/lastadi10.dtd">
+<components>
+	<include path="convention.xml"/>
+	<include path="creator.xml"/>
+	<include path="customizer.xml"/>
+
+	<component class="org.dbflute.lasta.di.core.smart.warm.WarmdeployBehavior"/>
+	
+	<component name="defaultBuilder" class="org.dbflute.lasta.di.core.factory.dixml.DiXmlLaContainerBuilder">
+		<property name="rule">
+			<component class="org.dbflute.lasta.di.core.factory.dixml.LaContainerTagHandlerRule">
+				<postConstruct name="addTagHandler">
+					<arg>"/components"</arg>
+					<arg>
+						<component class="org.dbflute.lasta.di.core.factory.dixml.taghandler.ComponentsTagHandler">
+							<property name="containerImplClass">
+								@org.dbflute.lasta.di.core.meta.impl.ThreadSafeLaContainerImpl@class
+							</property>
+						</component>
+					</arg>
+				</postConstruct>
+			</component>
+		</property>
+	</component>
+</components>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN" 
+	"http://dbflute.org/meta/lastadi10.dtd">
+<components>
+	<include path="convention.xml"/>
+	<include path="customizer.xml"/>
+	<include condition="#exists('#path')" path="my_creator.xml"/>
+	<include condition="#exists('#path')" path="lastafw_creator.xml"/>
+	<include path="embedded_creator.xml"/>
+</components>

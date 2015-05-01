@@ -1,0 +1,180 @@
+/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+package org.dbflute.lasta.di.helper.message;
+
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import org.dbflute.lasta.di.Disposable;
+import org.dbflute.lasta.di.DisposableUtil;
+import org.dbflute.lasta.di.exception.ResourceNotFoundException;
+import org.dbflute.lasta.di.exception.ResourceNotFoundRuntimeException;
+import org.dbflute.lasta.di.util.LdiAssertionUtil;
+import org.dbflute.lasta.di.util.LdiResourceUtil;
+
+/**
+ * @author modified by jflute (originated in Seasar)
+ */
+public class MessageResourceBundleFactory {
+
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    private static final String PROPERTIES_EXT = ".properties";
+    private static final Object NOT_FOUND = new Object();
+    private static final Map cacheMap = new HashMap();
+    private static boolean initialized = false;
+
+    // ===================================================================================
+    //                                                                          Get Bundle
+    //                                                                          ==========
+    public static MessageResourceBundle getBundle(String baseName) {
+        return getBundle(baseName, Locale.getDefault());
+    }
+
+    public static MessageResourceBundle getBundle(String baseName, Locale locale) throws ResourceNotFoundRuntimeException {
+        final MessageResourceBundle bundle = getNullableBundle(baseName, locale);
+        if (bundle != null) {
+            return bundle;
+        }
+        throw new ResourceNotFoundException("Not found the resource bundle: " + baseName + " " + locale);
+    }
+
+    // -----------------------------------------------------
+    //                                      Null-able Bundle
+    //                                      ----------------
+    protected static MessageResourceBundle getNullableBundle(String baseName) {
+        return getNullableBundle(baseName, Locale.getDefault());
+    }
+
+    protected static MessageResourceBundle getNullableBundle(String baseName, Locale locale) {
+        LdiAssertionUtil.assertNotNull("baseName", baseName);
+        LdiAssertionUtil.assertNotNull("locale", locale);
+
+        final String base = baseName.replace('.', '/');
+        final String[] bundleNames = calculateBundleNames(base, locale);
+        MessageResourceBundleFacade parentFacade = null;
+        MessageResourceBundleFacade facade = null;
+        final int length = bundleNames.length;
+        for (int i = 0; i < length; ++i) {
+            facade = loadFacade(bundleNames[i] + PROPERTIES_EXT);
+            if (parentFacade == null) {
+                parentFacade = facade;
+            } else if (facade != null) {
+                facade.setParent(parentFacade);
+                parentFacade = facade;
+            }
+        }
+
+        if (parentFacade != null) {
+            return parentFacade.getBundle();
+        } else {
+            return null;
+        }
+    }
+
+    // ===================================================================================
+    //                                                              Calculate Bundle Names
+    //                                                              ======================
+    protected static String[] calculateBundleNames(String baseName, Locale locale) {
+        int length = 1;
+        boolean l = locale.getLanguage().length() > 0;
+        if (l) {
+            length++;
+        }
+        boolean c = locale.getCountry().length() > 0;
+        if (c) {
+            length++;
+        }
+        boolean v = locale.getVariant().length() > 0;
+        if (v) {
+            length++;
+        }
+        String[] result = new String[length];
+        int index = 0;
+        result[index++] = baseName;
+
+        if (!(l || c || v)) {
+            return result;
+        }
+
+        StringBuffer buffer = new StringBuffer(baseName);
+        buffer.append('_');
+        buffer.append(locale.getLanguage());
+        if (l) {
+            result[index++] = new String(buffer);
+        }
+
+        if (!(c || v)) {
+            return result;
+        }
+        buffer.append('_');
+        buffer.append(locale.getCountry());
+        if (c) {
+            result[index++] = new String(buffer);
+        }
+
+        if (!v) {
+            return result;
+        }
+        buffer.append('_');
+        buffer.append(locale.getVariant());
+        result[index++] = new String(buffer);
+
+        return result;
+    }
+
+    // ===================================================================================
+    //                                                                         Load Facade
+    //                                                                         ===========
+    protected static MessageResourceBundleFacade loadFacade(String path) {
+        synchronized (cacheMap) {
+            if (!initialized) {
+                DisposableUtil.add(new Disposable() {
+                    public void dispose() {
+                        clear();
+                        initialized = false;
+                    }
+                });
+                initialized = true;
+            }
+            final Object cachedFacade = cacheMap.get(path);
+            if (cachedFacade == NOT_FOUND) {
+                return null;
+            } else if (cachedFacade != null) {
+                return (MessageResourceBundleFacade) cachedFacade;
+            }
+            final URL url = LdiResourceUtil.getResourceNoException(path);
+            if (url != null) {
+                final MessageResourceBundleFacade facade = new MessageResourceBundleFacade(url);
+                cacheMap.put(path, facade);
+                return facade;
+            } else {
+                cacheMap.put(path, NOT_FOUND);
+            }
+        }
+        return null;
+    }
+
+    // ===================================================================================
+    //                                                                         Clear Cache
+    //                                                                         ===========
+    public static void clear() {
+        cacheMap.clear();
+    }
+}

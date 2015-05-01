@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+	"http://dbflute.org/meta/lastadi10.dtd">
+<components namespace="jta">
+
+	<component name="userTransaction" class="org.dbflute.lasta.jta.core.UserTransactionImpl"/>
+	<component name="transactionManager" class="org.dbflute.lasta.jta.core.TransactionManagerImpl"/>
+
+	<!-- TransactionSynchronizationRegistry using TransactionManager -->
+	<component name="transactionSynchronizationRegistry" class="org.dbflute.lasta.jta.core.TransactionSynchronizationRegistryImpl"/>
+
+	<!-- TransactionManagerAdapter using JTA's TransactionManager -->
+	<component name="transactionManagerAdapter" class="org.dbflute.lasta.di.tx.adapter.JTATransactionManagerAdapter"/>
+</components>
