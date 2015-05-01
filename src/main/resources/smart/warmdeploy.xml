@@ -15,6 +15,7 @@
 					<arg>"/components"</arg>
 					<arg>
 						<component class="org.dbflute.lasta.di.core.factory.dixml.taghandler.ComponentsTagHandler">
+							<!-- parsed by plain hook as type expression using at-mark -->
 							<property name="containerImplClass">
 								@org.dbflute.lasta.di.core.meta.impl.ThreadSafeLaContainerImpl@class
 							</property>

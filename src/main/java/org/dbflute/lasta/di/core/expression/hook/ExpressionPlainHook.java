@@ -33,6 +33,8 @@ public interface ExpressionPlainHook {
     String NUM = "0123456789";
     String EXISTS_BEGIN = LdiResourceUtil.class.getName() + ".exists('";
     String EXISTS_END = "')";
+    String TYPE_BEGIN = "@"; // compatible with OGNL e.g. @org.dbflute.Entity@class
+    String TYPE_END = "@class"; // me too
     String METHOD_MARK = "()";
     String PROVIDER_GET = "provider.config().get";
 

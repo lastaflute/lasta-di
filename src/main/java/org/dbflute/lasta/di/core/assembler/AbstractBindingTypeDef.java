@@ -234,9 +234,28 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         try {
             return propertyDef.getValue();
         } catch (RuntimeException cause) {
-            throw new IllegalPropertyRuntimeException(BindingUtil.getComponentClass(componentDef, component),
-                    propertyDef.getPropertyName(), cause);
+            throwPropertyValueGetFailureException(componentDef, propertyDef, component, cause);
+            return null; // unreachable
         }
+    }
+
+    protected void throwPropertyValueGetFailureException(ComponentDef componentDef, PropertyDef propertyDef, Object component,
+            RuntimeException cause) {
+        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+        br.addNotice("Failed to get the value for the property.");
+        if (componentDef != null) {
+            br.addItem("Component Def");
+            final String componentName = componentDef.getComponentName();
+            final String typeName = componentDef.getComponentClass().getName();
+            final String definedPath = componentDef.getContainer().getPath();
+            br.addElement("name=" + componentName + ", type=" + typeName + ", path=" + definedPath);
+        }
+        br.addItem("Property Definition");
+        br.addElement(propertyDef);
+        br.addItem("Property Owner");
+        br.addElement(component);
+        final String msg = br.buildExceptionMessage();
+        throw new IllegalPropertyDefinitionException(msg, cause);
     }
 
     protected Object getComponent(ComponentDef componentDef, Object key, Object component, String propertyName)
@@ -244,15 +263,15 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         try {
             return componentDef.getContainer().getComponent(key);
         } catch (RuntimeException cause) {
-            throwIllegalPropertyDefinitionException(componentDef, key, component, propertyName, cause);
+            throwPropertyComponentGetFailureException(componentDef, key, component, propertyName, cause);
             return null; // unreachable
         }
     }
 
-    protected void throwIllegalPropertyDefinitionException(ComponentDef componentDef, Object key, Object component, String propertyName,
+    protected void throwPropertyComponentGetFailureException(ComponentDef componentDef, Object key, Object component, String propertyName,
             RuntimeException cause) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
-        br.addNotice("Illegal property definition for the key.");
+        br.addNotice("Failed to get the component for the property by the key.");
         br.addItem("Component Key");
         br.addElement(key);
         if (componentDef != null) {
