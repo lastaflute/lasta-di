@@ -3,12 +3,12 @@
 	"http://dbflute.org/meta/lastadi10.dtd">
 <components namespace="jta">
 
-	<component name="userTransaction" class="org.dbflute.lasta.jta.core.UserTransactionImpl"/>
-	<component name="transactionManager" class="org.dbflute.lasta.jta.core.TransactionManagerImpl"/>
+	<component name="userTransaction" class="org.lastaflute.jta.core.UserTransactionImpl"/>
+	<component name="transactionManager" class="org.lastaflute.jta.core.TransactionManagerImpl"/>
 
 	<!-- TransactionSynchronizationRegistry using TransactionManager -->
-	<component name="transactionSynchronizationRegistry" class="org.dbflute.lasta.jta.core.TransactionSynchronizationRegistryImpl"/>
+	<component name="transactionSynchronizationRegistry" class="org.lastaflute.jta.core.TransactionSynchronizationRegistryImpl"/>
 
 	<!-- TransactionManagerAdapter using JTA's TransactionManager -->
-	<component name="transactionManagerAdapter" class="org.dbflute.lasta.di.tx.adapter.JTATransactionManagerAdapter"/>
+	<component name="transactionManagerAdapter" class="org.lastaflute.di.tx.adapter.JTATransactionManagerAdapter"/>
 </components>

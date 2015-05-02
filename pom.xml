@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.dbflute.lasta</groupId>
+	<groupId>org.lastaflute</groupId>
 	<artifactId>lasta-di</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+	<version>0.6.0-RC2</version>
 	<packaging>jar</packaging>
 
 	<name>Lasta Di</name>
@@ -136,6 +136,9 @@
 					<encoding>UTF-8</encoding>
 					<docencoding>UTF-8</docencoding>
 					<charset>UTF-8</charset>
+					<!-- you can avoid self-closing check e.g. br-tag (checked since java8) -->
+					<!-- fixed but comment-out for emergency deploy -->
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -153,6 +156,24 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--
+			 'xxx.jar.asc' file can be created by this plug-in
+			 you can deploy by 'mvn -e clean deploy -Dgpg.keyname=xxx -Dgpg.passphrase="xxx"'
+			 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -188,6 +209,12 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.hamcrest</groupId>
+            		<artifactId>hamcrest-core</artifactId>
+            	</exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>

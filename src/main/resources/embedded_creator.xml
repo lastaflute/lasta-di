@@ -5,10 +5,10 @@
 	<include path="convention.xml"/>
 	<include path="customizer.xml"/>
 
-	<component name="actionCreator" class="org.dbflute.lasta.di.core.creator.ActionCreator"/>
-	<component name="assistCreator" class="org.dbflute.lasta.di.core.creator.AssistCreator"/>
-	<component name="logicCreator" class="org.dbflute.lasta.di.core.creator.LogicCreator"/>
-	<component name="serviceCreator" class="org.dbflute.lasta.di.core.creator.ServiceCreator"/>
-	<component name="helperCreator" class="org.dbflute.lasta.di.core.creator.HelperCreator"/>
-	<component name="interceptorCreator" class="org.dbflute.lasta.di.core.creator.InterceptorCreator"/>
+	<component name="actionCreator" class="org.lastaflute.di.core.creator.ActionCreator"/>
+	<component name="assistCreator" class="org.lastaflute.di.core.creator.AssistCreator"/>
+	<component name="logicCreator" class="org.lastaflute.di.core.creator.LogicCreator"/>
+	<component name="serviceCreator" class="org.lastaflute.di.core.creator.ServiceCreator"/>
+	<component name="helperCreator" class="org.lastaflute.di.core.creator.HelperCreator"/>
+	<component name="interceptorCreator" class="org.lastaflute.di.core.creator.InterceptorCreator"/>
 </components>

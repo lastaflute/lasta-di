@@ -4,9 +4,9 @@
 <components namespace="tx_aop">
 	<include path="jta.xml"/>
 
-	<component name="requiredTx" class="org.dbflute.lasta.di.tx.RequiredTxInterceptor"/>
-	<component name="requiresNewTx" class="org.dbflute.lasta.di.tx.RequiresNewTxInterceptor"/>
-	<component name="mandatoryTx" class="org.dbflute.lasta.di.tx.MandatoryInterceptor"/>
-	<component name="notSupportedTx" class="org.dbflute.lasta.di.tx.NotSupportedInterceptor"/>
-	<component name="neverTx" class="org.dbflute.lasta.di.tx.NeverInterceptor"/>
+	<component name="requiredTx" class="org.lastaflute.di.tx.RequiredTxInterceptor"/>
+	<component name="requiresNewTx" class="org.lastaflute.di.tx.RequiresNewTxInterceptor"/>
+	<component name="mandatoryTx" class="org.lastaflute.di.tx.MandatoryInterceptor"/>
+	<component name="notSupportedTx" class="org.lastaflute.di.tx.NotSupportedInterceptor"/>
+	<component name="neverTx" class="org.lastaflute.di.tx.NeverInterceptor"/>
 </components>
