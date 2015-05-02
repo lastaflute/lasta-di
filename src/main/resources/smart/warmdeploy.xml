@@ -6,18 +6,18 @@
 	<include path="creator.xml"/>
 	<include path="customizer.xml"/>
 
-	<component class="org.dbflute.lasta.di.core.smart.warm.WarmdeployBehavior"/>
+	<component class="org.lastaflute.di.core.smart.warm.WarmdeployBehavior"/>
 	
-	<component name="defaultBuilder" class="org.dbflute.lasta.di.core.factory.dixml.DiXmlLaContainerBuilder">
+	<component name="defaultBuilder" class="org.lastaflute.di.core.factory.dixml.DiXmlLaContainerBuilder">
 		<property name="rule">
-			<component class="org.dbflute.lasta.di.core.factory.dixml.DiXmlTagHandlerRule">
+			<component class="org.lastaflute.di.core.factory.dixml.DiXmlTagHandlerRule">
 				<postConstruct name="addTagHandler">
 					<arg>"/components"</arg>
 					<arg>
-						<component class="org.dbflute.lasta.di.core.factory.dixml.taghandler.ComponentsTagHandler">
+						<component class="org.lastaflute.di.core.factory.dixml.taghandler.ComponentsTagHandler">
 							<!-- parsed by plain hook as type expression using at-mark -->
 							<property name="containerImplClass">
-								@org.dbflute.lasta.di.core.meta.impl.ThreadSafeLaContainerImpl@class
+								@org.lastaflute.di.core.meta.impl.ThreadSafeLaContainerImpl@class
 							</property>
 						</component>
 					</arg>

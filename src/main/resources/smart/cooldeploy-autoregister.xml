@@ -6,5 +6,5 @@
 	<include path="creator.xml"/>
 	<include path="customizer.xml"/>
 
-	<component class="org.dbflute.lasta.di.core.smart.cool.CoolComponentAutoRegister"/>
+	<component class="org.lastaflute.di.core.smart.cool.CoolComponentAutoRegister"/>
 </components>

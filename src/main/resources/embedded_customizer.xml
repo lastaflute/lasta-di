@@ -4,30 +4,30 @@
 <components>
 	<include path="tx_customizer.xml"/>
 
-	<component name="actionCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="actionCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
-	<component name="assistCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="assistCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
-	<component name="logicCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="logicCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	  	<postConstruct name="addCustomizer">
 			<arg>
-				<component class="org.dbflute.lasta.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
+				<component class="org.lastaflute.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
 			</arg>
 	  	</postConstruct>
 	</component>
-	<component name="serviceCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="serviceCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	  	<postConstruct name="addCustomizer">
 			<arg>
-				<component class="org.dbflute.lasta.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
+				<component class="org.lastaflute.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
 			</arg>
 	  	</postConstruct>
 	</component>
-	<component name="helperCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="helperCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
-	<component name="validatorCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="validatorCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
-	<component name="converterCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="converterCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
-	<component name="interceptorCustomizer" class="org.dbflute.lasta.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	<component name="interceptorCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
 </components>
