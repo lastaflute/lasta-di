@@ -492,7 +492,7 @@ public class BeanDescImpl implements BeanDesc {
         if (args == null) {
             args = EMPTY_ARGS;
         }
-        Method[] methods = getMethods(methodName);
+        final Method[] methods = getMethods(methodName);
         Method method = findSuitableMethod(methods, args);
         if (method != null) {
             return method;
@@ -506,7 +506,7 @@ public class BeanDescImpl implements BeanDesc {
 
     private Method findSuitableMethod(Method[] methods, Object[] args) {
         outerLoop: for (int i = 0; i < methods.length; ++i) {
-            Class[] paramTypes = methods[i].getParameterTypes();
+            final Class<?>[] paramTypes = methods[i].getParameterTypes();
             if (paramTypes.length != args.length) {
                 continue;
             }
@@ -635,6 +635,11 @@ public class BeanDescImpl implements BeanDesc {
     //                                                                        Field Access
     //                                                                        ============
     @Override
+    public Object getFieldValue(String fieldName, Object target) throws FieldNotFoundRuntimeException {
+        return LdiFieldUtil.get(getField(fieldName), target);
+    }
+
+    @Override
     public Field getField(String fieldName) {
         final Field field = fieldCache.get(fieldName);
         if (field == null) {
@@ -646,11 +651,6 @@ public class BeanDescImpl implements BeanDesc {
     @Override
     public Field getField(int index) {
         return fieldCache.get(index);
-    }
-
-    @Override
-    public Object getFieldValue(String fieldName, Object target) throws FieldNotFoundRuntimeException {
-        return LdiFieldUtil.get(getField(fieldName), target);
     }
 
     @Override

@@ -25,21 +25,12 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 簡潔な記述で{@link Map}のインスタンスを生成して値を設定するためのユーティリティクラスです。
- * <p>
- * 本クラスをstatic importすることにより、次のように<code>Map</code>のインスタンスを簡潔に初期化することができます。
- * </p>
- * 
  * <pre>
  * Map<String, Integer> map = map("a", 1).$("b", 2).$("c", 3).$();
  * </pre>
- * 
+ * @param <K> The type of key.
+ * @param <V> The type of value.
  * @author modified by jflute (originated in Seasar)
- * @param <K>
- *            <code>Map</code>のキーの型
- * @param <V>
- *            <code>Map</code>の値の型
- * @since 2.4.18
  */
 public class Maps<K, V> {
 

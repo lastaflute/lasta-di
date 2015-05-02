@@ -33,61 +33,33 @@ public interface BeanDesc {
 
     Class<?> getBeanClass();
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    Object newInstance(Object[] args) throws ConstructorNotFoundRuntimeException;
+
+    Constructor<?> getSuitableConstructor(Object[] args) throws ConstructorNotFoundRuntimeException;
+
+    Constructor<?> getConstructor(Class<?>[] paramTypes);
+
+    String[] getConstructorParameterNames(final Class<?>[] paramTypes); // Diigu
+
+    String[] getConstructorParameterNames(Constructor<?> constructor); // Diigu
+
+    // ===================================================================================
+    //                                                                            Property
+    //                                                                            ========
     boolean hasPropertyDesc(String propertyName);
 
     PropertyDesc getPropertyDesc(String propertyName) throws PropertyNotFoundRuntimeException;
 
     PropertyDesc getPropertyDesc(int index);
 
-    /**
-     * {@link PropertyDesc}の数を返します。
-     * 
-     * @return
-     */
     int getPropertyDescSize();
 
-    /**
-     * 新しいインスタンスを作成します。
-     * 
-     * @param args
-     * @return 新しいインスタンス
-     * @throws ConstructorNotFoundRuntimeException
-     */
-    Object newInstance(Object[] args) throws ConstructorNotFoundRuntimeException;
-
-    /**
-     * 引数に応じた{@link Constructor}を返します。
-     * 
-     * @param args
-     * @return 引数に応じた{@link Constructor}
-     * @throws ConstructorNotFoundRuntimeException
-     */
-    Constructor<?> getSuitableConstructor(Object[] args) throws ConstructorNotFoundRuntimeException;
-
-    /**
-     * 型に応じた{@link Constructor}を返します。
-     * 
-     * @param paramTypes
-     * @return 型に応じた{@link Constructor}
-     */
-    Constructor<?> getConstructor(Class<?>[] paramTypes);
-
-    /**
-     * Diiguでエンハンスした{@link Constructor}のパラメータ名の配列を返します。
-     * 
-     * @param paramTypes
-     * @return パラメータ名の配列
-     */
-    String[] getConstructorParameterNames(final Class<?>[] paramTypes);
-
-    /**
-     * Diiguでエンハンスした{@link Constructor}のパラメータ名の配列を返します。
-     * 
-     * @param constructor
-     * @return パラメータ名の配列
-     */
-    String[] getConstructorParameterNames(Constructor<?> constructor);
-
+    // ===================================================================================
+    //                                                                              Method
+    //                                                                              ======
     Object invoke(Object target, String methodName, Object[] args) throws MethodNotFoundRuntimeException;
 
     Method getMethod(String methodName) throws MethodNotFoundRuntimeException;
@@ -107,41 +79,22 @@ public interface BeanDesc {
     String[] getMethodParameterNames(String methodName, final Class<?>[] paramTypes) throws MethodNotFoundRuntimeException,
             IllegalDiiguRuntimeException;
 
-    /**
-     * {@link Method}のパラメータ名の配列を返します。
-     * 
-     * @param methodName
-     * @param paramTypes
-     * @return {@link Method}のパラメータ名の配列
-     * @throws MethodNotFoundRuntimeException
-     *             {@link Method}が見つからない場合。
-     */
-    String[] getMethodParameterNamesNoException(String methodName, final Class[] paramTypes) throws MethodNotFoundRuntimeException;
+    String[] getMethodParameterNamesNoException(String methodName, final Class<?>[] paramTypes) throws MethodNotFoundRuntimeException;
 
-    /**
-     * {@link Method}のパラメータ名の配列を返します。
-     * 
-     * @param method
-     * @return {@link Method}のパラメータ名の配列
-     * @throws MethodNotFoundRuntimeException
-     *             {@link Method}が見つからない場合。
-     * @throws IllegalDiiguRuntimeException
-     *             Diiguでエンハンスされていない場合。
-     */
     String[] getMethodParameterNames(Method method) throws MethodNotFoundRuntimeException, IllegalDiiguRuntimeException;
 
     String[] getMethodParameterNamesNoException(Method method) throws MethodNotFoundRuntimeException;
 
     // ===================================================================================
-    //                                                                        Field Access
-    //                                                                        ============
+    //                                                                               Field
+    //                                                                               =====
+    Object getFieldValue(String fieldName, Object target) throws FieldNotFoundRuntimeException;
+
     boolean hasField(String fieldName);
 
     Field getField(String fieldName) throws FieldNotFoundRuntimeException;
 
     Field getField(int index);
-
-    Object getFieldValue(String fieldName, Object target) throws FieldNotFoundRuntimeException;
 
     int getFieldSize();
 
