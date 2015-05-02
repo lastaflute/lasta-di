@@ -26,31 +26,50 @@ import javax.sql.XAConnection;
 import javax.transaction.xa.XAResource;
 
 /**
- * {@link XAConnection}の実装です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class XAConnectionImpl implements XAConnection {
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     private Connection connection;
-    private XAResource xaResource;
+    private final XAResource xaResource;
+    private final List<ConnectionEventListener> listeners = new ArrayList<ConnectionEventListener>();
 
-    private List listeners = new ArrayList();
-
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public XAConnectionImpl(Connection connection) {
         this.connection = connection;
-        this.xaResource = new DBXAResourceImpl(connection);
+        this.xaResource = newDBXAResourceImpl(connection);
     }
 
-    public XAResource getXAResource() {
-        return xaResource;
+    protected DBXAResourceImpl newDBXAResourceImpl(Connection connection) {
+        return new DBXAResourceImpl(connection);
     }
 
-    public Connection getConnection() throws SQLException {
-        return connection;
+    // ===================================================================================
+    //                                                                   Listener Handling
+    //                                                                   =================
+    public synchronized void addConnectionEventListener(ConnectionEventListener listener) {
+        listeners.add(listener);
     }
 
+    public synchronized void removeConnectionEventListener(ConnectionEventListener listener) {
+        listeners.remove(listener);
+    }
+
+    // #java8comp
+    public void addStatementEventListener(StatementEventListener listener) {
+    }
+
+    public void removeStatementEventListener(StatementEventListener listener) {
+    }
+
+    // ===================================================================================
+    //                                                                             close()
+    //                                                                             =======
     public void close() throws SQLException {
         if (connection == null) {
             return;
@@ -61,24 +80,22 @@ public class XAConnectionImpl implements XAConnection {
         connection = null;
     }
 
-    public synchronized void addConnectionEventListener(final ConnectionEventListener listener) {
-        listeners.add(listener);
+    // ===================================================================================
+    //                                                                      Basic Override
+    //                                                                      ==============
+    @Override
+    public String toString() {
+        return "xaConnection:{" + xaResource + "}@" + Integer.toHexString(hashCode());
     }
 
-    public synchronized void removeConnectionEventListener(final ConnectionEventListener listener) {
-        listeners.remove(listener);
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Connection getConnection() throws SQLException {
+        return connection;
     }
 
-    // #java8comp
-    /* (non-Javadoc)
-     * @see javax.sql.PooledConnection#addStatementEventListener(javax.sql.StatementEventListener)
-     */
-    public void addStatementEventListener(StatementEventListener listener) {
-    }
-
-    /* (non-Javadoc)
-     * @see javax.sql.PooledConnection#removeStatementEventListener(javax.sql.StatementEventListener)
-     */
-    public void removeStatementEventListener(StatementEventListener listener) {
+    public XAResource getXAResource() {
+        return xaResource;
     }
 }

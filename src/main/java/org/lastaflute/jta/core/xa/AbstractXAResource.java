@@ -27,9 +27,7 @@ import org.lastaflute.jta.exception.LjtXAException;
 public abstract class AbstractXAResource implements XAResource, XAResourceStatus {
 
     private Xid currentXid;
-
     private int status = RS_NONE;
-
     private int timeout = 0;
 
     public AbstractXAResource() {
@@ -113,14 +111,6 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
         status = RS_SUSPENDED;
     }
 
-    /**
-     * サスペンドします。
-     * 
-     * @param xid
-     *            トランザクション識別子
-     * @throws XAException
-     *             XA例外が発生した場合
-     */
     protected abstract void doSuspend(Xid xid) throws XAException;
 
     private void fail(Xid xid) throws XAException {
@@ -128,13 +118,6 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
         status = RS_FAIL;
     }
 
-    /**
-     * 失敗させます。
-     * 
-     * @param xid
-     *            トランザクション識別子
-     * @throws XAException
-     */
     protected abstract void doFail(Xid xid) throws XAException;
 
     private void success(Xid xid) throws XAException {
@@ -142,14 +125,6 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
         status = RS_SUCCESS;
     }
 
-    /**
-     * 成功時の処理を行ないます。
-     * 
-     * @param xid
-     *            トランザクション識別子
-     * @throws XAException
-     *             XA例外が発生した場合
-     */
     protected abstract void doSuccess(Xid xid) throws XAException;
 
     public int prepare(Xid xid) throws XAException {
@@ -170,15 +145,6 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
         }
     }
 
-    /**
-     * コミットする準備を行ないます。
-     * 
-     * @param xid
-     *            トランザクション識別子
-     * @return 投票の結果
-     * @throws XAException
-     *             XA例外が発生した場合
-     */
     protected abstract int doPrepare(Xid xid) throws XAException;
 
     public void commit(Xid xid, boolean onePhase) throws XAException {
@@ -198,16 +164,6 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
         }
     }
 
-    /**
-     * コミットします。
-     * 
-     * @param xid
-     *            トランザクション識別子
-     * @param onePhase
-     *            1フェーズかどうか
-     * @throws XAException
-     *             XA例外が発生した場合
-     */
     protected abstract void doCommit(Xid xid, boolean onePhase) throws XAException;
 
     private void init() {
@@ -251,6 +207,25 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
         return false;
     }
 
+    // ===================================================================================
+    //                                                                      Basic Override
+    //                                                                      ==============
+    @Override
+    public String toString() {
+        return "xaResource:{" + currentXid + ", status=" + status + "}";
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Xid getCurrentXid() {
+        return currentXid;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
     public int getTransactionTimeout() throws XAException {
         return timeout;
     }
@@ -258,13 +233,5 @@ public abstract class AbstractXAResource implements XAResource, XAResourceStatus
     public boolean setTransactionTimeout(int timeout) throws XAException {
         this.timeout = timeout;
         return true;
-    }
-
-    public Xid getCurrentXid() {
-        return currentXid;
-    }
-
-    public int getStatus() {
-        return status;
     }
 }
