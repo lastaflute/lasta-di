@@ -16,37 +16,13 @@
 package org.lastaflute.di.helper.beans;
 
 /**
- * Java5で導入されたパラメタ化されたクラスを扱うためのインターフェースです。
- * 
- * @since 2.4.18
  * @author modified by jflute (originated in Seasar)
  */
 public interface ParameterizedClassDesc {
 
-    /**
-     * このインスタンスが表現するクラスがパラメタ化されていれば<code>true</code>を返します。
-     * 
-     * @return このインスタンスが表現するクラスがパラメタ化されていれば<code>true</code>
-     */
     boolean isParameterizedClass();
 
-    /**
-     * 原型となるクラスを返します。
-     * 
-     * @return 原型となるクラス
-     * @see lava.lang.ParameterizedType#getRawType()
-     */
-    Class getRawClass();
+    Class<?> getRawClass();
 
-    /**
-     * 型引数を表す{@link ParameterizedClassDesc}の配列を返します。
-     * <p>
-     * このインスタンスが表現するクラスがパラメタ化されたクラスでない場合は、<code>null</code>を返します。
-     * </p>
-     * 
-     * @return 型引数を表す{@link ParameterizedClassDesc}の配列
-     * @see java.lang.ParameterizedType#getActualTypeArguments()
-     */
     ParameterizedClassDesc[] getArguments();
-
 }

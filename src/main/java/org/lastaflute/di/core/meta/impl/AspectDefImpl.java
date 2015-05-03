@@ -22,45 +22,23 @@ import org.lastaflute.di.core.aop.impl.AspectImpl;
 import org.lastaflute.di.core.meta.AspectDef;
 
 /**
- * {@link AspectDef}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class AspectDefImpl extends ArgDefImpl implements AspectDef {
 
     private Pointcut pointcut;
 
-    /**
-     * {@link AspectDefImpl}を作成します。
-     */
     public AspectDefImpl() {
     }
 
-    /**
-     * {@link AspectDefImpl}を作成します。
-     * 
-     * @param pointcut
-     */
     public AspectDefImpl(Pointcut pointcut) {
         setPointcut(pointcut);
     }
 
-    /**
-     * {@link AspectDefImpl}を作成します。
-     * 
-     * @param interceptor
-     */
     public AspectDefImpl(MethodInterceptor interceptor) {
         setValue(interceptor);
     }
 
-    /**
-     * {@link AspectDefImpl}を作成します。
-     * 
-     * @param interceptor
-     * @param pointcut
-     */
     public AspectDefImpl(MethodInterceptor interceptor, Pointcut pointcut) {
         setValue(interceptor);
         setPointcut(pointcut);
@@ -74,11 +52,8 @@ public class AspectDefImpl extends ArgDefImpl implements AspectDef {
         this.pointcut = pointcut;
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.AspectDef#getAspect()
-     */
     public Aspect getAspect() {
-        MethodInterceptor interceptor = (MethodInterceptor) getValue();
+        final MethodInterceptor interceptor = (MethodInterceptor) getValue(Object.class);
         return new AspectImpl(interceptor, pointcut);
     }
 }

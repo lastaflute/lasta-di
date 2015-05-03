@@ -21,27 +21,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
- * {@link Number}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiNumberConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiNumberConversionUtil() {
     }
 
-    /**
-     * 適切な {@link Number}に変換します。
-     * 
-     * @param type
-     * @param o
-     * @return 適切な {@link Number}
-     */
-    public static Object convertNumber(Class type, Object o) {
+    public static Object convertNumber(Class<?> type, Object o) {
         if (type == Integer.class) {
             return LdiIntegerConversionUtil.toInteger(o);
         } else if (type == BigDecimal.class) {
@@ -62,13 +49,6 @@ public class LdiNumberConversionUtil {
         return o;
     }
 
-    /**
-     * Wrapperを返します。
-     * 
-     * @param type
-     * @param o
-     * @return Wrapper
-     */
     public static Object convertPrimitiveWrapper(Class type, Object o) {
         if (type == int.class) {
             Integer i = LdiIntegerConversionUtil.toInteger(o);
@@ -116,13 +96,6 @@ public class LdiNumberConversionUtil {
         return o;
     }
 
-    /**
-     * デリミタを削除します。
-     * 
-     * @param value
-     * @param locale
-     * @return デリミタを削除した結果
-     */
     public static String removeDelimeter(String value, Locale locale) {
         String groupingSeparator = findGroupingSeparator(locale);
         if (groupingSeparator != null) {
@@ -131,23 +104,11 @@ public class LdiNumberConversionUtil {
         return value;
     }
 
-    /**
-     * グルーピング用のセパレータを探します。
-     * 
-     * @param locale
-     * @return グルーピング用のセパレータ
-     */
     public static String findGroupingSeparator(Locale locale) {
         DecimalFormatSymbols symbol = getDecimalFormatSymbols(locale);
         return Character.toString(symbol.getGroupingSeparator());
     }
 
-    /**
-     * 数値のセパレータを返します。
-     * 
-     * @param locale
-     * @return 数値のセパレータ
-     */
     public static String findDecimalSeparator(Locale locale) {
         DecimalFormatSymbols symbol = getDecimalFormatSymbols(locale);
         return Character.toString(symbol.getDecimalSeparator());
@@ -162,5 +123,4 @@ public class LdiNumberConversionUtil {
         }
         return symbol;
     }
-
 }

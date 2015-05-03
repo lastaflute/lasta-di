@@ -67,7 +67,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected void bindManualProperty(ComponentDef componentDef, PropertyDef propertyDef, PropertyDesc propertyDesc, Object component) {
-        final Object value = getValue(componentDef, propertyDef, component);
+        final Object value = getValue(componentDef, propertyDef, component, propertyDesc.getPropertyType());
         setPropertyValue(componentDef, propertyDesc, component, value);
     }
 
@@ -147,7 +147,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected void bindManualResourceField(ComponentDef componentDef, PropertyDef propertyDef, Field field, Object component) {
-        final Object value = getValue(componentDef, propertyDef, component);
+        final Object value = getValue(componentDef, propertyDef, component, field.getType());
         setResourceFieldValue(componentDef, field, component, value);
     }
 
@@ -230,9 +230,10 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         return false;
     }
 
-    protected Object getValue(ComponentDef componentDef, PropertyDef propertyDef, Object component) throws IllegalPropertyRuntimeException {
+    protected Object getValue(ComponentDef componentDef, PropertyDef propertyDef, Object component, Class<?> resultType)
+            throws IllegalPropertyRuntimeException {
         try {
-            return propertyDef.getValue();
+            return propertyDef.getValue(resultType);
         } catch (RuntimeException cause) {
             throwPropertyValueGetFailureException(componentDef, propertyDef, component, cause);
             return null; // unreachable

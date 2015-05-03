@@ -16,20 +16,13 @@
 package org.lastaflute.jta.core.xa;
 
 import javax.transaction.xa.XAException;
-import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 /**
- * {@link XAResource}のデフォルト実装です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class DefaultXAResource extends AbstractXAResource {
 
-    /**
-     * {@link DefaultXAResource}を作成します。
-     */
     public DefaultXAResource() {
     }
 

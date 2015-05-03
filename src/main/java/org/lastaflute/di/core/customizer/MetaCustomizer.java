@@ -33,7 +33,7 @@ public class MetaCustomizer extends AbstractCustomizer {
         }
         for (int i = 0; i < metaDef.getMetaDefSize(); ++i) {
             final MetaDef meta = metaDef.getMetaDef(i);
-            componentDef.addMetaDef(new MetaDefImpl(meta.getName(), meta.getValue()));
+            componentDef.addMetaDef(new MetaDefImpl(meta.getName(), meta.getValue(Object.class)));
         }
     }
 

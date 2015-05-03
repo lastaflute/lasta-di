@@ -75,19 +75,19 @@ public class ScriptingExpression implements Expression {
     //                                                                            Evaluate
     //                                                                            ========
     @Override
-    public Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container) {
+    public Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
         if (parsed instanceof String) {
-            final Object hooked = hookPlainly((String) parsed, contextMap, container);
+            final Object hooked = hookPlainly((String) parsed, contextMap, container, conversionType);
             if (hooked != null) {
                 return hooked;
             }
         }
-        return engine.evaluate(parsed, contextMap, container);
+        return engine.evaluate(parsed, contextMap, container, conversionType);
     }
 
-    protected Object hookPlainly(String expression, Map<String, ? extends Object> contextMap, LaContainer container) {
+    protected Object hookPlainly(String expression, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
         final ExpressionPlainHook plainHook = preparePlainHook();
-        return plainHook != null ? plainHook.hookPlainly(expression, contextMap, container) : null;
+        return plainHook != null ? plainHook.hookPlainly(expression, contextMap, container, conversionType) : null;
     }
 
     public ExpressionPlainHook preparePlainHook() {

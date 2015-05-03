@@ -29,7 +29,7 @@ public class ComponentNameExpression extends SimpleSourceExpression {
         super(source);
     }
 
-    public Object evaluate(Map<String, ? extends Object> context, LaContainer container) {
+    public Object evaluate(Map<String, ? extends Object> context, LaContainer container, Class<?> conversionType) {
         Object result = container.getComponent(source);
         if (result == null && context != null) {
             result = context.get(source);

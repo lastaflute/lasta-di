@@ -19,27 +19,18 @@ import org.lastaflute.di.core.aop.InterType;
 import org.lastaflute.di.core.meta.InterTypeDef;
 
 /**
- * {@link InterTypeDef}の実装クラスです。
- * 
+ * @author modified by jflute (originated in Seasar)
  */
 public class InterTypeDefImpl extends ArgDefImpl implements InterTypeDef {
 
-    /**
-     * {@link InterTypeDefImpl}を作成します。
-     */
     public InterTypeDefImpl() {
     }
 
-    /**
-     * {@link InterTypeDefImpl}を作成します。
-     * 
-     * @param interType
-     */
     public InterTypeDefImpl(final InterType interType) {
         setValue(interType);
     }
 
     public InterType getInterType() {
-        return (InterType) getValue();
+        return (InterType) getValue(Object.class);
     }
 }

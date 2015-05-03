@@ -24,115 +24,88 @@ import org.lastaflute.di.core.meta.MethodDef;
 import org.lastaflute.di.core.util.ArgDefSupport;
 
 /**
- * {@link MethodDef}の抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public abstract class MethodDefImpl implements MethodDef {
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     private Method method;
-
     private String methodName;
-
-    private ArgDefSupport argDefSupport = new ArgDefSupport();
-
+    private final ArgDefSupport argDefSupport = new ArgDefSupport();
     private LaContainer container;
-
     private Expression expression;
 
-    /**
-     * {@link MethodDefImpl}を作成します。
-     */
-    public MethodDefImpl() {
-    }
-
-    /**
-     * {@link MethodDefImpl}を作成します。
-     * 
-     * @param method
-     */
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public MethodDefImpl(Method method) {
         this.method = method;
     }
 
-    /**
-     * {@link MethodDefImpl}を作成します。
-     * 
-     * @param methodName
-     */
-    public MethodDefImpl(String methodName) {
+    public MethodDefImpl(String methodName) { // e.g. postConstruct name="addSea"
         this.methodName = methodName;
     }
 
-    public Method getMethod() {
-        return method;
-    }
-
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#getMethodName()
-     */
-    public String getMethodName() {
-        return methodName;
-    }
-
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#addArgDef(org.lastaflute.di.core.meta.ArgDef)
-     */
+    // ===================================================================================
+    //                                                                           Arguments
+    //                                                                           =========
     public void addArgDef(ArgDef argDef) {
         argDefSupport.addArgDef(argDef);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.ArgDefAware#getArgDefSize()
-     */
     public int getArgDefSize() {
         return argDefSupport.getArgDefSize();
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.ArgDefAware#getArgDef(int)
-     */
     public ArgDef getArgDef(int index) {
         return argDefSupport.getArgDef(index);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#getArgs()
-     */
     public Object[] getArgs() {
-        Object[] args = new Object[getArgDefSize()];
-        for (int i = 0; i < getArgDefSize(); ++i) {
-            args[i] = getArgDef(i).getValue();
+        final int argDefSize = getArgDefSize();
+        final Object[] args = new Object[argDefSize];
+        final Class<?>[] parameterTypes = extractParameterTypes(argDefSize); // null allowed
+        for (int i = 0; i < argDefSize; ++i) {
+            final Class<?> conversionType = parameterTypes != null ? parameterTypes[i] : Object.class;
+            args[i] = getArgDef(i).getValue(conversionType);
         }
         return args;
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#getContainer()
-     */
+    protected Class<?>[] extractParameterTypes(final int argDefSize) {
+        Class<?>[] parameterTypes = method != null ? method.getParameterTypes() : null;
+        if (parameterTypes != null && parameterTypes.length != argDefSize) { // no way, just in case
+            parameterTypes = null;
+        }
+        return parameterTypes;
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Method getMethod() {
+        return method;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
     public LaContainer getContainer() {
         return container;
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#setContainer(org.lastaflute.di.core.LaContainer)
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
         argDefSupport.setContainer(container);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#getExpression()
-     */
     public Expression getExpression() {
         return expression;
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MethodDef#setExpression(Expression)
-     */
     public void setExpression(Expression expression) {
         this.expression = expression;
     }

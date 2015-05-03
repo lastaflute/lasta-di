@@ -275,12 +275,6 @@ public class LdiArrayUtil {
         Array.set(array, index, value);
     }
 
-    /**
-     * 配列をオブジェクトの配列に変換します。
-     * 
-     * @param obj
-     * @return オブジェクトの配列
-     */
     public static Object[] toObjectArray(Object obj) {
         int length = Array.getLength(obj);
         Object[] array = new Object[length];
@@ -290,18 +284,12 @@ public class LdiArrayUtil {
         return array;
     }
 
-    /**
-     * 配列をリストに変換します。
-     * 
-     * @param obj
-     *            配列
-     * @return リスト
-     */
-    public static List toList(Object obj) {
-        int length = Array.getLength(obj);
-        List list = new ArrayList(length);
+    @SuppressWarnings("unchecked")
+    public static <ELEMENT> List<ELEMENT> toList(Object obj) {
+        final int length = Array.getLength(obj);
+        final List<ELEMENT> list = new ArrayList<ELEMENT>(length);
         for (int i = 0; i < length; i++) {
-            list.add(Array.get(obj, i));
+            list.add((ELEMENT) Array.get(obj, i));
         }
         return list;
     }

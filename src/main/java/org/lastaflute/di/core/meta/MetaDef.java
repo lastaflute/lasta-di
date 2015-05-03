@@ -15,23 +15,10 @@
  */
 package org.lastaflute.di.core.meta;
 
-
 /**
- * コンポーネントの付加情報を定義するためのインターフェースです。
- * <p>
- * <code>&lt;components&gt;</code>、<code>&lt;component&gt;</code>、<code>&lt;arg&gt;</code>、<code>&lt;property&gt;</code>タグで
- * 定義したコンポーネントやプロパティに対し、<code>&lt;meta&gt;</code>タグで定義したメタデータ定義を保持します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
- * @author Tsuyoshi Yamamoto
  */
 public interface MetaDef extends ArgDef {
 
-    /**
-     * メタデータ定義の名前を返します。
-     * 
-     * @return メタデータ定義名
-     */
-    public String getName();
+    String getName();
 }

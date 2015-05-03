@@ -53,7 +53,7 @@ public abstract class AbstractConstructorAssembler extends AbstractAssembler imp
         final ComponentDef cd = getComponentDef();
         final LaContainer container = cd.getContainer();
         final Expression expression = cd.getExpression();
-        final Object component = expression.evaluate(Collections.emptyMap(), container); // #expression_point
+        final Object component = expression.evaluate(Collections.emptyMap(), container, Object.class); // #expression_point
         final Class<?> componentClass = cd.getComponentClass();
         if (componentClass != null && !componentClass.isInstance(component)) {
             throw new ClassUnmatchRuntimeException(componentClass, component != null ? component.getClass() : null);
@@ -71,7 +71,7 @@ public abstract class AbstractConstructorAssembler extends AbstractAssembler imp
         final Object[] args = new Object[getComponentDef().getArgDefSize()];
         for (int i = 0; i < args.length; ++i) {
             try {
-                args[i] = getComponentDef().getArgDef(i).getValue();
+                args[i] = getComponentDef().getArgDef(i).getValue(Object.class);
             } catch (ComponentNotFoundRuntimeException cause) {
                 throw new IllegalConstructorRuntimeException(getComponentDef().getComponentClass(), cause);
             }

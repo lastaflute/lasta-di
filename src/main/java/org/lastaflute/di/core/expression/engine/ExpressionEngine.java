@@ -26,7 +26,7 @@ public interface ExpressionEngine {
 
     Object parseExpression(String source);
 
-    Object evaluate(Object exp, Map<String, ? extends Object> contextMap, LaContainer container);
+    Object evaluate(Object exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType);
 
     String resolveStaticMethodReference(Class<?> refType, String methodName);
 }

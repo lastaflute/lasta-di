@@ -24,5 +24,5 @@ import org.lastaflute.di.core.LaContainer;
  */
 public interface Expression {
 
-    Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container);
+    Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType);
 }

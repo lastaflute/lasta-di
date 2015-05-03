@@ -18,17 +18,9 @@ package org.lastaflute.di.core.aop;
 import javassist.CtClass;
 
 /**
- * クラスの構造を変えるためのインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public interface InterType {
 
-    /**
-     * クラスの構造を変更します。
-     * 
-     * @param targetClass
-     * @param enhancedClass
-     */
-    void introduce(Class targetClass, CtClass enhancedClass);
+    void introduce(Class<?> targetClass, CtClass enhancedClass);
 }

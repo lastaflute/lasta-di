@@ -33,7 +33,7 @@ public class ArgDefImpl implements ArgDef {
     private LaContainer container;
     private Expression expression;
     private ComponentDef childComponentDef;
-    private MetaDefSupport metaDefSupport = new MetaDefSupport();
+    private final MetaDefSupport metaDefSupport = new MetaDefSupport();
 
     public ArgDefImpl() {
     }
@@ -42,9 +42,9 @@ public class ArgDefImpl implements ArgDef {
         setValue(value);
     }
 
-    public final Object getValue() {
+    public Object getValue(Class<?> conversionType) {
         if (expression != null) {
-            return expression.evaluate(Collections.emptyMap(), container);
+            return expression.evaluate(Collections.emptyMap(), container, conversionType);
         }
         if (childComponentDef != null) {
             return childComponentDef.getComponent();
@@ -102,37 +102,22 @@ public class ArgDefImpl implements ArgDef {
         childComponentDef = componentDef;
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MetaDefAware#addMetaDef(org.lastaflute.di.core.meta.MetaDef)
-     */
     public void addMetaDef(MetaDef metaDef) {
         metaDefSupport.addMetaDef(metaDef);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MetaDefAware#getMetaDef(int)
-     */
     public MetaDef getMetaDef(int index) {
         return metaDefSupport.getMetaDef(index);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MetaDefAware#getMetaDef(java.lang.String)
-     */
     public MetaDef getMetaDef(String name) {
         return metaDefSupport.getMetaDef(name);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MetaDefAware#getMetaDefs(java.lang.String)
-     */
     public MetaDef[] getMetaDefs(String name) {
         return metaDefSupport.getMetaDefs(name);
     }
 
-    /**
-     * @see org.lastaflute.di.core.meta.MetaDefAware#getMetaDefSize()
-     */
     public int getMetaDefSize() {
         return metaDefSupport.getMetaDefSize();
     }

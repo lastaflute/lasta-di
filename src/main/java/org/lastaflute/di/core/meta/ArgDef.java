@@ -20,75 +20,23 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.expression.Expression;
 
 /**
- * コンポーネントのコンストラクタおよびメソッドに与えられる引数定義のためのインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
- * @author vestige
  */
 public interface ArgDef extends MetaDefAware {
 
-    /**
-     * 引数定義の値を返します。
-     * <p>
-     * 引数定義の値とは、diconファイルに記述した<code>&lt;arg&gt;</code>要素の内容です。
-     * インジェクションする際に、コンストラクタや初期化メソッド等の引数値になります。
-     * </p>
-     * 
-     * @return 引数定義の値
-     */
-    public Object getValue();
+    Object getValue(Class<?> resultType);
 
-    /**
-     * 引数定義の値を設定します。
-     * 
-     * @param value
-     *            引数定義の値
-     */
-    public void setValue(Object value);
+    void setValue(Object value);
 
-    /**
-     * 引数を評価するコンテキストとなるS2コンテナを返します。
-     * 
-     * @return 引数を評価するコンテキストとなるS2コンテナ
-     */
-    public LaContainer getContainer();
+    LaContainer getContainer();
 
-    /**
-     * 引数を評価するコンテキストとなるS2コンテナを設定します。
-     * 
-     * @param container
-     *            引数を評価するコンテキストとなるS2コンテナ
-     */
-    public void setContainer(LaContainer container);
+    void setContainer(LaContainer container);
 
-    /**
-     * 引数定義の値となる式を返します。
-     * 
-     * @return 引数定義の値となる式
-     */
-    public Expression getExpression();
+    Expression getExpression();
 
-    /**
-     * 引数定義の値となる式を設定します。
-     * 
-     * @param expression
-     *            引数定義の値となる式
-     */
-    public void setExpression(Expression expression);
+    void setExpression(Expression expression);
 
-    /**
-     * 引数定義の値となる式、引数定義の値、引数定義の値となるコンポーネント定義のいずれかが存在し、値の取得が可能かどうかを返します。
-     * 
-     * @return 値の取得が可能な場合、<code>true</code>、そうでない場合は<code>false</code>
-     */
-    public boolean isValueGettable();
+    boolean isValueGettable();
 
-    /**
-     * 引数定義の値となるコンポーネント定義を設定します。
-     * 
-     * @param componentDef
-     *            引数定義の値となるコンポーネント定義
-     */
-    public void setChildComponentDef(ComponentDef componentDef);
-
+    void setChildComponentDef(ComponentDef componentDef);
 }

@@ -15,36 +15,14 @@
  */
 package org.lastaflute.di.core.meta;
 
-
 /**
  * @author modified by jflute (originated in Seasar)
  */
 public interface ArgDefAware {
 
-    /**
-     * 引数定義を追加します。
-     * 
-     * @param argDef
-     *            引数定義
-     */
-    public void addArgDef(ArgDef argDef);
+    void addArgDef(ArgDef argDef);
 
-    /**
-     * 登録されている{@link ArgDef 引数定義}の数を返します。
-     * 
-     * @return 登録されている引数定義の数
-     */
-    public int getArgDefSize();
+    int getArgDefSize();
 
-    /**
-     * 指定されたインデックス番号<code>index</code>の引数定義を返します。
-     * <p>
-     * インデックス番号は、 登録した順番に 0,1,2,… となります。
-     * </p>
-     * 
-     * @param index
-     *            引数定義を指定するインデックス番号
-     * @return 引数定義
-     */
-    public ArgDef getArgDef(int index);
+    ArgDef getArgDef(int index);
 }
