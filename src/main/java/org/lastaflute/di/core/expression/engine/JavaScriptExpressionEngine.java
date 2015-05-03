@@ -16,6 +16,7 @@
 package org.lastaflute.di.core.expression.engine;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,6 +44,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     protected static final String DQ = "\"";
     protected static final String CAST_INT_ARRAY = "(int[])";
     protected static final String CAST_STRING_ARRAY = "(String[])";
+    protected static final String CAST_SET = "(Set)";
 
     // thread-safe without e.g. put, register
     protected static final ScriptEngineManager defaultManager = new ScriptEngineManager();
@@ -82,6 +84,9 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         } else if (exp.startsWith(CAST_STRING_ARRAY)) {
             filteredExp = exp.substring(CAST_STRING_ARRAY.length());
             resolvedType = String[].class;
+        } else if (exp.startsWith(CAST_SET)) {
+            filteredExp = exp.substring(CAST_SET.length());
+            resolvedType = Set.class;
         } else {
             filteredExp = exp;
             resolvedType = conversionType;
@@ -221,6 +226,8 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
                     throwExpressionCannotConvertException(exp, contextMap, container, conversionType, index, e);
                 }
                 return strAry;
+            } else if (Set.class.isAssignableFrom(conversionType)) { // e.g. (Set)["sea","land"]
+                return new LinkedHashSet<Object>(challengeList);
             } else { // e.g. [1,2]
                 return challengeList;
             }
