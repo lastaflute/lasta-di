@@ -16,60 +16,17 @@
 package org.lastaflute.di.core.meta;
 
 /**
- * このインターフェースは、メタデータ定義を追加および取得することのできるオブジェクトを表します。 
- * <p>
- * メタデータ定義は複数追加することができます。 メタデータ定義の取得は、メタデータ定義名またはインデックス番号を指定して行います。
- * </p>
  * @author modified by jflute (originated in Seasar)
- * @author Tsuyoshi Yamamoto
- * @see MetaDef
- * 
  */
 public interface MetaDefAware {
 
-    /**
-     * メタデータ定義を追加します。
-     * 
-     * @param metaDef
-     *            メタデータ定義
-     */
-    public void addMetaDef(MetaDef metaDef);
+    void addMetaDef(MetaDef metaDef);
 
-    /**
-     * {@link MetaDef メタデータ定義}の数を返します。
-     * 
-     * @return メタデータ定義の数
-     */
-    public int getMetaDefSize();
+    int getMetaDefSize();
 
-    /**
-     * インデックス番号<code>index</code>で指定されたメタデータ定義を返します。
-     * <p>
-     * インデックス番号は、追加した順に0, 1, 2…となります。
-     * </p>
-     * 
-     * @param index
-     *            メタデータ定義を指定するインデックス番号
-     * @return メタデータ定義
-     */
-    public MetaDef getMetaDef(int index);
+    MetaDef getMetaDef(int index);
 
-    /**
-     * 指定したメタデータ定義名で登録されているメタデータ定義を取得します。 <br>
-     * メタデータ定義が登録されていない場合、<code>null</code>を返します。
-     * 
-     * @param name
-     *            メタデータ定義名
-     * @return メタデータ定義
-     */
-    public MetaDef getMetaDef(String name);
+    MetaDef getMetaDef(String name);
 
-    /**
-     * 指定したメタデータ定義名で登録されているメタデータ定義を取得します。 <br>
-     * メタデータ定義が登録されていない場合、要素数0の配列を返します。
-     * @param name
-     *            メタデータ定義名
-     * @return メタデータ定義を格納した配列
-     */
-    public MetaDef[] getMetaDefs(String name);
+    MetaDef[] getMetaDefs(String name);
 }

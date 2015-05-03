@@ -30,7 +30,6 @@ public interface ExpressionPlainHook {
     //                                                                          ==========
     String DQ = "\"";
     String SQ = "'";
-    String NUM = "0123456789";
     String EXISTS_BEGIN = LdiResourceUtil.class.getName() + ".exists('";
     String EXISTS_END = "')";
     String TYPE_BEGIN = "@"; // compatible with OGNL e.g. @org.dbflute.Entity@class
@@ -38,5 +37,5 @@ public interface ExpressionPlainHook {
     String METHOD_MARK = "()";
     String PROVIDER_GET = "provider.config().get";
 
-    Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container);
+    Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType);
 }

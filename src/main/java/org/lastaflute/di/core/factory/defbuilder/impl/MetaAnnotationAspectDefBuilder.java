@@ -37,8 +37,6 @@ import org.lastaflute.di.util.LdiMethodUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * メタアノテーションで注釈されたアノテーションを読み取り{@link AspectDef}を作成するコンポーネントの実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class MetaAnnotationAspectDefBuilder extends AbstractAspectDefBuilder {
@@ -264,7 +262,7 @@ public class MetaAnnotationAspectDefBuilder extends AbstractAspectDefBuilder {
         }
 
         @Override
-        public Object evaluate(Map<String, ? extends Object> context, LaContainer container) {
+        public Object evaluate(Map<String, ? extends Object> context, LaContainer container, Class<?> conversionType) {
             final MethodInterceptor interceptor = MethodInterceptor.class.cast(container.getComponent(getInterceptorName(annotation)));
             final BeanDesc beanDesc = BeanDescFactory.getBeanDesc(interceptor.getClass());
             for (final Method method : annotation.annotationType().getMethods()) {

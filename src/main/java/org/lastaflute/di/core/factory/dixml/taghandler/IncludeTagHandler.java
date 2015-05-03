@@ -54,7 +54,7 @@ public class IncludeTagHandler extends AbstractTagHandler {
                     return resolveVariableIfNeeds(condition, path, exp);
                 });
             });
-            final Object evaluated = expression.evaluate(contextMap, container);
+            final Object evaluated = expression.evaluate(contextMap, container, boolean.class);
             if (!(evaluated instanceof Boolean)) {
                 throw new IllegalStateException("condition:" + condition);
             }

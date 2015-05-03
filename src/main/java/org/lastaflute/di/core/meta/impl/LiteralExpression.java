@@ -33,7 +33,7 @@ public class LiteralExpression extends SimpleSourceExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container) {
+    public Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
         return value;
     }
 }

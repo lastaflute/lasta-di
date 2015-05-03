@@ -101,7 +101,7 @@ public abstract class AbstractMethodAssembler extends AbstractAssembler implemen
         ctx.put("out", System.out);
         ctx.put("err", System.err);
         LaContainer container = getComponentDef().getContainer();
-        methodDef.getExpression().evaluate(ctx, container);
+        methodDef.getExpression().evaluate(ctx, container, Object.class);
     }
 
     private Method getSuitableMethod(Method[] methods) {

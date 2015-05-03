@@ -18,39 +18,17 @@ package org.lastaflute.di.core.meta.impl;
 import java.lang.reflect.Method;
 
 import org.lastaflute.di.core.meta.InitMethodDef;
-import org.lastaflute.di.core.meta.MethodDef;
 
 /**
- * {@link InitMethodDef}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * @see MethodDef
- * 
  */
 public class InitMethodDefImpl extends MethodDefImpl implements InitMethodDef {
 
-    /**
-     * {@link InitMethodDefImpl}を作成します。
-     */
-    public InitMethodDefImpl() {
-    }
-
-    /**
-     * {@link InitMethodDefImpl}を作成します。
-     * 
-     * @param method
-     */
     public InitMethodDefImpl(Method method) {
         super(method);
     }
 
-    /**
-     * {@link InitMethodDefImpl}を作成します。
-     * 
-     * @param methodName
-     */
     public InitMethodDefImpl(String methodName) {
         super(methodName);
     }
-
 }

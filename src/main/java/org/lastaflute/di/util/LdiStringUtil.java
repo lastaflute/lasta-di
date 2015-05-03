@@ -65,8 +65,8 @@ public class LdiStringUtil {
         if (isEmpty(str)) {
             return EMPTY_STRINGS;
         }
-        List list = new ArrayList();
-        StringTokenizer st = new StringTokenizer(str, delim);
+        final List<Object> list = new ArrayList<Object>();
+        final StringTokenizer st = new StringTokenizer(str, delim);
         while (st.hasMoreElements()) {
             list.add(st.nextElement());
         }
@@ -295,13 +295,6 @@ public class LdiStringUtil {
         return buf.toString();
     }
 
-    /**
-     * キャメル記法を_記法に変換します。
-     * 
-     * @param s
-     *            テキスト
-     * @return 結果の文字列
-     */
     public static String decamelize(final String s) {
         if (s == null) {
             return null;

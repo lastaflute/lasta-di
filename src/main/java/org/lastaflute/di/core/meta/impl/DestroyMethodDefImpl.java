@@ -18,39 +18,17 @@ package org.lastaflute.di.core.meta.impl;
 import java.lang.reflect.Method;
 
 import org.lastaflute.di.core.meta.DestroyMethodDef;
-import org.lastaflute.di.core.meta.MethodDef;
 
 /**
- * {@link DestroyMethodDef}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * @see MethodDef
- * 
  */
 public class DestroyMethodDefImpl extends MethodDefImpl implements DestroyMethodDef {
 
-    /**
-     * {@link DestroyMethodDefImpl}を作成します。
-     */
-    public DestroyMethodDefImpl() {
-    }
-
-    /**
-     * {@link DestroyMethodDefImpl}を作成します。
-     * 
-     * @param method
-     */
     public DestroyMethodDefImpl(Method method) {
         super(method);
     }
 
-    /**
-     * {@link DestroyMethodDefImpl}を作成します。
-     * 
-     * @param methodName
-     */
     public DestroyMethodDefImpl(String methodName) {
         super(methodName);
     }
-
 }

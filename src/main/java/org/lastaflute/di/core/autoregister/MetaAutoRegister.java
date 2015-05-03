@@ -20,35 +20,11 @@ import org.lastaflute.di.core.meta.MetaDef;
 import org.lastaflute.di.core.meta.impl.MetaDefImpl;
 
 /**
- * メタ定義を自動登録するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class MetaAutoRegister extends AbstractComponentTargetAutoRegister {
 
-    /**
-     * {@link ComponentDef}です。
-     */
     protected ComponentDef componentDef;
-
-    /**
-     * コンポーネント定義を返します。
-     * 
-     * @return
-     */
-    public ComponentDef getComponentDef() {
-        return componentDef;
-    }
-
-    /**
-     * コンポーネント定義を設定します。
-     * 
-     * @param componentDef
-     */
-    public void setComponentDef(final ComponentDef componentDef) {
-        this.componentDef = componentDef;
-    }
 
     protected void register(final ComponentDef cd) {
         final MetaDef metaDef = componentDef.getMetaDef("autoRegister");
@@ -57,7 +33,15 @@ public class MetaAutoRegister extends AbstractComponentTargetAutoRegister {
         }
         for (int i = 0; i < metaDef.getMetaDefSize(); ++i) {
             final MetaDef meta = metaDef.getMetaDef(i);
-            cd.addMetaDef(new MetaDefImpl(meta.getName(), meta.getValue()));
+            cd.addMetaDef(new MetaDefImpl(meta.getName(), meta.getValue(Object.class)));
         }
+    }
+
+    public ComponentDef getComponentDef() {
+        return componentDef;
+    }
+
+    public void setComponentDef(final ComponentDef componentDef) {
+        this.componentDef = componentDef;
     }
 }
