@@ -74,7 +74,7 @@ public class AutoPropertyAssembler extends AbstractPropertyAssembler {
         if (writeMethod == null) { // e.g. getter only or public field, are out of target 
             return false;
         }
-        // TODO jflute #later setter DI from LastaDiProperties
+        // TODO jflute lastaflute: [A] fitting: DI :: setter DI from LastaDiProperties
         // the property has setter
         final String fqcn = writeMethod.getDeclaringClass().getName();
         return fqcn.startsWith("org.lastaflute.") || fqcn.startsWith("org.dbflute.") || fqcn.startsWith("org.codelibs.robot.db");
