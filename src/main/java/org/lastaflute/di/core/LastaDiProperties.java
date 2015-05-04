@@ -41,6 +41,7 @@ public class LastaDiProperties {
     public static final String SMART_PACKAGE1_KEY = "smart.package1";
     public static final String SMART_PACKAGE2_KEY = "smart.package2";
     public static final String SMART_PACKAGE3_KEY = "smart.package3";
+    public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
 
     private static final Logger logger = LoggerFactory.getLogger(LastaDiProperties.class);
@@ -216,7 +217,7 @@ public class LastaDiProperties {
                 if (diXmlScriptExpressionEngineType == null) {
                     final String engineName = getDiXmlScriptExpressionEngine();
                     if (engineName != null) {
-                        // TODO jflute lastaflute: [E] fitting: DI :: expression engine property error handling
+                        // TODO jflute lastaflute: [D] fitting: DI :: expression engine property error handling
                         diXmlScriptExpressionEngineType = LdiClassUtil.forName(engineName);
                     }
                     diXmlScriptExpressionEngineTypeDone = true;
@@ -224,6 +225,13 @@ public class LastaDiProperties {
             }
         }
         return diXmlScriptExpressionEngineType;
+    }
+
+    // -----------------------------------------------------
+    //                              Plain Property Injection
+    //                              ------------------------
+    public String getPlainPropertyInjectionPackage1() { // e.g. for S2Robot's DBFlute
+        return getProperty(PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY);
     }
 
     // ===================================================================================
