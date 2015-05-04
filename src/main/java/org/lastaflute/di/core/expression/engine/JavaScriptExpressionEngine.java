@@ -62,19 +62,19 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                            ========
     @Override
     public Object evaluate(Object exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
-        return viaResolveVariableEvaluate((String) exp, contextMap, container, conversionType);
+        return viaVariableResolvedEvaluate((String) exp, contextMap, container, conversionType);
     }
 
-    protected Object viaResolveVariableEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+    protected Object viaVariableResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> conversionType) {
         String filteredExp = exp;
         for (Entry<String, ? extends Object> entry : contextMap.entrySet()) { // e.g. #SMART => 'cool'
             filteredExp = LdiStringUtil.replace(filteredExp, "#" + entry.getKey(), SQ + entry.getValue() + SQ);
         }
-        return viaResolveCastEvaluate(filteredExp, contextMap, container, conversionType);
+        return viaCastResolvedEvaluate(filteredExp, contextMap, container, conversionType);
     }
 
-    protected Object viaResolveCastEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+    protected Object viaCastResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> conversionType) {
         final String filteredExp;
         final Class<?> resolvedType;
@@ -91,21 +91,51 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             filteredExp = exp;
             resolvedType = conversionType;
         }
-        return doEvaluate(filteredExp, contextMap, container, resolvedType);
+        return viaFirstNameResolvedEvaluate(filteredExp, contextMap, container, resolvedType);
     }
 
-    protected Object doEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
+    protected Object viaFirstNameResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> conversionType) {
+        final String filteredExp;
         String firstName = null;
         Object firstComponent = null;
         if (!exp.startsWith(DQ) && exp.contains(".")) {
             final String componentName = exp.substring(0, exp.indexOf("."));
-            if (container.hasComponentDef(componentName)) {
-                firstName = componentName;
-                firstComponent = container.getComponent(componentName);
+            final LaContainer namedContainer = container.getRoot().findChild(componentName); // in all container
+            if (namedContainer != null) { // first element is named container
+                final String rear = exp.substring(exp.indexOf(".") + ".".length());
+                if (rear.contains(".")) { // has more chain
+                    final String nextName = rear.substring(0, rear.indexOf("."));
+                    if (namedContainer.hasComponentDef(nextName)) { // in named container
+                        filteredExp = rear;
+                        firstName = nextName;
+                        firstComponent = namedContainer.getComponent(nextName);
+                    } else { // may be JavaScript expression (but basically mistake...)
+                        filteredExp = exp;
+                        firstName = componentName;
+                        firstComponent = namedContainer;
+                    }
+                } else {
+                    if (namedContainer.hasComponentDef(rear)) { // in named container
+                        return namedContainer.getComponent(rear); // resolved without evaluation
+                    } else { // may be JavaScript expression (but basically mistake...)
+                        filteredExp = exp;
+                        firstName = componentName;
+                        firstComponent = namedContainer;
+                    }
+                }
+            } else { // first element may be component
+                filteredExp = exp;
+                if (container.hasComponentDef(componentName)) { // in current container only
+                    firstName = componentName;
+                    firstComponent = container.getComponent(componentName);
+                }
             }
+        } else {
+            filteredExp = exp;
         }
-        final Object evaluated = actuallyEvaluate(exp, contextMap, container, firstName, firstComponent);
-        return filterEvaluated(exp, contextMap, container, evaluated, conversionType);
+        final Object evaluated = actuallyEvaluate(filteredExp, contextMap, container, firstName, firstComponent);
+        return filterEvaluated(filteredExp, contextMap, container, evaluated, conversionType);
     }
 
     // ===================================================================================

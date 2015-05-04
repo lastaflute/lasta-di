@@ -24,7 +24,6 @@ import org.lastaflute.di.core.exception.ContainerNotRegisteredRuntimeException;
 import org.lastaflute.di.core.exception.CyclicReferenceRuntimeException;
 import org.lastaflute.di.core.exception.TooManyRegistrationRuntimeException;
 import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
-import org.lastaflute.di.core.meta.InstanceDef;
 import org.lastaflute.di.core.meta.MetaDefAware;
 
 /**
@@ -126,53 +125,10 @@ public interface LaContainer extends MetaDefAware {
      */
     Object[] findLocalComponents(Object componentKey) throws CyclicReferenceRuntimeException;
 
-    /**
-     * <code>outerComponent</code>のクラスをキーとして登録された
-     * {@link ComponentDef コンポーネント定義}に従って、必要なコンポーネントのインジェクションを実行します。
-     * アスペクト、コンストラクタ・インジェクションは適用できません。
-     * <p>
-     * {@link ComponentDef コンポーネント定義}の{@link InstanceDef インスタンス定義}は
-     * {@link InstanceDef#OUTER_NAME outer}でなくてはなりません。
-     * </p>
-     * 
-     * @param outerComponent
-     *            外部コンポーネント
-     * @throws ClassUnmatchRuntimeException
-     *             適合するコンポーネント定義が見つからない場合
-     */
     void injectDependency(Object outerComponent) throws ClassUnmatchRuntimeException;
 
-    /**
-     * <code>componentClass</code>をキーとして登録された {@link ComponentDef コンポーネント定義}に従って、必要なコンポーネントのインジェクションを実行します。
-     * アスペクト、コンストラクタ・インジェクションは適用できません。
-     * <p>
-     * {@link ComponentDef コンポーネント定義}の{@link InstanceDef インスタンス定義}は
-     * {@link InstanceDef#OUTER_NAME outer}でなくてはなりません。
-     * </p>
-     * 
-     * @param outerComponent
-     *            外部コンポーネント
-     * @param componentClass
-     *            コンポーネント定義のキー (クラス)
-     * @throws ClassUnmatchRuntimeException
-     *             適合するコンポーネント定義が見つからない場合
-     */
     void injectDependency(Object outerComponent, Class<?> componentClass) throws ClassUnmatchRuntimeException;
 
-    /**
-     * <code>componentName</code>をキーとして登録された {@link ComponentDef コンポーネント定義}に従って、インジェクションを実行します。
-     * アスペクト、コンストラクタ・インジェクションは適用できません。
-     * <p>
-     * {@link ComponentDef コンポーネント定義}の{@link InstanceDef インスタンス定義}は
-     * {@link InstanceDef#OUTER_NAME outer}でなくてはなりません。
-     * </p>
-     * 
-     * @param outerComponent
-     *            外部コンポーネント
-     * @param componentName
-     *            コンポーネント定義のキー (名前)
-     * @throws ClassUnmatchRuntimeException
-     */
     void injectDependency(Object outerComponent, String componentName) throws ClassUnmatchRuntimeException;
 
     void register(Object component); // as anonymous component
@@ -195,34 +151,8 @@ public interface LaContainer extends MetaDefAware {
 
     ComponentDef[] findComponentDefs(Object componentKey);
 
-    /**
-     * 指定されたキーに対応する複数のコンポーネント定義を検索して返します。
-     * <p>
-     * 検索の範囲は現在のS2コンテナおよび、インクルードしているS2コンテナの階層全体です。
-     * キーに対応するコンポーネントが最初に見つかったS2コンテナとその子孫コンテナの全てを対象とします。
-     * 対象になるS2コンテナ全体から、キーに対応する全てのコンポーネント定義を配列で返します。
-     * </p>
-     * 
-     * @param componentKey
-     *            コンポーネント定義を取得するためのキー
-     * @return キーに対応するコンポーネント定義の配列を返します。 キーに対応するコンポーネント定義が存在しない場合は長さ0の配列を返します。
-     * @see #findComponentDefs
-     * @see #findLocalComponentDefs
-     */
     ComponentDef[] findAllComponentDefs(Object componentKey);
 
-    /**
-     * 指定されたキーに対応する複数のコンポーネント定義を検索して返します。
-     * <p>
-     * 検索の範囲は現在のS2コンテナのみです。 現在のS2コンテナから、キーに対応する全てのコンポーネント定義を配列で返します。
-     * </p>
-     * 
-     * @param componentKey
-     *            コンポーネント定義を取得するためのキー
-     * @return キーに対応するコンポーネント定義の配列を返します。 キーに対応するコンポーネント定義が存在しない場合は長さ0の配列を返します。
-     * @see #findComponentDefs
-     * @see #findAllComponentDefs
-     */
     ComponentDef[] findLocalComponentDefs(Object componentKey);
 
     boolean hasComponentDef(Object componentKey);
@@ -234,6 +164,8 @@ public interface LaContainer extends MetaDefAware {
     void registerDescendant(LaContainer descendant);
 
     void include(LaContainer child);
+
+    LaContainer findChild(String namespace);
 
     int getChildSize();
 
