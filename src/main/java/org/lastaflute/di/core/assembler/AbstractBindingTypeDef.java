@@ -220,13 +220,14 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         if (componentName == null) {
             return false;
         }
-        // TODO jflute lastaflute: [E] thinking: IgnoreCase injection?
+        // TODO jflute lastaflute: [C] thinking: IgnoreCase injection?
         if (componentName.equalsIgnoreCase(propertyName)) { // e.g. seaLogic for SeaLogic
             return true;
         }
         if (LdiStringUtil.endsWithIgnoreCase(componentName, ContainerConstants.PACKAGE_SEP + propertyName)) { // e.g. sea_landLogic
             return true;
         }
+        System.out.println("      false: " + componentName + " :: " + propertyName);
         return false;
     }
 

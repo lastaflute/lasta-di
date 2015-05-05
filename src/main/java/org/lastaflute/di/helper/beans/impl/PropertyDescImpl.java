@@ -217,7 +217,7 @@ public class PropertyDescImpl implements PropertyDesc {
                 LdiFieldUtil.set(field, target, value);
             }
         } catch (Throwable t) {
-            // TODO jflute lastaflute: [E] DI :: property desc exception message from DBFlute
+            // TODO jflute lastaflute: [E] fitting DI :: property desc exception message from DBFlute
             throw new IllegalPropertyRuntimeException(beanDesc.getBeanClass(), propertyName, t);
         }
     }
@@ -240,14 +240,20 @@ public class PropertyDescImpl implements PropertyDesc {
         return buf.toString();
     }
 
-    public Object convertIfNeed(Object arg) {
-        // TODO jflute lastaflute: [E] DI :: convert to local date
+    public Object convertIfNeed(Object arg) { // #date_parade
         if (propertyType.isPrimitive()) {
             return convertPrimitiveWrapper(arg);
         } else if (Number.class.isAssignableFrom(propertyType)) {
             return convertNumber(arg);
         } else if (java.util.Date.class.isAssignableFrom(propertyType)) {
             return convertDate(arg);
+            // no prepared conversion logic so cannot, while no need to convert heres
+            //} else if (LocalDate.class.isAssignableFrom(propertyType)) {
+            //    return DfTypeUtil.toLocalDate(arg);
+            //} else if (LocalDate.class.isAssignableFrom(propertyType)) {
+            //    return DfTypeUtil.toLocalDate(arg);
+            //} else if (LocalDateTime.class.isAssignableFrom(propertyType)) {
+            //    return DfTypeUtil.toLocalDateTime(arg);
         } else if (Boolean.class.isAssignableFrom(propertyType)) {
             return LdiBooleanConversionUtil.toBoolean(arg);
         } else if (arg != null && arg.getClass() != String.class && String.class == propertyType) {

@@ -41,7 +41,6 @@ public class AbstractTagHandler extends TagHandler {
 
     protected Expression doCreateExpression(String body, Supplier<ScriptingExpression> scriptingSupplier) {
         final String expr = body.trim();
-        // TODO jflute lastaflute: [E] fitting: DI :: expression error handling
         if ("null".equals(expr)) {
             return new LiteralExpression(expr, null);
         }
@@ -61,8 +60,12 @@ public class AbstractTagHandler extends TagHandler {
         if (scriptingSupplier != null) {
             return scriptingSupplier.get();
         } else {
-            return new ScriptingExpression(expr);
+            return newScriptingExpression(expr);
         }
+    }
+
+    protected ScriptingExpression newScriptingExpression(String expr) {
+        return new ScriptingExpression(expr);
     }
 
     protected boolean isComponentName(String expr) {
