@@ -227,7 +227,6 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         if (LdiStringUtil.endsWithIgnoreCase(componentName, ContainerConstants.PACKAGE_SEP + propertyName)) { // e.g. sea_landLogic
             return true;
         }
-        System.out.println("      false: " + componentName + " :: " + propertyName);
         return false;
     }
 
