@@ -28,7 +28,6 @@ import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiFieldUtil;
-import org.lastaflute.di.util.LdiStringUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -220,11 +219,10 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         if (componentName == null) {
             return false;
         }
-        // TODO jflute lastaflute: [C] thinking: IgnoreCase injection?
-        if (componentName.equalsIgnoreCase(propertyName)) { // e.g. seaLogic for SeaLogic
+        if (componentName.equals(propertyName)) { // e.g. seaLogic for SeaLogic
             return true;
         }
-        if (LdiStringUtil.endsWithIgnoreCase(componentName, ContainerConstants.PACKAGE_SEP + propertyName)) { // e.g. sea_landLogic
+        if (componentName.endsWith(ContainerConstants.PACKAGE_SEP + propertyName)) { // e.g. sea[_landLogic]
             return true;
         }
         return false;
