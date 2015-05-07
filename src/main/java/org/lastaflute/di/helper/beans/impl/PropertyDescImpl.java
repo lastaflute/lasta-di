@@ -18,6 +18,8 @@ package org.lastaflute.di.helper.beans.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -111,7 +113,7 @@ public class PropertyDescImpl implements PropertyDesc {
     }
 
     private void setUpParameterizedClassDesc() {
-        final Map<?, ?> typeVariables = ((BeanDescImpl) beanDesc).getTypeVariables();
+        final Map<TypeVariable<?>, Type> typeVariables = ((BeanDescImpl) beanDesc).getTypeVariables();
         if (field != null) {
             parameterizedClassDesc = ParameterizedClassDescFactory.createParameterizedClassDesc(field, typeVariables);
         } else if (readMethod != null) {
@@ -228,16 +230,14 @@ public class PropertyDescImpl implements PropertyDesc {
 
     @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append("propertyName=");
-        buf.append(propertyName);
-        buf.append(",propertyType=");
-        buf.append(propertyType.getName());
-        buf.append(",readMethod=");
-        buf.append(readMethod != null ? readMethod.getName() : "null");
-        buf.append(",writeMethod=");
-        buf.append(writeMethod != null ? writeMethod.getName() : "null");
-        return buf.toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("property:{");
+        sb.append(propertyName);
+        sb.append(", ").append(propertyType.getName());
+        sb.append(", reader=").append(readMethod != null ? readMethod.getName() : null);
+        sb.append(", writer=").append(writeMethod != null ? writeMethod.getName() : null);
+        sb.append("}@").append(Integer.toHexString(hashCode()));
+        return sb.toString();
     }
 
     public Object convertIfNeed(Object arg) { // #date_parade

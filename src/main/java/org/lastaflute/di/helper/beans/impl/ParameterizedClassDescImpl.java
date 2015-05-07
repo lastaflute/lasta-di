@@ -15,47 +15,27 @@
  */
 package org.lastaflute.di.helper.beans.impl;
 
+import java.lang.reflect.Type;
+
 import org.lastaflute.di.helper.beans.ParameterizedClassDesc;
+import org.lastaflute.di.util.tiger.LdiGenericUtil;
 
 /**
- * {@link ParameterizedClassDesc}の実装クラスです。
- * 
- * @since 2.4.18
  * @author modified by jflute (originated in Seasar)
  */
 public class ParameterizedClassDescImpl implements ParameterizedClassDesc {
 
-    /** 原型となるクラス */
-    protected Class rawClass;
+    protected final Type parameterizedType; // not null
+    protected final Class<?> rawClass; // not null
+    protected ParameterizedClassDesc[] arguments; // null or not empty array
 
-    /** 型引数を表す{@link ParameterizedClassDesc}の配列 */
-    protected ParameterizedClassDesc[] arguments;
-
-    /**
-     * インスタンスを構築します。
-     */
-    public ParameterizedClassDescImpl() {
-    }
-
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param rawClass
-     *            原型となるクラス
-     */
-    public ParameterizedClassDescImpl(final Class rawClass) {
+    public ParameterizedClassDescImpl(Type parameterizedType, Class<?> rawClass) {
+        this.parameterizedType = parameterizedType;
         this.rawClass = rawClass;
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param rawClass
-     *            原型となるクラス
-     * @param arguments
-     *            型引数を表す{@link ParameterizedClassDesc}の配列
-     */
-    public ParameterizedClassDescImpl(final Class rawClass, final ParameterizedClassDesc[] arguments) {
+    public ParameterizedClassDescImpl(Type parameterizedType, Class<?> rawClass, ParameterizedClassDesc[] arguments) {
+        this.parameterizedType = parameterizedType;
         this.rawClass = rawClass;
         this.arguments = arguments;
     }
@@ -64,32 +44,29 @@ public class ParameterizedClassDescImpl implements ParameterizedClassDesc {
         return arguments != null;
     }
 
-    public Class getRawClass() {
-        return rawClass;
+    public Type getParameterizedType() {
+        return parameterizedType;
     }
 
-    /**
-     * 原型となるクラスを設定します。
-     * 
-     * @param rawClass
-     *            原型となるクラス
-     */
-    public void setRawClass(final Class rawClass) {
-        this.rawClass = rawClass;
+    public Class<?> getRawClass() {
+        return rawClass;
     }
 
     public ParameterizedClassDesc[] getArguments() {
         return arguments;
     }
 
-    /**
-     * 型引数を表す{@link ParameterizedClassDesc}の配列を設定します。
-     * 
-     * @param arguments
-     *            型引数を表す{@link ParameterizedClassDesc}の配列
-     */
-    public void setArguments(final ParameterizedClassDesc[] arguments) {
+    public void setArguments(ParameterizedClassDesc[] arguments) {
         this.arguments = arguments;
     }
 
+    @Override
+    public Class<?> getGenericFirstType() {
+        return LdiGenericUtil.getGenericFirstClass(parameterizedType);
+    }
+
+    @Override
+    public Class<?> getGenericSecondType() {
+        return LdiGenericUtil.getGenericSecondClass(parameterizedType);
+    }
 }

@@ -15,6 +15,8 @@
  */
 package org.lastaflute.di.helper.beans;
 
+import java.lang.reflect.Type;
+
 /**
  * @author modified by jflute (originated in Seasar)
  */
@@ -22,7 +24,13 @@ public interface ParameterizedClassDesc {
 
     boolean isParameterizedClass();
 
+    Type getParameterizedType();
+
     Class<?> getRawClass();
 
     ParameterizedClassDesc[] getArguments();
+
+    Class<?> getGenericFirstType();
+
+    Class<?> getGenericSecondType();
 }

@@ -18,6 +18,8 @@ package org.lastaflute.di.helper.beans.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -75,7 +77,7 @@ public class BeanDescImpl implements BeanDesc {
 
     private Class<?> beanClass;
     private Constructor<?>[] constructors;
-    private Map typeVariables;
+    private Map<TypeVariable<?>, Type> typeVariables;
     private CaseInsensitiveMap propertyDescCache = new CaseInsensitiveMap();
     private Map methodsCache = new HashMap();
     private ArrayMap<String, Field> fieldCache = new ArrayMap<String, Field>();
@@ -672,7 +674,7 @@ public class BeanDescImpl implements BeanDesc {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
-    Map getTypeVariables() {
+    Map<TypeVariable<?>, Type> getTypeVariables() {
         return typeVariables;
     }
 }
