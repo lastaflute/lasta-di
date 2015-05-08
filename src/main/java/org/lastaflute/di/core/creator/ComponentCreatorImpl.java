@@ -122,7 +122,7 @@ public class ComponentCreatorImpl implements ComponentCreator {
         if (!namingConvention.isTargetClassName(componentClass.getName(), nameSuffix)) {
             return null;
         }
-        Class<?> targetClass = namingConvention.toCompleteClass(componentClass);
+        final Class<?> targetClass = namingConvention.toCompleteClass(componentClass);
         if (targetClass.isInterface()) {
             if (!isEnableInterface()) {
                 return null;
@@ -132,8 +132,8 @@ public class ComponentCreatorImpl implements ComponentCreator {
                 return null;
             }
         }
-        AnnotationHandler handler = AnnotationHandlerFactory.getAnnotationHandler();
-        ComponentDef cd = handler.createComponentDef(targetClass, instanceDef, autoBindingDef, externalBinding);
+        final AnnotationHandler handler = AnnotationHandlerFactory.getAnnotationHandler();
+        final ComponentDef cd = handler.createComponentDef(targetClass, instanceDef, autoBindingDef, externalBinding);
         if (cd.getComponentName() == null) {
             cd.setComponentName(namingConvention.fromClassNameToComponentName(targetClass.getName()));
         }
@@ -150,7 +150,7 @@ public class ComponentCreatorImpl implements ComponentCreator {
         if (!isTargetComponentName(componentName)) {
             return null;
         }
-        Class<?> componentClass = namingConvention.fromComponentNameToClass(componentName);
+        final Class<?> componentClass = namingConvention.fromComponentNameToClass(componentName);
         if (componentClass == null) {
             return null;
         }
