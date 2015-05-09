@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiClassUtil;
+import org.lastaflute.di.util.LdiSrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,7 @@ public class LastaDiProperties {
     public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
     public static final String INTERNAL_DEBUG_KEY = "internal.debug";
+    public static final String LASTA_ENV = "lasta.env"; // system property
 
     private static final Logger logger = LoggerFactory.getLogger(LastaDiProperties.class);
     private static LastaDiProperties instance; // lazy loaded
@@ -113,7 +115,7 @@ public class LastaDiProperties {
                     String msg = "The location should have delimiter colon ':' in " + LASTA_DI_PROPERTIES + " but: " + location;
                     throw new IllegalStateException(msg);
                 }
-                final String propName = location.substring(0, delimiterIndex).trim();
+                final String propName = resolveLastaEnvPath(location.substring(0, delimiterIndex).trim());
                 final String modeKey = location.substring(delimiterIndex + delimiter.length()).trim();
                 logger.info("...Loading specified properties and get by the key: {}, {}", propName, modeKey);
                 final Properties read = loadProperties(propName);
@@ -243,6 +245,27 @@ public class LastaDiProperties {
     //                                        --------------
     public boolean isInternalDebug() {
         return internalDebug;
+    }
+
+    // ===================================================================================
+    //                                                                  System Environment
+    //                                                                  ==================
+    public String resolveLastaEnvPath(String envPath) {
+        if (envPath == null) {
+            throw new IllegalArgumentException("The argument 'envPath' should not be null.");
+        }
+        final String lastaEnv = getLastaEnv();
+        if (lastaEnv != null && envPath.contains("_env.")) { // e.g. maihama_env.properties to maihama_env_prod.properties
+            final String front = LdiSrl.substringLastFront(envPath, "_env.");
+            final String rear = LdiSrl.substringLastRear(envPath, "_env.");
+            return front + "_env_" + lastaEnv + "." + rear;
+        } else {
+            return envPath;
+        }
+    }
+
+    public String getLastaEnv() { // null allowed
+        return System.getProperty(LASTA_ENV);
     }
 
     // ===================================================================================
