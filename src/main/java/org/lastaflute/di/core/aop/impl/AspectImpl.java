@@ -22,8 +22,6 @@ import org.lastaflute.di.core.aop.Pointcut;
 import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 
 /**
- * {@link Aspect}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -36,8 +34,6 @@ public class AspectImpl implements Aspect, Serializable {
     private Pointcut pointcut;
 
     /**
-     * {@link AspectImpl}を作成します。
-     * 
      * @param methodInterceptor
      */
     public AspectImpl(MethodInterceptor methodInterceptor) {
@@ -45,8 +41,6 @@ public class AspectImpl implements Aspect, Serializable {
     }
 
     /**
-     * {@link AspectImpl}を作成します。
-     * 
      * @param methodInterceptor
      * @param pointcut
      */

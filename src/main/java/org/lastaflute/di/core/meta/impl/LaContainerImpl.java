@@ -528,8 +528,6 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     }
 
     /**
-     * パラメータが<code>null</code>でないことを表明します。
-     * 
      * @param parameter
      * @param name
      */
@@ -540,8 +538,6 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     }
 
     /**
-     * パラメータが空でないことを表明します。
-     * 
      * @param parameter
      * @param name
      */

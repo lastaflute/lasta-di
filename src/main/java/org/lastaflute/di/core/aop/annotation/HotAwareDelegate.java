@@ -23,8 +23,6 @@ import java.lang.annotation.Target;
 import org.lastaflute.di.core.aop.interceptors.HotAwareDelegateInterceptor;
 
 /**
- * メソッドに{@link HotAwareDelegateInterceptor}を適用することを指定します。
- * 
  * @author modified by jflute (originated in Seasar)
  * @see HotAwareDelegateInterceptor
  */
@@ -34,9 +32,7 @@ import org.lastaflute.di.core.aop.interceptors.HotAwareDelegateInterceptor;
 public @interface HotAwareDelegate {
 
     /**
-     * 移譲する対象となるコンポーネント名です。
-     * 
-     * @return 移譲する対象となるコンポーネント名
+     * @return 
      */
     String targetName();
 

@@ -22,16 +22,12 @@ import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 
 /**
- * session用の{@link ComponentDeployer}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class SessionComponentDeployer extends AbstractComponentDeployer {
 
     /**
-     * {@link SessionComponentDeployer}を作成します。
-     * 
      * @param componentDef
      */
     public SessionComponentDeployer(ComponentDef componentDef) {

@@ -17,13 +17,10 @@ package org.lastaflute.di.core.external;
 
 import java.util.Map;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * application用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class ApplicationComponentDef extends SimpleComponentDef {

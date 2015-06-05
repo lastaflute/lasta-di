@@ -46,15 +46,10 @@ public class AutoBindingDefFactory {
         addAutoBindingDef(SEMIAUTO);
     }
 
-    /**
-     * インスタンスを構築します。
-     */
     protected AutoBindingDefFactory() {
     }
 
     /**
-     * 自動バインディング定義を追加します。
-     * 
      * @param autoBindingDef
      */
     public static void addAutoBindingDef(AutoBindingDef autoBindingDef) {
@@ -62,8 +57,6 @@ public class AutoBindingDefFactory {
     }
 
     /**
-     * 自動バインディング定義が存在するかどうかを返します。
-     * 
      * @param name
      * @return
      */
@@ -72,8 +65,6 @@ public class AutoBindingDefFactory {
     }
 
     /**
-     * 自動バインディング定義を返します。
-     * 
      * @param name
      * @return
      */

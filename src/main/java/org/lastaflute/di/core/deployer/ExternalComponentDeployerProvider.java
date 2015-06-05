@@ -16,11 +16,8 @@
 package org.lastaflute.di.core.deployer;
 
 import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.ExternalContext;
 
 /**
- * {@link ExternalContext}用の{@link ComponentDeployerFactory.Provider}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */

@@ -15,22 +15,9 @@
  */
 package org.lastaflute.di.core.exception;
 
-import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.LaContainer;
-import org.lastaflute.di.core.expression.Expression;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * コンポーネントのインスタンスを、 {@link ComponentDef コンポーネント定義}に指定されたクラスにキャスト出来ない場合にスローされます。
- * <p>
- * {@link  ComponentDef#setExpression(Expression)}でインスタンスの生成を定義している場合は、
- * そのインスタンスをコンポーネント定義に指定されたクラスにキャスト出来ないことを表します。
- * </p>
- * <p>
- * 外部コンポーネントを{@link LaContainer#injectDependency(Object)}などでインジェクションする場合は、
- * そのコンポーネントを、 コンポーネント定義に指定されたクラスにキャストできないことを表します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  * 
@@ -49,12 +36,8 @@ public class ClassUnmatchRuntimeException extends SRuntimeException {
     private Class realComponentClass_;
 
     /**
-     * <code>ClassUnmatchRuntimeException</code>を構築します。
-     * 
      * @param componentClass
-     *            コンポーネント定義に指定されたクラス
      * @param realComponentClass
-     *            コンポーネントの実際の型
      */
     public ClassUnmatchRuntimeException(Class componentClass, Class realComponentClass) {
         super("ESSR0069", new Object[] { componentClass.getName(), realComponentClass != null ? realComponentClass.getName() : "null" });
@@ -63,18 +46,14 @@ public class ClassUnmatchRuntimeException extends SRuntimeException {
     }
 
     /**
-     * コンポーネント定義に指定されたクラスを返します。
-     * 
-     * @return コンポーネント定義に指定されたクラス
+     * @return 
      */
     public Class getComponentClass() {
         return componentClass_;
     }
 
     /**
-     * コンポーネントの実際の型を返します。
-     * 
-     * @return コンポーネントの実際の型
+     * @return 
      */
     public Class getRealComponentClass() {
         return realComponentClass_;

@@ -24,52 +24,35 @@ import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandlerFactory;
 import org.lastaflute.di.core.meta.AutoBindingDef;
 import org.lastaflute.di.core.meta.InstanceDef;
-import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.ClassTraversal.ClassHandler;
+import org.lastaflute.di.util.LdiClassUtil;
 
 /**
- * コンポーネントを自動登録するための抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister implements ClassHandler {
 
-    /** クラスファイルの拡張子 */
     protected static final String CLASS_SUFFIX = ".class";
 
-    /**
-     * BINDINGアノテーションの定義です。
-     */
     public static final String autoNaming_BINDING = "bindingType=may";
 
     private AutoNaming autoNaming = new DefaultAutoNaming();
 
-    /**
-     * BINDINGアノテーションの定義です。
-     */
     public static final String instanceDef_BINDING = "bindingType=may";
 
     private InstanceDef instanceDef;
 
-    /**
-     * BINDINGアノテーションの定義です。
-     */
     public static final String autoBindingDef_BINDING = "bindingType=may";
 
     private AutoBindingDef autoBindingDef;
 
     private boolean externalBinding = false;
 
-    /**
-     * BINDINGアノテーションの定義です。
-     */
     public static final String customizer_BINDING = "bindingType=may";
 
     private ComponentCustomizer customizer;
 
     /**
-     * AutoNamingを返します。
-     * 
      * @return AutoNaming
      */
     public AutoNaming getAutoNaming() {
@@ -77,8 +60,6 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
     }
 
     /**
-     * AutoNamingを設定します。
-     * 
      * @param autoNaming
      *            AutoNaming
      */
@@ -87,76 +68,56 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
     }
 
     /**
-     * インスタンス定義を返します。
-     * 
-     * @return インスタンス定義
+     * @return 
      */
     public InstanceDef getInstanceDef() {
         return instanceDef;
     }
 
     /**
-     * インスタンス定義を設定します。
-     * 
      * @param instanceDef
-     *            インスタンス定義
      */
     public void setInstanceDef(InstanceDef instanceDef) {
         this.instanceDef = instanceDef;
     }
 
     /**
-     * 自動バインディング定義を返します。
-     * 
-     * @return 自動バインディング定義
+     * @return 
      */
     public AutoBindingDef getAutoBindingDef() {
         return autoBindingDef;
     }
 
     /**
-     * 自動バインディング定義を設定します。
-     * 
      * @param autoBindingDef
-     *            自動バインディング定義
      */
     public void setAutoBindingDef(AutoBindingDef autoBindingDef) {
         this.autoBindingDef = autoBindingDef;
     }
 
     /**
-     * 外部バインディングのデフォルト値を返します。
-     * 
-     * @return 外部バインディングのデフォルト値
+     * @return 
      */
     public boolean isExternalBinding() {
         return externalBinding;
     }
 
     /**
-     * 外部バインディングのデフォルト値を設定します。
-     * 
      * @param externalBinding
-     *            外部バインディングのデフォルト値
      */
     public void setExternalBinding(boolean externalBinding) {
         this.externalBinding = externalBinding;
     }
 
     /**
-     * コンポーネントカスタマイザを返します。
-     * 
-     * @return コンポーネントカスタマイザ
+     * @return 
      */
     public ComponentCustomizer getCustomizer() {
         return customizer;
     }
 
     /**
-     * コンポーネントカスタマイザを設定します。
-     * 
      * @param customizer
-     *            コンポーネントカスタマイザ
      */
     public void setCustomizer(ComponentCustomizer customizer) {
         this.customizer = customizer;
@@ -177,10 +138,7 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
     }
 
     /**
-     * コンポーネント定義を作成してコンテナに登録します。
-     * 
      * @param className
-     *            コンポーネントのクラス
      */
     protected void register(final String className) {
         final AnnotationHandler annoHandler = AnnotationHandlerFactory.getAnnotationHandler();
@@ -199,10 +157,7 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
     }
 
     /**
-     * コンポーネント定義をカスタマイズします。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      */
     protected void customize(ComponentDef componentDef) {
         if (customizer != null) {
@@ -211,15 +166,7 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
     }
 
     /**
-     * コンポーネントを検索する対象となるパッケージの配列を返します。
-     * <p>
-     * コンポーネントを検索する対象のパッケージは<code>ClassPattern</code>に設定されたパッケージ名から
-     * 重複やサブパッケージを除いたものになります。 例えば<code>ClassPattern</code>に<code>aaa, aaa.bbb, bbb</code>が指定された場合、
-     * <code>aaa.bbb</code>は<code>aaa</code>のサブパッケージなので取り除かれ、
-     * <code>aaa, bbb</code>が検索対象のパッケージとなります。
-     * </p>
-     * 
-     * @return コンポーネントを検索する対象となるパッケージの配列
+     * @return 
      */
     protected String[] getTargetPackages() {
         final List result = new ArrayList();

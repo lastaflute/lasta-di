@@ -24,31 +24,18 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * HOT deployに対応させるための{@link MethodInterceptor}です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class HotAwareDelegateInterceptor implements MethodInterceptor {
 
-    /**
-     * S2コンテナです。
-     */
     protected LaContainer container;
 
-    /**
-     * ターゲット名です。
-     */
     protected String targetName;
 
-    /**
-     * {@link HotAwareDelegateInterceptor}を作成します。
-     */
     public HotAwareDelegateInterceptor() {
     }
 
     /**
-     * {@link LaContainer}を設定します。
-     * 
      * @param container
      */
     public void setContainer(LaContainer container) {
@@ -56,8 +43,6 @@ public class HotAwareDelegateInterceptor implements MethodInterceptor {
     }
 
     /**
-     * ターゲット名を設定します。
-     * 
      * @param targetName
      */
     public void setTargetName(String targetName) {

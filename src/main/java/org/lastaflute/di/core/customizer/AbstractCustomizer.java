@@ -23,29 +23,6 @@ import org.lastaflute.di.core.autoregister.ClassPattern;
 import org.lastaflute.di.util.LdiClassUtil;
 
 /**
- * {@link org.lastaflute.di.core.ComponentDef コンポーネント定義}をカスタマイズするコンポーネントカスタマイザの抽象クラスです。
- * <p>
- * カスタマイズ対象となるコンポーネントおよびカスタマイズ非対象のコンポーネントを{@link org.lastaflute.di.core.autoregister.ClassPattern クラスパターン}で指定することができます。
- * 指定できるクラスパターンの組み合わせは、 以下の通りです。
- * </p>
- * <ul>
- * <li>カスタマイズ対象・非対象のクラスパターン共に指定されなかった場合は、 全てのコンポーネントをカスタマイズ対象とします。</li>
- * <li>カスタマイズ対象のクラスパターンのみ指定された場合は、
- * カスタマイズ対象クラスパターンにマッチしたコンポーネントのみがカスタマイズの対象となります。</li>
- * <li>カスタマイズ非対象のクラスパターンのみ指定された場合は、
- * カスタマイズ非対象クラスパターンにマッチしなかったコンポーネントのみがカスタマイズの対象となります。</li>
- * <li>カスタマイズ対象と非対象のクラスパターンが共に指定された場合は、 カスタマイズ対象クラスパターンにマッチしてかつ、
- * カスタマイズ非対象のクラスパターンにマッチしなかったコンポーネントのみがカスタマイズの対象となります。</li>
- * </ul>
- * <p>
- * カスタマイズ対象のコンポーネントが実装していなくてはならないインターフェースを、 ターゲットインターフェースとして{@link #setTargetInterface(Class) targetInterface}プロパティで指定することもできます。
- * ターゲットインターフェースを指定した場合は、 そのインターフェースを実装したコンポーネントのみがカスタマイズの対象になります。
- * </p>
- * <p>
- * {@link #customize(ComponentDef)}メソッドの引数で渡されたコンポーネントがカスタマイズ対象の場合は、 抽象メソッド{@link #doCustomize(ComponentDef)}を呼び出します。
- * サブクラスは{@link #doCustomize(ComponentDef)}メソッドを実装してコンポーネント定義をカスタマイズしてください。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class AbstractCustomizer implements ComponentCustomizer {

@@ -30,8 +30,6 @@ import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * メソッドアセンブラの抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -45,13 +43,10 @@ public abstract class AbstractMethodAssembler extends AbstractAssembler implemen
     }
 
     /**
-     * 定義されたメソッドを呼び出します。
-     * 
      * @param beanDesc
      * @param component
      * @param methodDef
      * @throws IllegalMethodRuntimeException
-     *             メソッド呼び出しで例外が発生した場合
      */
     protected void invoke(BeanDesc beanDesc, Object component, MethodDef methodDef) throws IllegalMethodRuntimeException {
 

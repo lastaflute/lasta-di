@@ -16,40 +16,21 @@
 package org.lastaflute.di.core.aop.javassist;
 
 /**
- * <code>try</code>ブロックをサポートするためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class TryBlockSupport {
 
-    /**
-     * try状態です。
-     */
     protected static final int STATUS_TRY = 0;
 
-    /**
-     * catch状態です。
-     */
     protected static final int STATUS_CATCH = 1;
 
-    /**
-     * finally状態です。
-     */
     protected static final int STATUS_FINALLY = 2;
 
-    /**
-     * 状態です。
-     */
     protected int status;
 
-    /**
-     * コード用のバッファです。
-     */
     protected StringBuffer codeBuf = new StringBuffer(500);
 
     /**
-     * {@link TryBlockSupport}を作成します。
-     * 
      * @param src
      */
     public TryBlockSupport(final String src) {
@@ -58,8 +39,6 @@ public class TryBlockSupport {
     }
 
     /**
-     * <code>catch</code>ブロックを追加します。
-     * 
      * @param exceptionType
      * @param src
      */
@@ -76,8 +55,6 @@ public class TryBlockSupport {
     }
 
     /**
-     * <code>finally</code>ブロックを設定します。
-     * 
      * @param src
      */
     public void setFinallyBlock(final String src) {
@@ -90,9 +67,7 @@ public class TryBlockSupport {
     }
 
     /**
-     * 出来上がったソースを返します。
-     * 
-     * @return 出来上がったソース
+     * @return 
      */
     public String getSourceCode() {
         if (status != STATUS_CATCH && status != STATUS_FINALLY) {

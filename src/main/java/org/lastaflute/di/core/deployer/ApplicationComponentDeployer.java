@@ -22,16 +22,12 @@ import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 
 /**
- * インスタンス属性がapplication用の{@link ComponentDeployer}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class ApplicationComponentDeployer extends AbstractComponentDeployer {
 
     /**
-     * {@link ApplicationComponentDeployer}を作成します。
-     * 
      * @param componentDef
      */
     public ApplicationComponentDeployer(ComponentDef componentDef) {

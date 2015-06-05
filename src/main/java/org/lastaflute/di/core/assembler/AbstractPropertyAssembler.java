@@ -27,8 +27,6 @@ import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
 
 /**
- * プロパティアセンブラの抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -42,14 +40,11 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
     }
 
     /**
-     * {@link ExternalContext}のデータをプロパティに自動設定します。
-     * 
      * @param beanDesc
      * @param componentDef
      * @param component
      * @param names
      * @throws EmptyRuntimeException
-     *             {@link ExternalContext}がnullの場合
      */
     protected void bindExternally(final BeanDesc beanDesc, final ComponentDef componentDef, final Object component, final Set names)
             throws EmptyRuntimeException {
@@ -79,12 +74,10 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
     }
 
     /**
-     * {@link ExternalContext}から値を取り出します。
-     * 
      * @param name
      * @param type
      * @param extCtx
-     * @return 値
+     * @return 
      */
     protected Object getValue(final String name, final Class type, final ExternalContext extCtx) {
         if (type.isArray()) {
@@ -102,11 +95,9 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
     }
 
     /**
-     * {@link ExternalContext}から値を取り出します。
-     * 
      * @param name
      * @param extCtx
-     * @return 値
+     * @return 
      */
     protected Object getValue(final String name, final ExternalContext extCtx) {
         Object value = extCtx.getRequestParameterMap().get(name);
@@ -121,11 +112,9 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
     }
 
     /**
-     * {@link ExternalContext}から配列の値を取り出します。
-     * 
      * @param name
      * @param extCtx
-     * @return 配列の値
+     * @return 
      */
     protected Object[] getValues(final String name, final ExternalContext extCtx) {
         Object[] values = (Object[]) extCtx.getRequestParameterValuesMap().get(name);

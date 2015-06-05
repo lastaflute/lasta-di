@@ -25,8 +25,6 @@ import org.lastaflute.di.util.LdiResourceUtil;
 import org.lastaflute.di.util.LdiZipFileUtil;
 
 /**
- * jarファイルの中にあるコンポーネントを自動登録するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  */
@@ -35,8 +33,6 @@ public class JarComponentAutoRegister extends AbstractJarComponentAutoRegister {
     private Class referenceClass = MethodInterceptor.class;
 
     /**
-     * 参照クラスを返します。
-     * 
      * @return
      */
     public Class getReferenceClass() {
@@ -44,9 +40,6 @@ public class JarComponentAutoRegister extends AbstractJarComponentAutoRegister {
     }
 
     /**
-     * jarファイルに含まれているクラスを設定します。jarファイルに含まれているならどのクラスでもOKです。
-     * このクラスを参照してjarファイルの物理的な位置を特定します。
-     * 
      * @param referenceClass
      */
     public void setReferenceClass(Class referenceClass) {

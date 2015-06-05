@@ -18,8 +18,6 @@ package org.lastaflute.di.core.deployer;
 import org.lastaflute.di.core.ComponentDef;
 
 /**
- * {@link ComponentDeployer}を作成するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class ComponentDeployerFactory {
@@ -27,8 +25,6 @@ public class ComponentDeployerFactory {
     private static Provider provider = new DefaultProvider();
 
     /**
-     * {@link Provider}を返します。
-     * 
      * @return
      */
     public static Provider getProvider() {
@@ -36,8 +32,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * {@link Provider}を設定します。
-     * 
      * @param p
      */
     public static void setProvider(final Provider p) {
@@ -45,8 +39,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * singleton用の{@link ComponentDeployer}を作成します。
-     * 
      * @param cd
      * @return
      */
@@ -55,8 +47,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * prototype用の{@link ComponentDeployer}を作成します。
-     * 
      * @param cd
      * @return
      */
@@ -65,8 +55,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * application(serlvetContext)用の{@link ComponentDeployer}を作成します。
-     * 
      * @param cd
      * @return
      */
@@ -75,8 +63,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * session用の{@link ComponentDeployer}を作成します。
-     * 
      * @param cd
      * @return
      */
@@ -85,8 +71,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * request用の{@link ComponentDeployer}を作成します。
-     * 
      * @param cd
      * @return
      */
@@ -95,8 +79,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * outer用の{@link ComponentDeployer}を作成します。
-     * 
      * @param cd
      * @return
      */
@@ -105,56 +87,42 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * {@link ComponentDeployerFactory}をカスタマイズするためのインターフェースです。
-     * 
      * @author koichk
      * 
      */
     public interface Provider {
 
         /**
-         * singleton用の{@link ComponentDeployer}を作成します。
-         * 
          * @param cd
          * @return
          */
         ComponentDeployer createSingletonComponentDeployer(ComponentDef cd);
 
         /**
-         * prototype用の{@link ComponentDeployer}を作成します。
-         * 
          * @param cd
          * @return
          */
         ComponentDeployer createPrototypeComponentDeployer(ComponentDef cd);
 
         /**
-         * application用の{@link ComponentDeployer}を作成します。
-         * 
          * @param cd
          * @return
          */
         ComponentDeployer createApplicationComponentDeployer(ComponentDef cd);
 
         /**
-         * session用の{@link ComponentDeployer}を作成します。
-         * 
          * @param cd
          * @return
          */
         ComponentDeployer createSessionComponentDeployer(ComponentDef cd);
 
         /**
-         * request用の{@link ComponentDeployer}を作成します。
-         * 
          * @param cd
          * @return
          */
         ComponentDeployer createRequestComponentDeployer(ComponentDef cd);
 
         /**
-         * outer用の{@link ComponentDeployer}を作成します。
-         * 
          * @param cd
          * @return
          */
@@ -162,8 +130,6 @@ public class ComponentDeployerFactory {
     }
 
     /**
-     * {@link ComponentDeployerFactory.Provider}のデフォルト実装です。
-     * 
      * @author koichk
      * 
      */

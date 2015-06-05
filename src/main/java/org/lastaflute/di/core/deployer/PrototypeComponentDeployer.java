@@ -18,16 +18,12 @@ package org.lastaflute.di.core.deployer;
 import org.lastaflute.di.core.ComponentDef;
 
 /**
- * prototype用の{@link ComponentDeployer}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class PrototypeComponentDeployer extends AbstractComponentDeployer {
 
     /**
-     * {@link PrototypeComponentDeployer}を作成します。
-     * 
      * @param componentDef
      */
     public PrototypeComponentDeployer(ComponentDef componentDef) {

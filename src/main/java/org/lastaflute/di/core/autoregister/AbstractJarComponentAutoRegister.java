@@ -26,8 +26,6 @@ import org.lastaflute.di.util.LdiResourceUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * jarファイルの中にあるコンポーネントを自動登録するための抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  */
@@ -38,8 +36,6 @@ public abstract class AbstractJarComponentAutoRegister extends AbstractComponent
     private Pattern[] jarFileNamePatterns;
 
     /**
-     * ベースとなるディレクトリを返します。
-     * 
      * @return
      */
     public String getBaseDir() {
@@ -47,8 +43,6 @@ public abstract class AbstractJarComponentAutoRegister extends AbstractComponent
     }
 
     /**
-     * ベースとなるディレクトリを設定します。
-     * 
      * @param baseDir
      */
     public void setBaseDir(String baseDir) {
@@ -73,16 +67,11 @@ public abstract class AbstractJarComponentAutoRegister extends AbstractComponent
         }
     }
 
-    /**
-     * ベースディレクトリを設定します。
-     */
     protected abstract void setupBaseDir();
 
     /**
-     * jarファイルが適用されるかどうか返します。
-     * 
      * @param jarFileName
-     * @return jarファイルが適用されるかどうか
+     * @return 
      */
     protected boolean isAppliedJar(final String jarFileName) {
         if (jarFileNamePatterns == null) {
@@ -102,18 +91,14 @@ public abstract class AbstractJarComponentAutoRegister extends AbstractComponent
     }
 
     /**
-     * jarファイルを検索します。
-     * 
      * @param jarFileName
-     * @return jarファイル
+     * @return 
      */
     protected File findJar(final String jarFileName) {
         return new File(baseDir, jarFileName);
     }
 
     /**
-     * jarファイル名を設定します。複数設定する場合は、','で区切ります。
-     * 
      * @param jarFileNames
      */
     public void setJarFileNames(String jarFileNames) {

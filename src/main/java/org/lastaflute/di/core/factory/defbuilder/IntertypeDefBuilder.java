@@ -17,22 +17,15 @@ package org.lastaflute.di.core.factory.defbuilder;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
-import org.lastaflute.di.core.meta.InterTypeDef;
 
 /**
- * Tigerアノテーションを読み取り{@link InterTypeDef}を作成するインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public interface IntertypeDefBuilder {
 
     /**
-     * コンポーネントからTigerアノテーションを読み取り{@link InterTypeDef}を作成し、コンポーネント定義に追加します。
-     * 
      * @param annotationHandler
-     *            このメソッドを呼び出しているアノテーションハンドラ
      * @param componentDef
-     *            コンポーネント定義
      */
     void appendIntertypeDef(AnnotationHandler annotationHandler, ComponentDef componentDef);
 

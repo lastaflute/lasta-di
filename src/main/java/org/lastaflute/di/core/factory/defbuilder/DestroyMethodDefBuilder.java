@@ -17,22 +17,15 @@ package org.lastaflute.di.core.factory.defbuilder;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
-import org.lastaflute.di.core.meta.DestroyMethodDef;
 
 /**
- * Tigerアノテーションを読み取り{@link DestroyMethodDef}を作成するインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public interface DestroyMethodDefBuilder {
 
     /**
-     * コンポーネントからTigerアノテーションを読み取り{@link DestroyMethodDef}を作成し、コンポーネント定義に追加します。
-     * 
      * @param annotationHandler
-     *            このメソッドを呼び出しているアノテーションハンドラ
      * @param componentDef
-     *            コンポーネント定義
      */
     void appendDestroyMethodDef(AnnotationHandler annotationHandler, ComponentDef componentDef);
 

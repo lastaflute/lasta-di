@@ -18,8 +18,6 @@ package org.lastaflute.di.core.factory.dixml.exception;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * 特定のタグにおいて、必要な属性が定義されていない場合にスローされます。
- * 
  * @author modified by jflute (originated in Seasar)
  * @author yatsu
  */
@@ -32,12 +30,8 @@ public class TagAttributeNotDefinedRuntimeException extends SRuntimeException {
     private String attributeName;
 
     /**
-     * <code>TagAttributeNotDefinedRuntimeException</code>を構築します。
-     * 
      * @param tagName
-     *            タグ名
      * @param attributeName
-     *            属性名
      */
     public TagAttributeNotDefinedRuntimeException(String tagName, String attributeName) {
 
@@ -47,18 +41,14 @@ public class TagAttributeNotDefinedRuntimeException extends SRuntimeException {
     }
 
     /**
-     * タグ名を返します。
-     * 
-     * @return タグ名
+     * @return 
      */
     public String getTagName() {
         return tagName;
     }
 
     /**
-     * 属性名を返します。
-     * 
-     * @return 属性名
+     * @return 
      */
     public String getAttributeName() {
         return attributeName;

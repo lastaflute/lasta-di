@@ -15,21 +15,15 @@
  */
 package org.lastaflute.di.core.external;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * RequestHeader用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class RequestHeaderMapComponentDef extends SimpleComponentDef {
 
-    /**
-     * {@link RequestHeaderMapComponentDef}を作成します。
-     */
     public RequestHeaderMapComponentDef() {
         super(null, null, ContainerConstants.HEADER);
     }

@@ -22,16 +22,11 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 
 /**
- * 自動登録用の抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public abstract class AbstractAutoRegister {
 
-    /**
-     * initメソッドアノテーションの定義です。
-     */
     public static final String INIT_METHOD = "registerAll";
 
     private LaContainer container;
@@ -41,8 +36,6 @@ public abstract class AbstractAutoRegister {
     private List ignoreClassPatterns = new ArrayList();
 
     /**
-     * コンテナを返します。
-     * 
      * @return
      */
     public LaContainer getContainer() {
@@ -50,8 +43,6 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * コンテナを設定します。
-     * 
      * @param container
      */
     public void setContainer(LaContainer container) {
@@ -59,8 +50,6 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * 追加されているClassPatternの数を返します。
-     * 
      * @return
      */
     public int getClassPatternSize() {
@@ -68,8 +57,6 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * ClassPatternを返します。
-     * 
      * @param index
      * @return
      */
@@ -78,8 +65,6 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * 自動登録で適用されるClassPatternを追加します。
-     * 
      * @param packageName
      * @param shortClassNames
      */
@@ -89,8 +74,6 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * 自動登録で適用されるClassPatternを追加します。
-     * 
      * @param classPattern
      */
     public void addClassPattern(ClassPattern classPattern) {
@@ -98,8 +81,6 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * 自動登録されないClassPatternを追加します。
-     * 
      * @param packageName
      * @param shortClassNames
      */
@@ -109,32 +90,23 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * 自動登録されないClassPatternを追加します。
-     * 
      * @param classPattern
      */
     public void addIgnoreClassPattern(ClassPattern classPattern) {
         ignoreClassPatterns.add(classPattern);
     }
 
-    /**
-     * 自動登録を行います。
-     */
     public abstract void registerAll();
 
     /**
-     * {@link ComponentDef}があるかどうかを返します。
-     * 
      * @param name
-     * @return {@link ComponentDef}があるかどうか
+     * @return 
      */
     protected boolean hasComponentDef(String name) {
         return findComponentDef(name) != null;
     }
 
     /**
-     * {@link ComponentDef}を検索します。
-     * 
      * @param name
      * @return {@link ComponentDef}
      */
@@ -153,11 +125,9 @@ public abstract class AbstractAutoRegister {
     }
 
     /**
-     * 無視するかどうかを返します。
-     * 
      * @param packageName
      * @param shortClassName
-     * @return 無視するかどうか
+     * @return 
      */
     protected boolean isIgnore(String packageName, String shortClassName) {
         if (ignoreClassPatterns.isEmpty()) {

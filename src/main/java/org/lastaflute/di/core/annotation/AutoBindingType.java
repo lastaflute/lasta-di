@@ -16,35 +16,20 @@
 package org.lastaflute.di.core.annotation;
 
 /**
- * 自動バインディングの列挙型です。
  * 
  * @author modified by jflute (originated in Seasar)
  */
 public enum AutoBindingType {
 
-    /**
-     * コンストラクタ・プロパティともに自動バインディングを行います。
-     */
     AUTO,
 
-    /**
-     * コンストラクタのみ自動バインディングを行います。
-     */
     CONSTRUCTOR,
 
-    /**
-     * プロパティのみ自動バインディングを行います。
-     */
     PROPERTY,
 
-    /**
-     * 自動バインディグを行いません。
-     */
     NONE;
 
     /**
-     * 自動バインディングタイプの名前を返します。
-     * 
      * @return 自動バインディングタイプの名前
      */
     public String getName() {

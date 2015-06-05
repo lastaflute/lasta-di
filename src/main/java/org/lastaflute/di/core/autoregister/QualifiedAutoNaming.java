@@ -19,15 +19,11 @@ import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * 拡張されたAutoNamingです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class QualifiedAutoNaming extends AbstractAutoNaming {
 
     /**
-     * 無視するパッケージプレフィックスを追加します。
-     * 
      * @param packagePrefix
      */
     public void addIgnorePackagePrefix(final String packagePrefix) {

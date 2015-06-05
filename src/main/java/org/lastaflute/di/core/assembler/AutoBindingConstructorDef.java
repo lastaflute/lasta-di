@@ -18,16 +18,12 @@ package org.lastaflute.di.core.assembler;
 import org.lastaflute.di.core.ComponentDef;
 
 /**
- * 自動バインディング定義のコンストラクタ版です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class AutoBindingConstructorDef extends AbstractAutoBindingDef {
 
     /**
-     * {@link AutoBindingConstructorDef}を作成します。
-     * 
      * @param name
      */
     protected AutoBindingConstructorDef(String name) {

@@ -16,11 +16,6 @@
 package org.lastaflute.di.core.meta;
 
 /**
- * このインターフェースは、 destroyメソッド定義を追加および取得することができるオブジェクトを表します。
- * <p>
- * destroyメソッド定義は複数追加することが出来ます。 destroyメソッド定義の取得はインデックス番号を指定して行います。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  * 
@@ -29,29 +24,18 @@ package org.lastaflute.di.core.meta;
 public interface DestroyMethodDefAware {
 
     /**
-     * destroyメソッド定義を追加します。
-     * 
      * @param methodDef
-     *            destroyメソッド定義
      */
     public void addDestroyMethodDef(DestroyMethodDef methodDef);
 
     /**
-     * {@link DestroyMethodDef destroyメソッド定義}の数を返します。
-     * 
-     * @return destroyメソッド定義の数
+     * @return 
      */
     public int getDestroyMethodDefSize();
 
     /**
-     * 指定されたインデックス番号<code>index</code>のdestroyメソッド定義を返します。
-     * <p>
-     * インデックス番号は、 追加した順番に 0,1,2,… となります。
-     * </p>
-     * 
      * @param index
-     *            destroyメソッド定義を指定するインデックス番号
-     * @return destroyメソッド定義
+     * @return 
      */
     public DestroyMethodDef getDestroyMethodDef(int index);
 }

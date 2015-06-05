@@ -77,14 +77,7 @@ public class AspectCustomizer extends AbstractCustomizer {
     }
 
     /**
-     * ポイントカットを作成して返します。
-     * <p>
-     * <code>pointcut</code>プロパティが指定されている場合は、 その文字列からポイントカットを作成します。
-     * <code>targetInterface</code>プロパティが指定されている場合は、
-     * そのインターフェースからポイントカットを作成します。 それ以外の場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @return ポイントカット
+     * @return 
      */
     protected Pointcut createPointcut() {
         if (!LdiStringUtil.isEmpty(pointcut)) {
@@ -97,12 +90,6 @@ public class AspectCustomizer extends AbstractCustomizer {
     }
 
     /**
-     * インスタンス属性が<code>singleton</code>以外のインターセプタを呼び出すためのアダプタとなるインターセプタです。
-     * <p>
-     * このインターセプタは呼び出されると、 構築時に指定されたインターセプタを{@link org.lastaflute.di.core.LaContainer}から取得して処理を引き渡します。
-     * そのため、 元々呼び出したいインターセプタのインスタンス属性が<code>singleton</code>以外でも期待した結果を得ることが出来るようになります。
-     * </p>
-     * 
      * @author modified by jflute (originated in Seasar)
      */
     public static class LookupAdaptorInterceptor extends AbstractInterceptor {

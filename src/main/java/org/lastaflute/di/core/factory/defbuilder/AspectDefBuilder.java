@@ -17,22 +17,15 @@ package org.lastaflute.di.core.factory.defbuilder;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
-import org.lastaflute.di.core.meta.AspectDef;
 
 /**
- * Tigerアノテーションを読み取り{@link AspectDef}を作成するインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public interface AspectDefBuilder {
 
     /**
-     * コンポーネントからTigerアノテーションを読み取り{@link AspectDef}を作成し、コンポーネント定義に追加します。
-     * 
      * @param annotationHandler
-     *            このメソッドを呼び出しているアノテーションハンドラ
      * @param componentDef
-     *            コンポーネント定義
      */
     void appendAspectDef(AnnotationHandler annotationHandler, ComponentDef componentDef);
 

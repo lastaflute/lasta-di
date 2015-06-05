@@ -19,8 +19,6 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.impl.LaContainerImpl;
 
 /**
- * {@link GenericExternalContext}用の {@link ExternalContextComponentDefRegister}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */

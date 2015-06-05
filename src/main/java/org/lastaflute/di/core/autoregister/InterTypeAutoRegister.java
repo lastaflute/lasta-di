@@ -20,21 +20,14 @@ import org.lastaflute.di.core.aop.InterType;
 import org.lastaflute.di.core.meta.impl.InterTypeDefImpl;
 
 /**
- * インタータイプの自動登録を行うクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class InterTypeAutoRegister extends AbstractComponentTargetAutoRegister {
 
-    /**
-     * {@link InterType}です。
-     */
     protected InterType interType;
 
     /**
-     * インタータイプを設定します。
-     * 
      * @param interType
      */
     public void setInterType(final InterType interType) {

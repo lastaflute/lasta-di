@@ -19,8 +19,6 @@ import org.lastaflute.di.core.meta.InstanceDef;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * 不正なコンポーネントインスタンス定義が指定された場合にスローされます。
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  * 
@@ -34,10 +32,7 @@ public class IllegalInstanceDefRuntimeException extends SRuntimeException {
     private String instanceName;
 
     /**
-     * <code>IllegalInstanceDefRuntimeException</code>を構築します。
-     * 
      * @param instanceName
-     *            指定された不正なコンポーネントインスタンス定義名
      */
     public IllegalInstanceDefRuntimeException(String instanceName) {
         super("ESSR0078", new Object[] { instanceName });
@@ -45,9 +40,7 @@ public class IllegalInstanceDefRuntimeException extends SRuntimeException {
     }
 
     /**
-     * 例外の原因となったコンポーネントインスタンス定義名を返します。
-     * 
-     * @return コンポーネントインスタンス定義名
+     * @return 
      */
     public String getInstanceName() {
         return instanceName;

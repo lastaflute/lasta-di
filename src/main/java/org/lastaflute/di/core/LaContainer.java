@@ -15,9 +15,6 @@
  */
 package org.lastaflute.di.core;
 
-import org.lastaflute.di.core.assembler.ConstructorAssembler;
-import org.lastaflute.di.core.assembler.MethodAssembler;
-import org.lastaflute.di.core.assembler.PropertyAssembler;
 import org.lastaflute.di.core.exception.ClassUnmatchRuntimeException;
 import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
 import org.lastaflute.di.core.exception.ContainerNotRegisteredRuntimeException;
@@ -27,84 +24,6 @@ import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
 import org.lastaflute.di.core.meta.MetaDefAware;
 
 /**
- * DIとAOPをサポートしたS2コンテナのインターフェースです。
- * 
- * <h4>S2Containerの役割について</h4>
- * <p>
- * コンポーネントの管理を行う機能を提供します。 コンポーネントとは１つかまたそれ以上のクラスで構成されるJavaオブジェクトです。
- * S2コンテナはコンポーネントの生成、コンポーネントの初期化、コンポーネントの取得を提供します。
- * コンポーネントを取得するキーには、コンポーネント名、コンポーネントのクラス、またはコンポーネントが実装するインターフェースを指定することができます。
- * </p>
- * <h4>S2コンテナのインスタンス階層について</h4>
- * <p>
- * S2コンテナ全体は複数のコンテナにより階層化されています。 一つのコンテナは複数のコンテナをインクルードすることができます。
- * 複数のコンテナが同一のコンテナをインクルードすることができます。
- * </p>
- * <p>
- * インクルードの参照範囲についてのイメージを示します。<br>
- * <img
- * src="http://s2container.seasar.org/ja/images/include_range_20040706.png"/><br>
- * コンテナの検索順についてのイメージを示します。<br>
- * <img
- * src="http://s2container.seasar.org/ja/images/include_search_20040706.png"/>
- * </p>
- * <h4>S2コンテナのインジェクションの種類について</h4>
- * <p>
- * S2コンテナは3種類のインジェクションをサポートします。
- * <dl>
- * <dt>{@link ConstructorAssembler コンストラクタ・インジェクション}</dt>
- * <dd>コンストラクタ引数を利用してコンポーネントをセットします。 </dd>
- * <dt>{@link PropertyAssembler セッター・インジェクション}</dt>
- * <dd>セッターメソッドを利用してコンポーネントをセットします。 </dd>
- * <dt>{@link MethodAssembler メソッド・インジェクション}</dt>
- * <dd>任意のメソッドを利用してコンポーネントをセットします。 </dd>
- * </dl>
- * </p>
- * <h4>S2Containerが持つメソッドの分類について</h4>
- * <p>
- * コンテナへの登録、コンテナからのコンポーネント取得、検索などを行うコンポーネントを管理する機能
- * <ul>
- * <li>{@link LaContainer#getComponent getComponent}</li>
- * <li>{@link LaContainer#getComponentDefSize getComponentDefSize}</li>
- * <li>{@link LaContainer#getComponentDef getComponentDef}</li>
- * <li>{@link LaContainer#findComponents findComponents}</li>
- * <li>{@link LaContainer#findAllComponents findAllComponents}</li>
- * <li>{@link LaContainer#findLocalComponents findLocalComponents}</li>
- * <li>{@link LaContainer#findComponentDefs findComponentDefs}</li>
- * <li>{@link LaContainer#findAllComponentDefs findAllComponentDefs}</li>
- * <li>{@link LaContainer#findLocalComponentDefs findLocalComponentDefs}</li>
- * <li>{@link LaContainer#hasComponentDef hasComponentDef}</li>
- * <li>{@link LaContainer#register register}</li>
- * <li>{@link LaContainer#injectDependency injectDependency}</li>
- * </ul>
- * コンテナの初期化、終了処理、コンテナの階層化、階層化されたコンテナへのアクセスなどコンテナを管理する機能
- * <ul>
- * <li>{@link LaContainer#getNamespace getNamespace}</li>
- * <li>{@link LaContainer#setNamespace setNamespace}</li>
- * <li>{@link LaContainer#getPath getPath getPath getPath}</li>
- * <li>{@link LaContainer#setPath setPath setPath setPath}</li>
- * <li>{@link LaContainer#getClassLoader getClassLoader}</li>
- * <li>{@link LaContainer#setClassLoader setClassLoader}</li>
- * <li>{@link LaContainer#init init}</li>
- * <li>{@link LaContainer#destroy destroy}</li>
- * <li>{@link LaContainer#getExternalContext getExternalContext}</li>
- * <li>{@link LaContainer#setExternalContext setExternalContext}</li>
- * <li>{@link LaContainer#getExternalContextComponentDefRegister getExternalContextComponentDefRegister}</li>
- * <li>{@link LaContainer#setExternalContextComponentDefRegister setExternalContextComponentDefRegister}</li>
- * <li>{@link LaContainer#hasDescendant hasDescendant}</li>
- * <li>{@link LaContainer#getDescendant getDescendant}</li>
- * <li>{@link LaContainer#registerDescendant registerDescendant}</li>
- * <li>{@link LaContainer#include include}</li>
- * <li>{@link LaContainer#getChildSize getChildSize}</li>
- * <li>{@link LaContainer#getChild getChild}</li>
- * <li>{@link LaContainer#getParentSize getParentSize}</li>
- * <li>{@link LaContainer#getParent getParent}</li>
- * <li>{@link LaContainer#addParent addParent}</li>
- * <li>{@link LaContainer#getRoot getRoot}</li>
- * <li>{@link LaContainer#setRoot setRoot}</li>
- * <li>{@link LaContainer#registerMap registerMap}</li>
- * </ul>
- * </p>
  * 
  * @author modified by jflute (originated in Seasar)
  * @author vestige &amp; SeasarJavaDoc Committers

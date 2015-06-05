@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 import org.lastaflute.di.core.aop.frame.MethodInvocation;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
@@ -28,8 +27,6 @@ import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * あるオブジェクトへの呼び出しを別のオブジェクトに転送する{@link MethodInterceptor}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -43,15 +40,10 @@ public class DelegateInterceptor extends AbstractInterceptor {
 
     private Map methodNameMap = new HashMap();
 
-    /**
-     * {@link DelegateInterceptor}を作成します。
-     */
     public DelegateInterceptor() {
     }
 
     /**
-     * {@link DelegateInterceptor}を作成します。
-     * 
      * @param target
      */
     public DelegateInterceptor(Object target) {
@@ -59,8 +51,6 @@ public class DelegateInterceptor extends AbstractInterceptor {
     }
 
     /**
-     * ターゲットのオブジェクトを返します。
-     * 
      * @return target
      */
     public Object getTarget() {
@@ -68,8 +58,6 @@ public class DelegateInterceptor extends AbstractInterceptor {
     }
 
     /**
-     * ターゲットのオブジェクトを設定します。
-     * 
      * @param target
      */
     public void setTarget(Object target) {
@@ -78,8 +66,6 @@ public class DelegateInterceptor extends AbstractInterceptor {
     }
 
     /**
-     * 転送するメソッドの組を追加します。
-     * 
      * @param methodName
      * @param targetMethodName
      */
