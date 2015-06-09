@@ -19,8 +19,6 @@ import org.lastaflute.di.core.meta.BindingTypeDef;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * 不正なバインディングタイプ定義が指定された場合にスローされます。
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  * 
@@ -34,10 +32,7 @@ public class IllegalBindingTypeDefRuntimeException extends SRuntimeException {
     private String bindingTypeName;
 
     /**
-     * <code>IllegalBindingTypeDefRuntimeException</code>を構築します。
-     * 
      * @param bindingTypeName
-     *            指定された不正なバインディングタイプ定義名
      */
     public IllegalBindingTypeDefRuntimeException(String bindingTypeName) {
         super("ESSR0079", new Object[] { bindingTypeName });
@@ -45,9 +40,7 @@ public class IllegalBindingTypeDefRuntimeException extends SRuntimeException {
     }
 
     /**
-     * 例外の原因となった不正なバインディングタイプ定義名を返します。
-     * 
-     * @return バインディングタイプ定義名
+     * @return 
      */
     public String getBindingTypeName() {
         return bindingTypeName;

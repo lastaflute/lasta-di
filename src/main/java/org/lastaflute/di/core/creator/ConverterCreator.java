@@ -20,15 +20,11 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * コンバータ用の {@link ComponentCreator}です。
- * 
  * @author shot
  */
 public class ConverterCreator extends ComponentCreatorImpl {
 
     /**
-     * {@link ConverterCreator}を作成します。
-     * 
      * @param namingConvention
      */
     public ConverterCreator(NamingConvention namingConvention) {
@@ -38,8 +34,6 @@ public class ConverterCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * コンバータ用の {@link ComponentCustomizer}を返します。
-     * 
      * @return
      */
     public ComponentCustomizer getConverterCustomizer() {
@@ -47,8 +41,6 @@ public class ConverterCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * コンバータ用の {@link ComponentCustomizer}を設定します。
-     * 
      * @param customizer
      */
     public void setConverterCustomizer(ComponentCustomizer customizer) {

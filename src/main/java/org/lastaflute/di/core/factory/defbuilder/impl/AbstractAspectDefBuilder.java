@@ -24,21 +24,14 @@ import org.lastaflute.di.core.meta.AspectDef;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 
 /**
- * Tigerアノテーションを読み取り{@link AspectDef}を作成するコンポーネントの実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class AbstractAspectDefBuilder implements AspectDefBuilder {
 
     /**
-     * 指定のインターセプタとポイントカットを持つ{@link AspectDef アスペクト定義}を作成して{@link ComponentDef コンポーネント定義}に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param interceptor
-     *            インターセプタを示すOGNL式
      * @param pointcut
-     *            ポイントカットを示す文字列 (カンマ区切りの正規表現)
      */
     protected void appendAspect(final ComponentDef componentDef, final String interceptor, final String pointcut) {
         if (interceptor == null) {
@@ -49,14 +42,9 @@ public abstract class AbstractAspectDefBuilder implements AspectDefBuilder {
     }
 
     /**
-     * 指定のインターセプタを指定のメソッドに適用する{@link AspectDef アスペクト定義}を作成して{@link ComponentDef コンポーネント定義}に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param interceptor
-     *            インターセプタを示すOGNL式
      * @param pointcut
-     *            インターセプタを適用するメソッド
      */
     protected void appendAspect(final ComponentDef componentDef, final String interceptor, final Method pointcut) {
         if (interceptor == null) {

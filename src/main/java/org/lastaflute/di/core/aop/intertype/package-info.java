@@ -13,8 +13,5 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-/**
- * Tigerアノテーションを読み取るための実装クラスを提供します。
- */
 package org.lastaflute.di.core.aop.intertype;
 

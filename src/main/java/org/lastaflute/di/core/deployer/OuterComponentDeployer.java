@@ -19,16 +19,12 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.exception.ClassUnmatchRuntimeException;
 
 /**
- * outer用の{@link ComponentDeployer}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class OuterComponentDeployer extends AbstractComponentDeployer {
 
     /**
-     * {@link OuterComponentDeployer}を作成します。
-     * 
      * @param componentDef
      */
     public OuterComponentDeployer(ComponentDef componentDef) {

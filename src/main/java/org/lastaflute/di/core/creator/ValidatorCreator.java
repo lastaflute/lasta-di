@@ -20,16 +20,12 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * Validator用の {@link ComponentCreator}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class ValidatorCreator extends ComponentCreatorImpl {
 
     /**
-     * {@link ValidatorCreator}を作成します。
-     * 
      * @param namingConvention
      */
     public ValidatorCreator(NamingConvention namingConvention) {
@@ -39,8 +35,6 @@ public class ValidatorCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * Validator用のカスタマイザを返します。
-     * 
      * @return
      */
     public ComponentCustomizer getValidatorCustomizer() {
@@ -48,8 +42,6 @@ public class ValidatorCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * Validator用のカスタマイザを設定します。
-     * 
      * @param customizer
      */
     public void setValidatorCustomizer(ComponentCustomizer customizer) {

@@ -43,100 +43,6 @@ import org.lastaflute.di.util.LdiFieldUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * クラスに指定された定数アノテーションからコンポーネント定義を作成する実装クラスです。
- * <p>
- * 定数アノテーションとは<code>public</code>,<code>static</code>,<code>final</code>を用いて記述されたフィールドの事です。
- * フィールドのキーと値は次の形式で指定します。
- * 
- * <pre>
- * <var>key1</var>=<var>value1</var>,<var>key2</var>=<var>value2</var>,<var>key3</var>=<var>value3</var>....
- * </pre>
- * 
- * 指定出来るキーとその値はそれぞれの定数アノテーションで説明します。
- * 一部の定数アノテーションのフィールドにはキーとその値を指定することが出来ないものもあります。
- * 
- * フィールドの値が不正な場合は{@link IllegalArgumentException}をスローします。
- * </p>
- * 
- * <h4><code>Component</code>アノテーション</h4>
- * <p>
- * <code>Component</code>アノテーションは、フィールド名が<code>COMPONENT</code>で<code>String</code>型のフィールドです。
- * <code>Component</code>アノテーションであるフィールドに指定出来るキーは以下になります。
- * </p>
- * <dl>
- * <dt><code>name</code></dt>
- * <dd>コンポーネント名</dd>
- * <dt><code>instance</code></dt>
- * <dd>インスタンス定義</dd>
- * <dt><code>autoBinding</code></dt>
- * <dd>自動バインディング定義</dd>
- * <dt><code>externalBinding</code></dt>
- * <dd>外部バインディング定義</dd>
- * </dl>
- * <p>
- * 指定されたキーとその値に従ってコンポーネント定義を作成します。
- * </p>
- * 
- * <h4><code>Binding</code>アノテーション</h4>
- * <p>
- * <code>Binding</code>アノテーションは、フィールド名が<code>プロパティ名_BINDING</code>で<code>String</code>型のフィールドです。
- * <code>Binding</code>アノテーションであるフィールドに指定出来るキーは以下になります。
- * </p>
- * <dl>
- * <dt><code>bindingType</code></dt>
- * <dd>バインディングタイプ</dd>
- * <dt><code>value</code></dt>
- * <dd>ONGL式</dd>
- * </dl>
- * また、<code>Binding</code>アノテーションのフィールドには<code>null</code>や<code>ONGL</code>式を直接指定することも出来ます。
- * <p>
- * 指定されたキーとその値に従ってプロパティ定義を作成します。
- * </p>
- * 
- * <h4><code>Aspect</code>アノテーション</h4>
- * <code>Aspect</code>アノテーションは、フィールド名が<code>ASPECT</code>で<code>String</code>型のフィールドです。
- * <code>Aspect</code>アノテーションであるフィールドに指定出来るキーは以下になります。
- * 
- * <dl>
- * <dt><code>value</code></dt>
- * <dd>インターセプタ名</dd>
- * <dt><code>pointcut</code></dt>
- * <dd>ポイントカット</dd>
- * </dl>
- * <p>
- * 指定されたキーとその値に従ってアスペクト定義を作成します。
- * </p>
- * 
- * 
- * <h4><code>InterType</code>アノテーション</h4>
- * <p>
- * <code>InterType</code>アノテーションは、フィールド名が<code>INTER_TYPE</code>で<code>String</code>型のフィールドです。
- * <code>InterType</code>アノテーションであるフィールドには、ONGL式を指定します。
- * </p>
- * <p>
- * 指定されたONGL式を元にインタータイプ定義を作成し、コンポーネント定義に追加します。
- * </p>
- * 
- * 
- * <h4><code>InitMethod</code>アノテーション</h4>
- * <p>
- * <code>InitMethod</code>アノテーションは、フィールド名が<code>INIT_METHOD</code>で<code>String</code>型のフィールドです。
- * <code>InitMethod</code>アノテーションであるフィールドには、コンポーネントが初期化されるときに呼び出したいメソッド名を指定します。メソッドが複数ある時はカンマで区切ることが出来ます。
- * </p>
- * <p>
- * 指定されたメソッド名から初期化メソッドを生成し、コンポーネント定義に追加します。
- * </p>
- * 
- * 
- * <h4><code>DestroyMethod</code>アノテーション</h4>
- * <p>
- * <code>DestroyMethod</code>アノテーションは、フィールド名が<code>DESTROY_METHOD</code>で<code>String</code>型のフィールドです。
- * <code>DestroyMethod</code>アノテーションであるフィールドには、コンポーネントが終了される時に呼び出したいメソッド名を指定します。メソッドが複数ある時はカンマで区切ることが出来ます。
- * </p>
- * <p>
- * 指定されたメソッド名からdestroyメソッドを生成し、コンポーネント定義に追加します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
@@ -177,11 +83,8 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * フィールドが定数アノテーションであるかどうかを判断します。
-     * 
      * @param field
-     *            フィールド
-     * @return フィールドが定数アノテーションの場合は<code>true</code>,そうでない場合は<code>false</code>
+     * @return 
      */
     protected boolean isConstantAnnotationField(Field field) {
         final int modifiers = field.getModifiers();
@@ -254,16 +157,10 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * 指定されたインターセプタ名とポイントカットを表す文字列からアスペクト定義を生成し、コンポーネント定義に追加します。 但し、インターセプタ名が<code>null</code>の場合には{@link EmptyRuntimeException}がスローされます。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param interceptor
-     *            インターセプタ名
      * @param pointcut
-     *            ポイントカットを表す文字列
      * @throws EmptyRuntimeException
-     *             インターセプタ名が<code>null</code>の場合
      */
     protected void appendAspect(ComponentDef componentDef, String interceptor, String pointcut) {
 
@@ -275,16 +172,10 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * 指定されたインターセプタ名とメソッドからアスペクト定義を生成し、コンポーネント定義に追加します。 但し、インターセプタ名が<code>null</code>の場合には{@link EmptyRuntimeException}がスローされます。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param interceptor
-     *            インターセプタ名
      * @param targetMethod
-     *            メソッド
      * @throws EmptyRuntimeException
-     *             インターセプタ名が<code>null</code>の場合
      */
     protected void appendAspect(ComponentDef componentDef, String interceptor, Method targetMethod) {
 
@@ -313,12 +204,8 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * インタータイプ定義を生成し、その定義にインタータイプ名で生成したOGNL式をセットしてコンポーネント定義に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param interTypeName
-     *            インタータイプ名
      */
     protected void appendInterType(ComponentDef componentDef, String interTypeName) {
         InterTypeDef interTypeDef = new InterTypeDefImpl();
@@ -357,12 +244,8 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * 指定されたメソッドから初期化メソッド定義を生成し、コンポーネント定義に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param method
-     *            メソッド
      */
     protected void appendInitMethod(ComponentDef componentDef, Method method) {
         InitMethodDef initMethodDef = new InitMethodDefImpl(method);
@@ -370,12 +253,8 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * 指定されたメソッド名から初期化メソッド定義を生成し、コンポーネント定義に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param methodName
-     *            メソッド名
      */
     protected void appendInitMethod(ComponentDef componentDef, String methodName) {
         InitMethodDef initMethodDef = new InitMethodDefImpl(methodName);
@@ -413,12 +292,8 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * 指定されたメソッドからdestroyメソッド定義を生成し、コンポーネント定義に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param targetMethod
-     *            メソッド
      */
     protected void appendDestroyMethod(ComponentDef componentDef, Method targetMethod) {
         DestroyMethodDef destroyMethodDef = new DestroyMethodDefImpl(targetMethod);
@@ -426,12 +301,8 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     /**
-     * 指定されたメソッド名からdestroyメソッド定義を生成し、コンポーネント定義に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param methodName
-     *            メソッド名
      */
     protected void appendDestroyMethod(ComponentDef componentDef, String methodName) {
         DestroyMethodDef destroyMethodDef = new DestroyMethodDefImpl(methodName);

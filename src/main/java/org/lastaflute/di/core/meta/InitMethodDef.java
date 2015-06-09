@@ -18,20 +18,6 @@ package org.lastaflute.di.core.meta;
 import org.lastaflute.di.core.LaContainer;
 
 /**
- * コンポーネントに対してinitメソッド･インジェクションを定義するためのインターフェースです。
- * <p>
- * initメソッド･インジェクションとは、S2コンテナによってインスタンスが生成された直後に、
- * 1つ以上の任意のメソッド(初期化メソッド)を実行するという機能です。ただし、コンポーネントインスタンス定義が<code>outer</code>の場合には、
- * 以下のメソッドが呼び出されたタイミングで実行されます。
- * 
- * <dl>
- * <dt>{@link LaContainer#injectDependency(Object)}</dt>
- * <dt>{@link LaContainer#injectDependency(Object,Class)}</dt>
- * <dt>{@link LaContainer#injectDependency(Object,String)}</dt>
- * </dl>
- * 
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author matsunobu
  * 

@@ -19,8 +19,6 @@ import org.lastaflute.di.core.meta.AutoBindingDef;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * 不正な自動バインディング定義が指定された場合にスローされます。
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  * 
@@ -34,10 +32,7 @@ public class IllegalAutoBindingDefRuntimeException extends SRuntimeException {
     private String autoBindingName;
 
     /**
-     * <code>IllegalAutoBindingDefRuntimeException</code>を構築します。
-     * 
      * @param autoBindingName
-     *            指定された不正な自動バインディング定義名
      */
     public IllegalAutoBindingDefRuntimeException(String autoBindingName) {
         super("ESSR0077", new Object[] { autoBindingName });
@@ -45,9 +40,7 @@ public class IllegalAutoBindingDefRuntimeException extends SRuntimeException {
     }
 
     /**
-     * 例外の原因となった不正な自動バインディング定義名を返します。
-     * 
-     * @return 自動バインディング定義名
+     * @return 
      */
     public String getAutoBindingName() {
         return autoBindingName;

@@ -18,12 +18,6 @@ package org.lastaflute.di.core.exception;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * 1つのキーに複数のコンポーネントが登録されていた場合にスローされます。
- * <p>
- * S2コンテナからコンポーネントを取得しようとした際に、 指定したキー(コンポーネントのクラス、 インターフェース、
- * あるいは名前)に該当するコンポーネント定義が複数存在した場合、 この例外が発生します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  * 
@@ -38,12 +32,8 @@ public class TooManyRegistrationRuntimeException extends SRuntimeException {
     private Class[] componentClasses_;
 
     /**
-     * <code>TooManyRegistrationRuntimeException</code>を構築します。
-     * 
      * @param key
-     *            コンポーネントを取得しようとした際に使用したキー
      * @param componentClasses
-     *            1つのキーに登録された複数コンポーネントのクラスの配列
      */
     public TooManyRegistrationRuntimeException(Object key, Class[] componentClasses) {
         super("ESSR0045", new Object[] { key, getClassNames(componentClasses) });
@@ -52,18 +42,14 @@ public class TooManyRegistrationRuntimeException extends SRuntimeException {
     }
 
     /**
-     * コンポーネントを取得しようとした際に使用したキーを返します。
-     * 
-     * @return コンポーネントを取得するためのキー
+     * @return 
      */
     public Object getKey() {
         return key_;
     }
 
     /**
-     * 1つのキーに登録された複数コンポーネントのクラスの配列を返します。
-     * 
-     * @return コンポーネントのクラスの配列
+     * @return 
      */
     public Class[] getComponentClasses() {
         return componentClasses_;

@@ -21,85 +21,40 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 
 /**
- * コンポーネントをインジェクションする時の動作を表すバインディングタイプを定義するインターフェースです。
- * <p>
- * バインディングタイプ定義には、 以下のものがあります。
- * </p>
- * <dl>
- * <dt><code>must</code></dt>
- * <dd>自動バインディングが適用できなかった場合、 例外が発生します。</dd>
- * <dt><code>should</code></dt>
- * <dd>自動バインディングが適用できなかった場合、 警告を通知します。</dd>
- * <dt><code>may</code></dt>
- * <dd>自動バインディングが適用できなかった場合でも何もおきません。</dd>
- * <dt><code>none</code></dt>
- * <dd>{@link org.lastaflute.di.core.meta.AutoBindingDef 自動バインディングタイプ定義}が<code>auto</code>や<code>property</code>の場合でも自動バインディングを適用しません。</dd>
- * </dl>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  */
 public interface BindingTypeDef {
 
-    /**
-     * バインディングタイプ定義名「<code>must</code>」を表す定数です。
-     */
     String MUST_NAME = "must";
 
-    /**
-     * バインディングタイプ定義名「<code>should</code>」を表す定数です。
-     */
     String SHOULD_NAME = "should";
 
-    /**
-     * バインディングタイプ定義名「<code>may</code>」を表す定数です。
-     */
     String MAY_NAME = "may";
 
-    /**
-     * バインディングタイプ定義名「<code>none</code>」を表す定数です。
-     */
     String NONE_NAME = "none";
 
     /**
-     * バインディングタイプ定義名を返します。
-     * 
-     * @return バインディングタイプ定義名
+     * @return 
      */
     String getName();
 
     /**
-     * バインディングタイプ定義に基づいて、 <code>component</code>に対してS2コンテナ上のコンポーネントをプロパティ経由でインジェクションします。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param propertyDef
-     *            プロパティに対する設定方法や設定値の定義
      * @param propertyDesc
-     *            対象となるコンポーネントのプロパティ情報
      * @param component
-     *            対象となるコンポーネントのインスタンス
      * @throws org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException
-     *             <code>propertyDef</code>に指定されたコンポーネントが取得できなかった場合、
-     *             または取得したコンポーネントがインジェクションできなかった場合
      */
     void bind(ComponentDef componentDef, PropertyDef propertyDef, PropertyDesc propertyDesc, Object component);
 
     /**
-     * バインディングタイプ定義に基づいて、 <code>component</code>に対してS2コンテナ上のコンポーネントをフィールドに直接インジェクションします。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      * @param propertyDef
-     *            プロパティに対する設定方法や設定値の定義
      * @param field
-     *            対象となるコンポーネントのフィールド情報
      * @param component
-     *            対象となるコンポーネントのインスタンス
      * @throws org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException
-     *             <code>propertyDef</code>に指定されたコンポーネントが取得できなかった場合
      * @throws org.lastaflute.di.exception.IllegalAccessRuntimeException
-     *             対象となるコンポーネントのフィールドが<code>private</code>などでアクセスできなかった場合
      */
     void bind(ComponentDef componentDef, PropertyDef propertyDef, Field field, Object component);
 }

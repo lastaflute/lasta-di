@@ -20,10 +20,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.lastaflute.di.core.aop.intertype.PropertyInterType;
-
 /**
- * {@link PropertyInterType}を適用してsetter/getterメソッドを生成することを示します。
  * 
  * @author y-komori
  */
@@ -32,9 +29,7 @@ import org.lastaflute.di.core.aop.intertype.PropertyInterType;
 public @interface Property {
 
     /**
-     * プロパティタイプです。
-     * 
-     * @return プロパティタイプ
+     * @return 
      */
     PropertyType value() default PropertyType.READWRITE;
 

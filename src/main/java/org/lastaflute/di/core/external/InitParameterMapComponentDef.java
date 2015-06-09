@@ -15,21 +15,15 @@
  */
 package org.lastaflute.di.core.external;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * InitParameter用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class InitParameterMapComponentDef extends SimpleComponentDef {
 
-    /**
-     * {@link InitParameterMapComponentDef}を作成します。
-     */
     public InitParameterMapComponentDef() {
         super(null, null, ContainerConstants.INIT_PARAM);
     }

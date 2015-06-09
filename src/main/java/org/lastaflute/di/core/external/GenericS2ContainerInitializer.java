@@ -24,42 +24,23 @@ import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * Genericな {@link LaContainer}の初期化クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class GenericS2ContainerInitializer {
 
-    /**
-     * {@link LaContainer}用の設定パスです。
-     */
     protected String containerConfigPath;
 
-    /**
-     * アプリケーション用の設定パスです。
-     */
     protected String configPath;
 
-    /**
-     * {@link ExternalContext}です。
-     */
     protected ExternalContext externalContext;
 
-    /**
-     * {@link ExternalContextComponentDefRegister}です。
-     */
     protected ExternalContextComponentDefRegister externalContextComponentDefRegister;
 
-    /**
-     * {@link GenericS2ContainerInitializer}を作成します。
-     */
     public GenericS2ContainerInitializer() {
         this(new GenericExternalContext(), new GenericExternalContextComponentDefRegister());
     }
 
     /**
-     * {@link GenericS2ContainerInitializer}を作成します。
-     * 
      * @param externalContext
      * @param externalContextComponentDefRegister
      */
@@ -70,8 +51,6 @@ public class GenericS2ContainerInitializer {
     }
 
     /**
-     * 初期化します。
-     * 
      * @return {@link LaContainer}
      */
     public LaContainer initialize() {
@@ -95,17 +74,13 @@ public class GenericS2ContainerInitializer {
     }
 
     /**
-     * 初期化されているかどうか返します。
-     * 
-     * @return 初期化されているかどうか
+     * @return 
      */
     protected boolean isAlreadyInitialized() {
         return SingletonLaContainerFactory.hasContainer();
     }
 
     /**
-     * 設定パスを設定します。
-     * 
      * @param configPath
      */
     public void setConfigPath(final String configPath) {

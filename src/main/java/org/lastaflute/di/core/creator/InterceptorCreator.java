@@ -20,16 +20,12 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * Interceptor用の {@link ComponentCreator}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class InterceptorCreator extends ComponentCreatorImpl {
 
     /**
-     * {@link InterceptorCreator}を作成します。
-     * 
      * @param namingConvention
      */
     public InterceptorCreator(NamingConvention namingConvention) {
@@ -39,8 +35,6 @@ public class InterceptorCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * Interceptor用の {@link ComponentCustomizer}を返します。
-     * 
      * @return
      */
     public ComponentCustomizer getInterceptorCustomizer() {
@@ -48,8 +42,6 @@ public class InterceptorCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * Interceptor用の {@link ComponentCustomizer}を設定します。
-     * 
      * @param customizer
      */
     public void setInterceptorCustomizer(ComponentCustomizer customizer) {

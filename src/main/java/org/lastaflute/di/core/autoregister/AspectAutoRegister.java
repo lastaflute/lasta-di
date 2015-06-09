@@ -21,8 +21,6 @@ import org.lastaflute.di.core.factory.AspectDefFactory;
 import org.lastaflute.di.core.meta.AspectDef;
 
 /**
- * アスペクトを自動登録するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -33,8 +31,6 @@ public class AspectAutoRegister extends AbstractComponentTargetAutoRegister {
     private String pointcut;
 
     /**
-     * インターセプタを設定します。
-     * 
      * @param interceptor
      */
     public void setInterceptor(MethodInterceptor interceptor) {
@@ -42,8 +38,6 @@ public class AspectAutoRegister extends AbstractComponentTargetAutoRegister {
     }
 
     /**
-     * ポイントカットを設定します。
-     * 
      * @param pointcut
      */
     public void setPointcut(String pointcut) {

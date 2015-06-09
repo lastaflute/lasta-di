@@ -23,8 +23,6 @@ import org.lastaflute.di.util.LdiStringUtil;
 import org.xml.sax.Attributes;
 
 /**
- * diconファイルの<code>interType</code>要素を解釈するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class InterTypeTagHandler extends AbstractTagHandler {
@@ -44,9 +42,7 @@ public class InterTypeTagHandler extends AbstractTagHandler {
     }
 
     /**
-     * インタータイプ定義を作成します。
-     * 
-     * @return インタータイプ定義
+     * @return 
      */
     protected InterTypeDef createInterTypeDef() {
         return new InterTypeDefImpl();

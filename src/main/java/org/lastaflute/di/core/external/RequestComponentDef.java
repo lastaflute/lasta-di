@@ -17,20 +17,14 @@ package org.lastaflute.di.core.external;
 
 import java.util.Map;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * Request用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class RequestComponentDef extends SimpleComponentDef {
 
-    /**
-     * {@link RequestComponentDef}を作成します。
-     */
     public RequestComponentDef() {
         super(Map.class, ContainerConstants.REQUEST_NAME);
     }

@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 更新しない {@link AbstractExternalContextMap}です。
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class AbstractUnmodifiableExternalContextMap extends AbstractExternalContextMap {

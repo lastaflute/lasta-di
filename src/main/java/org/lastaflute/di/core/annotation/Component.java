@@ -21,11 +21,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * S2コンテナで管理されるコンポーネントであることを示します。
- * <p>
- * diconファイルの<code>&lt;component&gt;</code>要素で指定する項目を設定するためのアノテーションです。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -33,30 +28,22 @@ import java.lang.annotation.Target;
 public @interface Component {
 
     /**
-     * コンポーネントの名前です。
-     * 
-     * @return コンポーネントの名前
+     * @return 
      */
     String name() default "";
 
     /**
-     * インスタンスタイプです。
-     * 
-     * @return インスタンスタイプ
+     * @return 
      */
     InstanceType instance() default InstanceType.SINGLETON;
 
     /**
-     * 自動バインディングタイプです。
-     * 
-     * @return 自動バインディングタイプ
+     * @return 
      */
     AutoBindingType autoBinding() default AutoBindingType.AUTO;
 
     /**
-     * 外部バインディングを有効にする場合は{@code null}
-     * 
-     * @return 外部バインディングを有効にする場合は{@code null}
+     * @return 
      */
     boolean externalBinding() default false;
 

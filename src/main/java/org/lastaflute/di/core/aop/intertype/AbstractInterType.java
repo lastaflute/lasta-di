@@ -29,29 +29,14 @@ import org.lastaflute.di.core.util.ClassPoolUtil;
 import org.lastaflute.di.exception.CannotCompileRuntimeException;
 import org.lastaflute.di.exception.NotFoundRuntimeException;
 
-/**
- * {@link InterType}の抽象クラスです。
- */
 public abstract class AbstractInterType implements InterType {
 
-    /**
-     * Componentアノテーションです。
-     */
     public static final String COMPONENT = "instance = prototype";
 
-    /**
-     * ターゲットクラスです。
-     */
     protected Class targetClass;
 
-    /**
-     * エンハンスされたクラスです。
-     */
     protected CtClass enhancedClass;
 
-    /**
-     * クラスプールです。
-     */
     protected ClassPool classPool;
 
     public void introduce(final Class targetClass, final CtClass enhancedClass) {
@@ -72,18 +57,12 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * クラス構造を変更します。
-     * 
      * @throws CannotCompileException
-     *             コンパイルできない場合
      * @throws NotFoundException
-     *             何かが見つからない場合
      */
     protected abstract void introduce() throws CannotCompileException, NotFoundException;
 
     /**
-     * ターゲットクラスを返します。
-     * 
      * @return
      */
     protected Class getTargetClass() {
@@ -91,154 +70,102 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * エンハンスされたクラスを返します。
-     * 
-     * @return エンハンスされたクラス
+     * @return 
      */
     protected CtClass getEnhancedClass() {
         return enhancedClass;
     }
 
     /**
-     * クラスプールを返します。
-     * 
-     * @return クラスプール
+     * @return 
      */
     protected ClassPool getClassPool() {
         return classPool;
     }
 
     /**
-     * インターフェースを追加します。
-     * 
      * @param clazz
-     *            インターフェース
      */
     protected void addInterface(final Class clazz) {
         enhancedClass.addInterface(toCtClass(clazz));
     }
 
     /**
-     * フィールドを追加します。
-     * 
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      */
     protected void addField(final Class type, final String name) {
         addField(Modifier.PRIVATE, type, name);
     }
 
     /**
-     * フィールドを追加します。
-     * 
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addField(final Class type, final String name, final String init) {
         addField(Modifier.PRIVATE, type, name, init);
     }
 
     /**
-     * 静的フィールドを追加します。
-     * 
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      */
     protected void addStaticField(final Class type, final String name) {
         addStaticField(Modifier.PRIVATE, type, name);
     }
 
     /**
-     * 静的フィールドを追加します。
-     * 
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addStaticField(final Class type, final String name, final String init) {
         addStaticField(Modifier.PRIVATE, type, name, init);
     }
 
     /**
-     * 定数を追加します。
-     * 
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addConstant(final Class type, final String name, final String init) {
         addStaticField(Modifier.PUBLIC | Modifier.FINAL, type, name, init);
     }
 
     /**
-     * 静的フィールドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      */
     protected void addStaticField(final int modifiers, final Class type, final String name) {
         addField(Modifier.STATIC | modifiers, type, name);
     }
 
     /**
-     * 静的フィールドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addStaticField(final int modifiers, final Class type, final String name, final String init) {
         addField(Modifier.STATIC | modifiers, type, name, init);
     }
 
     /**
-     * 静的フィールドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addStaticField(final int modifiers, final Class type, final String name, final CtField.Initializer init) {
         addField(Modifier.STATIC | modifiers, type, name, init);
     }
 
     /**
-     * フィールドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      */
     protected void addField(final int modifiers, final Class type, final String name) {
         try {
@@ -251,10 +178,7 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * フィールドを追加します。
-     * 
      * @param src
-     *            ソース
      */
     protected void addField(final String src) {
         try {
@@ -265,16 +189,10 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * フィールドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param type
-     *            フィールドの型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addField(final int modifiers, final Class type, final String name, final String init) {
         try {
@@ -287,16 +205,10 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * フィールドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param type
-     *            フィールド型
      * @param name
-     *            フィールド名
      * @param init
-     *            初期化情報
      */
     protected void addField(final int modifiers, final Class type, final String name, final CtField.Initializer init) {
         try {
@@ -309,180 +221,114 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param name
-     *            メソッド名
      * @param src
-     *            ソース
      */
     protected void addMethod(final String name, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, null, null, src);
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param src
-     *            ソース
      */
     protected void addMethod(final String name, final Class[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, paramTypes, null, src);
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param exceptionTypes
-     *            例外クラスの配列
      * @param src
-     *            ソース
      */
     protected void addMethod(final String name, final Class[] paramTypes, Class[] exceptionTypes, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, paramTypes, exceptionTypes, src);
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param src
-     *            ソース
      */
     protected void addMethod(final Class returnType, final String name, final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, null, null, src);
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param src
-     *            ソース
      */
     protected void addMethod(final Class returnType, final String name, final Class[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, paramTypes, null, src);
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param exceptionTypes
-     *            例外の型の配列
      * @param src
-     *            ソース
      */
     protected void addMethod(final Class returnType, final String name, final Class[] paramTypes, Class[] exceptionTypes, final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, paramTypes, exceptionTypes, src);
     }
 
     /**
-     * 静的メソッドを追加します。
-     * 
      * @param name
-     *            メソッド名
      * @param src
-     *            ソース
      */
     protected void addStaticMethod(final String name, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, void.class, name, null, null, src);
     }
 
     /**
-     * 静的メソッドを追加します。
-     * 
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param src
-     *            ソース
      */
     protected void addStaticMethod(final String name, final Class[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, void.class, name, paramTypes, null, src);
     }
 
     /**
-     * 静的メソッドを追加します。
-     * 
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param exceptionTypes
-     *            例外の型の配列
      * @param src
-     *            ソース
      */
     protected void addStaticMethod(final String name, final Class[] paramTypes, Class[] exceptionTypes, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, void.class, name, paramTypes, exceptionTypes, src);
     }
 
     /**
-     * 静的メソッドを追加します。
-     * 
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param src
-     *            ソース
      */
     protected void addStaticMethod(final Class returnType, final String name, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, returnType, name, null, null, src);
     }
 
     /**
-     * 静的メソッドを追加します。
-     * 
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param src
-     *            ソース
      */
     protected void addStaticMethod(final Class returnType, final String name, final Class[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, returnType, name, paramTypes, null, src);
     }
 
     /**
-     * 静的メソッドを追加します。
-     * 
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param exceptionTypes
-     *            例外の型の配列
      * @param src
-     *            ソース
      */
     protected void addStaticMethod(final Class returnType, final String name, final Class[] paramTypes, Class[] exceptionTypes,
             final String src) {
@@ -490,20 +336,12 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param modifiers
-     *            アクセス修飾子
      * @param returnType
-     *            戻り値の型
      * @param name
-     *            メソッド名
      * @param paramTypes
-     *            パラメータの型の配列
      * @param exceptionTypes
-     *            例外の型の配列
      * @param src
-     *            ソース
      */
     protected void addMethod(final int modifiers, final Class returnType, final String name, final Class[] paramTypes,
             Class[] exceptionTypes, final String src) {
@@ -518,10 +356,7 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * メソッドを追加します。
-     * 
      * @param src
-     *            ソース
      */
     protected void addMethod(final String src) {
         try {
@@ -532,22 +367,16 @@ public abstract class AbstractInterType implements InterType {
     }
 
     /**
-     * コンパイル時のクラスに変換します。
-     * 
      * @param clazz
-     *            元のクラス
-     * @return コンパイル時のクラス
+     * @return 
      */
     protected CtClass toCtClass(final Class clazz) {
         return ClassPoolUtil.toCtClass(classPool, clazz);
     }
 
     /**
-     * コンパイル時のクラスの配列に変換します。
-     * 
      * @param classes
-     *            元のクラスの配列
-     * @return コンパイル時のクラスの配列
+     * @return 
      */
     protected CtClass[] toCtClassArray(final Class[] classes) {
         return ClassPoolUtil.toCtClassArray(classPool, classes);

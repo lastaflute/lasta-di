@@ -15,15 +15,9 @@
  */
 package org.lastaflute.di.core.exception;
 
-import org.lastaflute.di.core.meta.InitMethodDef;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * アノテーションで指定された{@link InitMethodDef initメソッド・インジェクション定義}が不正だった場合にスローされます。
- * <p>
- * アノテーションで指定されたメソッドが存在しない場合、 複数定義されている場合、 および引数が必要な場合に不正とみなされます。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  * 
@@ -38,12 +32,8 @@ public class IllegalInitMethodAnnotationRuntimeException extends SRuntimeExcepti
     private String methodName_;
 
     /**
-     * <code>IllegalInitMethodAnnotationRuntimeException</code>を構築します。
-     * 
      * @param componentClass
-     *            アノテーションが指定されたクラス
      * @param methodName
-     *            アノテーションで指定されたメソッド名
      */
     public IllegalInitMethodAnnotationRuntimeException(Class componentClass, String methodName) {
         super("ESSR0081", new Object[] { componentClass.getName(), methodName });
@@ -52,18 +42,14 @@ public class IllegalInitMethodAnnotationRuntimeException extends SRuntimeExcepti
     }
 
     /**
-     * 例外の原因となったアノテーションが指定されたクラスを返します。
-     * 
-     * @return アノテーションが指定されたクラス
+     * @return 
      */
     public Class getComponentClass() {
         return componentClass_;
     }
 
     /**
-     * 例外の原因となったアノテーションで指定されたメソッド名を返します。
-     * 
-     * @return アノテーションで指定されたメソッド名
+     * @return 
      */
     public String getMethodName() {
         return methodName_;

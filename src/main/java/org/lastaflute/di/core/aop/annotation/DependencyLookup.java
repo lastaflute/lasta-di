@@ -21,8 +21,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * これに注釈されたgetterメソッドは、実行時にS2コンテナからルックアップしたコンポーネントを返すことを示します。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 @Retention(RetentionPolicy.RUNTIME)

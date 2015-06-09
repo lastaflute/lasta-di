@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.lastaflute.di.core.LaContainer;
-import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 import org.lastaflute.di.core.aop.frame.MethodInvocation;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
@@ -29,8 +28,6 @@ import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * prototypeのコンポーネントに呼び出しを転送する{@link MethodInterceptor}です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class PrototypeDelegateInterceptor extends AbstractInterceptor {
@@ -45,8 +42,6 @@ public class PrototypeDelegateInterceptor extends AbstractInterceptor {
     private Map methodNameMap = new HashMap();
 
     /**
-     * {@link PrototypeDelegateInterceptor}を作成します。
-     * 
      * @param container
      */
     public PrototypeDelegateInterceptor(final LaContainer container) {
@@ -54,17 +49,13 @@ public class PrototypeDelegateInterceptor extends AbstractInterceptor {
     }
 
     /**
-     * ターゲットのコンポーネント名を返します。
-     * 
-     * @return ターゲットのコンポーネント名
+     * @return 
      */
     public String getTargetName() {
         return targetName;
     }
 
     /**
-     * ターゲットのコンポーネント名を設定します。
-     * 
      * @param targetName
      */
     public void setTargetName(final String targetName) {
@@ -72,8 +63,6 @@ public class PrototypeDelegateInterceptor extends AbstractInterceptor {
     }
 
     /**
-     * 転送するメソッドの組を追加します。
-     * 
      * @param methodName
      * @param targetMethodName
      */

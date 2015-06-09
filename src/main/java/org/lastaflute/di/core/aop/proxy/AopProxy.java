@@ -36,8 +36,6 @@ import org.lastaflute.di.util.LdiConstructorUtil;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * {@link Aspect}を織り込んだクラスを作成するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class AopProxy implements Serializable {
@@ -55,8 +53,6 @@ public class AopProxy implements Serializable {
     private final AspectWeaver weaver;
 
     /**
-     * {@link AopProxy}を作成します。
-     * 
      * @param targetClass
      * @param aspects
      */
@@ -65,8 +61,6 @@ public class AopProxy implements Serializable {
     }
 
     /**
-     * {@link AopProxy}を作成します。
-     * 
      * @param targetClass
      * @param aspects
      * @param interTypes
@@ -76,8 +70,6 @@ public class AopProxy implements Serializable {
     }
 
     /**
-     * {@link AopProxy}を作成します。
-     * 
      * @param targetClass
      * @param aspects
      * @param parameters
@@ -87,8 +79,6 @@ public class AopProxy implements Serializable {
     }
 
     /**
-     * {@link AopProxy}を作成します。
-     * 
      * @param targetClass
      * @param aspects
      * @param interTypes
@@ -146,8 +136,6 @@ public class AopProxy implements Serializable {
     }
 
     /**
-     * エンハンスされたクラスを返します。
-     * 
      * @return
      */
     public Class getEnhancedClass() {
@@ -155,20 +143,16 @@ public class AopProxy implements Serializable {
     }
 
     /**
-     * エンハンスされたインスタンスを作成します。
-     * 
-     * @return エンハンスされたインスタンス
+     * @return 
      */
     public Object create() {
         return LdiClassUtil.newInstance(enhancedClass);
     }
 
     /**
-     * エンハンスされたインスタンスを作成します。
-     * 
      * @param argTypes
      * @param args
-     * @return エンハンスされたインスタンス
+     * @return 
      */
     public Object create(Class[] argTypes, Object[] args) {
         final Constructor constructor = LdiClassUtil.getConstructor(enhancedClass, argTypes);

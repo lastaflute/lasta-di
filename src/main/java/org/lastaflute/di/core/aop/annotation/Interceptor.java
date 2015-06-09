@@ -21,8 +21,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * インターセプタを適用するためにメソッドに指定されるアノテーションを注釈する、 メタアノテーションです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -30,12 +28,7 @@ import java.lang.annotation.Target;
 public @interface Interceptor {
 
     /**
-     * インターセプタのコンポーネント名です。
-     * <p>
-     * 省略された場合はこのアノテーションが付与されているアノテーションのクラス名をデキャピタライズした名前をコンポーネント名とします。
-     * </p>
-     * 
-     * @return インターセプタのコンポーネント名
+     * @return 
      */
     String value() default "";
 

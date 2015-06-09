@@ -28,8 +28,6 @@ import org.lastaflute.di.core.aop.impl.PointcutImpl;
 import org.lastaflute.di.core.aop.proxy.AopProxy;
 
 /**
- * {@link MethodInterceptor}を拡張するための抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -38,8 +36,6 @@ public abstract class AbstractInterceptor implements MethodInterceptor, Serializ
     static final long serialVersionUID = 0L;
 
     /**
-     * {@link AopProxy}を作成します。
-     * 
      * @param proxyClass
      * @return
      */
@@ -49,22 +45,16 @@ public abstract class AbstractInterceptor implements MethodInterceptor, Serializ
     }
 
     /**
-     * ターゲットクラスを返します。
-     * 
      * @param invocation
-     *            メソッド呼び出し
-     * @return ターゲットクラス
+     * @return 
      */
     protected Class getTargetClass(MethodInvocation invocation) {
         return ((LaMethodInvocation) invocation).getTargetClass();
     }
 
     /**
-     * コンポーネント定義を返します。
-     * 
      * @param invocation
-     *            メソッド呼び出し
-     * @return コンポーネント定義
+     * @return 
      */
     protected ComponentDef getComponentDef(MethodInvocation invocation) {
         if (invocation instanceof LaMethodInvocation) {

@@ -27,48 +27,26 @@ import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * AutoNamingの抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class AbstractAutoNaming implements AutoNaming {
 
-    /**
-     * Implのsuffixです。
-     */
     protected static final String IMPL = "Impl";
 
-    /**
-     * Beanのsuffixです。
-     */
     protected static final String BEAN = "Bean";
 
-    /**
-     * decapitalizeするかどうか。
-     */
     protected boolean decapitalize = true;
 
-    /**
-     * カスタマイズされた名前です。
-     */
     protected Map customizedNames = new HashMap();
 
-    /**
-     * 置換するルールです。
-     */
     protected Map replaceRules = new LinkedHashMap();
 
-    /**
-     * デフォルトのコンストラクタです。
-     */
     public AbstractAutoNaming() {
         addIgnoreClassSuffix(IMPL);
         addIgnoreClassSuffix(BEAN);
     }
 
     /**
-     * AutoNamingのルールにあわない場合に、FQCNに対するコンポーネント名を設定します。
-     * 
      * @param fqcn
      * @param name
      */
@@ -77,8 +55,6 @@ public abstract class AbstractAutoNaming implements AutoNaming {
     }
 
     /**
-     * コンポーネント名から取り除くサフィックスを追加します。 例えば、Implを追加した場合、hogeImplは、hogeという名前になります。
-     * 
      * @param classSuffix
      */
     public void addIgnoreClassSuffix(final String classSuffix) {
@@ -86,8 +62,6 @@ public abstract class AbstractAutoNaming implements AutoNaming {
     }
 
     /**
-     * コンポーネント名を置き換えるためのルールを追加します。 reqexの正規表現に一致した部分をreplacementで置き換えます。
-     * 
      * @param regex
      * @param replacement
      */
@@ -95,17 +69,12 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         replaceRules.put(Pattern.compile(regex), replacement);
     }
 
-    /**
-     * コンポーネント名を置き換えるためのルールをクリアします。
-     */
     public void clearReplaceRule() {
         customizedNames.clear();
         replaceRules.clear();
     }
 
     /**
-     * コンポーネント名をデキャピタライズするかどうかを設定します。デフォルトはtrueです。
-     * 
      * @param decapitalize
      */
     public void setDecapitalize(final boolean decapitalize) {
@@ -121,11 +90,9 @@ public abstract class AbstractAutoNaming implements AutoNaming {
     }
 
     /**
-     * カスタマイズされた名前を返します。
-     * 
      * @param packageName
      * @param shortClassName
-     * @return カスタマイズされた名前
+     * @return 
      */
     protected String getCustomizedName(final String packageName, final String shortClassName) {
         final String fqn = LdiClassUtil.concatName(packageName, shortClassName);
@@ -133,19 +100,15 @@ public abstract class AbstractAutoNaming implements AutoNaming {
     }
 
     /**
-     * コンポーネント名を定義します。
-     * 
      * @param packageName
      * @param shortClassName
-     * @return コンポーネント名
+     * @return 
      */
     protected abstract String makeDefineName(final String packageName, final String shortClassName);
 
     /**
-     * ルールを適用します。
-     * 
      * @param name
-     * @return ルールが適用された結果
+     * @return 
      */
     protected String applyRule(String name) {
         for (Iterator it = replaceRules.entrySet().iterator(); it.hasNext();) {
@@ -163,10 +126,8 @@ public abstract class AbstractAutoNaming implements AutoNaming {
     }
 
     /**
-     * 正規化します。
-     * 
      * @param name
-     * @return 正規化された名前
+     * @return 
      */
     protected String normalize(final String name) {
         final String[] names = name.split("\\.");

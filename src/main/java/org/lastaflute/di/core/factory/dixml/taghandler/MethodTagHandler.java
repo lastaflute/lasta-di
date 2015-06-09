@@ -21,8 +21,6 @@ import org.lastaflute.di.helper.xml.TagHandlerContext;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * diconファイルに指定されたメソッドインジェクションに共通する処理のための抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class MethodTagHandler extends AbstractTagHandler {
@@ -30,19 +28,11 @@ public abstract class MethodTagHandler extends AbstractTagHandler {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 指定された{@link org.lastaflute.di.core.meta.MethodDef メソッド定義}に対して、
-     * {@link org.lastaflute.di.core.expression.Expression 式}を設定します。
-     * 
      * @param methodDef
-     *            メソッド定義
      * @param expression
-     *            式を表す文字列
      * @param tagName
-     *            処理対象の要素名
      * @param context
-     *            コンテキスト
      * @throws TagAttributeNotDefinedRuntimeException
-     *             メソッド定義の<code>name</code>属性および式のいずれも指定されなかった場合
      */
     protected void processExpression(MethodDef methodDef, String expression, String tagName, TagHandlerContext context) {
         String expr = expression;

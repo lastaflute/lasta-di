@@ -18,13 +18,6 @@ package org.lastaflute.di.core.exception;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * 指定されたパスのファイル名に、 拡張子が付いていなかった場合にスローされます。
- * <p>
- * {@link org.lastaflute.di.core.factory.LaContainerFactory S2コンテナファクトリ}は、
- * S2コンテナを構築しようとした際に、 拡張子に応じて{@link org.lastaflute.di.core.factory.conbuilder.LaContainerBuilder S2コンテナビルダー}を切り替えます。
- * このため、 指定された設定ファイル(diconファイルなど)のファイル名に拡張子が付いていない場合には、 この例外が発生します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  */
@@ -35,10 +28,7 @@ public class ExtensionNotFoundRuntimeException extends SRuntimeException {
     private String path_;
 
     /**
-     * パスを指定して<code>ExtensionNotFoundRuntimeException</code>を構築します。
-     * 
      * @param path
-     *            指定されたパス
      */
     public ExtensionNotFoundRuntimeException(String path) {
         super("ESSR0074", new Object[] { path });
@@ -46,9 +36,7 @@ public class ExtensionNotFoundRuntimeException extends SRuntimeException {
     }
 
     /**
-     * 指定されたパスを返します。
-     * 
-     * @return 指定されたパス
+     * @return 
      */
     public String getPath() {
         return path_;

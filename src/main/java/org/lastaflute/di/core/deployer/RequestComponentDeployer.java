@@ -23,8 +23,6 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.log.SLogger;
 
 /**
- * request用の{@link ComponentDeployer}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -33,8 +31,6 @@ public class RequestComponentDeployer extends AbstractComponentDeployer {
     private static SLogger logger = SLogger.getLogger(RequestComponentDeployer.class);
 
     /**
-     * {@link RequestComponentDeployer}を作成します。
-     * 
      * @param componentDef
      */
     public RequestComponentDeployer(ComponentDef componentDef) {

@@ -22,41 +22,21 @@ import org.lastaflute.di.core.exception.IllegalInstanceDefRuntimeException;
 import org.lastaflute.di.core.meta.InstanceDef;
 
 /**
- * {@link InstanceDef}を作成するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class InstanceDefFactory {
 
-    /**
-     * singleton用の{@link InstanceDef}。
-     */
     public static final InstanceDef SINGLETON = new InstanceSingletonDef(InstanceDef.SINGLETON_NAME);
 
-    /**
-     * prototype用の{@link InstanceDef}。
-     */
     public static final InstanceDef PROTOTYPE = new InstancePrototypeDef(InstanceDef.PROTOTYPE_NAME);
 
-    /**
-     * application用の{@link InstanceDef}。
-     */
     public static final InstanceDef APPLICATION = new InstanceApplicationDef(InstanceDef.APPLICATION_NAME);
 
-    /**
-     * session用の{@link InstanceDef}。
-     */
     public static final InstanceDef SESSION = new InstanceSessionDef(InstanceDef.SESSION_NAME);
 
-    /**
-     * request用の{@link InstanceDef}。
-     */
     public static final InstanceDef REQUEST = new InstanceRequestDef(InstanceDef.REQUEST_NAME);
 
-    /**
-     * outer用の{@link InstanceDef}。
-     */
     public static final InstanceDef OUTER = new InstanceOuterDef(InstanceDef.OUTER_NAME);
 
     private static Map instanceDefs = new HashMap();
@@ -70,15 +50,10 @@ public class InstanceDefFactory {
         addInstanceDef(OUTER);
     }
 
-    /**
-     * {@link InstanceDefFactory}を作成します。
-     */
     protected InstanceDefFactory() {
     }
 
     /**
-     * {@link InstanceDef}を追加します。
-     * 
      * @param instanceDef
      */
     public static void addInstanceDef(InstanceDef instanceDef) {
@@ -86,8 +61,6 @@ public class InstanceDefFactory {
     }
 
     /**
-     * {@link InstanceDef}が存在するかどうかを返します。
-     * 
      * @param name
      * @return
      */
@@ -96,8 +69,6 @@ public class InstanceDefFactory {
     }
 
     /**
-     * nameに応じた{@link InstanceDef}を返します。
-     * 
      * @param name
      * @return {@link InstanceDef}
      */

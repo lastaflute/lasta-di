@@ -25,8 +25,6 @@ import org.lastaflute.di.util.LdiStringUtil;
 import org.xml.sax.Attributes;
 
 /**
- * diconファイルの<code>aspect</code>要素を解釈するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class AspectTagHandler extends AbstractTagHandler {
@@ -54,29 +52,23 @@ public class AspectTagHandler extends AbstractTagHandler {
     }
 
     /**
-     * アスペクト定義を作成します。
-     * 
-     * @return アスペクト定義
+     * @return 
      */
     protected AspectDefImpl createAspectDef() {
         return new AspectDefImpl();
     }
 
     /**
-     * アスペクト定義を作成します。
-     * 
      * @param pointcut
-     * @return アスペクト定義
+     * @return 
      */
     protected AspectDefImpl createAspectDef(Pointcut pointcut) {
         return new AspectDefImpl(pointcut);
     }
 
     /**
-     * ポイントカットを作成します。
-     * 
      * @param methodNames
-     * @return ポイントカット
+     * @return 
      */
     protected Pointcut createPointcut(String[] methodNames) {
         return new PointcutImpl(methodNames);

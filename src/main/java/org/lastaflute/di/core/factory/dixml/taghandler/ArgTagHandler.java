@@ -23,8 +23,6 @@ import org.lastaflute.di.util.LdiStringUtil;
 import org.xml.sax.Attributes;
 
 /**
- * diconファイルの<code>arg</code>要素を解釈するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class ArgTagHandler extends AbstractTagHandler {

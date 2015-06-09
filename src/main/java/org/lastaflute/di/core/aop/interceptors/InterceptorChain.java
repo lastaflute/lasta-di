@@ -22,8 +22,6 @@ import org.lastaflute.di.core.aop.impl.NestedMethodInvocation;
 import org.lastaflute.di.util.LdiArrayUtil;
 
 /**
- * 複数の{@link MethodInterceptor}をチェイン上につなぐ{@link MethodInterceptor}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -34,8 +32,6 @@ public class InterceptorChain extends AbstractInterceptor {
     private MethodInterceptor[] interceptors = new MethodInterceptor[0];
 
     /**
-     * {@link MethodInterceptor}を追加します。
-     * 
      * @param interceptor
      */
     public void add(MethodInterceptor interceptor) {

@@ -18,8 +18,6 @@ package org.lastaflute.di.core.meta.impl;
 import org.lastaflute.di.core.meta.MetaDef;
 
 /**
- * {@link MetaDef}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -27,15 +25,10 @@ public class MetaDefImpl extends ArgDefImpl implements MetaDef {
 
     private String name;
 
-    /**
-     * {@link MetaDefImpl}を作成します。
-     */
     public MetaDefImpl() {
     }
 
     /**
-     * {@link MetaDefImpl}を作成します。
-     * 
      * @param name
      */
     public MetaDefImpl(String name) {
@@ -43,8 +36,6 @@ public class MetaDefImpl extends ArgDefImpl implements MetaDef {
     }
 
     /**
-     * {@link MetaDefImpl}を作成します。
-     * 
      * @param name
      * @param value
      */

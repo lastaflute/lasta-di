@@ -17,19 +17,13 @@ package org.lastaflute.di.core.aop;
 
 import java.lang.reflect.Method;
 
-import org.lastaflute.di.core.aop.frame.MethodInterceptor;
-
 /**
- * {@link MethodInterceptor}がどこに適用されるのかをあらわすインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public interface Pointcut {
 
     /**
-     * 指定されたメソッドに{@link org.aopalliance.intercept.MethodInterceptor}が適用されるかどうかを返します。
-     * 
      * @param method
      * @return
      */

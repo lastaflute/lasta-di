@@ -16,16 +16,12 @@
 package org.lastaflute.di.core.autoregister;
 
 /**
- * 名前が明示的につけられていないコンポーネントに自動的に名前をつけるためのインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public interface AutoNaming {
 
     /**
-     * コンポーネント名を定義します。
-     * 
      * @param packageName
      * @param shortClassName
      * @return

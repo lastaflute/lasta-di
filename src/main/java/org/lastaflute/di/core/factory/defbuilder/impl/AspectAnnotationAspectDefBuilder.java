@@ -21,11 +21,8 @@ import java.lang.reflect.Modifier;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.annotation.Aspect;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
-import org.lastaflute.di.core.meta.AspectDef;
 
 /**
- * {@link Aspect}アノテーションを読み取り{@link AspectDef}を作成するコンポーネントの実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class AspectAnnotationAspectDefBuilder extends AbstractAspectDefBuilder {
@@ -36,10 +33,7 @@ public class AspectAnnotationAspectDefBuilder extends AbstractAspectDefBuilder {
     }
 
     /**
-     * クラスに付けられた{@link Aspect}アノテーションを読み取り{@link AspectDef アスペクト定義}を作成して{@link ComponentDef コンポーネント定義}に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      */
     protected void processClass(final ComponentDef componentDef) {
         final Class<?> componentClass = componentDef.getComponentClass();
@@ -56,10 +50,7 @@ public class AspectAnnotationAspectDefBuilder extends AbstractAspectDefBuilder {
     }
 
     /**
-     * メソッドに付けられた{@link Aspect}アノテーションを読み取り{@link AspectDef アスペクト定義}を作成して{@link ComponentDef コンポーネント定義}に追加します。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      */
     protected void processMethod(final ComponentDef componentDef) {
         final Class<?> componentClass = componentDef.getComponentClass();
