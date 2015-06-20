@@ -50,7 +50,7 @@ public class LjtTimeoutManager implements Runnable {
     //                                                                          ==========
     public synchronized void start() {
         if (thread == null) {
-            thread = new Thread(this, "Seasar2-TimeoutManager");
+            thread = new Thread(this, "LastaDi-JTA-TimeoutManager");
             thread.setDaemon(true);
             thread.start();
         }

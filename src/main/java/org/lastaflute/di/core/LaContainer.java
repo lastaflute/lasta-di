@@ -24,9 +24,7 @@ import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
 import org.lastaflute.di.core.meta.MetaDefAware;
 
 /**
- * 
  * @author modified by jflute (originated in Seasar)
- * @author vestige &amp; SeasarJavaDoc Committers
  */
 public interface LaContainer extends MetaDefAware {
 

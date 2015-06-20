@@ -22,10 +22,7 @@ import java.io.ObjectOutput;
 import java.util.NoSuchElementException;
 
 /**
- * Seasar2用の連結リストです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SLinkedList implements Cloneable, Externalizable {
 
@@ -35,18 +32,10 @@ public class SLinkedList implements Cloneable, Externalizable {
 
     private transient int size = 0;
 
-    /**
-     * {@link SLinkedList}を作成します。
-     */
     public SLinkedList() {
         header._next = header._previous = header;
     }
 
-    /**
-     * 最初のエントリを返します。
-     * 
-     * @return 最初のエントリ
-     */
     public Entry getFirstEntry() {
         if (isEmpty()) {
             return null;
@@ -54,11 +43,6 @@ public class SLinkedList implements Cloneable, Externalizable {
         return header._next;
     }
 
-    /**
-     * 最初の要素を返します。
-     * 
-     * @return 最初の要素
-     */
     public Object getFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException();
@@ -66,11 +50,6 @@ public class SLinkedList implements Cloneable, Externalizable {
         return getFirstEntry()._element;
     }
 
-    /**
-     * 最後のエントリを返します。
-     * 
-     * @return 最後のエントリ
-     */
     public Entry getLastEntry() {
         if (isEmpty()) {
             return null;
@@ -78,11 +57,6 @@ public class SLinkedList implements Cloneable, Externalizable {
         return header._previous;
     }
 
-    /**
-     * 最後の要素を返します。
-     * 
-     * @return 最後の要素
-     */
     public Object getLast() {
         if (isEmpty()) {
             throw new NoSuchElementException();
@@ -90,11 +64,6 @@ public class SLinkedList implements Cloneable, Externalizable {
         return getLastEntry()._element;
     }
 
-    /**
-     * 最初の要素を削除します。
-     * 
-     * @return 最初の要素
-     */
     public Object removeFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException();
@@ -104,11 +73,6 @@ public class SLinkedList implements Cloneable, Externalizable {
         return first;
     }
 
-    /**
-     * 最後の要素を削除します。
-     * 
-     * @return 最後の要素
-     */
     public Object removeLast() {
         if (isEmpty()) {
             throw new NoSuchElementException();

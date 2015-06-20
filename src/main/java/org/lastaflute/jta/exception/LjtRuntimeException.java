@@ -16,10 +16,7 @@
 package org.lastaflute.jta.exception;
 
 /**
- * Seasar2の例外のベースクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LjtRuntimeException extends RuntimeException {
 

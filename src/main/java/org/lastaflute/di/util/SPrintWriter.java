@@ -19,20 +19,15 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * Seasar2用の {@link PrintWriter}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SPrintWriter extends PrintWriter {
 
-    /**
-     * {@link SPrintWriter}を作成します。
-     */
     public SPrintWriter() {
         super(new StringWriter());
     }
 
+    @Override
     public String toString() {
         return out.toString();
     }
