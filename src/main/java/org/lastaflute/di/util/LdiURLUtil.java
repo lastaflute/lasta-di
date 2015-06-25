@@ -40,6 +40,7 @@ public class LdiURLUtil {
 
     /** プロトコルを正規化するためのマップ */
     protected static final Map CANONICAL_PROTOCOLS = new HashMap();
+
     static {
         CANONICAL_PROTOCOLS.put("wsjar", "jar"); // WebSphereがJarファイルのために使用する固有のプロトコル
         CANONICAL_PROTOCOLS.put("vfsfile", "file"); // JBossAS5がファイルシステムのために使用する固有のプロトコル

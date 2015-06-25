@@ -232,22 +232,22 @@ public class LaContainerFactory {
 
         protected void setupBehavior(final LaContainer configurationContainer) {
             if (configurationContainer.hasComponentDef(LaContainerBehavior.Provider.class)) {
-                LaContainerBehavior.setProvider((LaContainerBehavior.Provider) configurationContainer
-                        .getComponent(LaContainerBehavior.Provider.class));
+                LaContainerBehavior.setProvider(
+                        (LaContainerBehavior.Provider) configurationContainer.getComponent(LaContainerBehavior.Provider.class));
             }
         }
 
         protected void setupDeployer(final LaContainer configurationContainer) {
             if (configurationContainer.hasComponentDef(ComponentDeployerFactory.Provider.class)) {
-                ComponentDeployerFactory.setProvider((ComponentDeployerFactory.Provider) configurationContainer
-                        .getComponent(ComponentDeployerFactory.Provider.class));
+                ComponentDeployerFactory.setProvider(
+                        (ComponentDeployerFactory.Provider) configurationContainer.getComponent(ComponentDeployerFactory.Provider.class));
             }
         }
 
         protected void setupAssembler(final LaContainer configurationContainer) {
             if (configurationContainer.hasComponentDef(AssemblerFactory.Provider.class)) {
-                AssemblerFactory.setProvider((AssemblerFactory.Provider) configurationContainer
-                        .getComponent(AssemblerFactory.Provider.class));
+                AssemblerFactory
+                        .setProvider((AssemblerFactory.Provider) configurationContainer.getComponent(AssemblerFactory.Provider.class));
             }
         }
     }

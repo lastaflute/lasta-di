@@ -41,8 +41,8 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
     private static final Logger logger = LoggerFactory.getLogger(TransactionSynchronizationRegistryImpl.class);
 
     private TransactionManager tm;
-    private final Map<Transaction, SynchronizationRegisterImpl> transactionContexts = Collections
-            .synchronizedMap(new HashMap<Transaction, SynchronizationRegisterImpl>());
+    private final Map<Transaction, SynchronizationRegisterImpl> transactionContexts =
+            Collections.synchronizedMap(new HashMap<Transaction, SynchronizationRegisterImpl>());
 
     public TransactionSynchronizationRegistryImpl() {
     }

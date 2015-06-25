@@ -62,6 +62,7 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
     //}
 
     protected static final boolean enableCommonAnnotations;
+
     static {
         boolean enable = false;
         try {
@@ -71,21 +72,21 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         enableCommonAnnotations = enable;
     }
 
-    protected static final List<ComponentDefBuilder> componentDefBuilders = Collections
-            .synchronizedList(new ArrayList<ComponentDefBuilder>());
+    protected static final List<ComponentDefBuilder> componentDefBuilders =
+            Collections.synchronizedList(new ArrayList<ComponentDefBuilder>());
 
     protected static final List<PropertyDefBuilder> propertyDefBuilders = Collections.synchronizedList(new ArrayList<PropertyDefBuilder>());
 
     protected static final List<AspectDefBuilder> aspectDefBuilders = Collections.synchronizedList(new ArrayList<AspectDefBuilder>());
 
-    protected static final List<IntertypeDefBuilder> intertypeDefBuilders = Collections
-            .synchronizedList(new ArrayList<IntertypeDefBuilder>());
+    protected static final List<IntertypeDefBuilder> intertypeDefBuilders =
+            Collections.synchronizedList(new ArrayList<IntertypeDefBuilder>());
 
-    protected static final List<InitMethodDefBuilder> initMethodDefBuilders = Collections
-            .synchronizedList(new ArrayList<InitMethodDefBuilder>());
+    protected static final List<InitMethodDefBuilder> initMethodDefBuilders =
+            Collections.synchronizedList(new ArrayList<InitMethodDefBuilder>());
 
-    protected static final List<DestroyMethodDefBuilder> destroyMethodDefBuilders = Collections
-            .synchronizedList(new ArrayList<DestroyMethodDefBuilder>());
+    protected static final List<DestroyMethodDefBuilder> destroyMethodDefBuilders =
+            Collections.synchronizedList(new ArrayList<DestroyMethodDefBuilder>());
 
     static {
         initialize();

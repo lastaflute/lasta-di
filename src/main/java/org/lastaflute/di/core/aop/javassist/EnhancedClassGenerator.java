@@ -109,9 +109,8 @@ public class EnhancedClassGenerator extends AbstractGenerator {
             for (int i = 0; i < constructors.length; ++i) {
                 final int modifier = constructors[i].getModifiers();
                 final Package pkg = targetClass.getPackage();
-                if (Modifier.isPublic(modifier)
-                        || Modifier.isProtected(modifier)
-                        || (!Modifier.isPrivate(modifier) && !targetClass.getName().startsWith("java.") && (pkg == null || !pkg.isSealed()))) {
+                if (Modifier.isPublic(modifier) || Modifier.isProtected(modifier) || (!Modifier.isPrivate(modifier)
+                        && !targetClass.getName().startsWith("java.") && (pkg == null || !pkg.isSealed()))) {
                     createConstructor(enhancedClass, constructors[i]);
                 }
             }

@@ -494,8 +494,8 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
 
         assertOpened();
         try {
-            return new PreparedStatementWrapper(physicalConnection.prepareStatement(sql, resultSetType, resultSetConcurrency,
-                    resultSetHoldability), sql);
+            return new PreparedStatementWrapper(
+                    physicalConnection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability), sql);
         } catch (SQLException ex) {
             release();
             throw wrapException(ex, sql);

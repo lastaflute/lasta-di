@@ -15,7 +15,6 @@
  */
 package org.lastaflute.di.core.deployer;
 
-
 /**
  * @author modified by jflute (originated in Seasar)
  * @author belltree

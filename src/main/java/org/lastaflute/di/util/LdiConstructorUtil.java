@@ -49,8 +49,8 @@ public class LdiConstructorUtil {
      * @throws InvocationTargetRuntimeException
      *             {@link InvocationTargetException}が起こった場合
      */
-    public static Object newInstance(Constructor constructor, Object[] args) throws InstantiationRuntimeException,
-            IllegalAccessRuntimeException, InvocationTargetRuntimeException {
+    public static Object newInstance(Constructor constructor, Object[] args)
+            throws InstantiationRuntimeException, IllegalAccessRuntimeException, InvocationTargetRuntimeException {
 
         try {
             return constructor.newInstance(args);

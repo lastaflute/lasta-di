@@ -56,7 +56,8 @@ public class RestrictedTransactionImpl implements Transaction {
      * @param synchronizationRegistry
      *            トランザクションシンクロナイゼーションレジストリ
      */
-    public RestrictedTransactionImpl(final UserTransaction userTransaction, final TransactionSynchronizationRegistry synchronizationRegistry) {
+    public RestrictedTransactionImpl(final UserTransaction userTransaction,
+            final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
         this.synchronizationRegistry = synchronizationRegistry;
     }

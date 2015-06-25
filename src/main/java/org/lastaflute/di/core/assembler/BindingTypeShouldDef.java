@@ -34,7 +34,8 @@ public class BindingTypeShouldDef extends AbstractBindingTypeDef {
     }
 
     protected void doBindProperty(ComponentDef componentDef, PropertyDesc propertyDesc, Object component) {
-        if (!bindAutoProperty(componentDef, propertyDesc, component) && BindingUtil.isPropertyAutoBindable(propertyDesc.getPropertyType())) {
+        if (!bindAutoProperty(componentDef, propertyDesc, component)
+                && BindingUtil.isPropertyAutoBindable(propertyDesc.getPropertyType())) {
             logger.log("WSSR0008",
                     new Object[] { BindingUtil.getComponentClass(componentDef, component).getName(), propertyDesc.getPropertyName() });
         }

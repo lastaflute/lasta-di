@@ -171,8 +171,8 @@ public class ClassS2ContainerBuilder extends AbstractLaContainerBuilder {
         String componentName = ClassBuilderUtils.toComponentName(method.getName().substring(METHODPREFIX_DEFINE.length()));
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != 1) {
-            throw new RuntimeException("Definition method must have only one parameter but " + parameterTypes.length + ": "
-                    + method.getName());
+            throw new RuntimeException(
+                    "Definition method must have only one parameter but " + parameterTypes.length + ": " + method.getName());
         }
         Class<?> componentClass = parameterTypes[0];
         Class<?>[] constructorParameterTypes = new Class[parameterTypes.length - 1];

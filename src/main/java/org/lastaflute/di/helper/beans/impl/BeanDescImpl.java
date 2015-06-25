@@ -423,8 +423,8 @@ public class BeanDescImpl implements BeanDesc {
                 final String propertyName = decapitalizePropertyName(methodName.substring(3));
                 setupReadMethod(method, propertyName);
             } else if (methodName.startsWith("is")) {
-                if (method.getParameterTypes().length != 0 || !method.getReturnType().equals(Boolean.TYPE)
-                        && !method.getReturnType().equals(Boolean.class)) {
+                if (method.getParameterTypes().length != 0
+                        || !method.getReturnType().equals(Boolean.TYPE) && !method.getReturnType().equals(Boolean.class)) {
                     continue;
                 }
                 final String propertyName = decapitalizePropertyName(methodName.substring(2));

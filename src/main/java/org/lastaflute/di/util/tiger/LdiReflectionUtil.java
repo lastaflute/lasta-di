@@ -196,7 +196,8 @@ public abstract class LdiReflectionUtil {
      *             一致するメソッドが見つからない場合
      * @see Class#getMethod(String, Class[])
      */
-    public static Method getMethod(final Class<?> clazz, final String name, final Class<?>... argTypes) throws NoSuchMethodRuntimeException {
+    public static Method getMethod(final Class<?> clazz, final String name, final Class<?>... argTypes)
+            throws NoSuchMethodRuntimeException {
         try {
             return clazz.getMethod(name, argTypes);
         } catch (final NoSuchMethodException e) {
@@ -271,8 +272,8 @@ public abstract class LdiReflectionUtil {
      *             このコンストラクタが列挙型に関連している場合
      * @see Constructor#newInstance(Object[])
      */
-    public static <T> T newInstance(final Constructor<T> constructor, final Object... args) throws InstantiationRuntimeException,
-            IllegalAccessRuntimeException {
+    public static <T> T newInstance(final Constructor<T> constructor, final Object... args)
+            throws InstantiationRuntimeException, IllegalAccessRuntimeException {
         try {
             return constructor.newInstance(args);
         } catch (final InstantiationException e) {
@@ -380,8 +381,8 @@ public abstract class LdiReflectionUtil {
      * @see Method#invoke(Object, Object[])
      */
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(final Method method, final Object target, final Object... args) throws IllegalAccessRuntimeException,
-            InvocationTargetRuntimeException {
+    public static <T> T invoke(final Method method, final Object target, final Object... args)
+            throws IllegalAccessRuntimeException, InvocationTargetRuntimeException {
         try {
             return (T) method.invoke(target, args);
         } catch (final IllegalAccessException e) {
@@ -409,8 +410,8 @@ public abstract class LdiReflectionUtil {
      * @see Method#invoke(Object, Object[])
      */
     @SuppressWarnings("unchecked")
-    public static <T> T invokeStatic(final Method method, final Object... args) throws IllegalAccessRuntimeException,
-            InvocationTargetRuntimeException {
+    public static <T> T invokeStatic(final Method method, final Object... args)
+            throws IllegalAccessRuntimeException, InvocationTargetRuntimeException {
         return (T) invoke(method, null, args);
     }
 

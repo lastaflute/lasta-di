@@ -128,8 +128,8 @@ public class LdiClassUtil {
         }
     }
 
-    public static Object newInstance(String className) throws ClassNotFoundRuntimeException, InstantiationRuntimeException,
-            IllegalAccessRuntimeException {
+    public static Object newInstance(String className)
+            throws ClassNotFoundRuntimeException, InstantiationRuntimeException, IllegalAccessRuntimeException {
         return newInstance(forName(className));
     }
 

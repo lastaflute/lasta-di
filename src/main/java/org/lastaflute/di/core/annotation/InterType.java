@@ -30,6 +30,6 @@ public @interface InterType {
     /**
      * @return 
      */
-    String[] value();
+    String[]value();
 
 }

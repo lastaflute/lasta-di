@@ -31,6 +31,7 @@ import org.lastaflute.di.util.tiger.LdiCollectionsUtil;
 public abstract class PointTxAttributeCustomizer extends AbstractCustomizer {
 
     protected static final Map<Transactional.TxType, String> txInterceptors = LdiCollectionsUtil.newHashMap();
+
     static {
         txInterceptors.put(Transactional.TxType.MANDATORY, "tx_aop.mandatoryTx");
         txInterceptors.put(Transactional.TxType.REQUIRED, "tx_aop.requiredTx");

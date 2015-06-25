@@ -27,5 +27,5 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD })
 public @interface ManualBindingProperties {
 
-    String[] value();
+    String[]value();
 }

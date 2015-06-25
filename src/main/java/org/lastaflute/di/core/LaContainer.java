@@ -28,8 +28,8 @@ import org.lastaflute.di.core.meta.MetaDefAware;
  */
 public interface LaContainer extends MetaDefAware {
 
-    <COMPONENT> COMPONENT getComponent(Object componentKey) throws ComponentNotFoundRuntimeException, TooManyRegistrationRuntimeException,
-            CyclicReferenceRuntimeException;
+    <COMPONENT> COMPONENT getComponent(Object componentKey)
+            throws ComponentNotFoundRuntimeException, TooManyRegistrationRuntimeException, CyclicReferenceRuntimeException;
 
     Object[] findComponents(Object componentKey) throws CyclicReferenceRuntimeException;
 

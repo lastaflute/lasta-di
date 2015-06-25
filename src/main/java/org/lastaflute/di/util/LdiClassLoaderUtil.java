@@ -50,17 +50,15 @@ public abstract class LdiClassLoaderUtil {
     }
 
     private static Method getDefineClassMethod() {
-        final Method method =
-                LdiClassUtil.getDeclaredMethod(ClassLoader.class, "defineClass", new Class[] { String.class, byte[].class, int.class,
-                        int.class });
+        final Method method = LdiClassUtil.getDeclaredMethod(ClassLoader.class, "defineClass",
+                new Class[] { String.class, byte[].class, int.class, int.class });
         method.setAccessible(true);
         return method;
     }
 
     private static Method getDefinePackageMethod() {
-        final Method method =
-                LdiClassUtil.getDeclaredMethod(ClassLoader.class, "definePackage", new Class[] { String.class, String.class, String.class,
-                        String.class, String.class, String.class, String.class, URL.class });
+        final Method method = LdiClassUtil.getDeclaredMethod(ClassLoader.class, "definePackage", new Class[] { String.class, String.class,
+                String.class, String.class, String.class, String.class, String.class, URL.class });
         method.setAccessible(true);
         return method;
     }
@@ -200,8 +198,8 @@ public abstract class LdiClassLoaderUtil {
      */
     public static Class defineClass(final ClassLoader classLoader, final String className, final byte[] bytes, final int offset,
             final int length) {
-        return (Class) LdiMethodUtil.invoke(defineClassMethod, classLoader, new Object[] { className, bytes, new Integer(offset),
-                new Integer(length) });
+        return (Class) LdiMethodUtil.invoke(defineClassMethod, classLoader,
+                new Object[] { className, bytes, new Integer(offset), new Integer(length) });
     }
 
     /**
@@ -231,8 +229,8 @@ public abstract class LdiClassLoaderUtil {
      */
     public static Package definePackage(final ClassLoader classLoader, final String name, final String specTitle, final String specVersion,
             final String specVendor, final String implTitle, final String implVersion, final String implVendor, final URL sealBase) {
-        return (Package) LdiMethodUtil.invoke(definePackageMethod, classLoader, new Object[] { name, specTitle, specVersion, specVendor,
-                implTitle, implVersion, implVendor, sealBase });
+        return (Package) LdiMethodUtil.invoke(definePackageMethod, classLoader,
+                new Object[] { name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase });
     }
 
     /**

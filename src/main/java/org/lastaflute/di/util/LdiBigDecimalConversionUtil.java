@@ -29,6 +29,7 @@ public class LdiBigDecimalConversionUtil {
      * デフォルトのNormalizerです。
      */
     protected static BigDecimalNormalizer normalizer = new DefaultNormalizer();
+
     static {
         try {
             final Class clazz = Class.forName(TIGER_NORMALIZER_CLASS_NAME);

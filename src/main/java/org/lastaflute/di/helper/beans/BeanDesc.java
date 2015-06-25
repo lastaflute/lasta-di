@@ -76,8 +76,8 @@ public interface BeanDesc {
 
     String[] getMethodNames();
 
-    String[] getMethodParameterNames(String methodName, final Class<?>[] paramTypes) throws MethodNotFoundRuntimeException,
-            IllegalDiiguRuntimeException;
+    String[] getMethodParameterNames(String methodName, final Class<?>[] paramTypes)
+            throws MethodNotFoundRuntimeException, IllegalDiiguRuntimeException;
 
     String[] getMethodParameterNamesNoException(String methodName, final Class<?>[] paramTypes) throws MethodNotFoundRuntimeException;
 

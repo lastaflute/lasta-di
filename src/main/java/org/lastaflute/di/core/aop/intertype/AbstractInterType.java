@@ -273,7 +273,8 @@ public abstract class AbstractInterType implements InterType {
      * @param exceptionTypes
      * @param src
      */
-    protected void addMethod(final Class returnType, final String name, final Class[] paramTypes, Class[] exceptionTypes, final String src) {
+    protected void addMethod(final Class returnType, final String name, final Class[] paramTypes, Class[] exceptionTypes,
+            final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, paramTypes, exceptionTypes, src);
     }
 
@@ -346,9 +347,8 @@ public abstract class AbstractInterType implements InterType {
     protected void addMethod(final int modifiers, final Class returnType, final String name, final Class[] paramTypes,
             Class[] exceptionTypes, final String src) {
         try {
-            final CtMethod ctMethod =
-                    CtNewMethod.make(modifiers, toCtClass(returnType), name, toCtClassArray(paramTypes), toCtClassArray(exceptionTypes),
-                            src, enhancedClass);
+            final CtMethod ctMethod = CtNewMethod.make(modifiers, toCtClass(returnType), name, toCtClassArray(paramTypes),
+                    toCtClassArray(exceptionTypes), src, enhancedClass);
             enhancedClass.addMethod(ctMethod);
         } catch (final CannotCompileException e) {
             throw new CannotCompileRuntimeException(e);

@@ -92,14 +92,14 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
      * @param invokeSuperMethodName
      * @return 
      */
-    public static String createReturnStatement(final Method targetMethod, final String enhancedClassName, final String invokeSuperMethodName) {
+    public static String createReturnStatement(final Method targetMethod, final String enhancedClassName,
+            final String invokeSuperMethodName) {
         if (LdiMethodUtil.isAbstract(targetMethod)) {
             return createThrowStatement(targetMethod, enhancedClassName);
         }
 
-        final String invokeSuper =
-                "((" + enhancedClassName + ") target)." + invokeSuperMethodName + "("
-                        + createArgumentString(targetMethod.getParameterTypes()) + ")";
+        final String invokeSuper = "((" + enhancedClassName + ") target)." + invokeSuperMethodName + "("
+                + createArgumentString(targetMethod.getParameterTypes()) + ")";
 
         final Class returnType = targetMethod.getReturnType();
         if (returnType.equals(void.class)) {

@@ -207,8 +207,8 @@ public class AbstractGenerator {
     public Class toClass(final ClassLoader classLoader, final CtClass ctClass) {
         try {
             final byte[] bytecode = ctClass.toBytecode();
-            return (Class) defineClassMethod.invoke(classLoader, new Object[] { ctClass.getName(), bytecode, new Integer(0),
-                    new Integer(bytecode.length), protectionDomain });
+            return (Class) defineClassMethod.invoke(classLoader,
+                    new Object[] { ctClass.getName(), bytecode, new Integer(0), new Integer(bytecode.length), protectionDomain });
         } catch (final CannotCompileException e) {
             throw new CannotCompileRuntimeException(e);
         } catch (final IOException e) {
@@ -336,9 +336,8 @@ public class AbstractGenerator {
     protected CtMethod createMethod(final CtClass clazz, final int modifier, final Class returnType, final String methodName,
             final Class[] parameterTypes, final Class[] exceptionTypes, final String body) {
         try {
-            final CtMethod ctMethod =
-                    CtNewMethod.make(modifier & ~(Modifier.ABSTRACT | Modifier.NATIVE), toCtClass(returnType), methodName,
-                            toCtClassArray(parameterTypes), toCtClassArray(exceptionTypes), body, clazz);
+            final CtMethod ctMethod = CtNewMethod.make(modifier & ~(Modifier.ABSTRACT | Modifier.NATIVE), toCtClass(returnType), methodName,
+                    toCtClassArray(parameterTypes), toCtClassArray(exceptionTypes), body, clazz);
             clazz.addMethod(ctMethod);
             return ctMethod;
         } catch (final CannotCompileException e) {
