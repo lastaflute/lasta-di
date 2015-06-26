@@ -26,7 +26,8 @@ Can boot it by example of LastaFlute:
 
 *you can login by user 'Pixy' and password 'sea', and can see debug log at console
 
-# Maven Dependency
+# Information
+## Maven Dependency
 ```xml
 <dependency>
     <groupId>org.lastaflute</groupId>
@@ -35,10 +36,20 @@ Can boot it by example of LastaFlute:
 </dependency>
 ```
 
-# Japanese Site (English comming soon...)
+## Japanese Site (English comming soon...)
 http://dbflute.seasar.org/ja/lastaflute/lastadi/
 
-# Thanks, Friends
+# Special Thanks
+## Thanks, Frameworks
+Lasta Di forks Seasar, AOP alliance and extends it, thankful wonderful functions.
+And also forks S2ClassBuilder (called Redefiner in Lasta Di), provides flexible Di xml.
+If the frameworks were not there, no Lasta Di here.
+
+I appreciate every framework.
+
+## Thanks, Friends
 Not only LastaFlute, Lasta Di is used by:
 - RiverWeb: https://github.com/codelibs/elasticsearch-river-web
 - S2Robot: https://github.com/codelibs/s2robot
+
+Deeply Thanks!
