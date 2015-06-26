@@ -1,18 +1,16 @@
 # Lasta Di
 DI Container for LastaFlute, forked from Seasar as Java8
 
-# Two components
-- Quick component: convention registration, hot reloading (prototype)
-- Rich component: flexible manual registration (singleton)
-
-## How to inject
-Both components can be injected by @Resource annotation.
 ```java
 @Resource
 private AbcLogic abcLogic;
 ```
 
-# Speedy Boot
+## Two components
+- Quick component: convention registration, hot reloading (prototype)
+- Rich component: flexible manual registration (singleton)
+
+## Speedy Boot
 Simple logic in Lasta Di, speed is prior.
 And following features:
 - Small dependencies: Javassit, JTA, Slf4j (only three)
