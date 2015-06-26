@@ -24,7 +24,16 @@ Can boot it by example of LastaFlute:
 3. execute the main method of (org.docksidestage.boot) HarborBoot
 4. access to http://localhost:8090/harbor
 
-*you can login by user 'Pixy' and password 'sea', and can see debug log at console
+```java
+public class HarborBoot {
+
+    public static void main(String[] args) {
+        new JettyBoot(8090, "/harbor").asDevelopment().bootAwait();
+    }
+}
+```
+
+Can login by user 'Pixy' and password 'sea', and can see debug log at console.
 
 # Information
 ## Maven Dependency
@@ -39,15 +48,14 @@ Can boot it by example of LastaFlute:
 ## Japanese Site (English comming soon...)
 http://dbflute.seasar.org/ja/lastaflute/lastadi/
 
-# Special Thanks
-## Thanks, Frameworks
-Lasta Di forks Seasar, AOP alliance and extends it, thankful wonderful functions.
-And also forks S2ClassBuilder (called Redefiner in Lasta Di), provides flexible Di xml.
+# Thanks, Frameworks
+Lasta Di forks Seasar, AOP alliance and extends it, thankful wonderful functions.  
+And also forks S2ClassBuilder (called Redefiner in Lasta Di), provides flexible Di xml.  
 If the frameworks were not there, no Lasta Di here.
 
 I appreciate every framework.
 
-## Thanks, Friends
+# Thanks, Friends
 Not only LastaFlute, Lasta Di is used by:
 - RiverWeb: https://github.com/codelibs/elasticsearch-river-web
 - S2Robot: https://github.com/codelibs/s2robot
