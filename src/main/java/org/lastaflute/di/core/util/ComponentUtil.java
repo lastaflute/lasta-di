@@ -33,6 +33,7 @@ public class ComponentUtil implements ContainerConstants {
     private static final SLogger logger = SLogger.getLogger(ComponentUtil.class);
     private static final Class<?>[] EMPTY_CLASSES = new Class<?>[0];
     private static final Set<Class<?>> notAssignableClasses = new HashSet<Class<?>>();
+
     static {
         notAssignableClasses.add(Cloneable.class);
         notAssignableClasses.add(Comparable.class);

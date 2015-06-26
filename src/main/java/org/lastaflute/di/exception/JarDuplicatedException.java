@@ -16,22 +16,13 @@
 package org.lastaflute.di.exception;
 
 /**
- * Seasar2のJarファイルが複数存在している場合にスローされる例外です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class JarDuplicatedException extends SRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @param name
-     *            Jarの名前
-     * @param versions
-     *            バージョン
-     */
     public JarDuplicatedException(String name, Object versions) {
         super("ESSR0102", new Object[] { name, versions });
     }
-
 }

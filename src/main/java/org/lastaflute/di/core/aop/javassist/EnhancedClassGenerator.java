@@ -28,30 +28,17 @@ import javassist.CtClass;
 import org.lastaflute.di.core.aop.InterType;
 
 /**
- * コンポーネントのバイトコードをエンハンスするクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class EnhancedClassGenerator extends AbstractGenerator {
 
-    /**
-     * ターゲットクラス
-     */
     protected final Class targetClass;
 
-    /**
-     * エンハンスされるクラス名
-     */
     protected final String enhancedClassName;
 
-    /**
-     * エンハンスされるクラス
-     */
     protected CtClass enhancedClass;
 
     /**
-     * {@link EnhancedClassGenerator}を作成します。
-     * 
      * @param classPool
      * @param targetClass
      * @param enhancedClassName
@@ -77,8 +64,6 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * superクラスのメソッドを呼び出すためのメソッドを作成します。
-     * 
      * @param method
      * @param invokeSuperMethodName
      */
@@ -88,8 +73,6 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * {@link InterType}を適用します。
-     * 
      * @param interType
      */
     public void applyInterType(final InterType interType) {
@@ -97,8 +80,6 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * CtClassをClassに変換します。
-     * 
      * @param classLoader
      * @return
      */
@@ -109,26 +90,17 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         return clazz;
     }
 
-    /**
-     * CtClassをセットアップします。
-     */
     public void setupClass() {
         final Class superClass = (targetClass.isInterface()) ? Object.class : targetClass;
         enhancedClass = createCtClass(enhancedClassName, superClass);
     }
 
-    /**
-     * インターフェース用のセットアップを行ないます。
-     */
     public void setupInterface() {
         if (targetClass.isInterface()) {
             setInterface(enhancedClass, targetClass);
         }
     }
 
-    /**
-     * {@link Constructor}のセットアップを行ないます。
-     */
     public void setupConstructor() {
         final Constructor[] constructors = targetClass.getDeclaredConstructors();
         if (constructors.length == 0) {
@@ -137,9 +109,8 @@ public class EnhancedClassGenerator extends AbstractGenerator {
             for (int i = 0; i < constructors.length; ++i) {
                 final int modifier = constructors[i].getModifiers();
                 final Package pkg = targetClass.getPackage();
-                if (Modifier.isPublic(modifier)
-                        || Modifier.isProtected(modifier)
-                        || (!Modifier.isPrivate(modifier) && !targetClass.getName().startsWith("java.") && (pkg == null || !pkg.isSealed()))) {
+                if (Modifier.isPublic(modifier) || Modifier.isProtected(modifier) || (!Modifier.isPrivate(modifier)
+                        && !targetClass.getName().startsWith("java.") && (pkg == null || !pkg.isSealed()))) {
                     createConstructor(enhancedClass, constructors[i]);
                 }
             }
@@ -147,11 +118,9 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * ターゲットメソッド用のソースコードを作成します。
-     * 
      * @param method
      * @param methodInvocationClassName
-     * @return ターゲットメソッド用のソースコード
+     * @return 
      */
     public static String createTargetMethodSource(final Method method, final String methodInvocationClassName) {
         final StringBuffer buf = new StringBuffer(200);
@@ -181,18 +150,14 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * superクラスのメソッドを呼び出すためのソースコードを作成します。
-     * 
      * @param method
-     * @return superクラスのメソッドを呼び出すためのソースコード
+     * @return 
      */
     public static String createInvokeSuperMethodSource(final Method method) {
         return "{" + "return ($r) super." + method.getName() + "($$);" + "}";
     }
 
     /**
-     * 例外の型を正規化します。
-     * 
      * @param exceptionTypes
      * @return
      */
@@ -216,11 +181,9 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * 元のソースコードをtry, cacheで囲んだソースコードを返します。
-     * 
      * @param exceptionTypes
      * @param code
-     * @return 元のソースコードをtry, cacheで囲んだソースコード
+     * @return 
      */
     public static String aroundTryCatchBlock(final Class[] exceptionTypes, final String code) {
         final TryBlockSupport tryBlock = new TryBlockSupport(code);

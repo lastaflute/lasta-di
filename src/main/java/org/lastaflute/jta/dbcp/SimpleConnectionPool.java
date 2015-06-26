@@ -34,6 +34,7 @@ import javax.transaction.Synchronization;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
+import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.jta.dbcp.exception.ConnectionPoolShortFreeSQLException;
 import org.lastaflute.jta.dbcp.impl.ConnectionWrapperImpl;
 import org.lastaflute.jta.exception.LjtIllegalStateException;
@@ -119,15 +120,14 @@ public class SimpleConnectionPool implements ConnectionPool {
     //                                                                           =========
     public synchronized ConnectionWrapper checkOut() throws SQLException {
         final Transaction tx = getTransaction();
-        if (tx == null && !isAllowLocalTx()) {
+        if (tx == null && !isAllowLocalTx()) { // rare case
             throw new LjtIllegalStateException("Not begun transaction. (not allowed local transaction)");
         }
         ConnectionWrapper wrapper = getConnectionTxActivePool(tx);
         if (wrapper != null) {
-            // TODO jflute lastaflute: [E] fitting: DI :: connection pool logical connection logging for internal debug
-            //if (logger.isDebugEnabled()) {
-            //    logger.debug("...Checking out logical connection from pool: {}", tx);
-            //}
+            if (isInternalDebug()) {
+                logger.debug("...Checking out logical connection from pool: {}", tx);
+            }
             return wrapper;
         }
         long wait = maxWait;
@@ -138,8 +138,7 @@ public class SimpleConnectionPool implements ConnectionPool {
             final long startTime = System.currentTimeMillis();
             try {
                 wait((maxWait == -1L) ? 0L : wait);
-            } catch (InterruptedException e) {
-                // TODO jflute lastaflute: [E] fitting: DI :: connection pool exception handling
+            } catch (InterruptedException e) { // rare case
                 throw new LjtSQLException("Cannot wait the connection back to pool", e);
             }
             final long elapseTime = System.currentTimeMillis() - startTime;
@@ -162,7 +161,7 @@ public class SimpleConnectionPool implements ConnectionPool {
         if (transactionIsolationLevel != DEFAULT_TRANSACTION_ISOLATION_LEVEL) {
             wrapper.setTransactionIsolation(transactionIsolationLevel);
         }
-        if (logger.isDebugEnabled()) {
+        if (isInternalDebug()) {
             logger.debug("...Checking out logical connection from pool: {}", tx);
         }
         return wrapper;
@@ -394,6 +393,13 @@ public class SimpleConnectionPool implements ConnectionPool {
                 break;
             }
         }
+    }
+
+    // ===================================================================================
+    //                                                                      Internal Debug
+    //                                                                      ==============
+    protected boolean isInternalDebug() {
+        return LastaDiProperties.getInstance().isInternalDebug();
     }
 
     // ===================================================================================

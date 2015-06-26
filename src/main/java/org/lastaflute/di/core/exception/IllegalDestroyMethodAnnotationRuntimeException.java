@@ -15,15 +15,9 @@
  */
 package org.lastaflute.di.core.exception;
 
-import org.lastaflute.di.core.meta.DestroyMethodDef;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * アノテーションで指定された{@link DestroyMethodDef destroyメソッド・インジェクション定義}が不正だった場合にスローされます。
- * <p>
- * アノテーションで指定されたメソッドが存在しない場合、 複数定義されている場合、 および引数が必要な場合に不正とみなされます。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  * 
@@ -37,12 +31,8 @@ public class IllegalDestroyMethodAnnotationRuntimeException extends SRuntimeExce
     private String methodName;
 
     /**
-     * <code>IllegalDestroyMethodAnnotationRuntimeException</code>を構築します。
-     * 
      * @param componentClass
-     *            アノテーションが指定されたクラス
      * @param methodName
-     *            アノテーションで指定されたメソッド名
      */
     public IllegalDestroyMethodAnnotationRuntimeException(final Class componentClass, final String methodName) {
         super("ESSR0082", new Object[] { componentClass.getName(), methodName });
@@ -51,18 +41,14 @@ public class IllegalDestroyMethodAnnotationRuntimeException extends SRuntimeExce
     }
 
     /**
-     * 例外の原因となったアノテーションが指定されたクラスを返します。
-     * 
-     * @return アノテーションが指定されたクラス
+     * @return 
      */
     public Class getComponentClass() {
         return componentClass;
     }
 
     /**
-     * 例外の原因となったアノテーションで指定されたメソッド名を返します。
-     * 
-     * @return アノテーションで指定されたメソッド名
+     * @return 
      */
     public String getMethodName() {
         return methodName;

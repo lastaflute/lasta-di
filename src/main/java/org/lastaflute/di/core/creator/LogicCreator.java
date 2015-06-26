@@ -20,38 +20,20 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * Logic用の {@link ComponentCreator}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LogicCreator extends ComponentCreatorImpl {
 
-    /**
-     * {@link LogicCreator}を作成します。
-     * 
-     * @param namingConvention
-     */
     public LogicCreator(NamingConvention namingConvention) {
         super(namingConvention);
         setNameSuffix(namingConvention.getLogicSuffix());
         setInstanceDef(InstanceDefFactory.PROTOTYPE);
     }
 
-    /**
-     * Logic用の {@link ComponentCustomizer}を返します。
-     * 
-     * @return
-     */
     public ComponentCustomizer getLogicCustomizer() {
         return getCustomizer();
     }
 
-    /**
-     * Logic用の {@link ComponentCustomizer}を設定します。
-     * 
-     * @param customizer
-     */
     public void setLogicCustomizer(ComponentCustomizer customizer) {
         setCustomizer(customizer);
     }

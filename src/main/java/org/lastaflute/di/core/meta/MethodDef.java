@@ -21,20 +21,6 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.expression.Expression;
 
 /**
- * メソッド・インジェクションを定義するためのインターフェースです。
- * <p>
- * メソッド・インジェクションとは、任意のメソッドや式の呼び出しによりコンポーネントをインジェクションすることです。
- * </p>
- * <p>
- * 例として、<code>addFoo(Foo)</code> メソッドを通じて <code>Foo</code>をインジェクションする場合に利用することができます。
- * 引数のないメソッドや任意の式を呼び出すこともできます。
- * </p>
- * <p>
- * コンポーネントが初期化されるときに実行されるinitMethodインジェクションと、
- * コンテナの終了時に実行されるdesoryMethodインジェクションがあります。 destroyMethodインジェクションが適用されるのは、
- * コンポーネントのinstance要素が<code>singleton</code>の場合だけです。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author azusa
  * 
@@ -42,53 +28,37 @@ import org.lastaflute.di.core.expression.Expression;
 public interface MethodDef extends ArgDefAware {
 
     /**
-     * 実行するメソッドを返します。
-     * 
-     * @return 実行するメソッド
+     * @return 
      */
     public Method getMethod();
 
     /**
-     * メソッド名を返します。
-     * 
-     * @return メソッド名
+     * @return 
      */
     public String getMethodName();
 
     /**
-     * メソッド引数を返します。
-     * 
-     * @return メソッド引数
+     * @return 
      */
     public Object[] getArgs();
 
     /**
-     * 引数および式を評価するコンテキストとなるS2コンテナを返します。
-     * 
-     * @return 引数および式を評価するコンテキストとなるS2コンテナ
+     * @return 
      */
     public LaContainer getContainer();
 
     /**
-     * 引数および式を評価するコンテキストとなるS2コンテナを設定します。
-     * 
      * @param container
-     *            引数および式を評価するコンテキストとなるS2コンテナ
      */
     public void setContainer(LaContainer container);
 
     /**
-     * 実行される式を返します。
-     * 
-     * @return 実行される式
+     * @return 
      */
     public Expression getExpression();
 
     /**
-     * 実行される式を設定します。
-     * 
      * @param expression
-     *            実行される式
      */
     public void setExpression(Expression expression);
 }

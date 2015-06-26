@@ -18,32 +18,21 @@ package org.lastaflute.di.core.autoregister;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lastaflute.di.util.LdiResourcesUtil;
 import org.lastaflute.di.util.ClassTraversal.ClassHandler;
+import org.lastaflute.di.util.LdiResourcesUtil;
 import org.lastaflute.di.util.LdiResourcesUtil.Resources;
 
 /**
- * jarファイルに含まれているあるいはファイルシステム上(WEBINF/classesとか)にあるコンポーネントを自動登録するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class ComponentAutoRegister extends AbstractComponentAutoRegister implements ClassHandler {
 
-    /**
-     * 参照するクラスのリストです。
-     */
     protected List referenceClasses = new ArrayList();
 
-    /**
-     * デフォルトのコンストラクタです。
-     */
     public ComponentAutoRegister() {
     }
 
     /**
-     * jarファイルに含まれているクラスを追加します。jarファイルに含まれているならどのクラスでもOKです。
-     * このクラスを参照してjarファイルの物理的な位置を特定します。
-     * 
      * @param referenceClass
      */
     public void addReferenceClass(final Class referenceClass) {

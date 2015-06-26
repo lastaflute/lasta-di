@@ -22,8 +22,6 @@ import org.lastaflute.di.util.LdiResourceUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * ファイルシステム上(例えばWEBINF/classes)のコンポーネントを自動登録するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class FileSystemComponentAutoRegister extends AbstractComponentAutoRegister {
@@ -37,14 +35,7 @@ public class FileSystemComponentAutoRegister extends AbstractComponentAutoRegist
     }
 
     /**
-     * コンポーネントを検索する基点となるディレクトリを返します。
-     * <p>
-     * 基点となるディレクトリはこのコンポーネント自身を定義したdiconファイルのパスが見つかったディレクトリになります。
-     * 例えばdiconファイルのパスが<code>"foo/bar.dicon"</code>で、このdiconファイルの絶対パスが
-     * <code>/aaa/bbb/foo/bar.dicon</code>であれば、基点となるディレクトリは<code>/aaa/bbb</code>となります。
-     * </p>
-     * 
-     * @return コンポーネントを検索する基点となるディレクトリ
+     * @return 
      */
     protected File getRootDir() {
         final String path = getContainer().getPath();

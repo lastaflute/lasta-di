@@ -35,6 +35,7 @@ public class LdiSrl {
     protected static final String HARF_LOWER_ALPHABET = "abcdefghijklmnopqrstuvwxyz";
     protected static final String HARF_NUMBER = "0123456789";
     protected static final Set<Character> _alphabetHarfCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         final StringBuilder sb = new StringBuilder();
@@ -46,7 +47,9 @@ public class LdiSrl {
         }
         _alphabetHarfCharSet = Collections.unmodifiableSet(setupSet);
     }
+
     protected static final Set<Character> _alphabetHarfLowerCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         final StringBuilder sb = new StringBuilder();
@@ -57,7 +60,9 @@ public class LdiSrl {
         }
         _alphabetHarfLowerCharSet = Collections.unmodifiableSet(setupSet);
     }
+
     protected static final Set<Character> _alphabetHarfUpperCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         final StringBuilder sb = new StringBuilder();
@@ -68,7 +73,9 @@ public class LdiSrl {
         }
         _alphabetHarfUpperCharSet = Collections.unmodifiableSet(setupSet);
     }
+
     protected static final Set<Character> _numberHarfCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         final String chStr = HARF_NUMBER;
@@ -78,21 +85,27 @@ public class LdiSrl {
         }
         _numberHarfCharSet = Collections.unmodifiableSet(setupSet);
     }
+
     protected static final Set<Character> _alphabetHarfNumberHarfCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         setupSet.addAll(_alphabetHarfCharSet);
         setupSet.addAll(_numberHarfCharSet);
         _alphabetHarfNumberHarfCharSet = Collections.unmodifiableSet(setupSet);
     }
+
     protected static final Set<Character> _alphabetNumberHarfLowerCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         setupSet.addAll(_alphabetHarfLowerCharSet);
         setupSet.addAll(_numberHarfCharSet);
         _alphabetNumberHarfLowerCharSet = Collections.unmodifiableSet(setupSet);
     }
+
     protected static final Set<Character> _alphabetNumberHarfUpperCharSet;
+
     static {
         final Set<Character> setupSet = new HashSet<Character>();
         setupSet.addAll(_alphabetHarfUpperCharSet);

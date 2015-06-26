@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.lastaflute.di.core.ComponentDef;
+import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.di.core.meta.BindingTypeDef;
 import org.lastaflute.di.core.meta.PropertyDef;
 import org.lastaflute.di.helper.beans.BeanDesc;
@@ -76,6 +77,13 @@ public class AutoPropertyAssembler extends AbstractPropertyAssembler {
         }
         // the property has setter
         final String fqcn = writeMethod.getDeclaringClass().getName();
-        return fqcn.startsWith("org.lastaflute.") || fqcn.startsWith("org.dbflute.");
+        if (fqcn.startsWith("org.lastaflute.") || fqcn.startsWith("org.dbflute.")) {
+            return true;
+        }
+        final String specified1 = LastaDiProperties.getInstance().getPlainPropertyInjectionPackage1();
+        if (specified1 != null && fqcn.startsWith(specified1)) {
+            return true;
+        }
+        return false;
     }
 }

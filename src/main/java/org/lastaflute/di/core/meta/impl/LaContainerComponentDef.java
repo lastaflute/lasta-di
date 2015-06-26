@@ -15,20 +15,15 @@
  */
 package org.lastaflute.di.core.meta.impl;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 
 /**
- * {@link LaContainer}用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class LaContainerComponentDef extends SimpleComponentDef {
 
     /**
-     * {@link LaContainerComponentDef}を作成します。
-     * 
      * @param container
      * @param name
      */

@@ -39,7 +39,8 @@ public interface AnnotationHandler {
 
     ComponentDef createComponentDef(Class<?> componentClass, InstanceDef instanceDef, AutoBindingDef autoBindingDef);
 
-    ComponentDef createComponentDef(Class<?> componentClass, InstanceDef instanceDef, AutoBindingDef autoBindingDef, boolean externalBinding);
+    ComponentDef createComponentDef(Class<?> componentClass, InstanceDef instanceDef, AutoBindingDef autoBindingDef,
+            boolean externalBinding);
 
     void appendDI(ComponentDef componentDef);
 

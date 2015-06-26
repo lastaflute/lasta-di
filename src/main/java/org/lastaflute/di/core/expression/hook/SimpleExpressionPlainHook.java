@@ -123,7 +123,8 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         return null;
     }
 
-    protected Object resolveSimpleComponent(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+    protected Object resolveSimpleComponent(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> resultType) {
         if (!LdiSrl.containsAny(exp, ".", ",", SQ, DQ, "@", "#")) { // main except, just in case
             if (container.hasComponentDef(exp)) {
                 return container.getComponent(exp);
@@ -172,7 +173,8 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                                     Exists Resource
     //                                                                     ===============
-    protected Object resolveExistsResource(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+    protected Object resolveExistsResource(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> resultType) {
         if (exp.startsWith(EXISTS_BEGIN) && exp.endsWith(EXISTS_END)) {
             final String path = exp.substring(EXISTS_BEGIN.length(), exp.lastIndexOf(EXISTS_END));
             if (!path.contains(SQ)) {
@@ -185,7 +187,8 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                              Provider Configuration
     //                                                              ======================
-    protected Object resolveProviderConfig(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+    protected Object resolveProviderConfig(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> resultType) {
         // TODO jflute lastaflute: [E] fitting: DI :: JavaScript performance tuning, e.g. ? :
         if (exp.startsWith(PROVIDER_GET) && exp.endsWith(METHOD_MARK) && exp.contains(".") && !exp.contains("\"")) {
             final String[] tokens = exp.split("\\.");

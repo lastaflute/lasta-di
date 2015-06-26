@@ -85,7 +85,8 @@ public class ScriptingExpression implements Expression {
         return engine.evaluate(parsed, contextMap, container, conversionType);
     }
 
-    protected Object hookPlainly(String expression, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
+    protected Object hookPlainly(String expression, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> conversionType) {
         final ExpressionPlainHook plainHook = preparePlainHook();
         return plainHook != null ? plainHook.hookPlainly(expression, contextMap, container, conversionType) : null;
     }

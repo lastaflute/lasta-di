@@ -27,7 +27,6 @@ public class ActionCreator extends ComponentCreatorImpl {
     public ActionCreator(NamingConvention namingConvention) {
         super(namingConvention);
         setNameSuffix(namingConvention.getActionSuffix());
-        // TODO jflute lastaflute: [E] DI :: ActionCreator Prototype OK?
         setInstanceDef(InstanceDefFactory.REQUEST);
     }
 

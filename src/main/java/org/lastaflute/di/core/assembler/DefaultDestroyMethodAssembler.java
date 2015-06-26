@@ -21,16 +21,12 @@ import org.lastaflute.di.core.meta.MethodDef;
 import org.lastaflute.di.helper.beans.BeanDesc;
 
 /**
- * デフォルトのdestroyメソッドアセンブラです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class DefaultDestroyMethodAssembler extends AbstractMethodAssembler {
 
     /**
-     * {@link DefaultDestroyMethodAssembler}を作成します。
-     * 
      * @param componentDef
      */
     public DefaultDestroyMethodAssembler(ComponentDef componentDef) {

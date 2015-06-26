@@ -43,8 +43,8 @@ public class LdiMethodUtil {
     protected LdiMethodUtil() {
     }
 
-    public static Object invoke(Method method, Object target, Object[] args) throws InvocationTargetRuntimeException,
-            IllegalAccessRuntimeException {
+    public static Object invoke(Method method, Object target, Object[] args)
+            throws InvocationTargetRuntimeException, IllegalAccessRuntimeException {
         try {
             return method.invoke(target, args);
         } catch (InvocationTargetException e) {
@@ -204,8 +204,8 @@ public class LdiMethodUtil {
         if (GET_ELEMENT_TYPE_OF_COLLECTION_FROM_PARAMETER_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_COLLECTION_FROM_PARAMETER_METHOD, null, new Object[] { method,
-                new Integer(position) });
+        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_COLLECTION_FROM_PARAMETER_METHOD, null,
+                new Object[] { method, new Integer(position) });
     }
 
     /**
@@ -235,8 +235,8 @@ public class LdiMethodUtil {
         if (GET_ELEMENT_TYPE_OF_LIST_FROM_PARAMETER_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_LIST_FROM_PARAMETER_METHOD, null, new Object[] { method,
-                new Integer(position) });
+        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_LIST_FROM_PARAMETER_METHOD, null,
+                new Object[] { method, new Integer(position) });
     }
 
     /**
@@ -266,8 +266,8 @@ public class LdiMethodUtil {
         if (GET_ELEMENT_TYPE_OF_SET_FROM_PARAMETER_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_SET_FROM_PARAMETER_METHOD, null, new Object[] { method,
-                new Integer(position) });
+        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_SET_FROM_PARAMETER_METHOD, null,
+                new Object[] { method, new Integer(position) });
     }
 
     /**

@@ -17,117 +17,53 @@ package org.lastaflute.di.helper.beans.factory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Collections;
 import java.util.Map;
 
 import org.lastaflute.di.helper.beans.ParameterizedClassDesc;
-import org.lastaflute.di.helper.beans.PropertyDesc;
 
 /**
- * フィールの型やメソッドの引数型、戻り値型を表現する{@link ParameterizedClassDesc}を作成するファクトリです。
- * <p>
- * このクラスの機能はS2-Tigerに含まれる{@link Provider}の実装クラスによって提供されます。
- * </p>
- * 
- * @since 2.4.18
  * @author modified by jflute (originated in Seasar)
- * @see PropertyDesc#getParameterizedClassDesc()
  */
 public class ParameterizedClassDescFactory {
 
-    /** {@link Provider}実装クラスのクラス名 */
     protected static final String PROVIDER_CLASS_NAME = ParameterizedClassDescFactory.class.getName() + "Provider";
-
-    /** {@link Provider}のインスタンス */
     protected static final Provider provider = createProvider();
 
-    /**
-     * パラメータ化された型(クラスまたはインタフェース)が持つ型変数をキー、型引数を値とする{@link Map}を返します。
-     * <p>
-     * S2-Tigerが利用できない場合や、型がパラメタ化されていない場合は空の{@link Map}を返します。
-     * </p>
-     * 
-     * @param beanClass
-     *            パラメータ化された型(クラスまたはインタフェース)
-     * @return パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-     */
-    public static Map getTypeVariables(Class beanClass) {
+    public static Map<TypeVariable<?>, Type> getTypeVariables(Class<?> beanClass) {
         if (provider == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return provider.getTypeVariables(beanClass);
     }
 
-    /**
-     * フィールドの型をを表現する{@link ParameterizedClassDesc}を作成して返します。
-     * <p>
-     * S2-Tigerが利用できない場合や、フィールドがパラメタ化されていない場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @param field
-     *            フィールド
-     * @param map
-     *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-     * @return フィールドの型を表現する{@link ParameterizedClassDesc}
-     */
-    public static ParameterizedClassDesc createParameterizedClassDesc(final Field field, final Map map) {
+    public static ParameterizedClassDesc createParameterizedClassDesc(final Field field, final Map<TypeVariable<?>, Type> map) {
         if (provider == null) {
             return null;
         }
         return provider.createParameterizedClassDesc(field, map);
     }
 
-    /**
-     * メソッドの引数型を表現する{@link ParameterizedClassDesc}を作成して返します。
-     * <p>
-     * S2-Tigerが利用できない場合や、メソッドの引数がパラメタ化されていない場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @param method
-     *            メソッド
-     * @param index
-     *            引数の位置
-     * @param map
-     *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-     * @return メソッドの引数型を表現する{@link ParameterizedClassDesc}
-     */
-    public static ParameterizedClassDesc createParameterizedClassDesc(final Method method, final int index, final Map map) {
+    public static ParameterizedClassDesc createParameterizedClassDesc(final Method method, final int index,
+            final Map<TypeVariable<?>, Type> map) {
         if (provider == null) {
             return null;
         }
         return provider.createParameterizedClassDesc(method, index, map);
     }
 
-    /**
-     * メソッドの戻り値型を表現する{@link ParameterizedClassDesc}を作成して返します。
-     * <p>
-     * S2-Tigerが利用できない場合や、メソッドの戻り値型がパラメタ化されていない場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @param method
-     *            メソッド
-     * @param map
-     *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-     * @return メソッドの戻り値型を表現する{@link ParameterizedClassDesc}
-     */
-    public static ParameterizedClassDesc createParameterizedClassDesc(final Method method, final Map map) {
+    public static ParameterizedClassDesc createParameterizedClassDesc(final Method method, final Map<TypeVariable<?>, Type> map) {
         if (provider == null) {
             return null;
         }
         return provider.createParameterizedClassDesc(method, map);
     }
 
-    /**
-     * {@link Provider}のインスタンスを作成して返します。
-     * <p>
-     * S2-Tigerが利用できない場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @return {@link Provider}のインスタンス
-     */
     protected static Provider createProvider() {
         try {
-            final Class clazz = Class.forName(PROVIDER_CLASS_NAME);
+            final Class<?> clazz = Class.forName(PROVIDER_CLASS_NAME);
             return (Provider) clazz.newInstance();
         } catch (final Exception e) {
             return null;
@@ -135,60 +71,16 @@ public class ParameterizedClassDescFactory {
     }
 
     /**
-     * {@link ParameterizedClassDescFactory}の機能を提供するインターフェースです。
-     * <p>
-     * この実装クラスはS2-Tigerによって提供されます。
-     * </p>
-     * 
      * @author modified by jflute (originated in Seasar)
-     * @since 2.4.18
      */
     public interface Provider {
 
-        /**
-         * パラメータ化された型(クラスまたはインタフェース)が持つ型変数をキー、型引数を値とする{@link Map}を返します。
-         * 
-         * @param beanClass
-         *            パラメータ化された型(クラスまたはインタフェース)
-         * @return パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-         */
-        Map getTypeVariables(Class<?> beanClass);
+        Map<TypeVariable<?>, Type> getTypeVariables(Class<?> beanClass);
 
-        /**
-         * フィールドの型をを表現する{@link ParameterizedClassDesc}を作成して返します。
-         * 
-         * @param field
-         *            フィールド
-         * @param map
-         *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-         * @return フィールドの型を表現する{@link ParameterizedClassDesc}
-         */
-        ParameterizedClassDesc createParameterizedClassDesc(Field field, Map map);
+        ParameterizedClassDesc createParameterizedClassDesc(Field field, Map<TypeVariable<?>, Type> map);
 
-        /**
-         * メソッドの引数型を表現する{@link ParameterizedClassDesc}を作成して返します。
-         * 
-         * @param method
-         *            メソッド
-         * @param index
-         *            引数の位置
-         * @param map
-         *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-         * @return メソッドの引数型を表現する{@link ParameterizedClassDesc}
-         */
-        ParameterizedClassDesc createParameterizedClassDesc(Method method, int index, Map map);
+        ParameterizedClassDesc createParameterizedClassDesc(Method method, int index, Map<TypeVariable<?>, Type> map);
 
-        /**
-         * メソッドの戻り値型を表現する{@link ParameterizedClassDesc}を作成して返します。
-         * 
-         * @param method
-         *            メソッド
-         * @param map
-         *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-         * @return メソッドの戻り値型を表現する{@link ParameterizedClassDesc}を作成して返します。
-         */
-        ParameterizedClassDesc createParameterizedClassDesc(Method method, Map map);
-
+        ParameterizedClassDesc createParameterizedClassDesc(Method method, Map<TypeVariable<?>, Type> map);
     }
-
 }

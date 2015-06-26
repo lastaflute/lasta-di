@@ -15,21 +15,15 @@
  */
 package org.lastaflute.di.core.external;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * RequestParameterValues用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class RequestParameterValuesMapComponentDef extends SimpleComponentDef {
 
-    /**
-     * {@link RequestParameterValuesMapComponentDef}を作成します。
-     */
     public RequestParameterValuesMapComponentDef() {
         super(null, null, ContainerConstants.PARAM_VALUES);
     }

@@ -24,27 +24,17 @@ import org.lastaflute.di.core.aop.impl.NestedMethodInvocation;
 import org.lastaflute.di.util.LdiArrayUtil;
 
 /**
- * {@link InterceptorChain}を名前で追加できるようにしたものです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class InterceptorAdapter extends AbstractInterceptor {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * S2コンテナです。
-     */
     protected LaContainer container;
 
-    /**
-     * コンポーネント定義の配列です。
-     */
     protected ComponentDef[] interceptorDefs = new ComponentDef[0];
 
     /**
-     * {@link LaContainer}を設定します。
-     * 
      * @param container
      */
     public void setContainer(final LaContainer container) {
@@ -52,8 +42,6 @@ public class InterceptorAdapter extends AbstractInterceptor {
     }
 
     /**
-     * {@link MethodInterceptor}を名前を通じて追加します。
-     * 
      * @param interceptorNames
      */
     public void add(final String interceptorNames) {

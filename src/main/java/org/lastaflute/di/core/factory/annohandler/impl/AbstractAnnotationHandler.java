@@ -71,7 +71,8 @@ public abstract class AbstractAnnotationHandler implements AnnotationHandler {
     }
 
     @Override
-    public ComponentDef createComponentDef(String className, InstanceDef instanceDef, AutoBindingDef autoBindingDef, boolean externalBinding) {
+    public ComponentDef createComponentDef(String className, InstanceDef instanceDef, AutoBindingDef autoBindingDef,
+            boolean externalBinding) {
         return createComponentDef(LdiClassUtil.forName(className), instanceDef, autoBindingDef, externalBinding);
     }
 

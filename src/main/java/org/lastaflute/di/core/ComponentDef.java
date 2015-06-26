@@ -31,8 +31,8 @@ import org.lastaflute.di.core.meta.PropertyDefAware;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public interface ComponentDef extends ArgDefAware, InterTypeDefAware, PropertyDefAware, InitMethodDefAware, DestroyMethodDefAware,
-        AspectDefAware, MetaDefAware {
+public interface ComponentDef
+        extends ArgDefAware, InterTypeDefAware, PropertyDefAware, InitMethodDefAware, DestroyMethodDefAware, AspectDefAware, MetaDefAware {
 
     // ===================================================================================
     //                                                                          Initialize

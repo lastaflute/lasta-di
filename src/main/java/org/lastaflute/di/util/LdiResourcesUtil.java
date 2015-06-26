@@ -60,6 +60,7 @@ public class LdiResourcesUtil {
 
     /** URLのプロトコルをキー、{@link ResourceTypeFactory}を値とするマッピングです。 */
     protected static final Map resourcesTypeFactories = new HashMap();
+
     static {
         addResourcesFactory("file", new ResourcesFactory() {
             public Resources create(final URL url, final String rootPackage, final String rootDir) {

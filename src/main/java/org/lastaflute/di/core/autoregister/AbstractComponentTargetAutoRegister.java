@@ -20,8 +20,6 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.util.LdiClassUtil;
 
 /**
- * コンポーネントを対象にした自動登録を行うための抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -38,17 +36,13 @@ public abstract class AbstractComponentTargetAutoRegister extends AbstractAutoRe
     }
 
     /**
-     * {@link ComponentDef}を登録します。
-     * 
      * @param cd
      */
     protected abstract void register(ComponentDef cd);
 
     /**
-     * 処理対象のコンポーネントかどうか返します。
-     * 
      * @param cd
-     * @return 処理対象のコンポーネントかどうか
+     * @return 
      */
     protected boolean isAppliedComponent(final ComponentDef cd) {
         final Class componentClass = cd.getComponentClass();

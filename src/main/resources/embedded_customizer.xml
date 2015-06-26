@@ -8,6 +8,8 @@
 	</component>
 	<component name="assistCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
+	<component name="validatorCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
 	<component name="logicCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	  	<postConstruct name="addCustomizer">
 			<arg>
@@ -23,11 +25,5 @@
 	  	</postConstruct>
 	</component>
 	<component name="helperCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
-	</component>
-	<component name="validatorCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
-	</component>
-	<component name="converterCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
-	</component>
-	<component name="interceptorCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
 </components>

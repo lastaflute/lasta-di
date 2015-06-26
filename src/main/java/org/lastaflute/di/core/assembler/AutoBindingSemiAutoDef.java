@@ -18,7 +18,6 @@ package org.lastaflute.di.core.assembler;
 import org.lastaflute.di.core.ComponentDef;
 
 /**
- * 自動バインディング定義の半自動版です。
  * 
  * @author modified by jflute (originated in Seasar)
  * 
@@ -26,8 +25,6 @@ import org.lastaflute.di.core.ComponentDef;
 public class AutoBindingSemiAutoDef extends AbstractAutoBindingDef {
 
     /**
-     * {@link AutoBindingSemiAutoDef}を作成します。
-     * 
      * @param name
      */
     protected AutoBindingSemiAutoDef(String name) {

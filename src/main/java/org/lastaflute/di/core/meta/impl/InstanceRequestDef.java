@@ -18,19 +18,14 @@ package org.lastaflute.di.core.meta.impl;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.deployer.ComponentDeployer;
 import org.lastaflute.di.core.deployer.ComponentDeployerFactory;
-import org.lastaflute.di.core.meta.InstanceDef;
 
 /**
- * request用の{@link InstanceDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class InstanceRequestDef extends AbstractInstanceDef {
 
     /**
-     * {@link InstanceRequestDef}を作成します。
-     * 
      * @param name
      */
     protected InstanceRequestDef(String name) {

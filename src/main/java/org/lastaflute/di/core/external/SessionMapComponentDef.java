@@ -15,21 +15,15 @@
  */
 package org.lastaflute.di.core.external;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * sessionスコープ用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class SessionMapComponentDef extends SimpleComponentDef {
 
-    /**
-     * {@link SessionMapComponentDef}を作成します。
-     */
     public SessionMapComponentDef() {
         super(null, null, ContainerConstants.SESSION_SCOPE);
     }

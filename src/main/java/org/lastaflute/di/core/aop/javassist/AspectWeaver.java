@@ -40,21 +40,21 @@ import org.lastaflute.di.util.LdiMethodUtil;
 public class AspectWeaver {
 
     public static final String PREFIX_ENHANCED_CLASS = "$$";
-    public static final String SUFFIX_ENHANCED_CLASS = "$$EnhancedByS2AOP$$";
+    public static final String SUFFIX_ENHANCED_CLASS = "$$EnhancedByLastaDi$$";
     public static final String SUFFIX_METHOD_INVOCATION_CLASS = "$$MethodInvocation$$";
     public static final String SUFFIX_INVOKE_SUPER_METHOD = "$$invokeSuperMethod$$";
     public static final String SEPARATOR_METHOD_INVOCATION_CLASS = "$$";
 
     protected static final Set<String> enhancedClassNames = Collections.synchronizedSet(new HashSet<String>());
     protected final Class<?> targetClass;
-    protected final Map parameters;
+    protected final Map<?, ?> parameters;
     protected final String enhancedClassName;
     protected final EnhancedClassGenerator enhancedClassGenerator;
     protected final List<Class<?>> methodInvocationClassList = new ArrayList<Class<?>>();
     protected Class<?> enhancedClass;
     protected ClassPool classPool;
 
-    public AspectWeaver(final Class<?> targetClass, final Map parameters) {
+    public AspectWeaver(final Class<?> targetClass, final Map<?, ?> parameters) {
         this.targetClass = targetClass;
         this.parameters = parameters;
 

@@ -23,8 +23,6 @@ import org.lastaflute.di.util.LdiStringUtil;
 import org.xml.sax.Attributes;
 
 /**
- * diconファイルの<code>meta</code>要素を解釈するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class MetaTagHandler extends AbstractTagHandler {
@@ -45,10 +43,8 @@ public class MetaTagHandler extends AbstractTagHandler {
     }
 
     /**
-     * メタ定義を作成します。
-     * 
      * @param name
-     * @return メタ定義
+     * @return 
      */
     protected MetaDefImpl createMetaDef(String name) {
         return new MetaDefImpl(name);

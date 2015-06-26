@@ -19,12 +19,6 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.creator.ComponentCreator;
 
 /**
- * コンポーネント定義をカスタマイズします。
- * <p>
- * SMART deployを使用すると、 規約に基づいて{@link ComponentDef コンポーネント定義}が作成されます。
- * これらのコンポーネント定義をカスタマイズしたい場合に、 このインターフェースを実装したクラスを使用します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  * 
@@ -34,10 +28,7 @@ import org.lastaflute.di.core.creator.ComponentCreator;
 public interface ComponentCustomizer {
 
     /**
-     * 指定されたコンポーネント定義をカスタマイズします。
-     * 
      * @param componentDef
-     *            コンポーネント定義
      */
     void customize(ComponentDef componentDef);
 }

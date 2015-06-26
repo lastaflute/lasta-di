@@ -32,7 +32,7 @@ import java.util.Set;
  * @param <VALUE> The type of value.
  * @author modified by jflute (originated in Seasar)
  */
-public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE> implements Map<KEY, VALUE>, Cloneable, Externalizable {
+public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<KEY, VALUE>, Cloneable, Externalizable {
 
     static final long serialVersionUID = 1L;
 

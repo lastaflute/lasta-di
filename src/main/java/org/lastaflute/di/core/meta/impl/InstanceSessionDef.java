@@ -18,11 +18,8 @@ package org.lastaflute.di.core.meta.impl;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.deployer.ComponentDeployer;
 import org.lastaflute.di.core.deployer.ComponentDeployerFactory;
-import org.lastaflute.di.core.meta.InstanceDef;
 
 /**
- * session用の{@link InstanceDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */

@@ -27,7 +27,6 @@ import org.lastaflute.di.util.LdiMethodUtil;
 import org.lastaflute.di.util.LdiModifierUtil;
 
 /**
- * {@link Pointcut}の実装クラスです。
  * 
  * @author modified by jflute (originated in Seasar)
  * 
@@ -43,8 +42,6 @@ public class PointcutImpl implements Pointcut, Serializable {
     private Method method;
 
     /**
-     * {@link PointcutImpl}を作成します。
-     * 
      * @param targetClass
      * @throws EmptyRuntimeException
      */
@@ -57,8 +54,6 @@ public class PointcutImpl implements Pointcut, Serializable {
     }
 
     /**
-     * {@link PointcutImpl}を作成します。
-     * 
      * @param methodNames
      * @throws EmptyRuntimeException
      */
@@ -71,8 +66,6 @@ public class PointcutImpl implements Pointcut, Serializable {
     }
 
     /**
-     * {@link PointcutImpl}を作成します。
-     * 
      * @param method
      */
     public PointcutImpl(Method method) {
@@ -94,8 +87,6 @@ public class PointcutImpl implements Pointcut, Serializable {
     }
 
     /**
-     * 対象になったメソッド名の配列を返します。
-     * 
      * @return
      */
     public String[] getMethodNames() {

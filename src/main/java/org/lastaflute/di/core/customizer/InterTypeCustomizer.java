@@ -24,32 +24,14 @@ import org.lastaflute.di.core.meta.InterTypeDef;
 import org.lastaflute.di.core.meta.impl.InterTypeDefImpl;
 
 /**
- * {@link org.lastaflute.di.core.ComponentDef コンポーネント定義}に
- * {@link org.lastaflute.di.core.meta.InterTypeDef インタータイプ定義}を
- * 登録するコンポーネントカスタマイザです。
- * <p>
- * カスタマイザには、インタータイプのコンポーネント名を複数設定することができます。
- * インタータイプ名が複数設定された場合は、設定された順にインタータイプ定義をコンポーネント定義に登録します。
- * 最初に設定された名前を持つインタータイプが、後に設定された名前を持つインタータイプよりも先に呼び出されることになります。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class InterTypeCustomizer extends AbstractCustomizer {
 
-    /**
-     * インタータイプ名のリストです。
-     */
     protected final List interTypeNames = new ArrayList();
 
     /**
-     * コンポーネント定義に登録するインタータイプのコンポーネント名を設定します。
-     * <p>
-     * すでに設定されているインタータイプ名は破棄されます。
-     * </p>
-     * 
      * @param interTypeName
-     *            インタータイプのコンポーネント名
      */
     public void setInterTypeName(final String interTypeName) {
         interTypeNames.clear();
@@ -57,24 +39,14 @@ public class InterTypeCustomizer extends AbstractCustomizer {
     }
 
     /**
-     * コンポーネント定義に登録するインタータイプのコンポーネント名を追加します。
-     * 
      * @param interTypeName
-     *            インタータイプのコンポーネント名
      */
     public void addInterTypeName(final String interTypeName) {
         interTypeNames.add(interTypeName);
     }
 
     /**
-     * カスタマイズ対象のコンポーネント定義をカスタマイズをします。
-     * <p>
-     * 設定されたインタータイプ名を持つインタータイプ定義をコンポーネント定義に登録します。
-     * インタータイプ名が複数設定された場合は、設定された順にインタータイプ定義をコンポーネント定義に登録します。
-     * </p>
-     * 
      * @param componentDef
-     *            コンポーネント定義
      */
     protected void doCustomize(final ComponentDef componentDef) {
         for (int i = 0; i < interTypeNames.size(); ++i) {

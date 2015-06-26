@@ -17,10 +17,7 @@ package org.lastaflute.di.core.meta.impl;
 
 import org.lastaflute.di.core.meta.InstanceDef;
 
-
 /**
- * {@link InstanceDef}の抽象クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -29,8 +26,6 @@ public abstract class AbstractInstanceDef implements InstanceDef {
     private String name;
 
     /**
-     * {@link AbstractInstanceDef}を作成します。
-     * 
      * @param name
      */
     protected AbstractInstanceDef(String name) {

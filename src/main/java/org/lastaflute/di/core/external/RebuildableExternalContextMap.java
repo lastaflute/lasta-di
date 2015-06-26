@@ -21,29 +21,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.core.smart.hot.HotdeployClassLoader;
 import org.lastaflute.di.core.smart.hot.HotdeployUtil;
 
 /**
- * HOT deploy時に値を再構築可能な{@link ExternalContext 外部コンテキスト}用の抽象{@link Map}です。
- * <p>
- * HOT deploy中はリクエストごとにクラスが変わってしまうので、 セッションなどに入れたデータを別のリクエストで取り出すと
- * {@link ClassCastException}が起きます。 これを防ぐために最新のクラスで元のオブジェクトを再作成します。
- * </p>
- * <p>
- * HOT deployは単一スレッドで実行されることが前提なので、このクラスはスレッドセーフではありません。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @see HotdeployUtil#rebuildValue(Object)
  */
 public abstract class RebuildableExternalContextMap extends AbstractExternalContextMap {
 
-    /** {@link HotdeployClassLoader} */
     protected static WeakReference hotdeployClassLoader = new WeakReference(null);
 
-    /** {@link #hotdeployClassLoader}の元で再構築したコンポーネント名の{@link Set} */
     protected static Set rebuiltNames = new HashSet(64);
 
     public Object get(final Object key) {
@@ -76,13 +64,7 @@ public abstract class RebuildableExternalContextMap extends AbstractExternalCont
     }
 
     /**
-     * HOT deployモードの場合は<code>true</code>を返します。
-     * <p>
-     * HOT deployモードの場合で、{@link HotdeployClassLoader}が前回のチェック以降に切り替わっていた場合は
-     * 保持しているリビルド済みオブジェクトの名前をクリアします。
-     * </p>
-     * 
-     * @return HOT deployモードの場合は<code>true</code>
+     * @return 
      */
     protected boolean isHotdeployMode() {
         if (!HotdeployUtil.isHotdeploy()) {

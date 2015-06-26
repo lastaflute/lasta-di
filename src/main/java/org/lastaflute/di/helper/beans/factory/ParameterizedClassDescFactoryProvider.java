@@ -30,9 +30,6 @@ import org.lastaflute.di.helper.beans.impl.ParameterizedClassDescImpl;
 import org.lastaflute.di.util.tiger.LdiGenericUtil;
 
 /**
- * {@link Provider}の機能を提供する実装クラスです。
- * 
- * @since 2.4.18
  * @author modified by jflute (originated in Seasar)
  */
 public class ParameterizedClassDescFactoryProvider implements Provider {
@@ -41,46 +38,32 @@ public class ParameterizedClassDescFactoryProvider implements Provider {
         return getTypeVariableMap(beanClass);
     }
 
-    @SuppressWarnings("unchecked")
-    public ParameterizedClassDesc createParameterizedClassDesc(final Field field, final Map map) {
+    public ParameterizedClassDesc createParameterizedClassDesc(Field field, Map<TypeVariable<?>, Type> map) {
         return createParameterizedClassDesc(field.getGenericType(), map);
     }
 
-    @SuppressWarnings("unchecked")
-    public ParameterizedClassDesc createParameterizedClassDesc(final Method method, final int index, Map map) {
+    public ParameterizedClassDesc createParameterizedClassDesc(Method method, int index, Map<TypeVariable<?>, Type> map) {
         return createParameterizedClassDesc(method.getGenericParameterTypes()[index], map);
     }
 
-    @SuppressWarnings("unchecked")
-    public ParameterizedClassDesc createParameterizedClassDesc(final Method method, Map map) {
+    public ParameterizedClassDesc createParameterizedClassDesc(Method method, Map<TypeVariable<?>, Type> map) {
         return createParameterizedClassDesc(method.getGenericReturnType(), map);
     }
 
-    /**
-     * {@link Type}を表現する{@link ParameterizedClassDesc}を作成して返します。
-     * 
-     * @param type
-     *            型
-     * @param map
-     *            パラメータ化された型が持つ型変数をキー、型引数を値とする{@link Map}
-     * @return 型を表現する{@link ParameterizedClassDesc}
-     */
-    public ParameterizedClassDesc createParameterizedClassDesc(final Type type, final Map<TypeVariable<?>, Type> map) {
+    public ParameterizedClassDesc createParameterizedClassDesc(Type type, Map<TypeVariable<?>, Type> map) {
         final Class<?> rowClass = getActualClass(type, map);
         if (rowClass == null) {
             return null;
         }
-        final ParameterizedClassDescImpl desc = new ParameterizedClassDescImpl(rowClass);
         final Type[] parameterTypes = LdiGenericUtil.getGenericParameterTypes(type);
         if (parameterTypes == null || parameterTypes.length == 0) {
-            return desc;
+            return new ParameterizedClassDescImpl(type, rowClass);
+        } else {
+            final ParameterizedClassDesc[] parameterDescs = new ParameterizedClassDesc[parameterTypes.length];
+            for (int i = 0; i < parameterTypes.length; ++i) {
+                parameterDescs[i] = createParameterizedClassDesc(parameterTypes[i], map);
+            }
+            return new ParameterizedClassDescImpl(type, rowClass, parameterDescs);
         }
-        final ParameterizedClassDesc[] parameterDescs = new ParameterizedClassDesc[parameterTypes.length];
-        for (int i = 0; i < parameterTypes.length; ++i) {
-            parameterDescs[i] = createParameterizedClassDesc(parameterTypes[i], map);
-        }
-        desc.setArguments(parameterDescs);
-        return desc;
     }
-
 }

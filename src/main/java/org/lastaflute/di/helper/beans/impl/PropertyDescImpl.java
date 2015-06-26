@@ -18,6 +18,8 @@ package org.lastaflute.di.helper.beans.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -111,7 +113,7 @@ public class PropertyDescImpl implements PropertyDesc {
     }
 
     private void setUpParameterizedClassDesc() {
-        final Map<?, ?> typeVariables = ((BeanDescImpl) beanDesc).getTypeVariables();
+        final Map<TypeVariable<?>, Type> typeVariables = ((BeanDescImpl) beanDesc).getTypeVariables();
         if (field != null) {
             parameterizedClassDesc = ParameterizedClassDescFactory.createParameterizedClassDesc(field, typeVariables);
         } else if (readMethod != null) {
@@ -207,17 +209,18 @@ public class PropertyDescImpl implements PropertyDesc {
                     Class<?> clazz = writeMethod.getDeclaringClass();
                     Class<?> valueClass = value == null ? null : value.getClass();
                     Class<?> targetClass = target == null ? null : target.getClass();
-                    throw new SIllegalArgumentException("ESSR0098", new Object[] { clazz.getName(), clazz.getClassLoader(),
-                            propertyType.getName(), propertyType.getClassLoader(), propertyName,
-                            valueClass == null ? null : valueClass.getName(), valueClass == null ? null : valueClass.getClassLoader(),
-                            value, targetClass == null ? null : targetClass.getName(),
-                            targetClass == null ? null : targetClass.getClassLoader() }).initCause(t);
+                    throw new SIllegalArgumentException("ESSR0098",
+                            new Object[] { clazz.getName(), clazz.getClassLoader(), propertyType.getName(), propertyType.getClassLoader(),
+                                    propertyName, valueClass == null ? null : valueClass.getName(),
+                                    valueClass == null ? null : valueClass.getClassLoader(), value,
+                                    targetClass == null ? null : targetClass.getName(),
+                                    targetClass == null ? null : targetClass.getClassLoader() }).initCause(t);
                 }
             } else {
                 LdiFieldUtil.set(field, target, value);
             }
         } catch (Throwable t) {
-            // TODO jflute lastaflute: [E] DI :: property desc exception message from DBFlute
+            // TODO jflute lastaflute: [E] fitting DI :: property desc exception message from DBFlute
             throw new IllegalPropertyRuntimeException(beanDesc.getBeanClass(), propertyName, t);
         }
     }
@@ -228,26 +231,30 @@ public class PropertyDescImpl implements PropertyDesc {
 
     @Override
     public final String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append("propertyName=");
-        buf.append(propertyName);
-        buf.append(",propertyType=");
-        buf.append(propertyType.getName());
-        buf.append(",readMethod=");
-        buf.append(readMethod != null ? readMethod.getName() : "null");
-        buf.append(",writeMethod=");
-        buf.append(writeMethod != null ? writeMethod.getName() : "null");
-        return buf.toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("property:{");
+        sb.append(propertyName);
+        sb.append(", ").append(propertyType.getName());
+        sb.append(", reader=").append(readMethod != null ? readMethod.getName() : null);
+        sb.append(", writer=").append(writeMethod != null ? writeMethod.getName() : null);
+        sb.append("}@").append(Integer.toHexString(hashCode()));
+        return sb.toString();
     }
 
-    public Object convertIfNeed(Object arg) {
-        // TODO jflute lastaflute: [E] DI :: convert to local date
+    public Object convertIfNeed(Object arg) { // #date_parade
         if (propertyType.isPrimitive()) {
             return convertPrimitiveWrapper(arg);
         } else if (Number.class.isAssignableFrom(propertyType)) {
             return convertNumber(arg);
         } else if (java.util.Date.class.isAssignableFrom(propertyType)) {
             return convertDate(arg);
+            // no prepared conversion logic so cannot, while no need to convert heres
+            //} else if (LocalDate.class.isAssignableFrom(propertyType)) {
+            //    return DfTypeUtil.toLocalDate(arg);
+            //} else if (LocalDate.class.isAssignableFrom(propertyType)) {
+            //    return DfTypeUtil.toLocalDate(arg);
+            //} else if (LocalDateTime.class.isAssignableFrom(propertyType)) {
+            //    return DfTypeUtil.toLocalDateTime(arg);
         } else if (Boolean.class.isAssignableFrom(propertyType)) {
             return LdiBooleanConversionUtil.toBoolean(arg);
         } else if (arg != null && arg.getClass() != String.class && String.class == propertyType) {

@@ -15,21 +15,15 @@
  */
 package org.lastaflute.di.core.external;
 
-import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
 
 /**
- * applicationスコープ用の {@link ComponentDef}です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
 public class ApplicationMapComponentDef extends SimpleComponentDef {
 
-    /**
-     * {@link ApplicationMapComponentDef}を作成します。
-     */
     public ApplicationMapComponentDef() {
         super(null, null, ContainerConstants.APPLICATION_SCOPE);
     }

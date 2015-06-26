@@ -48,6 +48,26 @@ public abstract class LdiGenericUtil {
         return false;
     }
 
+    /**
+     * @param type The type that has the generic type. (NotNull)
+     * @return The first generic type for the specified type. (NullAllowed: e.g. not found)
+     */
+    public static Class<?> getGenericFirstClass(Type type) {
+        return findGenericClass(type, 0);
+    }
+
+    /**
+     * @param type The type that has the generic type. (NotNull)
+     * @return The second generic type for the specified type. (NullAllowed: e.g. not found)
+     */
+    public static Class<?> getGenericSecondClass(Type type) {
+        return findGenericClass(type, 1);
+    }
+
+    protected static Class<?> findGenericClass(Type type, int index) {
+        return getRawClass(getGenericParameterType(type, index));
+    }
+
     public static Class<?> getRawClass(final Type type) {
         if (Class.class.isInstance(type)) {
             return Class.class.cast(type);

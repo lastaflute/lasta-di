@@ -25,30 +25,19 @@ import javassist.CtMethod;
 
 import org.lastaflute.di.core.aop.LaMethodInvocation;
 import org.lastaflute.di.core.aop.frame.MethodInterceptor;
-import org.lastaflute.di.core.aop.frame.MethodInvocation;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * {@link MethodInvocation}をエンハンスするクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class MethodInvocationClassGenerator extends AbstractGenerator {
 
-    /**
-     * エンハンスされるクラス名
-     */
     protected final String enhancedClassName;
 
-    /**
-     * メソッド呼び出しクラス
-     */
     protected CtClass methodInvocationClass;
 
     /**
-     * {@link MethodInvocationClassGenerator}を作成します。
-     * 
      * @param classPool
      * @param invocationClassName
      * @param targetClassName
@@ -60,8 +49,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * proceedメソッドを作成します。
-     * 
      * @param targetMethod
      * @param invokeSuperMethodName
      */
@@ -71,8 +58,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * <code>CtClass</code>を<code>Class</code>に変換します。
-     * 
      * @param classLoader
      * @return
      */
@@ -84,12 +69,10 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * <code>proceed</code>メソッドのソースを作成します。
-     * 
      * @param targetMethod
      * @param enhancedClassName
      * @param invokeSuperMethodName
-     * @return <code>proceed</code>メソッドのソース
+     * @return 
      */
     public static String createProceedMethodSource(final Method targetMethod, final String enhancedClassName,
             final String invokeSuperMethodName) {
@@ -104,21 +87,19 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * <code>return</code>文用のソースを作成します。
-     * 
      * @param targetMethod
      * @param enhancedClassName
      * @param invokeSuperMethodName
-     * @return <code>return</code>文用のソース
+     * @return 
      */
-    public static String createReturnStatement(final Method targetMethod, final String enhancedClassName, final String invokeSuperMethodName) {
+    public static String createReturnStatement(final Method targetMethod, final String enhancedClassName,
+            final String invokeSuperMethodName) {
         if (LdiMethodUtil.isAbstract(targetMethod)) {
             return createThrowStatement(targetMethod, enhancedClassName);
         }
 
-        final String invokeSuper =
-                "((" + enhancedClassName + ") target)." + invokeSuperMethodName + "("
-                        + createArgumentString(targetMethod.getParameterTypes()) + ")";
+        final String invokeSuper = "((" + enhancedClassName + ") target)." + invokeSuperMethodName + "("
+                + createArgumentString(targetMethod.getParameterTypes()) + ")";
 
         final Class returnType = targetMethod.getReturnType();
         if (returnType.equals(void.class)) {
@@ -128,11 +109,9 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * <code>throws</code>句用のソースを作成します。
-     * 
      * @param targetMethod
      * @param enhancedClassName
-     * @return <code>throws</code>句用のソース
+     * @return 
      */
     public static String createThrowStatement(final Method targetMethod, final String enhancedClassName) {
         return "throw new java.lang.NoSuchMethodError(\"" + enhancedClassName + "." + targetMethod.getName() + "("
@@ -141,10 +120,8 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * 引数用のソースを作成します。
-     * 
      * @param argTypes
-     * @return 引数用のソース
+     * @return 
      */
     public static String createArgumentString(final Class[] argTypes) {
         if (argTypes == null || argTypes.length == 0) {
@@ -160,10 +137,8 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     }
 
     /**
-     * 引数の型用のソースを作成します。
-     * 
      * @param argTypes
-     * @return 引数の型用のソース
+     * @return 
      */
     public static String createArgumentTypeString(final Class[] argTypes) {
         if (argTypes == null || argTypes.length == 0) {
@@ -178,10 +153,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         return new String(buf);
     }
 
-    /**
-     * {@link MethodInvocation}のテンプレートです。
-     * 
-     */
     public static class MethodInvocationTemplate implements LaMethodInvocation {
         private static Class targetClass;
 
@@ -198,8 +169,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         int interceptorsIndex;
 
         /**
-         * インスタンスを構築します。
-         * 
          * @param target
          * @param arguments
          */

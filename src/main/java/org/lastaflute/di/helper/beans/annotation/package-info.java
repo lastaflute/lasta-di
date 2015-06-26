@@ -17,4 +17,3 @@
  * {@link org.lastaflute.di.helper.beans.BeanDesc.BeanDesc}が引数名を取得するために利用するアノテーションを提供します。
  */
 package org.lastaflute.di.helper.beans.annotation;
-

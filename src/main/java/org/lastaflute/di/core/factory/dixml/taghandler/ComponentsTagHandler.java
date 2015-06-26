@@ -24,45 +24,31 @@ import org.lastaflute.di.util.LdiStringUtil;
 import org.xml.sax.Attributes;
 
 /**
- * diconファイルの<code>components</code>要素を解釈するためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class ComponentsTagHandler extends TagHandler {
+
     private static final long serialVersionUID = 3182865184697069169L;
 
-    /**
-     * {@link LaContainer}の実装クラスです。
-     */
-    protected Class containerImplClass = LaContainerImpl.class;
+    protected Class<?> containerImplClass = LaContainerImpl.class;
 
-    /**
-     * {@link LaContainer}の実装クラスを返します。
-     * 
-     * @return {@link LaContainer}の実装クラス
-     */
-    public Class getContainerImplClass() {
+    public Class<?> getContainerImplClass() {
         return containerImplClass;
     }
 
-    /**
-     * {@link LaContainer}の実装クラスを設定します。
-     * 
-     * @param containerImplClass
-     */
-    public void setContainerImplClass(Class containerImplClass) {
+    public void setContainerImplClass(Class<?> containerImplClass) {
         this.containerImplClass = containerImplClass;
     }
 
     public void start(TagHandlerContext context, Attributes attributes) {
-        LaContainer container = createContainer();
-        String path = (String) context.getParameter("path");
+        final LaContainer container = createContainer();
+        final String path = (String) context.getParameter("path");
         container.setPath(path);
-        String namespace = attributes.getValue("namespace");
+        final String namespace = attributes.getValue("namespace");
         if (!LdiStringUtil.isEmpty(namespace)) {
             container.setNamespace(namespace);
         }
-        String initializeOnCreate = attributes.getValue("initializeOnCreate");
+        final String initializeOnCreate = attributes.getValue("initializeOnCreate");
         if (!LdiStringUtil.isEmpty(initializeOnCreate)) {
             container.setInitializeOnCreate(Boolean.valueOf(initializeOnCreate).booleanValue());
         }
@@ -74,11 +60,6 @@ public class ComponentsTagHandler extends TagHandler {
         context.push(container);
     }
 
-    /**
-     * {@link LaContainer}を作成します。
-     * 
-     * @return {@link LaContainer}
-     */
     protected LaContainer createContainer() {
         return (LaContainer) LdiClassUtil.newInstance(containerImplClass);
     }

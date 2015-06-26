@@ -27,11 +27,7 @@ public class ComponentNotFoundRuntimeException extends SRuntimeException {
     private Object componentKey_;
 
     /**
-     * コンポーネントの検索に用いたコンポーネントキーを指定して、
-     * <code>ComponentNotFoundRuntimeException</code>を構築します。
-     * 
      * @param componentKey
-     *            コンポーネントキー
      */
     public ComponentNotFoundRuntimeException(Object componentKey) {
         super("ESSR0046", new Object[] { componentKey });
@@ -39,9 +35,7 @@ public class ComponentNotFoundRuntimeException extends SRuntimeException {
     }
 
     /**
-     * コンポーネントの検索に用いたコンポーネントキーを返します。
-     * 
-     * @return コンポーネントキー
+     * @return 
      */
     public Object getComponentKey() {
         return componentKey_;

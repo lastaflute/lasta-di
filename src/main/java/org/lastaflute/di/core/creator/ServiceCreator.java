@@ -20,38 +20,6 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * Service用の {@link ComponentCreator}です。
-  * <P>
- * 決められた命名規約に従って、クラスからServiceクラスのコンポーネント定義を作成します。 作成されるコンポーネント定義の各種属性は以下になります。
- *
- * <table>
- * <tr>
- * <th>サフィックス</th>
- * <td>{@link NamingConvention#getServiceSuffix() Service(デフォルト)}</td>
- * </tr>
- * <tr>
- * <th>インスタンス定義</th>
- * <td>prototype</td>
- * </tr>
- * <tr>
- * <th>自動バインディング</th>
- * <td>auto</td>
- * </tr>
- * <tr>
- * <th>外部バインディング</th>
- * <td>無効</td>
- * </tr>
- * <tr>
- * <th>インターフェース</th>
- * <td>有効</td>
- * </tr>
- * <tr>
- * <th>抽象クラス</th>
- * <td>有効</td>
- * </tr>
- * </table>
- * </p>
- *
  * @author modified by jflute (originated in Seasar)
  * @author vestige
  *  
@@ -59,10 +27,7 @@ import org.lastaflute.di.naming.NamingConvention;
 public class ServiceCreator extends ComponentCreatorImpl {
 
     /**
-     * 指定された{@link NamingConvention 命名規約}に従った{@link ServiceCreator}を作成します。
-     * 
      * @param namingConvention
-     *          命名規約
      */
     public ServiceCreator(NamingConvention namingConvention) {
         super(namingConvention);
@@ -73,18 +38,14 @@ public class ServiceCreator extends ComponentCreatorImpl {
     }
 
     /**
-     * Service用の {@link ComponentCustomizer}を返します。
-     * 
-     * @return コンポーネントカスタマイザ
+     * @return 
      */
     public ComponentCustomizer getServiceCustomizer() {
         return getCustomizer();
     }
 
     /**
-     * Service用の {@link ComponentCustomizer}を設定します。
-     * 
-     * @param customizer コンポーネントカスタマイザ
+     * @param customizer 
      */
     public void setServiceCustomizer(ComponentCustomizer customizer) {
         setCustomizer(customizer);

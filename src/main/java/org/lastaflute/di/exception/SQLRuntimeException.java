@@ -43,9 +43,8 @@ public class SQLRuntimeException extends SRuntimeException {
         buf.append(cause.getMessage()).append(" : [");
         SQLException next = cause.getNextException();
         while (next != null) {
-            buf.append(
-                    MessageFormatter.getSimpleMessage("ESSR0071", new Object[] { next.getMessage(), Integer.toString(next.getErrorCode()),
-                            next.getSQLState() })).append("], [");
+            buf.append(MessageFormatter.getSimpleMessage("ESSR0071",
+                    new Object[] { next.getMessage(), Integer.toString(next.getErrorCode()), next.getSQLState() })).append("], [");
             next = next.getNextException();
         }
         Throwable t = cause.getCause();

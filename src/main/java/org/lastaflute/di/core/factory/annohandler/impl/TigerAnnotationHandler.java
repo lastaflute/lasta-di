@@ -48,11 +48,9 @@ import org.lastaflute.di.helper.beans.PropertyDesc;
  */
 public class TigerAnnotationHandler extends ConstantAnnotationHandler {
 
-    /** イニシャライズ済みなら<code>true</code> */
     protected static boolean initialized;
 
     // #deleted
-    ///** JPAが有効なら<code>true</code> */
     //protected static final boolean enableJPA;
     //static {
     //    boolean enable = false;
@@ -63,8 +61,8 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
     //    enableJPA = enable;
     //}
 
-    /** Common Annotationsが有効なら<code>true</code> */
     protected static final boolean enableCommonAnnotations;
+
     static {
         boolean enable = false;
         try {
@@ -74,21 +72,21 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         enableCommonAnnotations = enable;
     }
 
-    protected static final List<ComponentDefBuilder> componentDefBuilders = Collections
-            .synchronizedList(new ArrayList<ComponentDefBuilder>());
+    protected static final List<ComponentDefBuilder> componentDefBuilders =
+            Collections.synchronizedList(new ArrayList<ComponentDefBuilder>());
 
     protected static final List<PropertyDefBuilder> propertyDefBuilders = Collections.synchronizedList(new ArrayList<PropertyDefBuilder>());
 
     protected static final List<AspectDefBuilder> aspectDefBuilders = Collections.synchronizedList(new ArrayList<AspectDefBuilder>());
 
-    protected static final List<IntertypeDefBuilder> intertypeDefBuilders = Collections
-            .synchronizedList(new ArrayList<IntertypeDefBuilder>());
+    protected static final List<IntertypeDefBuilder> intertypeDefBuilders =
+            Collections.synchronizedList(new ArrayList<IntertypeDefBuilder>());
 
-    protected static final List<InitMethodDefBuilder> initMethodDefBuilders = Collections
-            .synchronizedList(new ArrayList<InitMethodDefBuilder>());
+    protected static final List<InitMethodDefBuilder> initMethodDefBuilders =
+            Collections.synchronizedList(new ArrayList<InitMethodDefBuilder>());
 
-    protected static final List<DestroyMethodDefBuilder> destroyMethodDefBuilders = Collections
-            .synchronizedList(new ArrayList<DestroyMethodDefBuilder>());
+    protected static final List<DestroyMethodDefBuilder> destroyMethodDefBuilders =
+            Collections.synchronizedList(new ArrayList<DestroyMethodDefBuilder>());
 
     static {
         initialize();
@@ -113,9 +111,6 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         initialized = true;
     }
 
-    /**
-     * インスタンスの状態を破棄します。
-     */
     public static void dispose() {
         clearComponentDefBuilder();
         clearPropertyDefBuilder();
@@ -126,43 +121,28 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         initialized = false;
     }
 
-    /**
-     * デフォルトの{@link ComponentDefBuilder}を追加します。
-     */
     public static void loadDefaultComponentDefBuilder() {
         componentDefBuilders.add(new PojoComponentDefBuilder());
     }
 
     /**
-     * {@link ComponentDefBuilder}を追加します。
-     * 
      * @param builder
-     *            {@link ComponentDefBuilder}
      */
     public static void addComponentDefBuilder(final ComponentDefBuilder builder) {
         componentDefBuilders.add(builder);
     }
 
     /**
-     * {@link ComponentDefBuilder}を削除します。
-     * 
      * @param builder
-     *            {@link ComponentDefBuilder}
      */
     public static void removeComponentDefBuilder(final ComponentDefBuilder builder) {
         componentDefBuilders.remove(builder);
     }
 
-    /**
-     * {@link ComponentDefBuilder}をクリアします。
-     */
     public static void clearComponentDefBuilder() {
         componentDefBuilders.clear();
     }
 
-    /**
-     * デフォルトの{@link PropertyDefBuilder}を追加します。
-     */
     public static void loadDefaultPropertyDefBuilder() {
         clearPropertyDefBuilder();
         // #lasta_di remove Binding annotation
@@ -176,110 +156,73 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
      * {@link PropertyDefBuilder}を追加します。
      * 
      * @param builder
-     *            {@link PropertyDefBuilder}
      */
     public static void addPropertyDefBuilder(final PropertyDefBuilder builder) {
         propertyDefBuilders.add(builder);
     }
 
     /**
-     * {@link PropertyDefBuilder}を削除します。
-     * 
      * @param builder
-     *            {@link PropertyDefBuilder}
      */
     public static void removePropertyDefBuilder(final PropertyDefBuilder builder) {
         propertyDefBuilders.remove(builder);
     }
 
-    /**
-     * {@link PropertyDefBuilder}をクリアします。
-     */
     public static void clearPropertyDefBuilder() {
         propertyDefBuilders.clear();
     }
 
-    /**
-     * デフォルトの{@link AspectDefBuilder}を追加します。
-     */
     public static void loadDefaultAspectDefBuilder() {
         aspectDefBuilders.add(new AspectAnnotationAspectDefBuilder());
         aspectDefBuilders.add(new MetaAnnotationAspectDefBuilder(Interceptor.class, "Interceptor"));
     }
 
     /**
-     * {@link AspectDefBuilder}を追加します。
-     * 
      * @param builder
-     *            {@link AspectDefBuilder}
      */
     public static void addAspectDefBuilder(final AspectDefBuilder builder) {
         aspectDefBuilders.add(builder);
     }
 
     /**
-     * {@link AspectDefBuilder}を削除します。
-     * 
      * @param builder
-     *            {@link AspectDefBuilder}
      */
     public static void removeAspectDefBuilder(final AspectDefBuilder builder) {
         aspectDefBuilders.remove(builder);
     }
 
-    /**
-     * {@link AspectDefBuilder}をクリアします。
-     */
     public static void clearAspectDefBuilder() {
         aspectDefBuilders.clear();
     }
 
-    /**
-     * デフォルトの{@link IntertypeDefBuilder}を追加します。
-     */
     public static void loadDefaultIntertypeDefBuilder() {
         intertypeDefBuilders.add(new S2IntertypeDefBuilder());
     }
 
     /**
-     * {@link IntertypeDefBuilder}を追加します。
-     * 
      * @param builder
-     *            {@link IntertypeDefBuilder}
      */
     public static void addIntertypeDefBuilder(final IntertypeDefBuilder builder) {
         intertypeDefBuilders.add(builder);
     }
 
     /**
-     * {@link IntertypeDefBuilder}を削除します。
-     * 
      * @param builder
-     *            {@link IntertypeDefBuilder}
      */
     public static void removeIntertypeDefBuilder(final IntertypeDefBuilder builder) {
         intertypeDefBuilders.remove(builder);
     }
 
-    /**
-     * {@link IntertypeDefBuilder}をクリアします。
-     */
     public static void clearIntertypeDefBuilder() {
         intertypeDefBuilders.clear();
     }
 
-    /**
-     * デフォルトの{@link InitMethodDefBuilder}を追加します。
-     */
     public static void loadDefaultInitMethodDefBuilder() {
         initMethodDefBuilders.add(new InitMethodDefBuilderImpl());
     }
 
     /**
-     * {@link InitMethodDefBuilder}を追加します。
-     * 
      * @param builder
-     *            {@link InitMethodDefBuilder}
      */
     public static void addInitMethodDefBuilder(final InitMethodDefBuilder builder) {
         initMethodDefBuilders.add(builder);

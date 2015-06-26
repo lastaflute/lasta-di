@@ -18,12 +18,6 @@ package org.lastaflute.di.core.exception;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * コンポーネントの循環参照が発生した場合にスローされます。
- * 
- * <p>
- * コンポーネントのコンストラクタ引数に、 同じコンポーネントを指定した場合などに発生します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author belltree
  * 
@@ -36,10 +30,7 @@ public class CyclicReferenceRuntimeException extends SRuntimeException {
     private Class componentClass_;
 
     /**
-     * 循環参照を引き起こしたコンポーネントのクラスを指定して、 <code>CyclicReferenceRuntimeException</code>を構築します。
-     * 
      * @param componentClass
-     *            循環参照を引き起こしたコンポーネントのクラス
      */
     public CyclicReferenceRuntimeException(Class componentClass) {
         super("ESSR0047", new Object[] { componentClass.getName() });
@@ -47,9 +38,7 @@ public class CyclicReferenceRuntimeException extends SRuntimeException {
     }
 
     /**
-     * 循環参照を引き起こしたコンポーネントのクラスを返します。
-     * 
-     * @return 循環参照を引き起こしたコンポーネントのクラス
+     * @return 
      */
     public Class getComponentClass() {
         return componentClass_;

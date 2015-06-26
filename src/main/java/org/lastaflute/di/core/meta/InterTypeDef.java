@@ -18,34 +18,13 @@ package org.lastaflute.di.core.meta;
 import org.lastaflute.di.core.aop.InterType;
 
 /**
- * コンポーネントに組み込むインタータイプを定義するインターフェースです。
- * <p>
- * インタータイプ定義は、diconファイルにおける<code>&lt;interType&gt;</code>要素で指定されます。
- * <code>&lt;interType&gt;</code>要素にはclass属性が含まれています。
- * </p>
- * <p>
- * class属性には{@link org.lastaflute.di.core.aop.InterType インタータイプ}を実装したクラスを指定します。
- * </p>
- * <p>
- * InterTypeは「静的な構造の変更」を実現します。 「静的な構造の変更」は下記のものを含みます。
- * </p>
- * <ul>
- * <li>スーパークラスの変更</li>
- * <li>実装インターフェースの追加</li>
- * <li>フィールドの追加</li>
- * <li>コンストラクタの追加</li>
- * <li>メソッドの追加</li>
- * </ul>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author Maeno
  */
 public interface InterTypeDef extends ArgDef {
 
     /**
-     * インタータイプを返します。
-     * 
-     * @return インタータイプ
+     * @return 
      */
     InterType getInterType();
 

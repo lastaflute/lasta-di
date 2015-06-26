@@ -21,11 +21,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * クラスにインタータイプを適用することを示します。
- * <p>
- * diconファイルの<code>&lt;interType&gt;</code>要素で指定する項目を設定するためのアノテーションです。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -33,10 +28,8 @@ import java.lang.annotation.Target;
 public @interface InterType {
 
     /**
-     * 適用するインタータイプを示すOGNL式です。
-     * 
-     * @return 適用するインタータイプを示すOGNL式
+     * @return 
      */
-    String[] value();
+    String[]value();
 
 }

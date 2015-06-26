@@ -73,8 +73,8 @@ public class Tuple5<T1, T2, T3, T4, T5> {
      *            5番目の値
      * @return 5つの値の組
      */
-    public static <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> tuple5(final T1 value1, final T2 value2, final T3 value3,
-            final T4 value4, final T5 value5) {
+    public static <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> tuple5(final T1 value1, final T2 value2, final T3 value3, final T4 value4,
+            final T5 value5) {
         return new Tuple5<T1, T2, T3, T4, T5>(value1, value2, value3, value4, value5);
     }
 

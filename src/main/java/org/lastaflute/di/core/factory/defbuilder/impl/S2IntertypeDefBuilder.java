@@ -24,8 +24,6 @@ import org.lastaflute.di.core.meta.InterTypeDef;
 import org.lastaflute.di.core.meta.impl.InterTypeDefImpl;
 
 /**
- * {@link InterType}アノテーションを読み取り{@link InterTypeDef}を作成するコンポーネントの実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class S2IntertypeDefBuilder implements IntertypeDefBuilder {

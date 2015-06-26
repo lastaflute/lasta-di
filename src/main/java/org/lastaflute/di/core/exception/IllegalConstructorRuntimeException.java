@@ -18,11 +18,6 @@ package org.lastaflute.di.core.exception;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * コンポーネントの構築に失敗した場合にスローされます。
- * <p>
- * この例外は、 コンポーネント定義でコンストラクタの引数として指定されたコンポーネントの取得に失敗した場合などに発生します。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  * @author modified by jflute (originated in Seasar)
  */
@@ -33,12 +28,8 @@ public class IllegalConstructorRuntimeException extends SRuntimeException {
     private Class componentClass_;
 
     /**
-     * <code>IllegalConstructorRuntimeException</code>を構築します。
-     * 
      * @param componentClass
-     *            構築に失敗したコンポーネントのクラス
      * @param cause
-     *            コンポーネントの構築に失敗した原因を表すエラーまたは例外
      */
     public IllegalConstructorRuntimeException(Class componentClass, Throwable cause) {
         super("ESSR0058", new Object[] { componentClass.getName(), cause }, cause);
@@ -46,9 +37,7 @@ public class IllegalConstructorRuntimeException extends SRuntimeException {
     }
 
     /**
-     * 構築に失敗したコンポーネントのクラスを返します。
-     * 
-     * @return 構築に失敗したコンポーネントのクラス
+     * @return 
      */
     public Class getComponentClass() {
         return componentClass_;

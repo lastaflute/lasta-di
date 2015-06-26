@@ -18,16 +18,11 @@ package org.lastaflute.di.core.assembler;
 import org.lastaflute.di.core.ComponentDef;
 
 /**
- * 自動バンディング定義の何も行わない版です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class AutoBindingNoneDef extends AbstractAutoBindingDef {
 
     /**
-     * {@link AutoBindingNoneDef}を作成します。
-     * 
      * @param name
      */
     protected AutoBindingNoneDef(String name) {

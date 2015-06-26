@@ -30,6 +30,7 @@ public class LdiBase64Util {
     private static final char PAD = '=';
 
     private static final byte[] DECODE_TABLE = new byte[128];
+
     static {
         for (int i = 0; i < DECODE_TABLE.length; i++) {
             DECODE_TABLE[i] = Byte.MAX_VALUE;

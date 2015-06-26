@@ -16,8 +16,6 @@
 package org.lastaflute.di.core.autoregister;
 
 /**
- * AutoNamingのデフォルト実装です。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */

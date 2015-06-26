@@ -7,8 +7,8 @@
 
 	<component name="actionCreator" class="org.lastaflute.di.core.creator.ActionCreator"/>
 	<component name="assistCreator" class="org.lastaflute.di.core.creator.AssistCreator"/>
+	<component name="validatorCreator" class="org.lastaflute.di.core.creator.ValidatorCreator"/>
 	<component name="logicCreator" class="org.lastaflute.di.core.creator.LogicCreator"/>
 	<component name="serviceCreator" class="org.lastaflute.di.core.creator.ServiceCreator"/>
 	<component name="helperCreator" class="org.lastaflute.di.core.creator.HelperCreator"/>
-	<component name="interceptorCreator" class="org.lastaflute.di.core.creator.InterceptorCreator"/>
 </components>

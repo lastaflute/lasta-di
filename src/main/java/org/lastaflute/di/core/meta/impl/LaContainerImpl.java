@@ -363,6 +363,25 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         return key instanceof String && namespace != null;
     }
 
+    // ===================================================================================
+    //                                                                     Child Container
+    //                                                                     ===============
+    @Override
+    public LaContainer findChild(String namespace) {
+        for (LaContainer child : children) {
+            if (namespace.equals(child.getNamespace())) {
+                return child;
+            }
+        }
+        for (LaContainer child : children) {
+            final LaContainer nestedFound = child.findChild(namespace);
+            if (nestedFound != null) {
+                return nestedFound;
+            }
+        }
+        return null;
+    }
+
     @Override
     public int getChildSize() {
         return children.size();
@@ -370,7 +389,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
 
     @Override
     public LaContainer getChild(int index) {
-        return (LaContainer) children.get(index);
+        return children.get(index);
     }
 
     public int getParentSize() {
@@ -509,8 +528,6 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     }
 
     /**
-     * パラメータが<code>null</code>でないことを表明します。
-     * 
      * @param parameter
      * @param name
      */
@@ -521,8 +538,6 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     }
 
     /**
-     * パラメータが空でないことを表明します。
-     * 
      * @param parameter
      * @param name
      */

@@ -17,4 +17,3 @@
  * Java5固有の機能を利用するユーティリティを提供します。
  */
 package org.lastaflute.di.util.tiger;
-

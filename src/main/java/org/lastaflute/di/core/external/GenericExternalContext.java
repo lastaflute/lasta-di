@@ -23,25 +23,14 @@ import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.util.LdiMapUtil;
 
 /**
- * Genericな {@link ExternalContext}です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class GenericExternalContext implements ExternalContext {
 
-    /**
-     * 空の {@link Map}です。
-     */
     protected static final Map EMPTY_MAP = Collections.unmodifiableMap(new HashMap());
 
-    /**
-     * applicationスコープ用の {@link Map}です。
-     */
     protected Map application = LdiMapUtil.createHashMap();
 
-    /**
-     * requestを管理するための {@link ThreadLocal}です。
-     */
     protected ThreadLocal requests = new ThreadLocal();
 
     public Object getApplication() {

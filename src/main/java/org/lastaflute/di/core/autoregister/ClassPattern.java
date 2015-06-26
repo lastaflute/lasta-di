@@ -20,8 +20,6 @@ import java.util.regex.Pattern;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
- * 自動登録の対象、非対象となるクラス名のパターンを保持します。
- * 
  * @author modified by jflute (originated in Seasar)
  * 
  */
@@ -31,15 +29,10 @@ public class ClassPattern {
 
     private Pattern[] shortClassNamePatterns;
 
-    /**
-     * デフォルトのコンストラクタです。
-     */
     public ClassPattern() {
     }
 
     /**
-     * パッケージ名とクラス名のパターンを受け取るコンストラクタです。
-     * 
      * @param packageName
      * @param shortClassNames
      */
@@ -49,8 +42,6 @@ public class ClassPattern {
     }
 
     /**
-     * パッケージ名を返します。
-     * 
      * @return
      */
     public String getPackageName() {
@@ -58,8 +49,6 @@ public class ClassPattern {
     }
 
     /**
-     * パッケージ名を設定します。
-     * 
      * @param packageName
      */
     public void setPackageName(String packageName) {
@@ -67,8 +56,6 @@ public class ClassPattern {
     }
 
     /**
-     * (パッケージを含まない)クラス名のパターンを設定します。複数のパターンを設定する場合、','で区切ります。
-     * 
      * @param shortClassNames
      */
     public void setShortClassNames(String shortClassNames) {
@@ -81,8 +68,6 @@ public class ClassPattern {
     }
 
     /**
-     * (パッケージを含まない)クラス名がパターンに一致しているかどうかを返します。
-     * 
      * @param shortClassName
      * @return
      */
@@ -99,8 +84,6 @@ public class ClassPattern {
     }
 
     /**
-     * パッケージ名がパターンに一致しているかどうかを返します。
-     * 
      * @param pName
      * @return
      */
@@ -115,10 +98,8 @@ public class ClassPattern {
     }
 
     /**
-     * デリミタを追加します。
-     * 
      * @param name
-     * @return デリミタが追加された名前
+     * @return 
      */
     protected static String appendDelimiter(final String name) {
         return name.endsWith(".") ? name : name + ".";

@@ -105,10 +105,12 @@ public class LdiFieldUtil {
             Class fieldClass = field.getType();
             Class valueClass = value == null ? null : value.getClass();
             Class targetClass = target == null ? null : target.getClass();
-            throw new SIllegalArgumentException("ESSR0094", new Object[] { clazz.getName(), clazz.getClassLoader(), fieldClass.getName(),
-                    fieldClass.getClassLoader(), field.getName(), valueClass == null ? null : valueClass.getName(),
-                    valueClass == null ? null : valueClass.getClassLoader(), value, targetClass == null ? null : targetClass.getName(),
-                    targetClass == null ? null : targetClass.getClassLoader() }, e);
+            throw new SIllegalArgumentException("ESSR0094",
+                    new Object[] { clazz.getName(), clazz.getClassLoader(), fieldClass.getName(), fieldClass.getClassLoader(),
+                            field.getName(), valueClass == null ? null : valueClass.getName(),
+                            valueClass == null ? null : valueClass.getClassLoader(), value,
+                            targetClass == null ? null : targetClass.getName(), targetClass == null ? null : targetClass.getClassLoader() },
+                    e);
         }
 
     }

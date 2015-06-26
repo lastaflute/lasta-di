@@ -34,6 +34,7 @@ public class JndiResourceLocator {
     public static final String ENC_PREFIX = "java:comp/env/";
 
     protected static final Map MAGIC_COMPONENTS = new HashMap();
+
     static {
         MAGIC_COMPONENTS.put("java:comp/UserTransaction", "jta/UserTransaction");
         MAGIC_COMPONENTS.put("java:comp/TransactionSynchronizationRegistry", "jta/TransactionSynchronizationRegistry");

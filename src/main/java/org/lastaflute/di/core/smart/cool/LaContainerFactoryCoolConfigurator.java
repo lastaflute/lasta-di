@@ -37,8 +37,8 @@ public class LaContainerFactoryCoolConfigurator extends DefaultConfigurator {
             provider.setExternalContext((ExternalContext) configurationContainer.getComponent(ExternalContext.class));
         }
         if (configurationContainer.hasComponentDef(ExternalContextComponentDefRegister.class)) {
-            provider.setExternalContextComponentDefRegister((ExternalContextComponentDefRegister) configurationContainer
-                    .getComponent(ExternalContextComponentDefRegister.class));
+            provider.setExternalContextComponentDefRegister(
+                    (ExternalContextComponentDefRegister) configurationContainer.getComponent(ExternalContextComponentDefRegister.class));
         }
         return provider;
     }

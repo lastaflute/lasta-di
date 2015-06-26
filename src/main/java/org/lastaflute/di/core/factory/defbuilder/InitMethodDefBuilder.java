@@ -17,10 +17,8 @@ package org.lastaflute.di.core.factory.defbuilder;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
-import org.lastaflute.di.core.meta.InitMethodDef;
 
 /**
- * Tigerアノテーションを読み取り{@link InitMethodDef}を作成するインターフェースです。
  * @author modified by jflute (originated in Seasar)
  */
 public interface InitMethodDefBuilder {
