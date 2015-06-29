@@ -55,7 +55,7 @@ public class HarborBoot {
 ```
 
 ## Official site
-(English pages have a low count but are increscent...)
+(English pages have a low count but are increscent...)  
 http://dbflute.seasar.org/lastaflute/lastadi/
 
 # Thanks, Frameworks
