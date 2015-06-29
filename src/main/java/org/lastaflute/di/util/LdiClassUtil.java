@@ -21,10 +21,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtField;
-
 import org.lastaflute.di.core.util.ClassPoolUtil;
 import org.lastaflute.di.exception.ClassNotFoundRuntimeException;
 import org.lastaflute.di.exception.IllegalAccessRuntimeException;
@@ -33,19 +29,18 @@ import org.lastaflute.di.exception.NoSuchConstructorRuntimeException;
 import org.lastaflute.di.exception.NoSuchFieldRuntimeException;
 import org.lastaflute.di.exception.NoSuchMethodRuntimeException;
 
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+
 /**
- * {@link Class}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiClassUtil {
 
-    private static Map wrapperToPrimitiveMap = new HashMap();
-
-    private static Map primitiveToWrapperMap = new HashMap();
-
-    private static Map primitiveClassNameMap = new HashMap();
+    private static Map<Class<?>, Class<?>> wrapperToPrimitiveMap = new HashMap<Class<?>, Class<?>>();
+    private static Map<Class<?>, Class<?>> primitiveToWrapperMap = new HashMap<Class<?>, Class<?>>();
+    private static Map<String, Class<?>> primitiveClassNameMap = new HashMap<String, Class<?>>();
 
     static {
         wrapperToPrimitiveMap.put(Character.class, Character.TYPE);
@@ -76,23 +71,10 @@ public class LdiClassUtil {
         primitiveClassNameMap.put(Boolean.TYPE.getName(), Boolean.TYPE);
     }
 
-    /**
-     * 
-     */
     protected LdiClassUtil() {
     }
 
-    /**
-     * {@link Class}を返します。
-     * 
-     * @param className
-     * @return {@link Class}
-     * @throws ClassNotFoundRuntimeException
-     *             {@link ClassNotFoundException}がおきた場合
-     * @see Class#forName(String)
-     */
-    public static Class forName(String className) throws ClassNotFoundRuntimeException {
-
+    public static Class<?> forName(String className) throws ClassNotFoundRuntimeException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
             return Class.forName(className, true, loader);
@@ -101,17 +83,8 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * プリミティブクラスの場合は、ラッパークラスに変換して返します。
-     * 
-     * @param className
-     * @return {@link Class}
-     * @throws ClassNotFoundRuntimeException
-     *             {@link ClassNotFoundException}がおきた場合
-     * @see #forName(String)
-     */
-    public static Class convertClass(String className) throws ClassNotFoundRuntimeException {
-        Class clazz = (Class) primitiveClassNameMap.get(className);
+    public static Class<?> convertClass(String className) throws ClassNotFoundRuntimeException {
+        Class<?> clazz = (Class<?>) primitiveClassNameMap.get(className);
         if (clazz != null) {
             return clazz;
         }
@@ -143,59 +116,31 @@ public class LdiClassUtil {
         return toClass.isAssignableFrom(fromClass);
     }
 
-    public static Class getPrimitiveClass(Class clazz) {
-        return (Class) wrapperToPrimitiveMap.get(clazz);
+    public static Class<?> getPrimitiveClass(Class<?> clazz) {
+        return (Class<?>) wrapperToPrimitiveMap.get(clazz);
     }
 
-    /**
-     * ラッパークラスならプリミティブクラスに、 そうでなければそのままクラスを返します。
-     * 
-     * @param clazz
-     * @return {@link Class}
-     */
-    public static Class getPrimitiveClassIfWrapper(Class clazz) {
-        Class ret = getPrimitiveClass(clazz);
+    public static Class<?> getPrimitiveClassIfWrapper(Class<?> clazz) {
+        Class<?> ret = getPrimitiveClass(clazz);
         if (ret != null) {
             return ret;
         }
         return clazz;
     }
 
-    /**
-     * プリミティブクラスをラッパークラスに変換します。
-     * 
-     * @param clazz
-     * @return {@link Class}
-     */
-    public static Class getWrapperClass(Class clazz) {
-        return (Class) primitiveToWrapperMap.get(clazz);
+    public static Class<?> getWrapperClass(Class<?> clazz) {
+        return (Class<?>) primitiveToWrapperMap.get(clazz);
     }
 
-    /**
-     * プリミティブの場合はラッパークラス、そうでない場合はもとのクラスを返します。
-     * 
-     * @param clazz
-     * @return {@link Class}
-     */
-    public static Class getWrapperClassIfPrimitive(Class clazz) {
-        Class ret = getWrapperClass(clazz);
+    public static Class<?> getWrapperClassIfPrimitive(Class<?> clazz) {
+        Class<?> ret = getWrapperClass(clazz);
         if (ret != null) {
             return ret;
         }
         return clazz;
     }
 
-    /**
-     * {@link Constructor}を返します。
-     * 
-     * @param clazz
-     * @param argTypes
-     * @return {@link Constructor}
-     * @throws NoSuchConstructorRuntimeException
-     *             {@link NoSuchMethodException}がおきた場合
-     * @see Class#getConstructor(Class[])
-     */
-    public static Constructor getConstructor(Class clazz, Class[] argTypes) throws NoSuchConstructorRuntimeException {
+    public static Constructor<?> getConstructor(Class<?> clazz, Class<?>[] argTypes) throws NoSuchConstructorRuntimeException {
         try {
             return clazz.getConstructor(argTypes);
         } catch (NoSuchMethodException ex) {
@@ -203,17 +148,7 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * そのクラスに宣言されている {@link Constructor}を返します。
-     * 
-     * @param clazz
-     * @param argTypes
-     * @return {@link Constructor}
-     * @throws NoSuchConstructorRuntimeException
-     *             {@link NoSuchMethodException}がおきた場合
-     * @see Class#getDeclaredConstructor(Class[])
-     */
-    public static Constructor getDeclaredConstructor(Class clazz, Class[] argTypes) throws NoSuchConstructorRuntimeException {
+    public static Constructor<?> getDeclaredConstructor(Class<?> clazz, Class<?>[] argTypes) throws NoSuchConstructorRuntimeException {
         try {
             return clazz.getDeclaredConstructor(argTypes);
         } catch (NoSuchMethodException ex) {
@@ -221,18 +156,7 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * {@link Method}を返します。
-     * 
-     * @param clazz
-     * @param methodName
-     * @param argTypes
-     * @return {@link Method}
-     * @throws NoSuchMethodRuntimeException
-     *             {@link NoSuchMethodException}がおきた場合
-     * @see Class#getMethod(String, Class[])
-     */
-    public static Method getMethod(Class clazz, String methodName, Class[] argTypes) throws NoSuchMethodRuntimeException {
+    public static Method getMethod(Class<?> clazz, String methodName, Class<?>[] argTypes) throws NoSuchMethodRuntimeException {
 
         try {
             return clazz.getMethod(methodName, argTypes);
@@ -241,18 +165,7 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * そのクラスに宣言されている {@link Method}を返します。
-     * 
-     * @param clazz
-     * @param methodName
-     * @param argTypes
-     * @return {@link Method}
-     * @throws NoSuchMethodRuntimeException
-     *             {@link NoSuchMethodException}がおきた場合
-     * @see Class#getDeclaredMethod(String, Class[])
-     */
-    public static Method getDeclaredMethod(Class clazz, String methodName, Class[] argTypes) throws NoSuchMethodRuntimeException {
+    public static Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?>[] argTypes) throws NoSuchMethodRuntimeException {
 
         try {
             return clazz.getDeclaredMethod(methodName, argTypes);
@@ -261,17 +174,7 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * {@link Field}を返します。
-     * 
-     * @param clazz
-     * @param fieldName
-     * @return {@link Field}
-     * @throws NoSuchFieldRuntimeException
-     *             {@link NoSuchFieldException}がおきた場合
-     * @see Class#getField(String)
-     */
-    public static Field getField(Class clazz, String fieldName) throws NoSuchFieldRuntimeException {
+    public static Field getField(Class<?> clazz, String fieldName) throws NoSuchFieldRuntimeException {
         try {
             return clazz.getField(fieldName);
         } catch (NoSuchFieldException ex) {
@@ -279,17 +182,7 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * そのクラスに宣言されている {@link Field}を返します。
-     * 
-     * @param clazz
-     * @param fieldName
-     * @return {@link Field}
-     * @throws NoSuchFieldRuntimeException
-     *             {@link NoSuchFieldException}がおきた場合
-     * @see Class#getDeclaredField(String)
-     */
-    public static Field getDeclaredField(Class clazz, String fieldName) throws NoSuchFieldRuntimeException {
+    public static Field getDeclaredField(Class<?> clazz, String fieldName) throws NoSuchFieldRuntimeException {
         try {
             return clazz.getDeclaredField(fieldName);
         } catch (NoSuchFieldException ex) {
@@ -297,14 +190,7 @@ public class LdiClassUtil {
         }
     }
 
-    /**
-     * このクラスに定義された{@link Field フィールド}をクラスファイルに定義された順番で返します。
-     * 
-     * @param clazz
-     *            対象のクラス
-     * @return このクラスに定義されたフィールドの配列
-     */
-    public static Field[] getDeclaredFields(final Class clazz) {
+    public static Field[] getDeclaredFields(final Class<?> clazz) {
         final ClassPool pool = ClassPoolUtil.getClassPool(clazz);
         final CtClass ctClass = ClassPoolUtil.toCtClass(pool, clazz);
         final CtField[] ctFields;
@@ -319,13 +205,7 @@ public class LdiClassUtil {
         return fields;
     }
 
-    /**
-     * パッケージ名を返します。
-     * 
-     * @param clazz
-     * @return パッケージ名
-     */
-    public static String getPackageName(Class clazz) {
+    public static String getPackageName(Class<?> clazz) {
         String fqcn = clazz.getName();
         int pos = fqcn.lastIndexOf('.');
         if (pos > 0) {
@@ -334,23 +214,10 @@ public class LdiClassUtil {
         return null;
     }
 
-    /**
-     * FQCNからパッケージ名を除いた名前を返します。
-     * 
-     * @param clazz
-     * @return FQCNからパッケージ名を除いた名前
-     * @see #getShortClassName(String)
-     */
-    public static String getShortClassName(Class clazz) {
+    public static String getShortClassName(Class<?> clazz) {
         return getShortClassName(clazz.getName());
     }
 
-    /**
-     * FQCNからパッケージ名を除いた名前を返します。
-     * 
-     * @param className
-     * @return FQCNからパッケージ名を除いた名前
-     */
     public static String getShortClassName(String className) {
         int i = className.lastIndexOf('.');
         if (i > 0) {
@@ -359,12 +226,6 @@ public class LdiClassUtil {
         return className;
     }
 
-    /**
-     * FQCNをパッケージ名とFQCNからパッケージ名を除いた名前に分けます。
-     * 
-     * @param className
-     * @return パッケージ名とFQCNからパッケージ名を除いた名前
-     */
     public static String[] splitPackageAndShortClassName(String className) {
         String[] ret = new String[2];
         int i = className.lastIndexOf('.');
@@ -377,47 +238,21 @@ public class LdiClassUtil {
         return ret;
     }
 
-    /**
-     * 配列の場合は要素のクラス名、それ以外はクラス名そのものを返します。
-     * 
-     * @param clazz
-     * @return クラス名
-     */
-    public static String getSimpleClassName(final Class clazz) {
+    public static String getSimpleClassName(final Class<?> clazz) {
         if (clazz.isArray()) {
             return getSimpleClassName(clazz.getComponentType()) + "[]";
         }
         return clazz.getName();
     }
 
-    /**
-     * クラス名をリソースパスとして表現します。
-     * 
-     * @param clazz
-     * @return リソースパス
-     * @see #getResourcePath(String)
-     */
-    public static String getResourcePath(Class clazz) {
+    public static String getResourcePath(Class<?> clazz) {
         return getResourcePath(clazz.getName());
     }
 
-    /**
-     * クラス名をリソースパスとして表現します。
-     * 
-     * @param className
-     * @return リソースパス
-     */
     public static String getResourcePath(String className) {
         return LdiStringUtil.replace(className, ".", "/") + ".class";
     }
 
-    /**
-     * クラス名の要素を結合します。
-     * 
-     * @param s1
-     * @param s2
-     * @return 結合された名前
-     */
     public static String concatName(String s1, String s2) {
         if (LdiStringUtil.isEmpty(s1) && LdiStringUtil.isEmpty(s2)) {
             return null;

@@ -1,5 +1,6 @@
-# Lasta Di
-DI Container for LastaFlute, forked from Seasar as Java8
+Lasta Di
+=======================
+simple DI container for LastaFlute, forked from Seasar as Java8
 
 ```java
 @Resource
@@ -19,15 +20,32 @@ And following features:
 # Quick Trial
 Can boot it by example of LastaFlute:
 
-1. prepare Java8 compile environment
-2. clone https://github.com/dbflute-session/lastaflute-example-harbor
-3. execute the main method of (org.docksidestage.boot) HarborBoot
-4. access to http://localhost:8090/harbor
+1. git clone https://github.com/dbflute-session/lastaflute-example-harbor.git
+2. prepare database by *ReplaceSchema at DBFlute client directory 'dbflute_maihamadb'  
+3. compile it by Java8, on e.g. Eclipse or IntelliJ or ... as Maven project
+4. execute the *main() method of (org.docksidestage.boot) HarborBoot
+5. access to http://localhost:8090/harbor  
+and login by user 'Pixy' and password 'sea', and can see debug log at console.
 
-*you can login by user 'Pixy' and password 'sea', and can see debug log at console
+*ReplaceSchema
+```java
+// call manage.sh at lastaflute-example-harbor/dbflute_maihamadb
+// and select replace-schema in displayed menu
+...:dbflute_maihamadb ...$ sh manage.sh
+```
+
+*main() method
+```java
+public class HarborBoot {
+
+    public static void main(String[] args) {
+        new JettyBoot(8090, "/harbor").asDevelopment().bootAwait();
+    }
+}
+```
 
 # Information
-## Maven Dependency
+## Maven Dependency in pom.xml
 ```xml
 <dependency>
     <groupId>org.lastaflute</groupId>
@@ -36,18 +54,18 @@ Can boot it by example of LastaFlute:
 </dependency>
 ```
 
-## Japanese Site (English comming soon...)
-http://dbflute.seasar.org/ja/lastaflute/lastadi/
+## Official site
+(English pages have a low count but are increscent...)
+http://dbflute.seasar.org/lastaflute/lastadi/
 
-# Special Thanks
-## Thanks, Frameworks
-Lasta Di forks Seasar, AOP alliance and extends it, thankful wonderful functions.
-And also forks S2ClassBuilder (called Redefiner in Lasta Di), provides flexible Di xml.
+# Thanks, Frameworks
+Lasta Di forks Seasar, AOP alliance and extends it, thankful wonderful functions.  
+And also forks S2ClassBuilder (called Redefiner in Lasta Di), provides flexible Di xml.  
 If the frameworks were not there, no Lasta Di here.
 
 I appreciate every framework.
 
-## Thanks, Friends
+# Thanks, Friends
 Not only LastaFlute, Lasta Di is used by:
 - RiverWeb: https://github.com/codelibs/elasticsearch-river-web
 - S2Robot: https://github.com/codelibs/s2robot
