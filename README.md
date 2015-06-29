@@ -1,6 +1,6 @@
 Lasta Di
 =======================
-DI Container for LastaFlute, forked from Seasar as Java8
+simple DI container for LastaFlute, forked from Seasar as Java8
 
 ```java
 @Resource
@@ -55,8 +55,8 @@ public class HarborBoot {
 ```
 
 ## Official site
-sorry Japanese Site now (English comming soon...)
-http://dbflute.seasar.org/ja/lastaflute/lastadi/
+(English pages have a low count but are increscent...)
+http://dbflute.seasar.org/lastaflute/lastadi/
 
 # Thanks, Frameworks
 Lasta Di forks Seasar, AOP alliance and extends it, thankful wonderful functions.  
