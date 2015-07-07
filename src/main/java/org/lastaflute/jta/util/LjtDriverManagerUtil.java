@@ -31,7 +31,7 @@ public abstract class LjtDriverManagerUtil {
         registerDriver(forName(driverClassName));
     }
 
-    protected static Class forName(String className) {
+    protected static Class<?> forName(String className) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
             return Class.forName(className, true, loader);
@@ -40,11 +40,11 @@ public abstract class LjtDriverManagerUtil {
         }
     }
 
-    public static void registerDriver(final Class driverClass) {
+    public static void registerDriver(final Class<?> driverClass) {
         registerDriver((Driver) newInstance(driverClass));
     }
 
-    protected static Object newInstance(Class clazz) {
+    protected static Object newInstance(Class<?> clazz) {
         try {
             return clazz.newInstance();
         } catch (InstantiationException e) {
@@ -71,7 +71,7 @@ public abstract class LjtDriverManagerUtil {
     }
 
     public static synchronized void deregisterAllDrivers() {
-        for (final Enumeration e = DriverManager.getDrivers(); e.hasMoreElements();) {
+        for (final Enumeration<Driver> e = DriverManager.getDrivers(); e.hasMoreElements();) {
             deregisterDriver((Driver) e.nextElement());
         }
     }

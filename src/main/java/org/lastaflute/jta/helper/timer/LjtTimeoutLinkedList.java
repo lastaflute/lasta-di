@@ -266,16 +266,10 @@ public class LjtTimeoutLinkedList implements Cloneable, Externalizable {
         return result;
     }
 
-    /**
-     * 要素を格納するエントリです。
-     * 
-     */
     public class Entry {
 
         private Object _element;
-
         private Entry _next;
-
         private Entry _previous;
 
         Entry(final Object element, final Entry next, final Entry previous) {
@@ -284,20 +278,10 @@ public class LjtTimeoutLinkedList implements Cloneable, Externalizable {
             _previous = previous;
         }
 
-        /**
-         * 要素を返します。
-         * 
-         * @return 要素
-         */
         public Object getElement() {
             return _element;
         }
 
-        /**
-         * 次のエントリを返します。
-         * 
-         * @return 次のエントリ
-         */
         public Entry getNext() {
             if (_next != LjtTimeoutLinkedList.this.header) {
                 return _next;
@@ -305,11 +289,6 @@ public class LjtTimeoutLinkedList implements Cloneable, Externalizable {
             return null;
         }
 
-        /**
-         * 前のエントリを返します。
-         * 
-         * @return 前のエントリ
-         */
         public Entry getPrevious() {
             if (_previous != LjtTimeoutLinkedList.this.header) {
                 return _previous;
@@ -317,22 +296,12 @@ public class LjtTimeoutLinkedList implements Cloneable, Externalizable {
             return null;
         }
 
-        /**
-         * 要素を削除します。
-         */
         public void remove() {
             _previous._next = _next;
             _next._previous = _previous;
             LjtTimeoutLinkedList.this.size--;
         }
 
-        /**
-         * 前に追加します。
-         * 
-         * @param o
-         *            要素
-         * @return 追加されたエントリ
-         */
         public Entry addBefore(final Object o) {
             Entry newEntry = new Entry(o, this, _previous);
             _previous._next = newEntry;

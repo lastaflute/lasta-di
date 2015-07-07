@@ -130,9 +130,9 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
 
         private final Transaction tx;
 
-        private final List interposedSynchronizations = new ArrayList();
+        private final List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
 
-        private final Map resourceMap = new HashMap();
+        private final Map<Object, Object> resourceMap = new HashMap<Object, Object>();
 
         public SynchronizationRegisterImpl(final Transaction tx) {
             this.tx = tx;

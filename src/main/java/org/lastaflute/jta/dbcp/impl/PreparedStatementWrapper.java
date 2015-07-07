@@ -660,184 +660,103 @@ public class PreparedStatementWrapper implements PreparedStatement {
     }
 
     // #java8comp
-    /* (non-Javadoc)
-     * @see java.sql.Statement#isClosed()
-     */
     public boolean isClosed() throws SQLException {
-
-        return false;
+        return original.isClosed();
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.Statement#setPoolable(boolean)
-     */
     public void setPoolable(boolean poolable) throws SQLException {
-
+        original.setPoolable(poolable);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.Statement#isPoolable()
-     */
     public boolean isPoolable() throws SQLException {
-
-        return false;
+        return original.isPoolable();
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.Statement#closeOnCompletion()
-     */
     public void closeOnCompletion() throws SQLException {
-
+        original.closeOnCompletion();
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.Statement#isCloseOnCompletion()
-     */
     public boolean isCloseOnCompletion() throws SQLException {
-
-        return false;
+        return original.isCloseOnCompletion();
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.Wrapper#unwrap(java.lang.Class)
-     */
-    public Object unwrap(Class iface) throws SQLException {
-
-        return null;
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return original.unwrap(iface);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
-     */
-    public boolean isWrapperFor(Class iface) throws SQLException {
-
-        return false;
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return original.isWrapperFor(iface);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setRowId(int, java.sql.RowId)
-     */
     public void setRowId(int parameterIndex, RowId x) throws SQLException {
-
+        original.setRowId(parameterIndex, x);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNString(int, java.lang.String)
-     */
     public void setNString(int parameterIndex, String value) throws SQLException {
-
+        original.setNString(parameterIndex, value);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader, long)
-     */
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
-
+        original.setNCharacterStream(parameterIndex, value, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNClob(int, java.sql.NClob)
-     */
     public void setNClob(int parameterIndex, NClob value) throws SQLException {
-
+        original.setNClob(parameterIndex, value);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setClob(int, java.io.Reader, long)
-     */
     public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
-
+        original.setClob(parameterIndex, reader, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream, long)
-     */
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
-
+        original.setBlob(parameterIndex, inputStream, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader, long)
-     */
     public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
-
+        original.setNClob(parameterIndex, reader, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setSQLXML(int, java.sql.SQLXML)
-     */
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
-
+        original.setSQLXML(parameterIndex, xmlObject);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, long)
-     */
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
-
+        original.setAsciiStream(parameterIndex, x, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream, long)
-     */
     public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
-
+        original.setBinaryStream(parameterIndex, x, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, long)
-     */
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
-
+        original.setCharacterStream(parameterIndex, reader, length);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream)
-     */
     public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
-
+        original.setAsciiStream(parameterIndex, x);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream)
-     */
     public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
-
+        original.setBinaryStream(parameterIndex, x);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader)
-     */
     public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
-
+        original.setCharacterStream(parameterIndex, reader);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader)
-     */
     public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
-
+        original.setNCharacterStream(parameterIndex, value);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setClob(int, java.io.Reader)
-     */
     public void setClob(int parameterIndex, Reader reader) throws SQLException {
-
+        original.setClob(parameterIndex, reader);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream)
-     */
     public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
-
+        original.setBlob(parameterIndex, inputStream);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader)
-     */
     public void setNClob(int parameterIndex, Reader reader) throws SQLException {
-
+        original.setNClob(parameterIndex, reader);
     }
-
 }
