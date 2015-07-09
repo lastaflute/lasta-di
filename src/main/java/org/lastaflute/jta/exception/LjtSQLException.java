@@ -28,7 +28,19 @@ public class LjtSQLException extends SQLException {
         super(msg);
     }
 
-    public LjtSQLException(String msg, Exception e) {
-        super(msg, e);
+    public LjtSQLException(String msg, Throwable cause) { // for normal exception (except SQLException)
+        super(msg, cause);
+        setupNextCause(cause);
+    }
+
+    public LjtSQLException(String msg, String sqlState, int vendorCode, SQLException cause) {
+        super(msg, sqlState, vendorCode, cause);
+        setupNextCause(cause);
+    }
+
+    protected void setupNextCause(Throwable cause) {
+        if (cause instanceof SQLException) {
+            setNextException((SQLException) cause);
+        }
     }
 }

@@ -59,7 +59,7 @@ public class PreparedStatementWrapper implements PreparedStatement {
 
     private SQLException wrapException(SQLException e, String sql) {
         if (sql != null) {
-            return new LjtSQLException("Failed to execute the SQL: " + sql, e);
+            return new LjtSQLException("Failed to execute the SQL: " + sql, e.getSQLState(), e.getErrorCode(), e);
         }
         return e;
     }

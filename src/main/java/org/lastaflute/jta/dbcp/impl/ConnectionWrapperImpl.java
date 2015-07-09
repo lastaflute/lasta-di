@@ -544,7 +544,7 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
     }
 
     private SQLException wrapException(SQLException e, String sql) {
-        return new LjtSQLException("Failed to execute the SQL: " + sql, e);
+        return new LjtSQLException("Failed to execute the SQL: " + sql, e.getSQLState(), e.getErrorCode(), e);
     }
 
     // #java8comp
