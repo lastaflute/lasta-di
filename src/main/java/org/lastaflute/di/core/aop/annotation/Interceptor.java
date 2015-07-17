@@ -27,9 +27,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface Interceptor {
 
-    /**
-     * @return 
-     */
     String value() default "";
-
 }

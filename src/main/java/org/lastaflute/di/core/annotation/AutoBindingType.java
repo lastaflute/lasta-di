@@ -16,24 +16,13 @@
 package org.lastaflute.di.core.annotation;
 
 /**
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public enum AutoBindingType {
 
-    AUTO,
+    AUTO, CONSTRUCTOR, PROPERTY, NONE;
 
-    CONSTRUCTOR,
-
-    PROPERTY,
-
-    NONE;
-
-    /**
-     * @return 自動バインディングタイプの名前
-     */
     public String getName() {
         return toString().toLowerCase();
     }
-
 }

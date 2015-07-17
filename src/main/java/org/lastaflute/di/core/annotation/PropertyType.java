@@ -16,24 +16,13 @@
 package org.lastaflute.di.core.annotation;
 
 /**
- * 
- * @author y-komori
+ * @author modified by jflute (originated in Seasar)
  */
 public enum PropertyType {
 
-    READ,
+    READ, WRITE, READWRITE, NONE;
 
-    WRITE,
-
-    READWRITE,
-
-    NONE;
-
-    /**
-     * @return 
-     */
     public String getName() {
         return toString().toLowerCase();
     }
-
 }
