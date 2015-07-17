@@ -24,169 +24,91 @@ import org.slf4j.LoggerFactory;
 /**
  * #delete
  */
-public class SLogger {
+public class LaLogger {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SLogger.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(LaLogger.class);
 
-    private static final Map loggers = new HashMap();
+    private static final Map<Class<?>, LaLogger> loggers = new HashMap<Class<?>, LaLogger>();
 
     private static boolean initialized;
 
-    public static synchronized SLogger getLogger(final Class clazz) {
+    public static synchronized LaLogger getLogger(final Class<?> clazz) {
         if (!initialized) {
             initialize();
         }
-        SLogger logger = (SLogger) loggers.get(clazz);
+        LaLogger logger = (LaLogger) loggers.get(clazz);
         if (logger == null) {
-            logger = new SLogger();
+            logger = new LaLogger();
             loggers.put(clazz, logger);
         }
         return logger;
     }
 
-    /**
-     * {@link SLogger}を初期化します。
-     */
     public static synchronized void initialize() {
         initialized = true;
     }
 
-    /**
-     * リソースを開放します。
-     */
     public synchronized static void dispose() {
         loggers.clear();
         initialized = false;
     }
 
-    /**
-     * DEBUG情報が出力されるかどうかを返します。
-     * 
-     * @return DEBUG情報が出力されるかどうか
-     */
     public final boolean isDebugEnabled() {
         return log.isDebugEnabled();
     }
 
-    /**
-     * DEBUG情報を出力します。
-     * 
-     * @param message
-     * @param throwable
-     */
     public final void debug(Object message, Throwable throwable) {
         if (isDebugEnabled()) {
             log.debug(message != null ? message.toString() : null, throwable);
         }
     }
 
-    /**
-     * DEBUG情報を出力します。
-     * 
-     * @param message
-     */
     public final void debug(Object message) {
         if (isDebugEnabled()) {
             log.debug(message != null ? message.toString() : null);
         }
     }
 
-    /**
-     * INFO情報が出力されるかどうかを返します。
-     * 
-     * @return INFO情報が出力されるかどうか
-     */
     public final boolean isInfoEnabled() {
         return log.isInfoEnabled();
     }
 
-    /**
-     * INFO情報を出力します。
-     * 
-     * @param message
-     * @param throwable
-     */
     public final void info(Object message, Throwable throwable) {
         if (isInfoEnabled()) {
             log.info(message != null ? message.toString() : null, throwable);
         }
     }
 
-    /**
-     * INFO情報を出力します。
-     * 
-     * @param message
-     */
     public final void info(Object message) {
         if (isInfoEnabled()) {
             log.info(message != null ? message.toString() : null);
         }
     }
 
-    /**
-     * WARN情報を出力します。
-     * 
-     * @param message
-     * @param throwable
-     */
     public final void warn(Object message, Throwable throwable) {
         log.warn(message != null ? message.toString() : null, throwable);
     }
 
-    /**
-     * WARN情報を出力します。
-     * 
-     * @param message
-     */
     public final void warn(Object message) {
         log.warn(message != null ? message.toString() : null);
     }
 
-    /**
-     * ERROR情報を出力します。
-     * 
-     * @param message
-     * @param throwable
-     */
     public final void error(Object message, Throwable throwable) {
         log.error(message != null ? message.toString() : null, throwable);
     }
 
-    /**
-     * ERROR情報を出力します。
-     * 
-     * @param message
-     */
     public final void error(Object message) {
         log.error(message != null ? message.toString() : null);
     }
 
-    /**
-     * ログを出力します。
-     * 
-     * @param throwable
-     */
     public final void log(Throwable throwable) {
         error(throwable.getMessage(), throwable);
     }
 
-    /**
-     * ログを出力します。
-     * 
-     * @param messageCode
-     * @param args
-     */
     public final void log(String messageCode, Object[] args) {
         log(messageCode, args, null);
     }
 
-    /**
-     * ログを出力します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param throwable
-     */
     public final void log(String messageCode, Object[] args, Throwable throwable) {
         char messageType = messageCode.charAt(0);
         if (isEnabledFor(messageType)) {

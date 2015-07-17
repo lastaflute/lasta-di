@@ -20,7 +20,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.lastaflute.di.exception.SIllegalStateException;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.tx.TransactionCallback;
 import org.lastaflute.di.tx.TransactionManagerAdapter;
 
@@ -32,7 +32,7 @@ public class JTAUserTransactionAdapter implements TransactionManagerAdapter, Sta
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final SLogger logger = SLogger.getLogger(JTAUserTransactionAdapter.class);
+    private static final LaLogger logger = LaLogger.getLogger(JTAUserTransactionAdapter.class);
 
     // ===================================================================================
     //                                                                           Attribute

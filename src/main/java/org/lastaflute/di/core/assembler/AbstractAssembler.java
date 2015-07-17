@@ -19,14 +19,14 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
 import org.lastaflute.di.core.util.BindingUtil;
 import org.lastaflute.di.helper.beans.BeanDesc;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 
 /**
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class AbstractAssembler {
 
-    private static SLogger logger = SLogger.getLogger(AbstractAssembler.class);
+    private static LaLogger logger = LaLogger.getLogger(AbstractAssembler.class);
 
     // ===================================================================================
     //                                                                           Attribute

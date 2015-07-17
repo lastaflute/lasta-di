@@ -18,7 +18,7 @@ package org.lastaflute.di;
 import java.beans.Introspector;
 import java.util.LinkedList;
 
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.LdiDriverManagerUtil;
 
 /**
@@ -47,7 +47,7 @@ public class DisposableUtil {
         }
         disposables.clear();
         Introspector.flushCaches();
-        SLogger.dispose();
+        LaLogger.dispose();
     }
 
     public static void deregisterAllDrivers() {

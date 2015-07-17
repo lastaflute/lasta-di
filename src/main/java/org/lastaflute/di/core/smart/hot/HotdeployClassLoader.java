@@ -17,7 +17,7 @@ package org.lastaflute.di.core.smart.hot;
 
 import java.io.InputStream;
 
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
 import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiClassUtil;
@@ -29,7 +29,7 @@ import org.lastaflute.di.util.LdiResourceUtil;
  */
 public class HotdeployClassLoader extends ClassLoader {
 
-    private static final SLogger logger = SLogger.getLogger(HotdeployClassLoader.class);
+    private static final LaLogger logger = LaLogger.getLogger(HotdeployClassLoader.class);
 
     protected final NamingConvention namingConvention;
 
