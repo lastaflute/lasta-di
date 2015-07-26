@@ -20,14 +20,14 @@ import java.lang.reflect.Field;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.util.BindingUtil;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 
 /**
  * @author modified by jflute (originated in Seasar)
  */
 public class BindingTypeShouldDef extends AbstractBindingTypeDef {
 
-    private static final SLogger logger = SLogger.getLogger(BindingTypeShouldDef.class);
+    private static final LaLogger logger = LaLogger.getLogger(BindingTypeShouldDef.class);
 
     protected BindingTypeShouldDef(String name) {
         super(name);

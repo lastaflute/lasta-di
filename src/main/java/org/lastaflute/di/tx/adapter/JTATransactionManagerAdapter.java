@@ -22,7 +22,7 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.lastaflute.di.exception.SIllegalStateException;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.tx.TransactionCallback;
 import org.lastaflute.di.tx.TransactionManagerAdapter;
 
@@ -31,7 +31,7 @@ import org.lastaflute.di.tx.TransactionManagerAdapter;
  */
 public class JTATransactionManagerAdapter implements TransactionManagerAdapter, Status {
 
-    private static final SLogger logger = SLogger.getLogger(JTATransactionManagerAdapter.class);
+    private static final LaLogger logger = LaLogger.getLogger(JTATransactionManagerAdapter.class);
 
     protected final UserTransaction userTransaction;
     protected final TransactionManager transactionManager;

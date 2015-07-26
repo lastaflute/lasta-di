@@ -21,7 +21,7 @@ import org.lastaflute.di.core.creator.ComponentCreator;
 import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
 import org.lastaflute.di.core.meta.impl.LaContainerBehavior.DefaultProvider;
 import org.lastaflute.di.core.util.ComponentUtil;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
@@ -31,7 +31,7 @@ import org.lastaflute.di.naming.NamingConvention;
  */
 public class WarmdeployBehavior extends DefaultProvider {
 
-    private static final SLogger logger = SLogger.getLogger(WarmdeployBehavior.class);
+    private static final LaLogger logger = LaLogger.getLogger(WarmdeployBehavior.class);
 
     private NamingConvention namingConvention;
 

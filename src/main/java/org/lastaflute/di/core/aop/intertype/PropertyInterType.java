@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiStringUtil;
 
@@ -45,7 +45,7 @@ public class PropertyInterType extends AbstractInterType {
     protected static final String STR_WRITE = "write";
     protected static final String STR_READWRITE = "readwrite";
 
-    private static SLogger logger = SLogger.getLogger(PropertyInterType.class);
+    private static LaLogger logger = LaLogger.getLogger(PropertyInterType.class);
 
     private static PropertyAnnotationHandler annotationHandler = new DefaultPropertyAnnotationHandler();
 

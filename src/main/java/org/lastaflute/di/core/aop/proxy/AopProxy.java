@@ -30,7 +30,7 @@ import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 import org.lastaflute.di.core.aop.impl.PointcutImpl;
 import org.lastaflute.di.core.aop.javassist.AspectWeaver;
 import org.lastaflute.di.exception.EmptyRuntimeException;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiConstructorUtil;
 import org.lastaflute.di.util.LdiMethodUtil;
@@ -42,7 +42,7 @@ public class AopProxy implements Serializable {
 
     static final long serialVersionUID = 0L;
 
-    private static SLogger logger = SLogger.getLogger(AopProxy.class);
+    private static LaLogger logger = LaLogger.getLogger(AopProxy.class);
 
     private final Class targetClass;
 

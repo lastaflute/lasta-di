@@ -21,16 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * @author y-komori
+ * @author modified by jflute (originated in Seasar)
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.FIELD })
 public @interface Property {
 
-    /**
-     * @return 
-     */
     PropertyType value() default PropertyType.READWRITE;
-
 }

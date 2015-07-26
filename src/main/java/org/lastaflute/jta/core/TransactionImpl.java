@@ -56,13 +56,13 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
 
     private int status = Status.STATUS_NO_TRANSACTION;
 
-    private List xaResourceWrappers = new ArrayList();
+    private List<XAResourceWrapper> xaResourceWrappers = new ArrayList<XAResourceWrapper>();
 
     private List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
-    private List interposedSynchronizations = new ArrayList();
+    private List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
 
-    private Map resourceMap = new HashMap();
+    private Map<Object, Object> resourceMap = new HashMap<Object, Object>();
 
     private boolean suspended = false;
 
@@ -485,7 +485,6 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
     }
 
     public void registerInterposedSynchronization(Synchronization sync) throws IllegalStateException {
-
         assertNotSuspended();
         assertActive();
         interposedSynchronizations.add(sync);
@@ -526,11 +525,11 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
         return xid.toString();
     }
 
-    public List getSynchronizations() {
+    public List<Synchronization> getSynchronizations() {
         return synchronizations;
     }
 
-    public List getInterposedSynchronizations() {
+    public List<Synchronization> getInterposedSynchronizations() {
         return interposedSynchronizations;
     }
 }

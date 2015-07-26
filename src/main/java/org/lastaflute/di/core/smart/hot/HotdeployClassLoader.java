@@ -17,7 +17,7 @@ package org.lastaflute.di.core.smart.hot;
 
 import java.io.InputStream;
 
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
 import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiClassUtil;
@@ -29,7 +29,7 @@ import org.lastaflute.di.util.LdiResourceUtil;
  */
 public class HotdeployClassLoader extends ClassLoader {
 
-    private static final SLogger logger = SLogger.getLogger(HotdeployClassLoader.class);
+    private static final LaLogger logger = LaLogger.getLogger(HotdeployClassLoader.class);
 
     protected final NamingConvention namingConvention;
 
@@ -39,16 +39,16 @@ public class HotdeployClassLoader extends ClassLoader {
     }
 
     @Override
-    public Class loadClass(String className, boolean resolve) throws ClassNotFoundException {
+    public Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         if (HotdeployUtil.REBUILDER_CLASS_NAME.equals(className)) {
-            final Class clazz = findLoadedClass(className);
+            final Class<?> clazz = findLoadedClass(className);
             if (clazz != null) {
                 return clazz;
             }
             return defineClass(className, resolve);
         }
         if (isTargetClass(className)) {
-            Class clazz = findLoadedClass(className);
+            Class<?> clazz = findLoadedClass(className);
             if (clazz != null) {
                 return clazz;
             }
@@ -65,11 +65,11 @@ public class HotdeployClassLoader extends ClassLoader {
         return super.loadClass(className, resolve);
     }
 
-    protected Class defineClass(String className, boolean resolve) {
+    protected Class<?> defineClass(String className, boolean resolve) {
         final String path = LdiClassUtil.getResourcePath(className);
         final InputStream is = LdiResourceUtil.getResourceAsStreamNoException(path);
         if (is != null) {
-            final Class clazz = defineClass(className, is);
+            final Class<?> clazz = defineClass(className, is);
             if (resolve) {
                 resolveClass(clazz);
             }
@@ -78,11 +78,11 @@ public class HotdeployClassLoader extends ClassLoader {
         return null;
     }
 
-    protected Class defineClass(String className, InputStream classFile) {
+    protected Class<?> defineClass(String className, InputStream classFile) {
         return defineClass(className, LdiInputStreamUtil.getBytes(classFile));
     }
 
-    protected Class defineClass(String className, byte[] bytes) {
+    protected Class<?> defineClass(String className, byte[] bytes) {
         return defineClass(className, bytes, 0, bytes.length);
     }
 

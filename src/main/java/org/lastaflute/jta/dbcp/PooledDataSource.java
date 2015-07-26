@@ -79,11 +79,11 @@ public class PooledDataSource implements DataSource, Serializable {
         return null;
     }
 
-    public Object unwrap(Class iface) throws SQLException {
+    public <T> T unwrap(Class<T> iface) throws SQLException {
         return null;
     }
 
-    public boolean isWrapperFor(Class iface) throws SQLException {
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return false;
     }
 

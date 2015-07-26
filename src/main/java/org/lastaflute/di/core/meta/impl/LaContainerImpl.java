@@ -42,7 +42,7 @@ import org.lastaflute.di.core.util.ComponentUtil;
 import org.lastaflute.di.core.util.MetaDefSupport;
 import org.lastaflute.di.core.util.Traversal;
 import org.lastaflute.di.exception.ContainerInitFailureException;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.CaseInsensitiveMap;
 import org.lastaflute.di.util.LdiStringUtil;
@@ -52,7 +52,7 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class LaContainerImpl implements LaContainer, ContainerConstants {
 
-    private static final SLogger logger = SLogger.getLogger(LaContainerImpl.class);
+    private static final LaLogger logger = LaLogger.getLogger(LaContainerImpl.class);
 
     protected Map<Object, ComponentDefHolder> componentDefMap = new HashMap<Object, ComponentDefHolder>();
     protected List<ComponentDef> componentDefList = new ArrayList<ComponentDef>();

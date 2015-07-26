@@ -50,7 +50,7 @@ import org.lastaflute.di.helper.beans.exception.IllegalDiiguRuntimeException;
 import org.lastaflute.di.helper.beans.exception.MethodNotFoundRuntimeException;
 import org.lastaflute.di.helper.beans.exception.PropertyNotFoundRuntimeException;
 import org.lastaflute.di.helper.beans.factory.ParameterizedClassDescFactory;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.ArrayMap;
 import org.lastaflute.di.util.CaseInsensitiveMap;
 import org.lastaflute.di.util.LdiClassUtil;
@@ -69,7 +69,7 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class BeanDescImpl implements BeanDesc {
 
-    private static final SLogger logger = SLogger.getLogger(BeanDescImpl.class);
+    private static final LaLogger logger = LaLogger.getLogger(BeanDescImpl.class);
     private static final Object[] EMPTY_ARGS = new Object[0];
     private static final Class<?>[] EMPTY_PARAM_TYPES = new Class[0];
     private static final String[] EMPTY_STRING_ARRAY = new String[0];

@@ -23,83 +23,49 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.creator.ComponentCreator;
 import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
-import org.lastaflute.di.core.meta.impl.LaContainerImpl;
 import org.lastaflute.di.core.meta.impl.LaContainerBehavior.DefaultProvider;
+import org.lastaflute.di.core.meta.impl.LaContainerImpl;
 import org.lastaflute.di.core.util.ComponentUtil;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * HOT deployのための
- * {@link org.lastaflute.di.core.meta.impl.LaContainerBehavior.Provider}です。
- * <p>
- * このクラスをs2container.diconに登録するとHOT deployで動作するようになります。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class HotdeployBehavior extends DefaultProvider {
 
-    private static final SLogger logger = SLogger.getLogger(HotdeployBehavior.class);
+    private static final LaLogger logger = LaLogger.getLogger(HotdeployBehavior.class);
 
     private ClassLoader originalClassLoader;
 
     private HotdeployClassLoader hotdeployClassLoader;
 
-    private Map componentDefCache = new HashMap();
+    private Map<Object, ComponentDef> componentDefCache = new HashMap<Object, ComponentDef>();
 
     private NamingConvention namingConvention;
 
     private ComponentCreator[] creators = new ComponentCreator[0];
 
-    /** keepプロパティのバインディングタイプアノテーションです。 */
     public static final String keep_BINDING = "bindingType=may";
 
     private boolean keep;
 
-    /**
-     * {@link NamingConvention}を返します。
-     * 
-     * @return {@link NamingConvention}
-     */
     public NamingConvention getNamingConvention() {
         return namingConvention;
     }
 
-    /**
-     * {@link NamingConvention}を設定します。
-     * 
-     * @param namingConvention
-     */
     public void setNamingConvention(NamingConvention namingConvention) {
         this.namingConvention = namingConvention;
     }
 
-    /**
-     * {@link ComponentCreator}の配列を返します。
-     * 
-     * @return {@link ComponentCreator}の配列
-     */
     public ComponentCreator[] getCreators() {
         return creators;
     }
 
-    /**
-     * {@link ComponentCreator}の配列を設定します。
-     * 
-     * @param creators
-     */
     public void setCreators(ComponentCreator[] creators) {
         this.creators = creators;
     }
 
-    /**
-     * {@link #start()}/{@link #stop()}の度にクラスローダをキープするかどうかを設定します。
-     * 
-     * @param keep
-     *            クラスローダをキープする場合<code>true</code>
-     */
     public void setKeep(boolean keep) {
         this.keep = keep;
         if (hotdeployClassLoader != null) {
@@ -152,8 +118,8 @@ public class HotdeployBehavior extends DefaultProvider {
         if (cd != null) {
             return cd;
         }
-        if (key instanceof Class) {
-            cd = createComponentDef((Class) key);
+        if (key instanceof Class<?>) {
+            cd = createComponentDef((Class<?>) key);
         } else if (key instanceof String) {
             cd = createComponentDef((String) key);
             if (cd != null && !key.equals(cd.getComponentName())) {
@@ -181,13 +147,7 @@ public class HotdeployBehavior extends DefaultProvider {
         return (ComponentDef) componentDefCache.get(key);
     }
 
-    /**
-     * {@link ComponentDef}を作成します。
-     * 
-     * @param componentClass
-     * @return {@link ComponentDef}
-     */
-    protected ComponentDef createComponentDef(Class componentClass) {
+    protected ComponentDef createComponentDef(Class<?> componentClass) {
         for (int i = 0; i < creators.length; ++i) {
             ComponentCreator creator = creators[i];
             ComponentDef cd = creator.createComponentDef(componentClass);
@@ -198,12 +158,6 @@ public class HotdeployBehavior extends DefaultProvider {
         return null;
     }
 
-    /**
-     * {@link ComponentDef}を作成します。
-     * 
-     * @param componentName
-     * @return {@link ComponentDef}
-     */
     protected ComponentDef createComponentDef(String componentName) {
         for (int i = 0; i < creators.length; ++i) {
             ComponentCreator creator = creators[i];
@@ -215,34 +169,19 @@ public class HotdeployBehavior extends DefaultProvider {
         return null;
     }
 
-    /**
-     * {@link ComponentDef}を登録します。
-     * 
-     * @param componentDef
-     */
     protected void register(ComponentDef componentDef) {
         componentDef.setContainer(SingletonLaContainerFactory.getContainer());
         registerByClass(componentDef);
         registerByName(componentDef);
     }
 
-    /**
-     * {@link ComponentDef}をクラスをキーにして登録します。
-     * 
-     * @param componentDef
-     */
     protected void registerByClass(ComponentDef componentDef) {
-        Class[] classes = ComponentUtil.getAssignableClasses(componentDef.getComponentClass());
+        Class<?>[] classes = ComponentUtil.getAssignableClasses(componentDef.getComponentClass());
         for (int i = 0; i < classes.length; ++i) {
             registerMap(classes[i], componentDef);
         }
     }
 
-    /**
-     * {@link ComponentDef}を名前をキーにして登録します。
-     * 
-     * @param componentDef
-     */
     protected void registerByName(ComponentDef componentDef) {
         String componentName = componentDef.getComponentName();
         if (componentName != null) {
@@ -250,15 +189,6 @@ public class HotdeployBehavior extends DefaultProvider {
         }
     }
 
-    /**
-     * {@link ComponentDef}をキャッシュに登録します。
-     * <p>
-     * キャッシュは基本的にリクエストごとに破棄されます
-     * </p>
-     * 
-     * @param key
-     * @param componentDef
-     */
     protected void registerMap(Object key, ComponentDef componentDef) {
         ComponentDef previousCd = (ComponentDef) componentDefCache.get(key);
         if (previousCd == null) {

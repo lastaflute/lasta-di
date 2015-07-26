@@ -20,7 +20,7 @@ import java.util.Map;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.exception.EmptyRuntimeException;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -28,7 +28,7 @@ import org.lastaflute.di.helper.log.SLogger;
  */
 public class RequestComponentDeployer extends AbstractComponentDeployer {
 
-    private static SLogger logger = SLogger.getLogger(RequestComponentDeployer.class);
+    private static LaLogger logger = LaLogger.getLogger(RequestComponentDeployer.class);
 
     /**
      * @param componentDef

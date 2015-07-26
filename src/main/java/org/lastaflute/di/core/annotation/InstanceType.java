@@ -21,6 +21,7 @@ package org.lastaflute.di.core.annotation;
 public enum InstanceType {
 
     SINGLETON, PROTOTYPE, APPLICATION, SESSION, REQUEST, OUTER;
+
     public String getName() {
         return toString().toLowerCase();
     }

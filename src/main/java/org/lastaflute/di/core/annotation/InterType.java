@@ -27,9 +27,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface InterType {
 
-    /**
-     * @return 
-     */
     String[]value();
-
 }

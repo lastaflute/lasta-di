@@ -20,20 +20,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.lastaflute.di.core.aop.interceptors.HotAwareDelegateInterceptor;
-
 /**
  * @author modified by jflute (originated in Seasar)
- * @see HotAwareDelegateInterceptor
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Interceptor
 public @interface HotAwareDelegate {
 
-    /**
-     * @return 
-     */
     String targetName();
-
 }

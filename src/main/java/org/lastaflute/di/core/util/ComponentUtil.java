@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.LdiStringUtil;
 
 /**
@@ -30,7 +30,7 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class ComponentUtil implements ContainerConstants {
 
-    private static final SLogger logger = SLogger.getLogger(ComponentUtil.class);
+    private static final LaLogger logger = LaLogger.getLogger(ComponentUtil.class);
     private static final Class<?>[] EMPTY_CLASSES = new Class<?>[0];
     private static final Set<Class<?>> notAssignableClasses = new HashSet<Class<?>>();
 

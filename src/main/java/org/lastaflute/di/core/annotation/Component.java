@@ -27,24 +27,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Component {
 
-    /**
-     * @return 
-     */
     String name() default "";
 
-    /**
-     * @return 
-     */
     InstanceType instance() default InstanceType.SINGLETON;
 
-    /**
-     * @return 
-     */
     AutoBindingType autoBinding() default AutoBindingType.AUTO;
 
-    /**
-     * @return 
-     */
     boolean externalBinding() default false;
-
 }

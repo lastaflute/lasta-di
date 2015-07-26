@@ -18,10 +18,7 @@ package org.lastaflute.jta.exception;
 import javax.naming.NamingException;
 
 /**
- * {@link NamingException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LjtNamingRuntimeException extends LjtRuntimeException {
 

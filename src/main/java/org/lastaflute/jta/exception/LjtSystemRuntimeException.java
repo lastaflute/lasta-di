@@ -18,20 +18,12 @@ package org.lastaflute.jta.exception;
 import javax.transaction.SystemException;
 
 /**
- * {@link SystemException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LjtSystemRuntimeException extends LjtRuntimeException {
 
     private static final long serialVersionUID = 7215695745074415461L;
 
-    /**
-     * {@link LjtSystemRuntimeException}を作成します。
-     * 
-     * @param cause
-     */
     public LjtSystemRuntimeException(SystemException cause) {
         super("System failed", cause);
     }

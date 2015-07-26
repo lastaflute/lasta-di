@@ -19,21 +19,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * 配列を{@link Iterator}にするAdaptorです。
- * 
- * @author shot
+ * @author modified by jflute (originated in Seasar)
  */
-public class ArrayIterator implements Iterator {
+public class ArrayIterator implements Iterator<Object> {
 
     private Object[] items_;
-
     private int index_ = 0;
 
-    /**
-     * {@link ArrayIterator}を作成します。
-     * 
-     * @param items
-     */
     public ArrayIterator(Object items[]) {
         items_ = items;
     }
@@ -55,5 +47,4 @@ public class ArrayIterator implements Iterator {
     public void remove() {
         throw new UnsupportedOperationException("remove");
     }
-
 }

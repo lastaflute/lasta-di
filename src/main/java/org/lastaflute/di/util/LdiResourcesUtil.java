@@ -29,7 +29,7 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.lastaflute.di.helper.log.SLogger;
+import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.ClassTraversal.ClassHandler;
 import org.lastaflute.di.util.ResourceTraversal.ResourceHandler;
 
@@ -56,7 +56,7 @@ public class LdiResourcesUtil {
     /** 空の{@link Resources}の配列です。 */
     protected static final Resources[] EMPTY_ARRAY = new Resources[0];
 
-    private static final SLogger logger = SLogger.getLogger(LdiResourcesUtil.class);
+    private static final LaLogger logger = LaLogger.getLogger(LdiResourcesUtil.class);
 
     /** URLのプロトコルをキー、{@link ResourceTypeFactory}を値とするマッピングです。 */
     protected static final Map resourcesTypeFactories = new HashMap();
