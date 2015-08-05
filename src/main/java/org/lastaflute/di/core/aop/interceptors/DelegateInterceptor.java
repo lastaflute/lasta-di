@@ -28,54 +28,35 @@ import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class DelegateInterceptor extends AbstractInterceptor {
 
     private static final long serialVersionUID = 3613140488663554089L;
 
     private Object target;
-
     private BeanDesc beanDesc;
-
-    private Map methodNameMap = new HashMap();
+    private final Map<String, String> methodNameMap = new HashMap<String, String>();
 
     public DelegateInterceptor() {
     }
 
-    /**
-     * @param target
-     */
     public DelegateInterceptor(Object target) {
         setTarget(target);
     }
 
-    /**
-     * @return target
-     */
     public Object getTarget() {
         return target;
     }
 
-    /**
-     * @param target
-     */
     public void setTarget(Object target) {
         this.target = target;
         beanDesc = BeanDescFactory.getBeanDesc(target.getClass());
     }
 
-    /**
-     * @param methodName
-     * @param targetMethodName
-     */
     public void addMethodNameMap(String methodName, String targetMethodName) {
         methodNameMap.put(methodName, targetMethodName);
     }
 
-    /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
-     */
     public Object invoke(MethodInvocation invocation) throws Throwable {
         if (target == null) {
             throw new EmptyRuntimeException("target");

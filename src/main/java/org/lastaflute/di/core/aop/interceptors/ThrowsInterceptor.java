@@ -31,20 +31,19 @@ import org.lastaflute.di.util.LdiMethodUtil;
 public abstract class ThrowsInterceptor extends AbstractInterceptor {
 
     private static final long serialVersionUID = 1L;
-
     public static final String METHOD_NAME = "handleThrowable";
 
-    private Map methodMap = new HashMap();
+    private final Map<Class<?>, Method> methodMap = new HashMap<Class<?>, Method>();
 
     public ThrowsInterceptor() {
-        Method[] methods = getClass().getMethods();
+        final Method[] methods = getClass().getMethods();
         for (int i = 0; i < methods.length; ++i) {
-            Method m = methods[i];
-            if (LdiMethodUtil.isBridgeMethod(m) || LdiMethodUtil.isSyntheticMethod(m)) {
+            final Method method = methods[i];
+            if (LdiMethodUtil.isBridgeMethod(method) || LdiMethodUtil.isSyntheticMethod(method)) {
                 continue;
             }
-            if (isHandleThrowable(m)) {
-                methodMap.put(m.getParameterTypes()[0], m);
+            if (isHandleThrowable(method)) {
+                methodMap.put(method.getParameterTypes()[0], method);
             }
         }
         if (methodMap.size() == 0) {
@@ -58,9 +57,6 @@ public abstract class ThrowsInterceptor extends AbstractInterceptor {
                 && MethodInvocation.class.isAssignableFrom(method.getParameterTypes()[1]);
     }
 
-    /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
-     */
     public Object invoke(MethodInvocation invocation) throws Throwable {
         try {
             return invocation.proceed();
@@ -77,8 +73,8 @@ public abstract class ThrowsInterceptor extends AbstractInterceptor {
         }
     }
 
-    private Method getMethod(Throwable t) {
-        Class clazz = t.getClass();
+    private Method getMethod(Throwable cause) {
+        Class<?> clazz = cause.getClass();
         Method method = (Method) methodMap.get(clazz);
         while (method == null && !clazz.equals(Throwable.class)) {
             clazz = clazz.getSuperclass();

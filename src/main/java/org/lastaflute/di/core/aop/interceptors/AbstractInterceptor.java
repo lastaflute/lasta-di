@@ -33,29 +33,17 @@ import org.lastaflute.di.core.aop.proxy.AopProxy;
  */
 public abstract class AbstractInterceptor implements MethodInterceptor, Serializable {
 
-    static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
-    /**
-     * @param proxyClass
-     * @return
-     */
-    public Object createProxy(Class proxyClass) {
+    public Object createProxy(Class<?> proxyClass) {
         Aspect aspect = new AspectImpl(this, new PointcutImpl(new String[] { ".*" }));
         return new AopProxy(proxyClass, new Aspect[] { aspect }).create();
     }
 
-    /**
-     * @param invocation
-     * @return 
-     */
-    protected Class getTargetClass(MethodInvocation invocation) {
+    protected Class<?> getTargetClass(MethodInvocation invocation) {
         return ((LaMethodInvocation) invocation).getTargetClass();
     }
 
-    /**
-     * @param invocation
-     * @return 
-     */
     protected ComponentDef getComponentDef(MethodInvocation invocation) {
         if (invocation instanceof LaMethodInvocation) {
             LaMethodInvocation impl = (LaMethodInvocation) invocation;

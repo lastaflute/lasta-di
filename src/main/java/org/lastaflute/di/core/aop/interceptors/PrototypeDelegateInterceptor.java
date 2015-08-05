@@ -31,72 +31,49 @@ import org.lastaflute.di.util.LdiMethodUtil;
  * @author modified by jflute (originated in Seasar)
  */
 public class PrototypeDelegateInterceptor extends AbstractInterceptor {
+
     private static final long serialVersionUID = -6138917007687873314L;
 
     private LaContainer container;
-
     private String targetName;
-
     private BeanDesc beanDesc;
+    private final Map<String, String> methodNameMap = new HashMap<String, String>();
 
-    private Map methodNameMap = new HashMap();
-
-    /**
-     * @param container
-     */
     public PrototypeDelegateInterceptor(final LaContainer container) {
         this.container = container;
     }
 
-    /**
-     * @return 
-     */
     public String getTargetName() {
         return targetName;
     }
 
-    /**
-     * @param targetName
-     */
     public void setTargetName(final String targetName) {
         this.targetName = targetName;
     }
 
-    /**
-     * @param methodName
-     * @param targetMethodName
-     */
     public void addMethodNameMap(final String methodName, final String targetMethodName) {
         methodNameMap.put(methodName, targetMethodName);
     }
 
-    /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
-     */
     public Object invoke(MethodInvocation invocation) throws Throwable {
         if (targetName == null) {
             throw new EmptyRuntimeException("targetName");
         }
-
         final Method method = invocation.getMethod();
         if (!LdiMethodUtil.isAbstract(method)) {
             return invocation.proceed();
         }
-
         String methodName = method.getName();
         if (methodNameMap.containsKey(methodName)) {
             methodName = (String) methodNameMap.get(methodName);
         }
-
         final Object target = container.getComponent(targetName);
         if (beanDesc == null) {
             beanDesc = BeanDescFactory.getBeanDesc(target.getClass());
         }
-
         if (!beanDesc.hasMethod(methodName)) {
             throw new MethodNotFoundRuntimeException(getTargetClass(invocation), methodName, invocation.getArguments());
         }
-
         return beanDesc.invoke(target, methodName, invocation.getArguments());
     }
 }

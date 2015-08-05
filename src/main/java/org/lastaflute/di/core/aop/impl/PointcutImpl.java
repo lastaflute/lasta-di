@@ -27,47 +27,30 @@ import org.lastaflute.di.util.LdiMethodUtil;
 import org.lastaflute.di.util.LdiModifierUtil;
 
 /**
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class PointcutImpl implements Pointcut, Serializable {
 
-    static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     private String[] methodNames;
-
     private Pattern[] patterns;
-
     private Method method;
 
-    /**
-     * @param targetClass
-     * @throws EmptyRuntimeException
-     */
-    public PointcutImpl(Class targetClass) throws EmptyRuntimeException {
-
+    public PointcutImpl(Class<?> targetClass) throws EmptyRuntimeException {
         if (targetClass == null) {
             throw new EmptyRuntimeException("targetClass");
         }
         setMethodNames(getMethodNames(targetClass));
     }
 
-    /**
-     * @param methodNames
-     * @throws EmptyRuntimeException
-     */
     public PointcutImpl(String[] methodNames) throws EmptyRuntimeException {
-
         if (methodNames == null || methodNames.length == 0) {
             throw new EmptyRuntimeException("methodNames");
         }
         setMethodNames(methodNames);
     }
 
-    /**
-     * @param method
-     */
     public PointcutImpl(Method method) {
         this.method = method;
     }
@@ -76,8 +59,7 @@ public class PointcutImpl implements Pointcut, Serializable {
         if (method != null) {
             return method.equals(targetMethod);
         }
-
-        String methodName = targetMethod.getName();
+        final String methodName = targetMethod.getName();
         for (int i = 0; i < patterns.length; ++i) {
             if (patterns[i].matcher(methodName).matches()) {
                 return true;
@@ -86,9 +68,6 @@ public class PointcutImpl implements Pointcut, Serializable {
         return false;
     }
 
-    /**
-     * @return
-     */
     public String[] getMethodNames() {
         return methodNames;
     }
@@ -101,13 +80,13 @@ public class PointcutImpl implements Pointcut, Serializable {
         }
     }
 
-    private static String[] getMethodNames(Class targetClass) {
-        Set methodNameSet = new HashSet();
+    private static String[] getMethodNames(Class<?> targetClass) {
+        final Set<String> methodNameSet = new HashSet<String>();
         if (targetClass.isInterface()) {
             addInterfaceMethodNames(methodNameSet, targetClass);
         }
-        for (Class clazz = targetClass; clazz != Object.class && clazz != null; clazz = clazz.getSuperclass()) {
-            Class[] interfaces = clazz.getInterfaces();
+        for (Class<?> clazz = targetClass; clazz != Object.class && clazz != null; clazz = clazz.getSuperclass()) {
+            final Class<?>[] interfaces = clazz.getInterfaces();
             for (int i = 0; i < interfaces.length; ++i) {
                 addInterfaceMethodNames(methodNameSet, interfaces[i]);
             }
@@ -119,21 +98,21 @@ public class PointcutImpl implements Pointcut, Serializable {
 
     }
 
-    private static void addInterfaceMethodNames(Set methodNameSet, Class interfaceClass) {
-        Method[] methods = interfaceClass.getDeclaredMethods();
+    private static void addInterfaceMethodNames(Set<String> methodNameSet, Class<?> interfaceClass) {
+        final Method[] methods = interfaceClass.getDeclaredMethods();
         for (int j = 0; j < methods.length; j++) {
             methodNameSet.add(methods[j].getName());
         }
-        Class[] interfaces = interfaceClass.getInterfaces();
+        final Class<?>[] interfaces = interfaceClass.getInterfaces();
         for (int i = 0; i < interfaces.length; ++i) {
             addInterfaceMethodNames(methodNameSet, interfaces[i]);
         }
     }
 
-    private static void addClassMethodNames(Set methodNameSet, Class clazz) {
-        Method[] methods = clazz.getMethods();
+    private static void addClassMethodNames(Set<String> methodNameSet, Class<?> clazz) {
+        final Method[] methods = clazz.getMethods();
         for (int i = 0; i < methods.length; ++i) {
-            Method method = methods[i];
+            final Method method = methods[i];
             if (LdiMethodUtil.isSyntheticMethod(method) || LdiMethodUtil.isBridgeMethod(method)) {
                 continue;
             }
