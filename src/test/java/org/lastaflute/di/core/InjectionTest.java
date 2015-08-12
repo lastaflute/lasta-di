@@ -47,7 +47,7 @@ public class InjectionTest extends UnitLastaDiTestCase {
         logic.hanger();
     }
 
-    public void test_injection_by_setter_under_dbflute() throws Exception {
+    public void test_injection_by_setter_under_dbflute_basic() throws Exception {
         // ## Arrange ##
         MockSeaLogic logic = getComponent(MockSeaLogic.class);
         log(logic);
@@ -56,6 +56,17 @@ public class InjectionTest extends UnitLastaDiTestCase {
         // ## Act ##
         // ## Assert ##
         logic.magic(); // under org.dbflute so injected
+    }
+
+    public void test_injection_by_setter_under_dbflute_otherName() throws Exception {
+        // ## Arrange ##
+        MockSeaLogic logic = getComponent(MockSeaLogic.class);
+        log(logic);
+        assertNotNull(logic);
+
+        // ## Act ##
+        // ## Assert ##
+        logic.mermaid(); // under org.dbflute so injected
     }
 
     public void test_injection_hiddenSuper() throws Exception {

@@ -74,9 +74,10 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         final LaContainer container = componentDef.getContainer();
         final String propName = propertyDesc.getPropertyName();
         final Class<?> propType = propertyDesc.getPropertyType();
-        if (container.hasComponentDef(propType)) {
+        final boolean hasComponentByType = container.hasComponentDef(propType);
+        if (hasComponentByType) {
             final ComponentDef cd = container.getComponentDef(propType);
-            if (isAutoBindable(propName, propType, cd)) {
+            if (isSimpleNamingAutoBindable(propName, propType, cd)) {
                 final Object value = getComponent(componentDef, propType, component, propName);
                 setPropertyValue(componentDef, propertyDesc, component, value);
                 return true;
@@ -90,7 +91,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
             }
         }
         if (isPropertyAutoBindable(propType)) {
-            if (container.hasComponentDef(propType)) {
+            if (hasComponentByType) {
                 final Object value = getComponent(componentDef, propType, component, propName);
                 setPropertyValue(componentDef, propertyDesc, component, value);
                 return true;
@@ -151,14 +152,13 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected boolean bindAutoResourceField(ComponentDef componentDef, Field field, Object component) { // #injection_point
-        // TODO jflute lastaflute: [F] research: DI :: injection logic sliming
         final LaContainer container = componentDef.getContainer();
         final String propName = field.getName();
         final Class<?> propType = field.getType();
         final boolean hasComponentByType = container.hasComponentDef(propType);
         if (hasComponentByType) {
             final ComponentDef cd = container.getComponentDef(propType);
-            if (isAutoBindable(propName, propType, cd)) {
+            if (isSimpleNamingAutoBindable(propName, propType, cd)) {
                 Object value = getComponent(componentDef, propType, component, propName);
                 setResourceFieldValue(componentDef, field, component, value);
                 return true;
@@ -212,9 +212,9 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     protected abstract void doBindResourceField(ComponentDef componentDef, Field field, Object component);
 
     // ===================================================================================
-    //                                                                        Small Helper
+    //                                                                        Assist Logic
     //                                                                        ============
-    protected boolean isAutoBindable(String propertyName, Class<?> propertyType, ComponentDef cd) {
+    protected boolean isSimpleNamingAutoBindable(String propertyName, Class<?> propertyType, ComponentDef cd) {
         final String componentName = cd.getComponentName();
         if (componentName == null) {
             return false;
