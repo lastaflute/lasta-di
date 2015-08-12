@@ -46,25 +46,14 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         addIgnoreClassSuffix(BEAN);
     }
 
-    /**
-     * @param fqcn
-     * @param name
-     */
     public void setCustomizedName(final String fqcn, final String name) {
         customizedNames.put(fqcn, name);
     }
 
-    /**
-     * @param classSuffix
-     */
     public void addIgnoreClassSuffix(final String classSuffix) {
         addReplaceRule(classSuffix + "$", "");
     }
 
-    /**
-     * @param regex
-     * @param replacement
-     */
     public void addReplaceRule(final String regex, final String replacement) {
         replaceRules.put(Pattern.compile(regex), replacement);
     }
@@ -74,9 +63,6 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         replaceRules.clear();
     }
 
-    /**
-     * @param decapitalize
-     */
     public void setDecapitalize(final boolean decapitalize) {
         this.decapitalize = decapitalize;
     }
@@ -89,27 +75,13 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         return makeDefineName(packageName, shortClassName);
     }
 
-    /**
-     * @param packageName
-     * @param shortClassName
-     * @return 
-     */
     protected String getCustomizedName(final String packageName, final String shortClassName) {
         final String fqn = LdiClassUtil.concatName(packageName, shortClassName);
         return (String) customizedNames.get(fqn);
     }
 
-    /**
-     * @param packageName
-     * @param shortClassName
-     * @return 
-     */
     protected abstract String makeDefineName(final String packageName, final String shortClassName);
 
-    /**
-     * @param name
-     * @return 
-     */
     protected String applyRule(String name) {
         for (Iterator it = replaceRules.entrySet().iterator(); it.hasNext();) {
             final Entry entry = (Entry) it.next();
@@ -125,10 +97,6 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         return name;
     }
 
-    /**
-     * @param name
-     * @return 
-     */
     protected String normalize(final String name) {
         final String[] names = name.split("\\.");
         final StringBuffer buf = new StringBuffer(name.length());
