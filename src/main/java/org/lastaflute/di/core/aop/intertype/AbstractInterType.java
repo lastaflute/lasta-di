@@ -15,6 +15,11 @@
  */
 package org.lastaflute.di.core.aop.intertype;
 
+import org.lastaflute.di.core.aop.InterType;
+import org.lastaflute.di.core.util.ClassPoolUtil;
+import org.lastaflute.di.exception.CannotCompileRuntimeException;
+import org.lastaflute.di.exception.NotFoundRuntimeException;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -24,22 +29,20 @@ import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
 
-import org.lastaflute.di.core.aop.InterType;
-import org.lastaflute.di.core.util.ClassPoolUtil;
-import org.lastaflute.di.exception.CannotCompileRuntimeException;
-import org.lastaflute.di.exception.NotFoundRuntimeException;
-
+/**
+ * @author modified by jflute (originated in Seasar)
+ */
 public abstract class AbstractInterType implements InterType {
 
     public static final String COMPONENT = "instance = prototype";
 
-    protected Class targetClass;
+    protected Class<?> targetClass;
 
     protected CtClass enhancedClass;
 
     protected ClassPool classPool;
 
-    public void introduce(final Class targetClass, final CtClass enhancedClass) {
+    public void introduce(final Class<?> targetClass, final CtClass enhancedClass) {
         this.targetClass = targetClass;
         this.enhancedClass = enhancedClass;
         this.classPool = enhancedClass.getClassPool();
@@ -56,118 +59,57 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @throws CannotCompileException
-     * @throws NotFoundException
-     */
     protected abstract void introduce() throws CannotCompileException, NotFoundException;
 
-    /**
-     * @return
-     */
-    protected Class getTargetClass() {
+    protected Class<?> getTargetClass() {
         return targetClass;
     }
 
-    /**
-     * @return 
-     */
     protected CtClass getEnhancedClass() {
         return enhancedClass;
     }
 
-    /**
-     * @return 
-     */
     protected ClassPool getClassPool() {
         return classPool;
     }
 
-    /**
-     * @param clazz
-     */
-    protected void addInterface(final Class clazz) {
+    protected void addInterface(final Class<?> clazz) {
         enhancedClass.addInterface(toCtClass(clazz));
     }
 
-    /**
-     * @param type
-     * @param name
-     */
-    protected void addField(final Class type, final String name) {
+    protected void addField(final Class<?> type, final String name) {
         addField(Modifier.PRIVATE, type, name);
     }
 
-    /**
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addField(final Class type, final String name, final String init) {
+    protected void addField(final Class<?> type, final String name, final String init) {
         addField(Modifier.PRIVATE, type, name, init);
     }
 
-    /**
-     * @param type
-     * @param name
-     */
-    protected void addStaticField(final Class type, final String name) {
+    protected void addStaticField(final Class<?> type, final String name) {
         addStaticField(Modifier.PRIVATE, type, name);
     }
 
-    /**
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addStaticField(final Class type, final String name, final String init) {
+    protected void addStaticField(final Class<?> type, final String name, final String init) {
         addStaticField(Modifier.PRIVATE, type, name, init);
     }
 
-    /**
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addConstant(final Class type, final String name, final String init) {
+    protected void addConstant(final Class<?> type, final String name, final String init) {
         addStaticField(Modifier.PUBLIC | Modifier.FINAL, type, name, init);
     }
 
-    /**
-     * @param modifiers
-     * @param type
-     * @param name
-     */
-    protected void addStaticField(final int modifiers, final Class type, final String name) {
+    protected void addStaticField(final int modifiers, final Class<?> type, final String name) {
         addField(Modifier.STATIC | modifiers, type, name);
     }
 
-    /**
-     * @param modifiers
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addStaticField(final int modifiers, final Class type, final String name, final String init) {
+    protected void addStaticField(final int modifiers, final Class<?> type, final String name, final String init) {
         addField(Modifier.STATIC | modifiers, type, name, init);
     }
 
-    /**
-     * @param modifiers
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addStaticField(final int modifiers, final Class type, final String name, final CtField.Initializer init) {
+    protected void addStaticField(final int modifiers, final Class<?> type, final String name, final CtField.Initializer init) {
         addField(Modifier.STATIC | modifiers, type, name, init);
     }
 
-    /**
-     * @param modifiers
-     * @param type
-     * @param name
-     */
-    protected void addField(final int modifiers, final Class type, final String name) {
+    protected void addField(final int modifiers, final Class<?> type, final String name) {
         try {
             final CtField field = new CtField(toCtClass(type), name, enhancedClass);
             field.setModifiers(modifiers);
@@ -177,9 +119,6 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @param src
-     */
     protected void addField(final String src) {
         try {
             enhancedClass.addField(CtField.make(src, enhancedClass));
@@ -188,13 +127,7 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @param modifiers
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addField(final int modifiers, final Class type, final String name, final String init) {
+    protected void addField(final int modifiers, final Class<?> type, final String name, final String init) {
         try {
             final CtField field = new CtField(toCtClass(type), name, enhancedClass);
             field.setModifiers(modifiers);
@@ -204,13 +137,7 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @param modifiers
-     * @param type
-     * @param name
-     * @param init
-     */
-    protected void addField(final int modifiers, final Class type, final String name, final CtField.Initializer init) {
+    protected void addField(final int modifiers, final Class<?> type, final String name, final CtField.Initializer init) {
         try {
             final CtField field = new CtField(toCtClass(type), name, enhancedClass);
             field.setModifiers(modifiers);
@@ -220,132 +147,58 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @param name
-     * @param src
-     */
     protected void addMethod(final String name, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, null, null, src);
     }
 
-    /**
-     * @param name
-     * @param paramTypes
-     * @param src
-     */
-    protected void addMethod(final String name, final Class[] paramTypes, final String src) {
+    protected void addMethod(final String name, final Class<?>[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, paramTypes, null, src);
     }
 
-    /**
-     * @param name
-     * @param paramTypes
-     * @param exceptionTypes
-     * @param src
-     */
-    protected void addMethod(final String name, final Class[] paramTypes, Class[] exceptionTypes, final String src) {
+    protected void addMethod(final String name, final Class<?>[] paramTypes, Class<?>[] exceptionTypes, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, paramTypes, exceptionTypes, src);
     }
 
-    /**
-     * @param returnType
-     * @param name
-     * @param src
-     */
-    protected void addMethod(final Class returnType, final String name, final String src) {
+    protected void addMethod(final Class<?> returnType, final String name, final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, null, null, src);
     }
 
-    /**
-     * @param returnType
-     * @param name
-     * @param paramTypes
-     * @param src
-     */
-    protected void addMethod(final Class returnType, final String name, final Class[] paramTypes, final String src) {
+    protected void addMethod(final Class<?> returnType, final String name, final Class<?>[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, paramTypes, null, src);
     }
 
-    /**
-     * @param returnType
-     * @param name
-     * @param paramTypes
-     * @param exceptionTypes
-     * @param src
-     */
-    protected void addMethod(final Class returnType, final String name, final Class[] paramTypes, Class[] exceptionTypes,
+    protected void addMethod(final Class<?> returnType, final String name, final Class<?>[] paramTypes, Class<?>[] exceptionTypes,
             final String src) {
         addMethod(Modifier.PUBLIC, returnType, name, paramTypes, exceptionTypes, src);
     }
 
-    /**
-     * @param name
-     * @param src
-     */
     protected void addStaticMethod(final String name, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, void.class, name, null, null, src);
     }
 
-    /**
-     * @param name
-     * @param paramTypes
-     * @param src
-     */
-    protected void addStaticMethod(final String name, final Class[] paramTypes, final String src) {
+    protected void addStaticMethod(final String name, final Class<?>[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, void.class, name, paramTypes, null, src);
     }
 
-    /**
-     * @param name
-     * @param paramTypes
-     * @param exceptionTypes
-     * @param src
-     */
-    protected void addStaticMethod(final String name, final Class[] paramTypes, Class[] exceptionTypes, final String src) {
+    protected void addStaticMethod(final String name, final Class<?>[] paramTypes, Class<?>[] exceptionTypes, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, void.class, name, paramTypes, exceptionTypes, src);
     }
 
-    /**
-     * @param returnType
-     * @param name
-     * @param src
-     */
-    protected void addStaticMethod(final Class returnType, final String name, final String src) {
+    protected void addStaticMethod(final Class<?> returnType, final String name, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, returnType, name, null, null, src);
     }
 
-    /**
-     * @param returnType
-     * @param name
-     * @param paramTypes
-     * @param src
-     */
-    protected void addStaticMethod(final Class returnType, final String name, final Class[] paramTypes, final String src) {
+    protected void addStaticMethod(final Class<?> returnType, final String name, final Class<?>[] paramTypes, final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, returnType, name, paramTypes, null, src);
     }
 
-    /**
-     * @param returnType
-     * @param name
-     * @param paramTypes
-     * @param exceptionTypes
-     * @param src
-     */
-    protected void addStaticMethod(final Class returnType, final String name, final Class[] paramTypes, Class[] exceptionTypes,
+    protected void addStaticMethod(final Class<?> returnType, final String name, final Class<?>[] paramTypes, Class<?>[] exceptionTypes,
             final String src) {
         addMethod(Modifier.PUBLIC | Modifier.STATIC, returnType, name, paramTypes, exceptionTypes, src);
     }
 
-    /**
-     * @param modifiers
-     * @param returnType
-     * @param name
-     * @param paramTypes
-     * @param exceptionTypes
-     * @param src
-     */
-    protected void addMethod(final int modifiers, final Class returnType, final String name, final Class[] paramTypes,
-            Class[] exceptionTypes, final String src) {
+    protected void addMethod(final int modifiers, final Class<?> returnType, final String name, final Class<?>[] paramTypes,
+            Class<?>[] exceptionTypes, final String src) {
         try {
             final CtMethod ctMethod = CtNewMethod.make(modifiers, toCtClass(returnType), name, toCtClassArray(paramTypes),
                     toCtClassArray(exceptionTypes), src, enhancedClass);
@@ -355,9 +208,6 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @param src
-     */
     protected void addMethod(final String src) {
         try {
             enhancedClass.addMethod(CtNewMethod.make(src, enhancedClass));
@@ -366,19 +216,11 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
-    /**
-     * @param clazz
-     * @return 
-     */
-    protected CtClass toCtClass(final Class clazz) {
+    protected CtClass toCtClass(final Class<?> clazz) {
         return ClassPoolUtil.toCtClass(classPool, clazz);
     }
 
-    /**
-     * @param classes
-     * @return 
-     */
-    protected CtClass[] toCtClassArray(final Class[] classes) {
+    protected CtClass[] toCtClassArray(final Class<?>[] classes) {
         return ClassPoolUtil.toCtClassArray(classPool, classes);
     }
 }

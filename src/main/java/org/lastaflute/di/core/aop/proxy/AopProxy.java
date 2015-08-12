@@ -41,50 +41,26 @@ import org.lastaflute.di.util.LdiMethodUtil;
 public class AopProxy implements Serializable {
 
     static final long serialVersionUID = 0L;
-
     private static LaLogger logger = LaLogger.getLogger(AopProxy.class);
 
-    private final Class targetClass;
-
-    private final Class enhancedClass;
-
+    private final Class<?> targetClass;
+    private final Class<?> enhancedClass;
     private final Pointcut defaultPointcut;
-
     private final AspectWeaver weaver;
 
-    /**
-     * @param targetClass
-     * @param aspects
-     */
-    public AopProxy(final Class targetClass, final Aspect[] aspects) {
+    public AopProxy(final Class<?> targetClass, final Aspect[] aspects) {
         this(targetClass, aspects, null, null);
     }
 
-    /**
-     * @param targetClass
-     * @param aspects
-     * @param interTypes
-     */
-    public AopProxy(final Class targetClass, final Aspect[] aspects, final InterType[] interTypes) {
+    public AopProxy(final Class<?> targetClass, final Aspect[] aspects, final InterType[] interTypes) {
         this(targetClass, aspects, interTypes, null);
     }
 
-    /**
-     * @param targetClass
-     * @param aspects
-     * @param parameters
-     */
-    public AopProxy(final Class targetClass, final Aspect[] aspects, final Map parameters) {
+    public AopProxy(final Class<?> targetClass, final Aspect[] aspects, final Map<?, ?> parameters) {
         this(targetClass, aspects, null, parameters);
     }
 
-    /**
-     * @param targetClass
-     * @param aspects
-     * @param interTypes
-     * @param parameters
-     */
-    public AopProxy(final Class targetClass, final Aspect[] aspects, final InterType[] interTypes, final Map parameters) {
+    public AopProxy(final Class<?> targetClass, final Aspect[] aspects, final InterType[] interTypes, final Map<?, ?> parameters) {
         if ((aspects == null || aspects.length == 0) && (interTypes == null || interTypes.length == 0)) {
             throw new EmptyRuntimeException("aspects and interTypes");
         }
@@ -117,7 +93,7 @@ public class AopProxy implements Serializable {
                 continue;
             }
 
-            List interceptorList = new ArrayList();
+            List<MethodInterceptor> interceptorList = new ArrayList<MethodInterceptor>();
             for (int j = 0; j < aspects.length; ++j) {
                 Aspect aspect = aspects[j];
                 if (aspect.getPointcut().isApplied(method)) {
@@ -135,27 +111,16 @@ public class AopProxy implements Serializable {
         }
     }
 
-    /**
-     * @return
-     */
-    public Class getEnhancedClass() {
+    public Class<?> getEnhancedClass() {
         return enhancedClass;
     }
 
-    /**
-     * @return 
-     */
     public Object create() {
         return LdiClassUtil.newInstance(enhancedClass);
     }
 
-    /**
-     * @param argTypes
-     * @param args
-     * @return 
-     */
-    public Object create(Class[] argTypes, Object[] args) {
-        final Constructor constructor = LdiClassUtil.getConstructor(enhancedClass, argTypes);
+    public Object create(Class<?>[] argTypes, Object[] args) {
+        final Constructor<?> constructor = LdiClassUtil.getConstructor(enhancedClass, argTypes);
         return LdiConstructorUtil.newInstance(constructor, args);
     }
 
@@ -163,5 +128,4 @@ public class AopProxy implements Serializable {
         int mod = method.getModifiers();
         return !Modifier.isFinal(mod) && !Modifier.isStatic(mod);
     }
-
 }

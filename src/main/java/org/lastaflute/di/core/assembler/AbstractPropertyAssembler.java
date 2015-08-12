@@ -32,21 +32,11 @@ import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
  */
 public abstract class AbstractPropertyAssembler extends AbstractAssembler implements PropertyAssembler {
 
-    /**
-     * @param componentDef
-     */
     public AbstractPropertyAssembler(ComponentDef componentDef) {
         super(componentDef);
     }
 
-    /**
-     * @param beanDesc
-     * @param componentDef
-     * @param component
-     * @param names
-     * @throws EmptyRuntimeException
-     */
-    protected void bindExternally(final BeanDesc beanDesc, final ComponentDef componentDef, final Object component, final Set names)
+    protected void bindExternally(final BeanDesc beanDesc, final ComponentDef componentDef, final Object component, final Set<String> names)
             throws EmptyRuntimeException {
         final ExternalContext extCtx = componentDef.getContainer().getRoot().getExternalContext();
         if (extCtx == null) {
@@ -73,13 +63,7 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
         }
     }
 
-    /**
-     * @param name
-     * @param type
-     * @param extCtx
-     * @return 
-     */
-    protected Object getValue(final String name, final Class type, final ExternalContext extCtx) {
+    protected Object getValue(final String name, final Class<?> type, final ExternalContext extCtx) {
         if (type.isArray()) {
             Object[] values = getValues(name, extCtx);
             if (values != null) {
@@ -94,11 +78,6 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
         return getValue(name, extCtx);
     }
 
-    /**
-     * @param name
-     * @param extCtx
-     * @return 
-     */
     protected Object getValue(final String name, final ExternalContext extCtx) {
         Object value = extCtx.getRequestParameterMap().get(name);
         if (value != null) {
@@ -111,11 +90,6 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
         return extCtx.getRequestMap().get(name);
     }
 
-    /**
-     * @param name
-     * @param extCtx
-     * @return 
-     */
     protected Object[] getValues(final String name, final ExternalContext extCtx) {
         Object[] values = (Object[]) extCtx.getRequestParameterValuesMap().get(name);
         if (values != null && values.length > 0) {

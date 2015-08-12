@@ -29,7 +29,6 @@ import org.lastaflute.di.core.aop.proxy.AopProxy;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public abstract class AbstractInterceptor implements MethodInterceptor, Serializable {
 

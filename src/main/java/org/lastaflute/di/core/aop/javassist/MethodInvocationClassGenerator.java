@@ -19,14 +19,14 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-
 import org.lastaflute.di.core.aop.LaMethodInvocation;
 import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiMethodUtil;
+
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -34,46 +34,26 @@ import org.lastaflute.di.util.LdiMethodUtil;
 public class MethodInvocationClassGenerator extends AbstractGenerator {
 
     protected final String enhancedClassName;
-
     protected CtClass methodInvocationClass;
 
-    /**
-     * @param classPool
-     * @param invocationClassName
-     * @param targetClassName
-     */
     public MethodInvocationClassGenerator(final ClassPool classPool, final String invocationClassName, final String targetClassName) {
         super(classPool);
         this.enhancedClassName = targetClassName;
         this.methodInvocationClass = getAndRenameCtClass(MethodInvocationTemplate.class, invocationClassName);
     }
 
-    /**
-     * @param targetMethod
-     * @param invokeSuperMethodName
-     */
     public void createProceedMethod(final Method targetMethod, final String invokeSuperMethodName) {
         final CtMethod method = getDeclaredMethod(methodInvocationClass, "proceed", null);
         setMethodBody(method, createProceedMethodSource(targetMethod, enhancedClassName, invokeSuperMethodName));
     }
 
-    /**
-     * @param classLoader
-     * @return
-     */
-    public Class toClass(final ClassLoader classLoader) {
-        final Class clazz = toClass(classLoader, methodInvocationClass);
+    public Class<?> toClass(final ClassLoader classLoader) {
+        final Class<?> clazz = toClass(classLoader, methodInvocationClass);
         methodInvocationClass.detach();
         methodInvocationClass = null;
         return clazz;
     }
 
-    /**
-     * @param targetMethod
-     * @param enhancedClassName
-     * @param invokeSuperMethodName
-     * @return 
-     */
     public static String createProceedMethodSource(final Method targetMethod, final String enhancedClassName,
             final String invokeSuperMethodName) {
         final StringBuffer buf = new StringBuffer(1000);
@@ -86,12 +66,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         return new String(buf);
     }
 
-    /**
-     * @param targetMethod
-     * @param enhancedClassName
-     * @param invokeSuperMethodName
-     * @return 
-     */
     public static String createReturnStatement(final Method targetMethod, final String enhancedClassName,
             final String invokeSuperMethodName) {
         if (LdiMethodUtil.isAbstract(targetMethod)) {
@@ -101,66 +75,53 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         final String invokeSuper = "((" + enhancedClassName + ") target)." + invokeSuperMethodName + "("
                 + createArgumentString(targetMethod.getParameterTypes()) + ")";
 
-        final Class returnType = targetMethod.getReturnType();
+        final Class<?> returnType = targetMethod.getReturnType();
         if (returnType.equals(void.class)) {
             return invokeSuper + ";" + "return null;";
         }
         return "return " + toObject(returnType, invokeSuper) + ";";
     }
 
-    /**
-     * @param targetMethod
-     * @param enhancedClassName
-     * @return 
-     */
     public static String createThrowStatement(final Method targetMethod, final String enhancedClassName) {
         return "throw new java.lang.NoSuchMethodError(\"" + enhancedClassName + "." + targetMethod.getName() + "("
                 + createArgumentTypeString(targetMethod.getParameterTypes()) + ")\");";
 
     }
 
-    /**
-     * @param argTypes
-     * @return 
-     */
-    public static String createArgumentString(final Class[] argTypes) {
+    public static String createArgumentString(final Class<?>[] argTypes) {
         if (argTypes == null || argTypes.length == 0) {
             return "";
         }
 
-        final StringBuffer buf = new StringBuffer(1000);
+        final StringBuilder sb = new StringBuilder(1000);
         for (int i = 0; i < argTypes.length; ++i) {
-            buf.append(fromObject(argTypes[i], "arguments[" + i + "]")).append(", ");
+            sb.append(fromObject(argTypes[i], "arguments[" + i + "]")).append(", ");
         }
-        buf.setLength(buf.length() - 2);
-        return new String(buf);
+        sb.setLength(sb.length() - 2);
+        return new String(sb);
     }
 
-    /**
-     * @param argTypes
-     * @return 
-     */
-    public static String createArgumentTypeString(final Class[] argTypes) {
+    public static String createArgumentTypeString(final Class<?>[] argTypes) {
         if (argTypes == null || argTypes.length == 0) {
             return "";
         }
-
-        final StringBuffer buf = new StringBuffer(1000);
+        final StringBuilder sb = new StringBuilder(1000);
         for (int i = 0; i < argTypes.length; ++i) {
-            buf.append(LdiClassUtil.getSimpleClassName(argTypes[i])).append(", ");
+            sb.append(LdiClassUtil.getSimpleClassName(argTypes[i])).append(", ");
         }
-        buf.setLength(buf.length() - 2);
-        return new String(buf);
+        sb.setLength(sb.length() - 2);
+        return new String(sb);
     }
 
     public static class MethodInvocationTemplate implements LaMethodInvocation {
-        private static Class targetClass;
+
+        private static Class<?> targetClass;
 
         private static Method method;
 
         static MethodInterceptor[] interceptors;
 
-        private static Map parameters;
+        private static Map<String, Object> parameters;
 
         private Object target;
 
@@ -168,10 +129,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
 
         int interceptorsIndex;
 
-        /**
-         * @param target
-         * @param arguments
-         */
         public MethodInvocationTemplate(final Object target, final Object[] arguments) {
             this.target = target;
             this.arguments = arguments;
