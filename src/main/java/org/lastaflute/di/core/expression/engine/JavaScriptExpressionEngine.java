@@ -16,6 +16,7 @@
 package org.lastaflute.di.core.expression.engine;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,9 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         } else if (exp.startsWith(CAST_SET)) {
             filteredExp = exp.substring(CAST_SET.length());
             resolvedType = Set.class;
+        } else if (exp.startsWith("{") && exp.endsWith("}")) {
+            filteredExp = "[" + exp + "]";
+            resolvedType = MarkedMap.class;
         } else {
             filteredExp = exp;
             resolvedType = conversionType;
@@ -94,12 +98,15 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         return viaFirstNameResolvedEvaluate(filteredExp, contextMap, container, resolvedType);
     }
 
+    protected static class MarkedMap { // marker class
+    }
+
     protected Object viaFirstNameResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> conversionType) {
         final String filteredExp;
         String firstName = null;
         Object firstComponent = null;
-        if (!exp.startsWith(DQ) && exp.contains(".")) {
+        if (!exp.startsWith(DQ) && !exp.startsWith("[") && !exp.startsWith("{") && exp.contains(".")) {
             final String componentName = exp.substring(0, exp.indexOf("."));
             final LaContainer namedContainer = container.getRoot().findChild(componentName); // in all container
             if (namedContainer != null) { // first element is named container
@@ -258,6 +265,10 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
                 return strAry;
             } else if (Set.class.isAssignableFrom(conversionType)) { // e.g. (Set)["sea","land"]
                 return new LinkedHashSet<Object>(challengeList);
+            } else if (MarkedMap.class.isAssignableFrom(conversionType)) { // e.g. {"sea":"land"} as [{"sea":"land"}]
+                @SuppressWarnings("unchecked")
+                final Map<Object, Object> wrappedMap = (Map<Object, Object>) challengeList.get(0);
+                return new LinkedHashMap<Object, Object>(wrappedMap); // convert to normal map
             } else { // e.g. [1,2]
                 return challengeList;
             }
