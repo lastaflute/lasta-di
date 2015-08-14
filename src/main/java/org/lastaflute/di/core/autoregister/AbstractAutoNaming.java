@@ -32,14 +32,11 @@ import org.lastaflute.di.util.LdiStringUtil;
 public abstract class AbstractAutoNaming implements AutoNaming {
 
     protected static final String IMPL = "Impl";
-
     protected static final String BEAN = "Bean";
 
     protected boolean decapitalize = true;
-
-    protected Map customizedNames = new HashMap();
-
-    protected Map replaceRules = new LinkedHashMap();
+    protected Map<String, String> customizedNames = new HashMap<String, String>();
+    protected Map<Pattern, String> replaceRules = new LinkedHashMap<Pattern, String>();
 
     public AbstractAutoNaming() {
         addIgnoreClassSuffix(IMPL);
@@ -83,8 +80,8 @@ public abstract class AbstractAutoNaming implements AutoNaming {
     protected abstract String makeDefineName(final String packageName, final String shortClassName);
 
     protected String applyRule(String name) {
-        for (Iterator it = replaceRules.entrySet().iterator(); it.hasNext();) {
-            final Entry entry = (Entry) it.next();
+        for (Iterator<Entry<Pattern, String>> it = replaceRules.entrySet().iterator(); it.hasNext();) {
+            final Entry<Pattern, String> entry = (Entry<Pattern, String>) it.next();
             final Pattern pattern = (Pattern) entry.getKey();
             final String replacement = (String) entry.getValue();
             final Matcher matcher = pattern.matcher(name);

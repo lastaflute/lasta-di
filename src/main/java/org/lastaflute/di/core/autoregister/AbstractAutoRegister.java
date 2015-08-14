@@ -23,93 +23,53 @@ import org.lastaflute.di.core.LaContainer;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public abstract class AbstractAutoRegister {
 
     public static final String INIT_METHOD = "registerAll";
 
     private LaContainer container;
+    private final List<ClassPattern> classPatterns = new ArrayList<ClassPattern>();
+    private final List<ClassPattern> ignoreClassPatterns = new ArrayList<ClassPattern>();
 
-    private List classPatterns = new ArrayList();
-
-    private List ignoreClassPatterns = new ArrayList();
-
-    /**
-     * @return
-     */
     public LaContainer getContainer() {
         return container;
     }
 
-    /**
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
     }
 
-    /**
-     * @return
-     */
     public int getClassPatternSize() {
         return classPatterns.size();
     }
 
-    /**
-     * @param index
-     * @return
-     */
     public ClassPattern getClassPattern(int index) {
         return (ClassPattern) classPatterns.get(index);
     }
 
-    /**
-     * @param packageName
-     * @param shortClassNames
-     */
     public void addClassPattern(String packageName, String shortClassNames) {
-
         addClassPattern(new ClassPattern(packageName, shortClassNames));
     }
 
-    /**
-     * @param classPattern
-     */
     public void addClassPattern(ClassPattern classPattern) {
         classPatterns.add(classPattern);
     }
 
-    /**
-     * @param packageName
-     * @param shortClassNames
-     */
     public void addIgnoreClassPattern(String packageName, String shortClassNames) {
-
         addIgnoreClassPattern(new ClassPattern(packageName, shortClassNames));
     }
 
-    /**
-     * @param classPattern
-     */
     public void addIgnoreClassPattern(ClassPattern classPattern) {
         ignoreClassPatterns.add(classPattern);
     }
 
     public abstract void registerAll();
 
-    /**
-     * @param name
-     * @return 
-     */
     protected boolean hasComponentDef(String name) {
         return findComponentDef(name) != null;
     }
 
-    /**
-     * @param name
-     * @return {@link ComponentDef}
-     */
     protected ComponentDef findComponentDef(String name) {
         if (name == null) {
             return null;
@@ -124,11 +84,6 @@ public abstract class AbstractAutoRegister {
         return null;
     }
 
-    /**
-     * @param packageName
-     * @param shortClassName
-     * @return 
-     */
     protected boolean isIgnore(String packageName, String shortClassName) {
         if (ignoreClassPatterns.isEmpty()) {
             return false;
