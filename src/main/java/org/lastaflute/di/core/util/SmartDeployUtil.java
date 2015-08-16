@@ -31,9 +31,6 @@ import org.lastaflute.di.util.LdiFieldUtil;
  */
 public class SmartDeployUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected SmartDeployUtil() {
     }
 

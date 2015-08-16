@@ -17,9 +17,11 @@ package org.lastaflute.di.core.j2ee;
 
 import java.util.Hashtable;
 
+import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.NameAlreadyBoundException;
+import javax.naming.NameClassPair;
 import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -102,19 +104,19 @@ public class JndiContext implements Context {
         throw new OperationNotSupportedException("getNameParser");
     }
 
-    public NamingEnumeration list(final Name name) throws NamingException {
+    public NamingEnumeration<NameClassPair> list(final Name name) throws NamingException {
         throw new OperationNotSupportedException("list");
     }
 
-    public NamingEnumeration list(final String name) throws NamingException {
+    public NamingEnumeration<NameClassPair> list(final String name) throws NamingException {
         throw new OperationNotSupportedException("list");
     }
 
-    public NamingEnumeration listBindings(final Name name) throws NamingException {
+    public NamingEnumeration<Binding> listBindings(final Name name) throws NamingException {
         throw new OperationNotSupportedException("listBindings");
     }
 
-    public NamingEnumeration listBindings(final String name) throws NamingException {
+    public NamingEnumeration<Binding> listBindings(final String name) throws NamingException {
         throw new OperationNotSupportedException("listBindings");
     }
 

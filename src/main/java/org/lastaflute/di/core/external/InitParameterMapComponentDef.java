@@ -28,9 +28,6 @@ public class InitParameterMapComponentDef extends SimpleComponentDef {
         super(null, null, ContainerConstants.INIT_PARAM);
     }
 
-    /**
-     * @see org.lastaflute.di.core.ComponentDef#getComponent()
-     */
     public Object getComponent() {
         return getContainer().getRoot().getExternalContext().getInitParameterMap();
     }

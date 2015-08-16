@@ -15,43 +15,15 @@
  */
 package org.lastaflute.jta.core.xa;
 
-import javax.transaction.xa.XAResource;
-
 /**
- * {@link XAResource}のステータスを定義したインターフェースです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public interface XAResourceStatus {
 
-    /**
-     * None
-     */
     int RS_NONE = 0;
-
-    /**
-     * Active
-     */
     int RS_ACTIVE = 1;
-
-    /**
-     * Suspended
-     */
     int RS_SUSPENDED = 2;
-
-    /**
-     * Fail
-     */
     int RS_FAIL = 3;
-
-    /**
-     * Success
-     */
     int RS_SUCCESS = 4;
-
-    /**
-     * Prepared
-     */
     int RS_PREPARED = 5;
 }

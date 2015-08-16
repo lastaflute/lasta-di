@@ -83,13 +83,6 @@ public class HotdeployBehavior extends DefaultProvider {
         container.setClassLoader(hotdeployClassLoader);
     }
 
-    /**
-     * HOT deployを終了します。
-     * <p>
-     * {@link #keep}プロパティが<code>true</code>の場合、HOT deployクラスローダは破棄せず、 次の
-     * {@link #start()}～{@link #stop()}でも同じクラスローダが使用されます。
-     * </p>
-     */
     public void stop() {
         if (!keep) {
             finish();
@@ -137,12 +130,6 @@ public class HotdeployBehavior extends DefaultProvider {
         return cd;
     }
 
-    /**
-     * キャッシュにある {@link ComponentDef}を返します。
-     * 
-     * @param key
-     * @return {@link ComponentDef}
-     */
     protected ComponentDef getComponentDefFromCache(Object key) {
         return (ComponentDef) componentDefCache.get(key);
     }

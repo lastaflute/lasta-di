@@ -38,19 +38,19 @@ public interface ExternalContext {
 
     Map<String, Object> getApplicationMap();
 
-    Map getInitParameterMap();
+    Map<String, Object> getInitParameterMap();
 
     Map<String, Object> getSessionMap();
 
-    Map getRequestCookieMap();
+    Map<String, Object> getRequestCookieMap();
 
-    Map getRequestHeaderMap();
+    Map<String, Object> getRequestHeaderMap();
 
-    Map getRequestHeaderValuesMap();
+    Map<String, Object[]> getRequestHeaderValuesMap();
 
     Map<String, Object> getRequestMap();
 
-    Map getRequestParameterMap();
+    Map<String, Object> getRequestParameterMap();
 
-    Map getRequestParameterValuesMap();
+    Map<String, Object[]> getRequestParameterValuesMap();
 }

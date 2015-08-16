@@ -25,8 +25,6 @@ import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * WARM deploy時にコンポーネントを自動登録する{@link org.lastaflute.di.core.factory.LaContainerFactory.LaContainerProvider}の実装です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class WarmdeployBehavior extends DefaultProvider {
@@ -34,43 +32,20 @@ public class WarmdeployBehavior extends DefaultProvider {
     private static final LaLogger logger = LaLogger.getLogger(WarmdeployBehavior.class);
 
     private NamingConvention namingConvention;
-
     private ComponentCreator[] creators = new ComponentCreator[0];
 
-    /**
-     * 命名規則を返します。
-     * 
-     * @return 命名規則
-     */
     public NamingConvention getNamingConvention() {
         return namingConvention;
     }
 
-    /**
-     * 命名規則を設定します。
-     * 
-     * @param namingConvention
-     *            命名規則
-     */
     public void setNamingConvention(NamingConvention namingConvention) {
         this.namingConvention = namingConvention;
     }
 
-    /**
-     * コンポーネントクリエータの配列を返します。
-     * 
-     * @return コンポーネントクリエータの配列
-     */
     public ComponentCreator[] getCreators() {
         return creators;
     }
 
-    /**
-     * コンポーネントクリエータの配列を設定します。
-     * 
-     * @param creators
-     *            コンポーネントクリエータの配列
-     */
     public void setCreators(ComponentCreator[] creators) {
         this.creators = creators;
     }
@@ -85,7 +60,7 @@ public class WarmdeployBehavior extends DefaultProvider {
                 return null;
             }
             if (key instanceof Class) {
-                cd = createComponentDef((Class) key);
+                cd = createComponentDef((Class<?>) key);
             } else if (key instanceof String) {
                 cd = createComponentDef((String) key);
                 if (cd != null && !key.equals(cd.getComponentName())) {
@@ -104,18 +79,7 @@ public class WarmdeployBehavior extends DefaultProvider {
         }
     }
 
-    /**
-     * コンポーネント定義を作成します。
-     * <p>
-     * コンポーネントクリエータを順次呼び出し、コンポーネント定義が作成された場合はそれを返します。
-     * どのコンポーネントクリエータからもコンポーネント定義が作成されなかった場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @param componentClass
-     *            コンポーネントのクラス
-     * @return コンポーネント定義
-     */
-    protected ComponentDef createComponentDef(Class componentClass) {
+    protected ComponentDef createComponentDef(Class<?> componentClass) {
         for (int i = 0; i < creators.length; ++i) {
             ComponentCreator creator = creators[i];
             ComponentDef cd = creator.createComponentDef(componentClass);
@@ -126,17 +90,6 @@ public class WarmdeployBehavior extends DefaultProvider {
         return null;
     }
 
-    /**
-     * コンポーネント定義を作成します。
-     * <p>
-     * コンポーネントクリエータを順次呼び出し、コンポーネント定義が作成された場合はそれを返します。
-     * どのコンポーネントクリエータからもコンポーネント定義が作成されなかった場合は<code>null</code>を返します。
-     * </p>
-     * 
-     * @param componentName
-     *            コンポーネント名
-     * @return コンポーネント定義
-     */
     protected ComponentDef createComponentDef(String componentName) {
         for (int i = 0; i < creators.length; ++i) {
             ComponentCreator creator = creators[i];
@@ -147,5 +100,4 @@ public class WarmdeployBehavior extends DefaultProvider {
         }
         return null;
     }
-
 }

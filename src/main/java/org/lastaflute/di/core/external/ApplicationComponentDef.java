@@ -24,16 +24,11 @@ import org.lastaflute.di.core.meta.impl.SimpleComponentDef;
  * @author modified by jflute (originated in Seasar)
  */
 public class ApplicationComponentDef extends SimpleComponentDef {
-    /**
-     * {@link ApplicationComponentDef}を作成します。
-     */
+
     public ApplicationComponentDef() {
         super(Map.class, ContainerConstants.SERVLET_CONTEXT_NAME);
     }
 
-    /**
-     * @see org.lastaflute.di.core.ComponentDef#getComponent()
-     */
     public Object getComponent() {
         return getContainer().getRoot().getExternalContext().getApplication();
     }

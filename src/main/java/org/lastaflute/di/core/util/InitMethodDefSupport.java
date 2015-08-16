@@ -22,28 +22,16 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.InitMethodDef;
 
 /**
- * {@link InitMethodDef}を補助するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class InitMethodDefSupport {
 
-    private List methodDefs = new ArrayList();
-
+    private final List<InitMethodDef> methodDefs = new ArrayList<InitMethodDef>();
     private LaContainer container;
 
-    /**
-     * {@link InitMethodDefSupport}を作成します。
-     */
     public InitMethodDefSupport() {
     }
 
-    /**
-     * {@link InitMethodDef}を追加します。
-     * 
-     * @param methodDef
-     */
     public void addInitMethodDef(InitMethodDef methodDef) {
         if (container != null) {
             methodDef.setContainer(container);
@@ -51,30 +39,14 @@ public class InitMethodDefSupport {
         methodDefs.add(methodDef);
     }
 
-    /**
-     * {@link InitMethodDef}の数を返します。
-     * 
-     * @return {@link InitMethodDef}の数
-     */
     public int getInitMethodDefSize() {
         return methodDefs.size();
     }
 
-    /**
-     * {@link InitMethodDef}を返します。
-     * 
-     * @param index
-     * @return {@link InitMethodDef}
-     */
     public InitMethodDef getInitMethodDef(int index) {
         return (InitMethodDef) methodDefs.get(index);
     }
 
-    /**
-     * {@link LaContainer}を返します。
-     * 
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
         for (int i = 0; i < getInitMethodDefSize(); ++i) {
