@@ -49,7 +49,7 @@ public class LdiNumberConversionUtil {
         return o;
     }
 
-    public static Object convertPrimitiveWrapper(Class type, Object o) {
+    public static Object convertPrimitiveWrapper(Class<?> type, Object o) {
         if (type == int.class) {
             Integer i = LdiIntegerConversionUtil.toInteger(o);
             if (i != null) {

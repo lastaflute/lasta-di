@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class CaseInsensitiveMap extends ArrayMap {
+public class CaseInsensitiveMap extends ArrayMap<String, Object> {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,13 +41,14 @@ public class CaseInsensitiveMap extends ArrayMap {
         return super.get(convertKey(key));
     }
 
-    public final Object put(Object key, Object value) {
+    public final Object put(String key, Object value) {
         return super.put(convertKey(key), value);
     }
 
-    public final void putAll(Map map) {
-        for (Iterator i = map.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
+    public final void putAll(Map<? extends String, ? extends Object> map) {
+        for (Iterator<?> i = map.entrySet().iterator(); i.hasNext();) {
+            @SuppressWarnings("unchecked")
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) i.next();
             put(convertKey(entry.getKey()), entry.getValue());
         }
     }
@@ -63,5 +64,4 @@ public class CaseInsensitiveMap extends ArrayMap {
     private static String convertKey(Object key) {
         return ((String) key).toLowerCase();
     }
-
 }

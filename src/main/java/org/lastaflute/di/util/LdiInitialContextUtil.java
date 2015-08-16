@@ -23,25 +23,13 @@ import javax.naming.NamingException;
 import org.lastaflute.di.exception.NamingRuntimeException;
 
 /**
- * {@link javax.naming.InitialContext 初期コンテキスト}を扱うためのユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiInitialContextUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiInitialContextUtil() {
     }
 
-    /**
-     * 初期コンテキストを作成して返します。
-     * 
-     * @return 初期コンテキスト
-     * @throws org.lastaflute.di.exception.NamingRuntimeException
-     *             初期コンテキストを作成できなかった場合にスローされます
-     */
     public static InitialContext create() {
         try {
             return new InitialContext();
@@ -50,16 +38,7 @@ public class LdiInitialContextUtil {
         }
     }
 
-    /**
-     * 指定した環境を使用して初期コンテキストを作成して返します。
-     * 
-     * @param env
-     *            初期コンテキストの作成に使用される環境。<code>mull</code>は空の環境を示す
-     * @return 初期コンテキスト
-     * @throws NamingRuntimeException
-     *             初期コンテキストを作成できなかった場合にスローされます
-     */
-    public static InitialContext create(final Hashtable env) {
+    public static InitialContext create(final Hashtable<?, ?> env) {
         try {
             return new InitialContext(env);
         } catch (final NamingException ex) {
@@ -67,17 +46,6 @@ public class LdiInitialContextUtil {
         }
     }
 
-    /**
-     * 指定した初期コンテキストから指定されたオブジェクトを取得して返します。
-     * 
-     * @param ctx
-     *            初期コンテキスト
-     * @param jndiName
-     *            検索するオブジェクトの名前
-     * @return <code>jndiName</code>にバインドされているオブジェクト
-     * @throws NamingRuntimeException
-     *             初期コンテキストを作成できなかった場合にスローされます
-     */
     public static Object lookup(final InitialContext ctx, final String jndiName) throws NamingRuntimeException {
         try {
             return ctx.lookup(jndiName);
@@ -85,5 +53,4 @@ public class LdiInitialContextUtil {
             throw new NamingRuntimeException(ex);
         }
     }
-
 }

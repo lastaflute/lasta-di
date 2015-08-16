@@ -20,30 +20,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * {@link Modifier}用のユーティリティクラスです。
- * 
- * @author shot
- * 
+ * @author modified by jflute (originated in Seasar)
  */
 public class LdiModifierUtil {
 
     static final int BRIDGE = 0x00000040;
-
     static final int SYNTHETIC = 0x00001000;
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiModifierUtil() {
     }
 
-    /**
-     * <code>public</code>かどうか返します。
-     * 
-     * @param m
-     *            メソッド
-     * @return パブリックかどうか
-     */
     public static boolean isPublic(Method m) {
         return isPublic(m.getModifiers());
     }
@@ -52,79 +38,30 @@ public class LdiModifierUtil {
         return isPublic(f.getModifiers());
     }
 
-    /**
-     * <code>public</code>,<code>static</code>,<code>final</code>かどうか返します。
-     * 
-     * @param f
-     *            フィールド
-     * @return <code>public</code>,<code>static</code>,<code>final</code>かどうか
-     */
     public static boolean isPublicStaticFinalField(Field f) {
         return isPublicStaticFinal(f.getModifiers());
     }
 
-    /**
-     * <code>public</code>,<code>static</code>,<code>final</code>かどうか返します。
-     * 
-     * @param modifier
-     *            モディファイヤ
-     * @return <code>public</code>,<code>static</code>,<code>final</code>かどうか
-     */
     public static boolean isPublicStaticFinal(int modifier) {
         return isPublic(modifier) && isStatic(modifier) && isFinal(modifier);
     }
 
-    /**
-     * <code>public</code>かどうか返します。
-     * 
-     * @param modifier
-     *            モディファイヤ
-     * @return <code>public</code>かどうか
-     */
     public static boolean isPublic(int modifier) {
         return Modifier.isPublic(modifier);
     }
 
-    /**
-     * <code>abstract</code>かどうか返します。
-     * 
-     * @param clazz
-     *            クラス
-     * @return <code>abstract</code>かどうか
-     */
-    public static boolean isAbstract(Class clazz) {
+    public static boolean isAbstract(Class<?> clazz) {
         return isAbstract(clazz.getModifiers());
     }
 
-    /**
-     * <code>abstract</code>かどうか返します。
-     * 
-     * @param modifier
-     *            モディファイヤ
-     * @return <code>abstract</code>かどうか
-     */
     public static boolean isAbstract(int modifier) {
         return Modifier.isAbstract(modifier);
     }
 
-    /**
-     * <code>static</code>かどうか返します。
-     * 
-     * @param modifier
-     *            モディファイヤ
-     * @return <code>static</code>かどうか
-     */
     public static boolean isStatic(int modifier) {
         return Modifier.isStatic(modifier);
     }
 
-    /**
-     * <code>final</code>かどうか返します。
-     * 
-     * @param modifier
-     *            モディファイヤ
-     * @return <code>final</code>かどうか
-     */
     public static boolean isFinal(int modifier) {
         return Modifier.isFinal(modifier);
     }
@@ -137,36 +74,14 @@ public class LdiModifierUtil {
         return isFinal(field.getModifiers());
     }
 
-    /**
-     * <code>transient</code>かどうか返します。
-     * 
-     * @param field
-     *            フィールド
-     * @return <code>transient</code>かどうか
-     * @see #isTransient(int)
-     */
     public static boolean isTransient(Field field) {
         return isTransient(field.getModifiers());
     }
 
-    /**
-     * <code>transient</code>かどうか返します。
-     * 
-     * @param modifier
-     *            モディファイヤ
-     * @return <code>transient</code>かどうか
-     */
     public static boolean isTransient(int modifier) {
         return Modifier.isTransient(modifier);
     }
 
-    /**
-     * インスタンスフィールドかどうかを返します。
-     * 
-     * @param field
-     *            フィールド
-     * @return インスタンスフィールドかどうか
-     */
     public static boolean isInstanceField(Field field) {
         int m = field.getModifiers();
         return !isStatic(m) && !isFinal(m);

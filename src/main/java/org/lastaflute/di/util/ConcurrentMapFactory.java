@@ -21,23 +21,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.lastaflute.di.util.LdiMapUtil.MapFactory;
 
 /**
- * {@link java.util.concurrent.ConcurrentHashMap}を作成するファクトリの実装です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
-@SuppressWarnings("unchecked")
 public class ConcurrentMapFactory implements MapFactory {
 
-    public Map create() {
-        return new ConcurrentHashMap();
+    public <KEY, VALUE> Map<KEY, VALUE> create() {
+        return new ConcurrentHashMap<KEY, VALUE>();
     }
 
-    public Map create(final int initialCapacity) {
-        return new ConcurrentHashMap(initialCapacity);
+    public <KEY, VALUE> Map<KEY, VALUE> create(final int initialCapacity) {
+        return new ConcurrentHashMap<KEY, VALUE>(initialCapacity);
     }
 
-    public Map create(final int initialCapacity, final float loadFactor) {
-        return new ConcurrentHashMap(initialCapacity, loadFactor, initialCapacity);
+    public <KEY, VALUE> Map<KEY, VALUE> create(final int initialCapacity, final float loadFactor) {
+        return new ConcurrentHashMap<KEY, VALUE>(initialCapacity, loadFactor, initialCapacity);
     }
-
 }

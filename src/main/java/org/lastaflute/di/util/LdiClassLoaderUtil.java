@@ -25,21 +25,14 @@ import org.lastaflute.di.exception.ClassNotFoundRuntimeException;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link ClassLoader}を扱うためのユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class LdiClassLoaderUtil {
 
     private static final Method findLoadedClassMethod = getFindLoadedClassMethod();
-
     private static final Method defineClassMethod = getDefineClassMethod();
-
     private static final Method definePackageMethod = getDefinePackageMethod();
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiClassLoaderUtil() {
     }
 
@@ -63,7 +56,7 @@ public abstract class LdiClassLoaderUtil {
         return method;
     }
 
-    public static ClassLoader getClassLoader(final Class targetClass) {
+    public static ClassLoader getClassLoader(final Class<?> targetClass) {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         if (contextClassLoader != null) {
             return contextClassLoader;
@@ -92,49 +85,18 @@ public abstract class LdiClassLoaderUtil {
         throw new IllegalStateException("Not found the class loader: " + targetClass);
     }
 
-    /**
-     * コンテキストクラスローダから指定された名前を持つすべてのリソースを探します。
-     * 
-     * @param name
-     *            リソース名
-     * @return リソースに対する URL
-     *         オブジェクトの列挙。リソースが見つからなかった場合、列挙は空になる。クラスローダがアクセスを持たないリソースは列挙に入らない
-     * @see java.lang.ClassLoader#getResources(String)
-     */
-    public static Iterator getResources(final String name) {
+    public static Iterator<URL> getResources(final String name) {
         return getResources(Thread.currentThread().getContextClassLoader(), name);
     }
 
-    /**
-     * {@link #getClassLoader(Class)}が返すクラスローダから指定された名前を持つすべてのリソースを探します。
-     * 
-     * @param targetClass
-     *            ターゲット・クラス
-     * @param name
-     *            リソース名
-     * @return リソースに対する URL
-     *         オブジェクトの列挙。リソースが見つからなかった場合、列挙は空になる。クラスローダがアクセスを持たないリソースは列挙に入らない
-     * @see java.lang.ClassLoader#getResources(String)
-     */
-    public static Iterator getResources(final Class targetClass, final String name) {
+    public static Iterator<URL> getResources(final Class<?> targetClass, final String name) {
         return getResources(getClassLoader(targetClass), name);
     }
 
-    /**
-     * 指定のクラスローダから指定された名前を持つすべてのリソースを探します。
-     * 
-     * @param loader
-     *            クラスローダ
-     * @param name
-     *            リソース名
-     * @return リソースに対する URL
-     *         オブジェクトの列挙。リソースが見つからなかった場合、列挙は空になる。クラスローダがアクセスを持たないリソースは列挙に入らない
-     * @see java.lang.ClassLoader#getResources(String)
-     */
-    public static Iterator getResources(final ClassLoader loader, final String name) {
+    public static Iterator<URL> getResources(final ClassLoader loader, final String name) {
         try {
-            final Enumeration e = loader.getResources(name);
-            return new EnumerationIterator(e);
+            final Enumeration<URL> e = loader.getResources(name);
+            return new EnumerationIterator<URL>(e);
         } catch (final IOException e) {
             throw new IORuntimeException(e);
         }
@@ -159,20 +121,9 @@ public abstract class LdiClassLoaderUtil {
         return false;
     }
 
-    /**
-     * 指定のクラスローダまたはその祖先の暮らすローダが、 このバイナリ名を持つクラスの起動ローダとしてJava仮想マシンにより記録されていた場合は、
-     * 指定されたバイナリ名を持つクラスを返します。 記録されていなかった場合は<code>null</code>を返します。
-     * 
-     * @param classLoader
-     *            クラスローダ
-     * @param className
-     *            クラスのバイナリ名
-     * @return <code>Class</code>オブジェクト。クラスがロードされていない場合は<code>null</code>
-     * @see java.lang.ClassLoader#findLoadedClass(String)
-     */
-    public static Class findLoadedClass(final ClassLoader classLoader, final String className) {
+    public static Class<?> findLoadedClass(final ClassLoader classLoader, final String className) {
         for (ClassLoader loader = classLoader; loader != null; loader = loader.getParent()) {
-            final Class clazz = (Class) LdiMethodUtil.invoke(findLoadedClassMethod, loader, new Object[] { className });
+            final Class<?> clazz = (Class<?>) LdiMethodUtil.invoke(findLoadedClassMethod, loader, new Object[] { className });
             if (clazz != null) {
                 return clazz;
             }
@@ -180,77 +131,23 @@ public abstract class LdiClassLoaderUtil {
         return null;
     }
 
-    /**
-     * バイトの配列を<code>Class</code>クラスのインスタンスに変換します。
-     * 
-     * @param classLoader
-     *            バイナリデータから<code>Class</code>クラスのインスタンスに変換するクラスローダ
-     * @param className
-     *            クラスのバイナリ名
-     * @param bytes
-     *            クラスデータを構成するバイト列
-     * @param offset
-     *            クラスデータ<code>bytes</code>の開始オフセット
-     * @param length
-     *            クラスデータの長さ
-     * @return 指定されたクラスデータから作成された<code>Class</code>オブジェクト
-     * @see java.lang.ClassLoader#defineClass(String, byte[], int, int)
-     */
-    public static Class defineClass(final ClassLoader classLoader, final String className, final byte[] bytes, final int offset,
+    public static Class<?> defineClass(final ClassLoader classLoader, final String className, final byte[] bytes, final int offset,
             final int length) {
-        return (Class) LdiMethodUtil.invoke(defineClassMethod, classLoader,
+        return (Class<?>) LdiMethodUtil.invoke(defineClassMethod, classLoader,
                 new Object[] { className, bytes, new Integer(offset), new Integer(length) });
     }
 
-    /**
-     * 指定の<code>ClassLoader</code>で名前を使ってパッケージを定義します。
-     * 
-     * @param classLoader
-     *            パッケージを定義するクラスローダ
-     * @param name
-     *            パッケージ名
-     * @param specTitle
-     *            仕様のタイトル
-     * @param specVersion
-     *            仕様のバージョン
-     * @param specVendor
-     *            仕様のベンダー
-     * @param implTitle
-     *            実装のタイトル
-     * @param implVersion
-     *            実装のバージョン
-     * @param implVendor
-     *            実装のベンダー
-     * @param sealBase
-     *            <code>null</code>でない場合、このパッケージは指定されたコードソース<code>URL</code>オブジェクトを考慮してシールされる。そうでない場合、パッケージはシールされない
-     * @return 新しく定義された<code>Package</code>オブジェクト
-     * @see java.lang.ClassLoader#definePackage(String, String, String, String,
-     *      String, String, String, URL)
-     */
     public static Package definePackage(final ClassLoader classLoader, final String name, final String specTitle, final String specVersion,
             final String specVendor, final String implTitle, final String implVersion, final String implVendor, final URL sealBase) {
         return (Package) LdiMethodUtil.invoke(definePackageMethod, classLoader,
                 new Object[] { name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase });
     }
 
-    /**
-     * 指定されたバイナリ名を持つクラスをロードします。
-     * 
-     * @param loader
-     *            クラスローダ
-     * @param className
-     *            クラスのバイナリ名
-     * @return 結果の<code>Class</code>オブジェクト
-     * @throws ClassNotFoundRuntimeException
-     *             クラスが見つからなかった場合
-     * @see java.lang.ClassLoader#loadClass(String)
-     */
-    public static Class loadClass(final ClassLoader loader, final String className) {
+    public static Class<?> loadClass(final ClassLoader loader, final String className) {
         try {
             return loader.loadClass(className);
         } catch (final ClassNotFoundException e) {
             throw new ClassNotFoundRuntimeException(e);
         }
     }
-
 }

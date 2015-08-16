@@ -25,41 +25,22 @@ public class LdiBigDecimalConversionUtil {
 
     protected static final String TIGER_NORMALIZER_CLASS_NAME = TigerBigDecimalConversion.class.getName();
 
-    /**
-     * デフォルトのNormalizerです。
-     */
     protected static BigDecimalNormalizer normalizer = new DefaultNormalizer();
 
     static {
         try {
-            final Class clazz = Class.forName(TIGER_NORMALIZER_CLASS_NAME);
+            final Class<?> clazz = Class.forName(TIGER_NORMALIZER_CLASS_NAME);
             normalizer = (BigDecimalNormalizer) clazz.newInstance();
         } catch (Exception ignore) {}
     }
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiBigDecimalConversionUtil() {
     }
 
-    /**
-     * {@link BigDecimal}に変換します。
-     * 
-     * @param o
-     * @return {@link BigDecimal}に変換されたデータ
-     */
     public static BigDecimal toBigDecimal(Object o) {
         return toBigDecimal(o, null);
     }
 
-    /**
-     * {@link BigDecimal}に変換します。
-     * 
-     * @param o
-     * @param pattern
-     * @return {@link BigDecimal}に変換されたデータ
-     */
     public static BigDecimal toBigDecimal(Object o, String pattern) {
         if (o == null) {
             return null;
@@ -81,45 +62,19 @@ public class LdiBigDecimalConversionUtil {
         }
     }
 
-    /**
-     * {@link BigDecimal}を文字列に変換します。
-     * 
-     * @param dec
-     * @return 文字列に変換されたデータ
-     */
     public static String toString(BigDecimal dec) {
         return normalizer.toString(dec);
     }
 
-    /**
-     * {@link BigDecimal}を正規化するためのインターフェースです。
-     * これは、Java5からtoString()のロジックが変わったことに対応するためです。
-     * 
-     */
     public interface BigDecimalNormalizer {
 
-        /**
-         * 正規化します。
-         * 
-         * @param dec
-         * @return 正規化された{@link BigDecimal}
-         */
         BigDecimal normalize(BigDecimal dec);
 
-        /**
-         * {@link BigDecimal}を文字列に変換します。
-         * 
-         * @param dec
-         * @return
-         */
         String toString(BigDecimal dec);
     }
 
-    /**
-     * デフォルトの{@link LdiBigDecimalConversionUtil.BigDecimalNormalizer}の実装クラスです。
-     * 
-     */
     public static class DefaultNormalizer implements BigDecimalNormalizer {
+
         public BigDecimal normalize(final BigDecimal dec) {
             return dec;
         }

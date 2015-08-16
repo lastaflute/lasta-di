@@ -23,35 +23,15 @@ import org.lastaflute.di.exception.InstantiationRuntimeException;
 import org.lastaflute.di.exception.InvocationTargetRuntimeException;
 
 /**
- * {@link Constructor}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiConstructorUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiConstructorUtil() {
     }
 
-    /**
-     * 新しいインスタンスを作成します。
-     * 
-     * @param constructor
-     * @param args
-     * @return
-     * @throws InstantiationRuntimeException
-     *             {@link InstantiationException}が起こった場合
-     * @throws IllegalAccessRuntimeException
-     *             {@link IllegalAccessException}が起こった場合
-     * @throws InvocationTargetRuntimeException
-     *             {@link InvocationTargetException}が起こった場合
-     */
-    public static Object newInstance(Constructor constructor, Object[] args)
+    public static Object newInstance(Constructor<?> constructor, Object[] args)
             throws InstantiationRuntimeException, IllegalAccessRuntimeException, InvocationTargetRuntimeException {
-
         try {
             return constructor.newInstance(args);
         } catch (InstantiationException ex) {

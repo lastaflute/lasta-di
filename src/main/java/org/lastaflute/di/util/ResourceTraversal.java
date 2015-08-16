@@ -26,65 +26,21 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * リソースをトラバースするためのクラスです。
- * <p>
- * このクラスを直接使うより、{@link LdiResourcesUtil}を使用してください。
- * </p>
- * 
- * @author taedium
- * @see LdiResourcesUtil
+ * @author modified by jflute (originated in Seasar)
  */
 public class ResourceTraversal {
 
-    /**
-     * リソースを処理するインターフェースです。
-     * 
-     */
     public interface ResourceHandler {
-        /**
-         * リソースを処理します。
-         * 
-         * @param path
-         * @param is
-         */
         void processResource(String path, InputStream is);
     }
 
-    /**
-     * インスタンスを構築します。
-     */
     protected ResourceTraversal() {
     }
 
-    /**
-     * ファイルシステムに含まれるリソースをトラバースします。
-     * 
-     * @param rootDir
-     *            ルートディレクトリ
-     * @param handler
-     *            リソースを処理するハンドラ
-     */
     public static void forEach(final File rootDir, final ResourceHandler handler) {
         forEach(rootDir, null, handler);
     }
 
-    /**
-     * ファイルシステムに含まれるリソースをトラバースします。
-     * <p>
-     * ルートディレクトリ以下のリソースのうち、ベースディレクトリで始まるパスを持つリソースがトラバースの対象となります。
-     * リソースを処理するハンドラには、ルートディレクトリからの相対パスが渡されます。 例えばルートディレクトリが
-     * <code>/aaa/bbb</code>で、ベースディレクトリが<code>ccc/ddd</code>の場合、
-     * <code>/aaa/bbb/ccc/ddd/eee.txt</code>というリソースが存在すると、 ハンドラには
-     * <code>ccc/ddd/eee.txt</code>というパスが渡されます。
-     * </p>
-     * 
-     * @param rootDir
-     *            ルートディレクトリ
-     * @param baseDirectory
-     *            ベースディレクトリ
-     * @param handler
-     *            リソースを処理するハンドラ
-     */
     public static void forEach(final File rootDir, final String baseDirectory, final ResourceHandler handler) {
         final File baseDir = getBaseDir(rootDir, baseDirectory);
         if (baseDir.exists()) {
@@ -92,39 +48,15 @@ public class ResourceTraversal {
         }
     }
 
-    /**
-     * Jarファイル形式のファイルに含まれるリソースをトラバースします。
-     * 
-     * @param jarFile
-     *            jarファイル形式のファイル
-     * @param handler
-     *            リソースを処理するハンドラ
-     */
     public static void forEach(final JarFile jarFile, final ResourceHandler handler) {
         forEach(jarFile, "", handler);
     }
 
-    /**
-     * Jarファイル形式のファイルに含まれるリソースをトラバースします。
-     * <p>
-     * Jarファイル内のリソースのうち、接頭辞で始まるパスを持つリソースがトラバースの対象となります。
-     * リソースを処理するハンドラには、接頭辞を除くエントリ名が渡されます。 例えば接頭辞が <code>/aaa/bbb/</code>
-     * で、Jarファイル内に <code>/aaa/bbb/ccc/ddd/eee.txt</code>というリソースが存在すると、 ハンドラには
-     * <code>ccc/ddd/eee.txt</code>というパスが渡されます。
-     * </p>
-     * 
-     * @param jarFile
-     *            jarファイル形式のファイル
-     * @param prefix
-     *            トラバースするリソースの名前が含む接頭辞。スラッシュ('/')で終了していなければなりません。
-     * @param handler
-     *            リソースを処理するハンドラ
-     */
     public static void forEach(final JarFile jarFile, final String prefix, final ResourceHandler handler) {
         final int pos = prefix.length();
-        final Enumeration enumeration = jarFile.entries();
+        final Enumeration<JarEntry> enumeration = jarFile.entries();
         while (enumeration.hasMoreElements()) {
-            final JarEntry entry = (JarEntry) enumeration.nextElement();
+            final JarEntry entry = enumeration.nextElement();
             if (!entry.isDirectory()) {
                 final String entryName = entry.getName().replace('\\', '/');
                 if (!entryName.startsWith(prefix)) {
@@ -140,34 +72,10 @@ public class ResourceTraversal {
         }
     }
 
-    /**
-     * ZIPファイル形式の入力ストリームに含まれるリソースをトラバースします。
-     * 
-     * @param zipInputStream
-     *            ZIPファイル形式の入力ストリーム
-     * @param handler
-     *            リソースを処理するハンドラ
-     */
     public static void forEach(final ZipInputStream zipInputStream, final ResourceHandler handler) {
         forEach(zipInputStream, "", handler);
     }
 
-    /**
-     * ZIPファイル形式の入力ストリームに含まれるリソースをトラバースします。
-     * <p>
-     * 入力ストリーム内のリソースのうち、接頭辞で始まるパスを持つリソースがトラバースの対象となります。
-     * リソースを処理するハンドラには、接頭辞を除くエントリ名が渡されます。 例えば接頭辞が <code>/aaa/bbb/</code>
-     * で、入力ストリーム内に <code>/aaa/bbb/ccc/ddd/eee.txt</code>というリソースが存在すると、 ハンドラには
-     * <code>ccc/ddd/eee.txt</code>というパスが渡されます。
-     * </p>
-     * 
-     * @param zipInputStream
-     *            ZIPファイル形式の入力ストリーム
-     * @param prefix
-     *            トラバースするリソースの名前が含む接頭辞。スラッシュ('/')で終了していなければなりません。
-     * @param handler
-     *            リソースを処理するハンドラ
-     */
     public static void forEach(final ZipInputStream zipInputStream, final String prefix, final ResourceHandler handler) {
         final int pos = prefix.length();
         ZipEntry entry = null;

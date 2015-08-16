@@ -26,31 +26,15 @@ public class LdiMapUtil {
 
     protected static final MapFactory factory = getMapFactory();
 
-    @SuppressWarnings("unchecked")
     public static <KEY, VALUE> Map<KEY, VALUE> createHashMap() { // thread safe
         return factory.create();
     }
 
-    @SuppressWarnings("unchecked")
     public static <KEY, VALUE> Map<KEY, VALUE> createHashMap(final int initialCapacity) { // thread safe
         return factory.create(initialCapacity);
     }
 
-    /**
-     * スレッドセーフな{@link java.util.HashMap}を作成して返します。
-     * <p>
-     * 実行環境がJava5の場合は{@link java.util.concurrent.ConcurrentHashMap}を、それ以外の場合は
-     * {@link java.util.CollectionUtil#synchronizedMap}でラップされた{@link java.util.HashMap}を
-     * 返します。
-     * </p>
-     * 
-     * @param initialCapacity
-     *            初期容量
-     * @param loadFactor
-     *            負荷係数
-     * @return スレッドセーフな{@link java.util.HashMap}
-     */
-    public static Map createHashMap(final int initialCapacity, final float loadFactor) {
+    public static <KEY, VALUE> Map<KEY, VALUE> createHashMap(final int initialCapacity, final float loadFactor) {
         return factory.create(initialCapacity, loadFactor);
     }
 
@@ -63,58 +47,32 @@ public class LdiMapUtil {
     }
 
     /**
-     * スレッドセーフな{@link java.util.HashMap}のファクトリです。
-     * 
      * @author modified by jflute (originated in Seasar)
      */
     interface MapFactory {
-        /**
-         * デフォルトの初期容量と負荷係数で{@link java.util.HashMap}を作成して返します。
-         * 
-         * @return スレッドセーフな{@link java.util.HashMap}
-         */
-        Map create();
 
-        /**
-         * 指定されて初期容量とデフォルトの負荷係数で{@link java.util.HashMap}を作成して返します。
-         * 
-         * @param initialCapacity
-         * @return スレッドセーフな{@link java.util.HashMap}
-         */
-        Map create(int initialCapacity);
+        <KEY, VALUE> Map<KEY, VALUE> create();
 
-        /**
-         * 指定された初期容量と負荷係数で{@link java.util.HashMap}を作成して返します。
-         * 
-         * @param initialCapacity
-         *            初期容量
-         * @param loadFactor
-         *            負荷係数
-         * @return スレッドセーフな{@link java.util.HashMap}
-         */
-        Map create(int initialCapacity, float loadFactor);
+        <KEY, VALUE> Map<KEY, VALUE> create(int initialCapacity);
+
+        <KEY, VALUE> Map<KEY, VALUE> create(int initialCapacity, float loadFactor);
     }
 
     /**
-     * {@link java.util.CollectionUtil#synchronizedMap}でラップされた{@link java.util.HashMap}を
-     * 作成するファクトリの実装です。
-     * 
      * @author modified by jflute (originated in Seasar)
      */
     public static class SynchronizedMapFactory implements MapFactory {
 
-        public Map create() {
-            return Collections.synchronizedMap(new HashMap());
+        public <KEY, VALUE> Map<KEY, VALUE> create() {
+            return Collections.synchronizedMap(new HashMap<KEY, VALUE>());
         }
 
-        public Map create(final int initialCapacity) {
-            return Collections.synchronizedMap(new HashMap(initialCapacity));
+        public <KEY, VALUE> Map<KEY, VALUE> create(final int initialCapacity) {
+            return Collections.synchronizedMap(new HashMap<KEY, VALUE>(initialCapacity));
         }
 
-        public Map create(final int initialCapacity, final float loadFactor) {
-            return Collections.synchronizedMap(new HashMap(initialCapacity, loadFactor));
+        public <KEY, VALUE> Map<KEY, VALUE> create(final int initialCapacity, final float loadFactor) {
+            return Collections.synchronizedMap(new HashMap<KEY, VALUE>(initialCapacity, loadFactor));
         }
-
     }
-
 }

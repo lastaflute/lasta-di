@@ -23,55 +23,22 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * クラスを横断して処理するためのハンドラです。
- * <p>
- * このクラスを直接使うより、{@link LdiResourcesUtil}を使用してください。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
- * @see LdiResourcesUtil
  */
 public class ClassTraversal {
+
     private static final String CLASS_SUFFIX = ".class";
-
     private static final String WAR_FILE_EXTENSION = ".war";
-
     private static final String WEB_INF_CLASSES_PATH = "WEB-INF/classes/";
 
-    /**
-     * クラスを横断して処理するためのハンドラです。
-     * 
-     */
     public interface ClassHandler {
-        /**
-         * クラスを処理します。
-         * 
-         * @param packageName
-         * @param shortClassName
-         */
         void processClass(String packageName, String shortClassName);
     }
 
-    /**
-     * rootディレクトリ配下を処理します。
-     * 
-     * @param rootDir
-     * @param handler
-     */
     public static void forEach(final File rootDir, final ClassHandler handler) {
         forEach(rootDir, null, handler);
     }
 
-    /**
-     * ファイルシステムに含まれるクラスをトラバースします。
-     * 
-     * @param rootDir
-     *            ルートディレクトリ
-     * @param rootPackage
-     *            ルートパッケージ
-     * @param handler
-     *            クラスを処理するハンドラ
-     */
     public static void forEach(final File rootDir, final String rootPackage, final ClassHandler handler) {
         final File packageDir = getPackageDir(rootDir, rootPackage);
         if (packageDir.exists()) {
@@ -79,21 +46,6 @@ public class ClassTraversal {
         }
     }
 
-    /**
-     * Jarファイルに含まれるクラスをトラバースします。
-     * <p>
-     * 指定されたJarファイルが拡張子<code>.war</code>を持つ場合は、 Jarファイル内のエントリのうち、 接頭辞
-     * <code>WEB-INF/classes</code>で始まるパスを持つエントリがトラバースの対象となります。
-     * クラスを処理するハンドラには、接頭辞を除くエントリ名が渡されます。 例えばJarファイル内に
-     * <code>/WEB-INF/classes/ccc/ddd/Eee.class</code>というクラスファイルが存在すると、 ハンドラには
-     * パッケージ名<code>ccc.ddd</code>およびクラス名<code>Eee</code>が渡されます。
-     * </p>
-     * 
-     * @param jarFile
-     *            Jarファイル
-     * @param handler
-     *            クラスを処理するハンドラ
-     */
     public static void forEach(final JarFile jarFile, final ClassHandler handler) {
         if (jarFile.getName().toLowerCase().endsWith(WAR_FILE_EXTENSION)) {
             forEach(jarFile, WEB_INF_CLASSES_PATH, handler);
@@ -102,25 +54,9 @@ public class ClassTraversal {
         }
     }
 
-    /**
-     * Jarファイルに含まれるクラスをトラバースします。
-     * <p>
-     * Jarファイル内のエントリのうち、接頭辞で始まるパスを持つエントリがトラバースの対象となります。
-     * クラスを処理するハンドラには、接頭辞を除くエントリ名が渡されます。 例えば接頭辞が <code>/aaa/bbb/</code>
-     * で、Jarファイル内に <code>/aaa/bbb/ccc/ddd/Eee.class</code>というクラスファイルが存在すると、
-     * ハンドラには パッケージ名<code>ccc.ddd</code>およびクラス名<code>Eee</code>が渡されます。
-     * </p>
-     * 
-     * @param jarFile
-     *            Jarファイル
-     * @param prefix
-     *            トラバースするリソースの名前が含む接頭辞。スラッシュ('/')で終了していなければなりません。
-     * @param handler
-     *            クラスを処理するハンドラ
-     */
     public static void forEach(final JarFile jarFile, final String prefix, final ClassHandler handler) {
         final int startPos = prefix.length();
-        final Enumeration enumeration = jarFile.entries();
+        final Enumeration<JarEntry> enumeration = jarFile.entries();
         while (enumeration.hasMoreElements()) {
             final JarEntry entry = (JarEntry) enumeration.nextElement();
             final String entryName = entry.getName().replace('\\', '/');
@@ -134,36 +70,10 @@ public class ClassTraversal {
         }
     }
 
-    /**
-     * ZIPファイル形式の入力ストリームに含まれるクラスをトラバースします。
-     * 
-     * @param zipInputStream
-     *            ZIPファイル形式の入力ストリーム
-     * @param prefix
-     *            トラバースするリソースの名前が含む接頭辞。スラッシュ('/')で終了していなければなりません。
-     * @param handler
-     *            クラスを処理するハンドラ
-     */
     public static void forEach(final ZipInputStream zipInputStream, final ClassHandler handler) {
         forEach(zipInputStream, "", handler);
     }
 
-    /**
-     * ZIPファイル形式の入力ストリームに含まれるクラスをトラバースします。
-     * <p>
-     * 入力ストリーム内のエントリのうち、接頭辞で始まるパスを持つエントリがトラバースの対象となります。
-     * クラスを処理するハンドラには、接頭辞を除くエントリ名が渡されます。 例えば接頭辞が <code>/aaa/bbb/</code>
-     * で、入力ストリーム内に <code>/aaa/bbb/ccc/ddd/Eee.class</code>というクラスファイルが存在すると、
-     * ハンドラには パッケージ名<code>ccc.ddd</code>およびクラス名<code>Eee</code>が渡されます。
-     * </p>
-     * 
-     * @param zipInputStream
-     *            ZIPファイル形式の入力ストリーム
-     * @param prefix
-     *            トラバースするリソースの名前が含む接頭辞。スラッシュ('/')で終了していなければなりません。
-     * @param handler
-     *            クラスを処理するハンドラ
-     */
     public static void forEach(final ZipInputStream zipInputStream, final String prefix, final ClassHandler handler) {
         final int startPos = prefix.length();
         ZipEntry entry = null;
