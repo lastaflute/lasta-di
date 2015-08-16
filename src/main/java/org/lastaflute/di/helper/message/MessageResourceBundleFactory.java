@@ -37,7 +37,7 @@ public class MessageResourceBundleFactory {
     //                                                                          ==========
     private static final String PROPERTIES_EXT = ".properties";
     private static final Object NOT_FOUND = new Object();
-    private static final Map cacheMap = new HashMap();
+    private static final Map<String, Object> cacheMap = new HashMap<String, Object>();
     private static boolean initialized = false;
 
     // ===================================================================================
