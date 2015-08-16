@@ -15,51 +15,28 @@
  */
 package org.lastaflute.di.core.exception;
 
-import org.lastaflute.di.core.assembler.MethodAssembler;
-import org.lastaflute.di.core.meta.DestroyMethodDef;
-import org.lastaflute.di.core.meta.InitMethodDef;
-import org.lastaflute.di.core.meta.MethodDef;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
- * 
- * @see MethodDef
- * @see InitMethodDef
- * @see DestroyMethodDef
- * @see MethodAssembler
- * @see org.lastaflute.di.core.assembler.AbstractMethodAssembler
  */
 public class IllegalMethodRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -9114586009590848186L;
 
-    private Class componentClass_;
-
+    private Class<?> componentClass_;
     private String methodName_;
 
-    /**
-     * @param componentClass
-     * @param methodName
-     * @param cause
-     */
-    public IllegalMethodRuntimeException(Class componentClass, String methodName, Throwable cause) {
+    public IllegalMethodRuntimeException(Class<?> componentClass, String methodName, Throwable cause) {
         super("ESSR0060", new Object[] { componentClass.getName(), methodName, cause }, cause);
         componentClass_ = componentClass;
         methodName_ = methodName;
     }
 
-    /**
-     * @return 
-     */
-    public Class getComponentClass() {
+    public Class<?> getComponentClass() {
         return componentClass_;
     }
 
-    /**
-     * @return 
-     */
     public String getMethodName() {
         return methodName_;
     }

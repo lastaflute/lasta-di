@@ -24,38 +24,25 @@ import org.lastaflute.di.core.meta.AspectDef;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class InterfaceAspectAutoRegister {
 
     public static final String INIT_METHOD = "registerAll";
 
     private LaContainer container;
-
     private MethodInterceptor interceptor;
-
-    private Class targetInterface;
-
+    private Class<?> targetInterface;
     private Pointcut pointcut;
 
-    /**
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
     }
 
-    /**
-     * @param interceptor
-     */
     public void setInterceptor(MethodInterceptor interceptor) {
         this.interceptor = interceptor;
     }
 
-    /**
-     * @param targetInterface
-     */
-    public void setTargetInterface(Class targetInterface) {
+    public void setTargetInterface(Class<?> targetInterface) {
         if (!targetInterface.isInterface()) {
             throw new IllegalArgumentException(targetInterface.getName());
         }
@@ -70,11 +57,8 @@ public class InterfaceAspectAutoRegister {
         }
     }
 
-    /**
-     * @param componentDef
-     */
     protected void register(ComponentDef componentDef) {
-        Class componentClass = componentDef.getComponentClass();
+        Class<?> componentClass = componentDef.getComponentClass();
         if (componentClass == null) {
             return;
         }
@@ -84,9 +68,6 @@ public class InterfaceAspectAutoRegister {
         registerInterceptor(componentDef);
     }
 
-    /**
-     * @param componentDef
-     */
     protected void registerInterceptor(ComponentDef componentDef) {
         AspectDef aspectDef = AspectDefFactory.createAspectDef(interceptor, pointcut);
         componentDef.addAspectDef(aspectDef);

@@ -40,7 +40,7 @@ public class AspectCustomizer extends AbstractCustomizer {
     public static final String pointcut_BINDING = "bindingType=may";
     public static final String useLookupAdapter_BINDING = "bindingType=may";
 
-    private final List interceptorNames = new ArrayList();
+    private final List<String> interceptorNames = new ArrayList<String>();
     private String pointcut;
     private boolean useLookupAdapter;
 
@@ -76,9 +76,6 @@ public class AspectCustomizer extends AbstractCustomizer {
         }
     }
 
-    /**
-     * @return 
-     */
     protected Pointcut createPointcut() {
         if (!LdiStringUtil.isEmpty(pointcut)) {
             return AspectDefFactory.createPointcut(pointcut);

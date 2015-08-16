@@ -19,38 +19,24 @@ import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
- * 
- * @see org.lastaflute.di.core.factory.annohandler.impl.ConstantAnnotationHandler
  */
 public class IllegalInitMethodAnnotationRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 0L;
 
-    private Class componentClass_;
-
+    private Class<?> componentClass_;
     private String methodName_;
 
-    /**
-     * @param componentClass
-     * @param methodName
-     */
-    public IllegalInitMethodAnnotationRuntimeException(Class componentClass, String methodName) {
+    public IllegalInitMethodAnnotationRuntimeException(Class<?> componentClass, String methodName) {
         super("ESSR0081", new Object[] { componentClass.getName(), methodName });
         componentClass_ = componentClass;
         methodName_ = methodName;
     }
 
-    /**
-     * @return 
-     */
-    public Class getComponentClass() {
+    public Class<?> getComponentClass() {
         return componentClass_;
     }
 
-    /**
-     * @return 
-     */
     public String getMethodName() {
         return methodName_;
     }

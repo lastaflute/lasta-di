@@ -19,53 +19,39 @@ import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
- * 
- * @see org.lastaflute.di.core.meta.impl.TooManyRegistrationComponentDefImpl#getComponent()
  */
 public class TooManyRegistrationRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -6522677955855595193L;
 
     private Object key_;
+    private Class<?>[] componentClasses_;
 
-    private Class[] componentClasses_;
-
-    /**
-     * @param key
-     * @param componentClasses
-     */
-    public TooManyRegistrationRuntimeException(Object key, Class[] componentClasses) {
+    public TooManyRegistrationRuntimeException(Object key, Class<?>[] componentClasses) {
         super("ESSR0045", new Object[] { key, getClassNames(componentClasses) });
         key_ = key;
         componentClasses_ = componentClasses;
     }
 
-    /**
-     * @return 
-     */
     public Object getKey() {
         return key_;
     }
 
-    /**
-     * @return 
-     */
-    public Class[] getComponentClasses() {
+    public Class<?>[] getComponentClasses() {
         return componentClasses_;
     }
 
-    private static String getClassNames(Class[] componentClasses) {
-        StringBuffer buf = new StringBuffer(255);
+    private static String getClassNames(Class<?>[] componentClasses) {
+        StringBuilder sb = new StringBuilder(255);
         for (int i = 0; i < componentClasses.length; ++i) {
             if (componentClasses[i] != null) {
-                buf.append(componentClasses[i].getName());
+                sb.append(componentClasses[i].getName());
             } else {
-                buf.append("<unknown>");
+                sb.append("<unknown>");
             }
-            buf.append(", ");
+            sb.append(", ");
         }
-        buf.setLength(buf.length() - 2);
-        return buf.toString();
+        sb.setLength(sb.length() - 2);
+        return sb.toString();
     }
 }

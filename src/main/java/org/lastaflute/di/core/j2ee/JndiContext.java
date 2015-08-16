@@ -36,10 +36,10 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class JndiContext implements Context {
 
-    protected final Hashtable env;
+    protected final Hashtable<String, Object> env;
     protected final String path;
 
-    public JndiContext(final Hashtable env) {
+    public JndiContext(final Hashtable<String, Object> env) {
         this.env = env;
         this.path = (String) env.get(PROVIDER_URL);
     }
@@ -86,7 +86,7 @@ public class JndiContext implements Context {
         throw new OperationNotSupportedException("destroySubcontext");
     }
 
-    public Hashtable getEnvironment() throws NamingException {
+    public Hashtable<String, Object> getEnvironment() throws NamingException {
         return env;
     }
 
@@ -120,14 +120,14 @@ public class JndiContext implements Context {
 
     public Object lookup(final Name name) throws NamingException {
         if (name.isEmpty()) {
-            return new JndiContext(new Hashtable(env));
+            return new JndiContext(new Hashtable<String, Object>(env));
         }
         return lookup(name.toString());
     }
 
     public Object lookup(final String name) throws NamingException {
         if (LdiStringUtil.isEmpty(name)) {
-            return new JndiContext(new Hashtable(env));
+            return new JndiContext(new Hashtable<String, Object>(env));
         }
         return SingletonLaContainerFactory.getContainer().getComponent(JndiResourceLocator.resolveName(name));
     }

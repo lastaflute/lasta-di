@@ -20,20 +20,13 @@ import org.lastaflute.di.core.exception.ClassUnmatchRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class OuterComponentDeployer extends AbstractComponentDeployer {
 
-    /**
-     * @param componentDef
-     */
     public OuterComponentDeployer(ComponentDef componentDef) {
         super(componentDef);
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#deploy()
-     */
     public Object deploy() {
         throw new UnsupportedOperationException("deploy");
     }
@@ -45,8 +38,7 @@ public class OuterComponentDeployer extends AbstractComponentDeployer {
     }
 
     private void checkComponentClass(Object outerComponent) throws ClassUnmatchRuntimeException {
-
-        Class componentClass = getComponentDef().getComponentClass();
+        Class<?> componentClass = getComponentDef().getComponentClass();
         if (componentClass == null) {
             return;
         }
@@ -55,15 +47,9 @@ public class OuterComponentDeployer extends AbstractComponentDeployer {
         }
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#init()
-     */
     public void init() {
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#destroy()
-     */
     public void destroy() {
     }
 }

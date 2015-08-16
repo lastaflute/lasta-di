@@ -19,28 +19,19 @@ import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
- * 
- * @see org.lastaflute.di.core.deployer.SingletonComponentDeployer
  */
 public class CyclicReferenceRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -5993824919440261214L;
 
-    private Class componentClass_;
+    private Class<?> componentClass_;
 
-    /**
-     * @param componentClass
-     */
-    public CyclicReferenceRuntimeException(Class componentClass) {
+    public CyclicReferenceRuntimeException(Class<?> componentClass) {
         super("ESSR0047", new Object[] { componentClass.getName() });
         componentClass_ = componentClass;
     }
 
-    /**
-     * @return 
-     */
-    public Class getComponentClass() {
+    public Class<?> getComponentClass() {
         return componentClass_;
     }
 }

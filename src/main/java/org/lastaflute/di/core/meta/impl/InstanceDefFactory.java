@@ -28,18 +28,13 @@ import org.lastaflute.di.core.meta.InstanceDef;
 public class InstanceDefFactory {
 
     public static final InstanceDef SINGLETON = new InstanceSingletonDef(InstanceDef.SINGLETON_NAME);
-
     public static final InstanceDef PROTOTYPE = new InstancePrototypeDef(InstanceDef.PROTOTYPE_NAME);
-
     public static final InstanceDef APPLICATION = new InstanceApplicationDef(InstanceDef.APPLICATION_NAME);
-
     public static final InstanceDef SESSION = new InstanceSessionDef(InstanceDef.SESSION_NAME);
-
     public static final InstanceDef REQUEST = new InstanceRequestDef(InstanceDef.REQUEST_NAME);
-
     public static final InstanceDef OUTER = new InstanceOuterDef(InstanceDef.OUTER_NAME);
 
-    private static Map instanceDefs = new HashMap();
+    private static Map<String, InstanceDef> instanceDefs = new HashMap<String, InstanceDef>();
 
     static {
         addInstanceDef(SINGLETON);
@@ -53,29 +48,18 @@ public class InstanceDefFactory {
     protected InstanceDefFactory() {
     }
 
-    /**
-     * @param instanceDef
-     */
     public static void addInstanceDef(InstanceDef instanceDef) {
         instanceDefs.put(instanceDef.getName(), instanceDef);
     }
 
-    /**
-     * @param name
-     * @return
-     */
     public static boolean existInstanceDef(String name) {
         return instanceDefs.containsKey(name);
     }
 
-    /**
-     * @param name
-     * @return {@link InstanceDef}
-     */
     public static InstanceDef getInstanceDef(String name) {
         if (!instanceDefs.containsKey(name)) {
             throw new IllegalInstanceDefRuntimeException(name);
         }
-        return (InstanceDef) instanceDefs.get(name);
+        return instanceDefs.get(name);
     }
 }

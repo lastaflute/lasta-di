@@ -19,27 +19,19 @@ import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author modified by jflute (originated in Seasar)
  */
 public class IllegalConstructorRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 1454032979718620824L;
 
-    private Class componentClass_;
+    private Class<?> componentClass_;
 
-    /**
-     * @param componentClass
-     * @param cause
-     */
-    public IllegalConstructorRuntimeException(Class componentClass, Throwable cause) {
+    public IllegalConstructorRuntimeException(Class<?> componentClass, Throwable cause) {
         super("ESSR0058", new Object[] { componentClass.getName(), cause }, cause);
         componentClass_ = componentClass;
     }
 
-    /**
-     * @return 
-     */
-    public Class getComponentClass() {
+    public Class<?> getComponentClass() {
         return componentClass_;
     }
 }

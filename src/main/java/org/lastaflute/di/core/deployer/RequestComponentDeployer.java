@@ -30,16 +30,10 @@ public class RequestComponentDeployer extends AbstractComponentDeployer {
 
     private static LaLogger logger = LaLogger.getLogger(RequestComponentDeployer.class);
 
-    /**
-     * @param componentDef
-     */
     public RequestComponentDeployer(ComponentDef componentDef) {
         super(componentDef);
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#deploy()
-     */
     public Object deploy() {
         ComponentDef cd = getComponentDef();
         ExternalContext extCtx = cd.getContainer().getRoot().getExternalContext();
@@ -48,7 +42,7 @@ public class RequestComponentDeployer extends AbstractComponentDeployer {
             logger.log(re);
             throw re;
         }
-        Map requestMap = extCtx.getRequestMap();
+        Map<String, Object> requestMap = extCtx.getRequestMap();
         String componentName = getComponentName();
         Object component = null;
         component = requestMap.get(componentName);
@@ -66,15 +60,9 @@ public class RequestComponentDeployer extends AbstractComponentDeployer {
         throw new UnsupportedOperationException("injectDependency");
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#init()
-     */
     public void init() {
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#destroy()
-     */
     public void destroy() {
     }
 }

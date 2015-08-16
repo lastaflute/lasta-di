@@ -82,10 +82,6 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
         return createComponentDef(componentClass, name, instanceDef, autoBindingDef, externalBinding);
     }
 
-    /**
-     * @param field
-     * @return 
-     */
     protected boolean isConstantAnnotationField(Field field) {
         final int modifiers = field.getModifiers();
         return Modifier.isFinal(modifiers) && Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers);
@@ -126,7 +122,7 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     public void appendAspect(ComponentDef componentDef) {
-        Class componentClass = componentDef.getComponentClass();
+        Class<?> componentClass = componentDef.getComponentClass();
         if (componentClass == null) {
             return;
         }
@@ -156,12 +152,6 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
         appendAspect(componentDef, interceptor, pointcut);
     }
 
-    /**
-     * @param componentDef
-     * @param interceptor
-     * @param pointcut
-     * @throws EmptyRuntimeException
-     */
     protected void appendAspect(ComponentDef componentDef, String interceptor, String pointcut) {
 
         if (interceptor == null) {
@@ -171,12 +161,6 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
         componentDef.addAspectDef(aspectDef);
     }
 
-    /**
-     * @param componentDef
-     * @param interceptor
-     * @param targetMethod
-     * @throws EmptyRuntimeException
-     */
     protected void appendAspect(ComponentDef componentDef, String interceptor, Method targetMethod) {
 
         if (interceptor == null) {
@@ -187,7 +171,7 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     public void appendInterType(ComponentDef componentDef) {
-        Class componentClass = componentDef.getComponentClass();
+        Class<?> componentClass = componentDef.getComponentClass();
         if (componentClass == null) {
             return;
         }
@@ -203,10 +187,6 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
         }
     }
 
-    /**
-     * @param componentDef
-     * @param interTypeName
-     */
     protected void appendInterType(ComponentDef componentDef, String interTypeName) {
         InterTypeDef interTypeDef = new InterTypeDefImpl();
         interTypeDef.setExpression(new ScriptingExpression(interTypeName));
@@ -214,7 +194,7 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
     }
 
     public void appendInitMethod(ComponentDef componentDef) {
-        Class componentClass = componentDef.getComponentClass();
+        Class<?> componentClass = componentDef.getComponentClass();
         if (componentClass == null) {
             return;
         }
@@ -243,26 +223,18 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
         }
     }
 
-    /**
-     * @param componentDef
-     * @param method
-     */
     protected void appendInitMethod(ComponentDef componentDef, Method method) {
         InitMethodDef initMethodDef = new InitMethodDefImpl(method);
         componentDef.addInitMethodDef(initMethodDef);
     }
 
-    /**
-     * @param componentDef
-     * @param methodName
-     */
     protected void appendInitMethod(ComponentDef componentDef, String methodName) {
         InitMethodDef initMethodDef = new InitMethodDefImpl(methodName);
         componentDef.addInitMethodDef(initMethodDef);
     }
 
     public void appendDestroyMethod(ComponentDef componentDef) {
-        Class componentClass = componentDef.getComponentClass();
+        Class<?> componentClass = componentDef.getComponentClass();
         if (componentClass == null) {
             return;
         }
@@ -291,19 +263,11 @@ public class ConstantAnnotationHandler extends AbstractAnnotationHandler {
         }
     }
 
-    /**
-     * @param componentDef
-     * @param targetMethod
-     */
     protected void appendDestroyMethod(ComponentDef componentDef, Method targetMethod) {
         DestroyMethodDef destroyMethodDef = new DestroyMethodDefImpl(targetMethod);
         componentDef.addDestroyMethodDef(destroyMethodDef);
     }
 
-    /**
-     * @param componentDef
-     * @param methodName
-     */
     protected void appendDestroyMethod(ComponentDef componentDef, String methodName) {
         DestroyMethodDef destroyMethodDef = new DestroyMethodDefImpl(methodName);
         componentDef.addDestroyMethodDef(destroyMethodDef);

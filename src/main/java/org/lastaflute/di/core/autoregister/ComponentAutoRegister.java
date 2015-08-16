@@ -27,7 +27,7 @@ import org.lastaflute.di.util.LdiResourcesUtil.Resources;
  */
 public class ComponentAutoRegister extends AbstractComponentAutoRegister implements ClassHandler {
 
-    protected List referenceClasses = new ArrayList();
+    protected List<Class<?>> referenceClasses = new ArrayList<Class<?>>();
 
     public ComponentAutoRegister() {
     }
@@ -35,13 +35,13 @@ public class ComponentAutoRegister extends AbstractComponentAutoRegister impleme
     /**
      * @param referenceClass
      */
-    public void addReferenceClass(final Class referenceClass) {
+    public void addReferenceClass(final Class<?> referenceClass) {
         referenceClasses.add(referenceClass);
     }
 
     public void registerAll() {
         for (int i = 0; i < referenceClasses.size(); ++i) {
-            final Class referenceClass = (Class) referenceClasses.get(i);
+            final Class<?> referenceClass = referenceClasses.get(i);
             final Resources resources = LdiResourcesUtil.getResourcesType(referenceClass);
             try {
                 resources.forEach(this);
@@ -50,5 +50,4 @@ public class ComponentAutoRegister extends AbstractComponentAutoRegister impleme
             }
         }
     }
-
 }

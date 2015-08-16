@@ -26,23 +26,16 @@ import org.lastaflute.di.util.LdiZipFileUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author modified by jflute (originated in Seasar)
  */
 public class JarComponentAutoRegister extends AbstractJarComponentAutoRegister {
 
-    private Class referenceClass = MethodInterceptor.class;
+    private Class<?> referenceClass = MethodInterceptor.class;
 
-    /**
-     * @return
-     */
-    public Class getReferenceClass() {
+    public Class<?> getReferenceClass() {
         return referenceClass;
     }
 
-    /**
-     * @param referenceClass
-     */
-    public void setReferenceClass(Class referenceClass) {
+    public void setReferenceClass(Class<?> referenceClass) {
         this.referenceClass = referenceClass;
     }
 
@@ -59,5 +52,4 @@ public class JarComponentAutoRegister extends AbstractJarComponentAutoRegister {
         File dir = jarFile.getParentFile();
         setBaseDir(LdiFileUtil.getCanonicalPath(dir));
     }
-
 }

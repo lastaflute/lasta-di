@@ -29,15 +29,15 @@ public class GenericExternalContext implements ExternalContext {
 
     protected static final Map EMPTY_MAP = Collections.unmodifiableMap(new HashMap());
 
-    protected Map application = LdiMapUtil.createHashMap();
+    protected Map<String, Object> application = LdiMapUtil.createHashMap();
 
-    protected ThreadLocal requests = new ThreadLocal();
+    protected ThreadLocal<Object> requests = new ThreadLocal<Object>();
 
     public Object getApplication() {
         return application;
     }
 
-    public Map getApplicationMap() {
+    public Map<String, Object> getApplicationMap() {
         return application;
     }
 
@@ -61,8 +61,8 @@ public class GenericExternalContext implements ExternalContext {
         return EMPTY_MAP;
     }
 
-    public Map getRequestMap() {
-        return (Map) requests.get();
+    public Map<String, Object> getRequestMap() {
+        return (Map<String, Object>) requests.get();
     }
 
     public Map getRequestParameterMap() {
@@ -81,7 +81,8 @@ public class GenericExternalContext implements ExternalContext {
         return null;
     }
 
-    public Map getSessionMap() {
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getSessionMap() {
         return EMPTY_MAP;
     }
 
@@ -94,5 +95,4 @@ public class GenericExternalContext implements ExternalContext {
 
     public void setResponse(final Object response) {
     }
-
 }

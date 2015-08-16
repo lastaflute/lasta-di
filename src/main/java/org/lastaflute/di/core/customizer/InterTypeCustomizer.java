@@ -28,26 +28,17 @@ import org.lastaflute.di.core.meta.impl.InterTypeDefImpl;
  */
 public class InterTypeCustomizer extends AbstractCustomizer {
 
-    protected final List interTypeNames = new ArrayList();
+    protected final List<String> interTypeNames = new ArrayList<String>();
 
-    /**
-     * @param interTypeName
-     */
     public void setInterTypeName(final String interTypeName) {
         interTypeNames.clear();
         interTypeNames.add(interTypeName);
     }
 
-    /**
-     * @param interTypeName
-     */
     public void addInterTypeName(final String interTypeName) {
         interTypeNames.add(interTypeName);
     }
 
-    /**
-     * @param componentDef
-     */
     protected void doCustomize(final ComponentDef componentDef) {
         for (int i = 0; i < interTypeNames.size(); ++i) {
             final InterTypeDef interTypeDef = new InterTypeDefImpl();
@@ -55,5 +46,4 @@ public class InterTypeCustomizer extends AbstractCustomizer {
             componentDef.addInterTypeDef(interTypeDef);
         }
     }
-
 }
