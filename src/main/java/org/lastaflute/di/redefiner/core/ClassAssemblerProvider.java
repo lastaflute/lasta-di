@@ -16,10 +16,10 @@
 package org.lastaflute.di.redefiner.core;
 
 import org.lastaflute.di.core.ComponentDef;
+import org.lastaflute.di.core.assembler.AssemblerFactory.DefaultProvider;
 import org.lastaflute.di.core.assembler.ConstructorAssembler;
 import org.lastaflute.di.core.assembler.MethodAssembler;
 import org.lastaflute.di.core.assembler.PropertyAssembler;
-import org.lastaflute.di.core.assembler.AssemblerFactory.DefaultProvider;
 
 /**
  * @author modified by jflute (originated in Ymir)

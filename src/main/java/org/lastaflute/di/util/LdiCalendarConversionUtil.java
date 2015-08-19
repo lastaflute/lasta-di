@@ -16,8 +16,6 @@
 package org.lastaflute.di.util;
 
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * @author modified by jflute (originated in Seasar)

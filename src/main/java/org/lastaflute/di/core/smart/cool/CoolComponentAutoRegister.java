@@ -25,10 +25,10 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.creator.ComponentCreator;
 import org.lastaflute.di.core.util.ComponentUtil;
 import org.lastaflute.di.naming.NamingConvention;
+import org.lastaflute.di.util.ClassTraversal.ClassHandler;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiModifierUtil;
 import org.lastaflute.di.util.LdiResourcesUtil;
-import org.lastaflute.di.util.ClassTraversal.ClassHandler;
 import org.lastaflute.di.util.LdiResourcesUtil.Resources;
 
 /**

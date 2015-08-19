@@ -50,11 +50,6 @@ public class LdiPreparedStatementUtil {
         }
     }
 
-    /**
-     * @param ps
-     * @throws SQLRuntimeException
-     * @see PreparedStatement#execute()
-     */
     public static boolean execute(PreparedStatement ps) throws SQLRuntimeException {
         try {
             return ps.execute();
