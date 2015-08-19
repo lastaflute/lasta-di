@@ -16,22 +16,14 @@
 package org.lastaflute.di.util;
 
 /**
- * {@link Boolean}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiBooleanConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiBooleanConversionUtil() {
     }
 
     /**
-     * {@link Boolean}に変換します。
-     * 
      * @param o
      * @return {@link Boolean}
      */
@@ -60,8 +52,6 @@ public class LdiBooleanConversionUtil {
     }
 
     /**
-     * booleanに変換します。
-     * 
      * @param o
      * @return boolean
      */

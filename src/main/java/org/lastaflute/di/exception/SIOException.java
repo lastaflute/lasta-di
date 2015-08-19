@@ -20,10 +20,7 @@ import java.io.IOException;
 import org.lastaflute.di.helper.message.MessageFormatter;
 
 /**
- * Seasar2用の{@link IOException}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SIOException extends IOException {
 
@@ -33,12 +30,6 @@ public class SIOException extends IOException {
 
     private Object[] args;
 
-    /**
-     * {@link SIOException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     */
     public SIOException(String messageCode, Object[] args) {
         super(MessageFormatter.getMessage(messageCode, args));
 
@@ -46,20 +37,10 @@ public class SIOException extends IOException {
         this.args = args;
     }
 
-    /**
-     * メッセージコードを返します。
-     * 
-     * @return メッセージコード
-     */
     public String getMessageCode() {
         return messageCode;
     }
 
-    /**
-     * 引数の配列を返します。
-     * 
-     * @return 引数の配列
-     */
     public Object[] getArgs() {
         return args;
     }

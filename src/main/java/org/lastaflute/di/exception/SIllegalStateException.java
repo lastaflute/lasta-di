@@ -18,10 +18,7 @@ package org.lastaflute.di.exception;
 import org.lastaflute.di.helper.message.MessageFormatter;
 
 /**
- * Seasar2用の{@link IllegalStateException}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SIllegalStateException extends IllegalStateException {
 
@@ -31,23 +28,12 @@ public class SIllegalStateException extends IllegalStateException {
 
     private Object[] args;
 
-    /**
-     * {@link SIllegalStateException}を作成します。
-     * 
-     * @param messageCode
-     */
     public SIllegalStateException(String messageCode) {
         super(MessageFormatter.getMessage(messageCode, null));
 
         this.messageCode = messageCode;
     }
 
-    /**
-     * {@link SIllegalStateException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     */
     public SIllegalStateException(String messageCode, Object[] args) {
         super(MessageFormatter.getMessage(messageCode, args));
 
@@ -55,20 +41,10 @@ public class SIllegalStateException extends IllegalStateException {
         this.args = args;
     }
 
-    /**
-     * メッセージコードを返します。
-     * 
-     * @return メッセージコード
-     */
     public String getMessageCode() {
         return messageCode;
     }
 
-    /**
-     * 引数の配列を返します。
-     * 
-     * @return 引数の配列
-     */
     public Object[] getArgs() {
         return args;
     }

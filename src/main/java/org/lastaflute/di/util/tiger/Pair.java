@@ -16,93 +16,41 @@
 package org.lastaflute.di.util.tiger;
 
 /**
- * 二つの値のペアです。
- * 
  * @author modified by jflute (originated in Seasar)
  * @since 2.4.18
  * @param <T1>
- *            1番目の値の型
  * @param <T2>
- *            2番目の値の型
  */
 public class Pair<T1, T2> {
 
-    /** 1番目の値 */
     protected T1 first;
 
-    /** 2番目の値 */
     protected T2 second;
 
-    /**
-     * 二つの値のペアを作成して返します。
-     * 
-     * @param <T1>
-     *            1番目の値の型
-     * @param <T2>
-     *            2番目の値の型
-     * @param first
-     *            1番目の値
-     * @param second
-     *            2番目の値
-     * @return 二つの値のペア
-     */
     public static <T1, T2> Pair<T1, T2> pair(final T1 first, final T2 second) {
         return new Pair<T1, T2>(first, second);
     }
 
-    /**
-     * インスタンスを構築します。
-     */
     public Pair() {
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param first
-     *            1番目の値
-     * @param second
-     *            2番目の値
-     */
     public Pair(final T1 first, final T2 second) {
         this.first = first;
         this.second = second;
     }
 
-    /**
-     * 1番目の値を返します。
-     * 
-     * @return 1番目の値
-     */
     public T1 getFirst() {
         return first;
     }
 
-    /**
-     * 1番目の値を設定します。
-     * 
-     * @param first
-     *            1番目の値
-     */
     public void setFirst(final T1 first) {
         this.first = first;
     }
 
-    /**
-     * 2番目の値を返します。
-     * 
-     * @return 2番目の値
-     */
     public T2 getSecond() {
         return second;
     }
 
-    /**
-     * 2番目の値を設定します。
-     * 
-     * @param second
-     *            2番目の値
-     */
     public void setSecond(final T2 second) {
         this.second = second;
     }

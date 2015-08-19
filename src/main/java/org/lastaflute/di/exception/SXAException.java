@@ -20,10 +20,7 @@ import javax.transaction.xa.XAException;
 import org.lastaflute.di.helper.message.MessageFormatter;
 
 /**
- * Seasar2用の{@link XAException}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SXAException extends XAException {
 
@@ -33,32 +30,14 @@ public class SXAException extends XAException {
 
     private Object[] args;
 
-    /**
-     * {@link SXAException}を作成します。
-     * 
-     * @param t
-     */
     public SXAException(Throwable t) {
         this("ESSR0017", new Object[] { t }, t);
     }
 
-    /**
-     * {@link SXAException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     */
     public SXAException(String messageCode, Object[] args) {
         this(messageCode, args, null);
     }
 
-    /**
-     * {@link SXAException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param t
-     */
     public SXAException(String messageCode, Object[] args, Throwable t) {
         super(MessageFormatter.getMessage(messageCode, args));
         this.messageCode = messageCode;
@@ -66,20 +45,10 @@ public class SXAException extends XAException {
         initCause(t);
     }
 
-    /**
-     * メッセージコードを返します。
-     * 
-     * @return メッセージコード
-     */
     public String getMessageCode() {
         return messageCode;
     }
 
-    /**
-     * 引数の配列を返します。
-     * 
-     * @return 引数の配列
-     */
     public Object[] getArgs() {
         return args;
     }

@@ -19,49 +19,21 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * {@link String}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiStringConversionUtil {
 
-    /**
-     * WAVE DASHです。
-     */
     public static final int WAVE_DASH = 0x301c;
 
-    /**
-     * FULLWIDTH TILDEです。
-     */
     public static final int FULLWIDTH_TILDE = 0xff5e;
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiStringConversionUtil() {
     }
 
-    /**
-     * 文字列に変換します。
-     * 
-     * @param value
-     *            値
-     * @return 変換された結果
-     */
     public static String toString(Object value) {
         return toString(value, null);
     }
 
-    /**
-     * 文字列に変換します。
-     * 
-     * @param value
-     *            値
-     * @param pattern
-     *            パターン
-     * @return 変換された結果
-     */
     public static String toString(Object value, String pattern) {
         if (value == null) {
             return null;
@@ -78,15 +50,6 @@ public class LdiStringConversionUtil {
         }
     }
 
-    /**
-     * 文字列に変換します。
-     * 
-     * @param value
-     *            値
-     * @param pattern
-     *            パターン
-     * @return 変換された結果
-     */
     public static String toString(Number value, String pattern) {
         if (value != null) {
             if (pattern != null) {
@@ -97,15 +60,6 @@ public class LdiStringConversionUtil {
         return null;
     }
 
-    /**
-     * 文字列に変換します。
-     * 
-     * @param value
-     *            値
-     * @param pattern
-     *            パターン
-     * @return 変換された結果
-     */
     public static String toString(java.util.Date value, String pattern) {
         if (value != null) {
             if (pattern != null) {
@@ -116,13 +70,6 @@ public class LdiStringConversionUtil {
         return null;
     }
 
-    /**
-     * WAVE DASH(U+301C)をFULLWIDTH TILDE(U+FF5E)に変換します。
-     * 
-     * @param source
-     *            ソース
-     * @return 変換結果
-     */
     public static String fromWaveDashToFullwidthTilde(String source) {
         if (source == null) {
             return null;

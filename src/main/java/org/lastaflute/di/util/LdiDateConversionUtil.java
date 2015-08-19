@@ -25,22 +25,14 @@ import java.util.Locale;
 import org.lastaflute.di.exception.ParseRuntimeException;
 
 /**
- * {@link Date}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiDateConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiDateConversionUtil() {
     }
 
     /**
-     * {@link Date}に変換します。
-     * 
      * @param o
      * @return {@link Date}
      */
@@ -49,8 +41,6 @@ public class LdiDateConversionUtil {
     }
 
     /**
-     * {@link Date}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Date}
@@ -70,8 +60,6 @@ public class LdiDateConversionUtil {
     }
 
     /**
-     * {@link Date}に変換します。
-     * 
      * @param s
      * @param pattern
      * @return {@link Date}
@@ -80,12 +68,6 @@ public class LdiDateConversionUtil {
         return toDate(s, pattern, Locale.getDefault());
     }
 
-    /**
-     * @param s
-     * @param pattern
-     * @param locale
-     * @return
-     */
     public static Date toDate(String s, String pattern, Locale locale) {
         if (LdiStringUtil.isEmpty(s)) {
             return null;
@@ -99,8 +81,6 @@ public class LdiDateConversionUtil {
     }
 
     /**
-     * {@link SimpleDateFormat}を返します。
-     * 
      * @param s
      * @param pattern
      * @param locale
@@ -114,8 +94,6 @@ public class LdiDateConversionUtil {
     }
 
     /**
-     * {@link SimpleDateFormat}を返します。
-     * 
      * @param s
      * @param locale
      * @return {@link SimpleDateFormat}
@@ -145,8 +123,6 @@ public class LdiDateConversionUtil {
     }
 
     /**
-     * {@link SimpleDateFormat}を返します。
-     * 
      * @param locale
      * @return {@link SimpleDateFormat}
      */
@@ -155,21 +131,13 @@ public class LdiDateConversionUtil {
     }
 
     /**
-     * 年4桁用の{@link SimpleDateFormat}を返します。
-     * 
      * @param locale
-     * @return 年4桁用の{@link SimpleDateFormat}
+     * @return 
      */
     public static SimpleDateFormat getY4DateFormat(Locale locale) {
         return new SimpleDateFormat(getY4Pattern(locale));
     }
 
-    /**
-     * 年4桁用の日付パターンを返します。
-     * 
-     * @param locale
-     * @return 年4桁用の日付パターン
-     */
     public static String getY4Pattern(Locale locale) {
         String pattern = getPattern(locale);
         if (pattern.indexOf("yyyy") < 0) {
@@ -178,12 +146,6 @@ public class LdiDateConversionUtil {
         return pattern;
     }
 
-    /**
-     * 日付パターンを返します。
-     * 
-     * @param locale
-     * @return 日付パターン
-     */
     public static String getPattern(Locale locale) {
         SimpleDateFormat df = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, locale);
         String pattern = df.toPattern();
@@ -200,12 +162,6 @@ public class LdiDateConversionUtil {
         return pattern;
     }
 
-    /**
-     * 日付のデリミタを探します。
-     * 
-     * @param value
-     * @return 日付のデリミタ
-     */
     public static String findDelimiter(String value) {
         for (int i = 0; i < value.length(); ++i) {
             char c = value.charAt(i);
@@ -217,12 +173,6 @@ public class LdiDateConversionUtil {
         return null;
     }
 
-    /**
-     * 日付パターンから日付のデリミタを探します。
-     * 
-     * @param pattern
-     * @return 日付のデリミタ
-     */
     public static String findDelimiterFromPattern(String pattern) {
         String ret = null;
         for (int i = 0; i < pattern.length(); ++i) {
@@ -235,13 +185,6 @@ public class LdiDateConversionUtil {
         return ret;
     }
 
-    /**
-     * 日付パターンから日付のデリミタを取り除きます。
-     * 
-     * @param pattern
-     *            パターン
-     * @return 日付のデリミタを取り除いた後のパターン
-     */
     public static String removeDelimiter(String pattern) {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < pattern.length(); ++i) {

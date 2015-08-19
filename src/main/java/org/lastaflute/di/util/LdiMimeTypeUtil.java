@@ -22,24 +22,13 @@ import java.net.URLConnection;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * Mimeタイプ用のユーティリティクラスです。
- * 
  * @author shot
  */
 public class LdiMimeTypeUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiMimeTypeUtil() {
     }
 
-    /**
-     * コンテントタイプを予想します。
-     * 
-     * @param path
-     * @return コンテントタイプ
-     */
     public static String guessContentType(final String path) {
         LdiAssertionUtil.assertNotNull("path is null.", path);
         final InputStream is = LdiResourceUtil.getResourceAsStream(path);

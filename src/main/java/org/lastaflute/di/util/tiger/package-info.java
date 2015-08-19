@@ -13,7 +13,4 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-/**
- * Java5固有の機能を利用するユーティリティを提供します。
- */
 package org.lastaflute.di.util.tiger;

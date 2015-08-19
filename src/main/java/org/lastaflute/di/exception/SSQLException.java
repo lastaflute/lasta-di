@@ -20,10 +20,7 @@ import java.sql.SQLException;
 import org.lastaflute.di.helper.message.MessageFormatter;
 
 /**
- * Seasar2用の{@link SQLException}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SSQLException extends SQLException {
 
@@ -35,85 +32,30 @@ public class SSQLException extends SQLException {
 
     private Object[] args;
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     */
     public SSQLException(String messageCode, Object[] args) {
         this(messageCode, args, null, 0, null);
     }
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param cause
-     */
     public SSQLException(String messageCode, Object[] args, Throwable cause) {
         this(messageCode, args, null, 0, cause);
     }
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param sqlState
-     */
     public SSQLException(String messageCode, Object[] args, String sqlState) {
         this(messageCode, args, sqlState, 0, null);
     }
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param sqlState
-     * @param cause
-     */
     public SSQLException(String messageCode, Object[] args, String sqlState, Throwable cause) {
         this(messageCode, args, sqlState, 0, cause);
     }
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param sqlState
-     * @param vendorCode
-     */
     public SSQLException(String messageCode, Object[] args, String sqlState, int vendorCode) {
         this(messageCode, args, sqlState, vendorCode, null);
     }
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param sqlState
-     * @param vendorCode
-     * @param cause
-     */
     public SSQLException(String messageCode, Object[] args, String sqlState, int vendorCode, Throwable cause) {
         this(messageCode, args, sqlState, vendorCode, cause, null);
     }
 
-    /**
-     * {@link SSQLException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     * @param sqlState
-     * @param vendorCode
-     * @param cause
-     * @param sql
-     */
     public SSQLException(String messageCode, Object[] args, String sqlState, int vendorCode, Throwable cause, String sql) {
         super(MessageFormatter.getMessage(messageCode, args), sqlState, vendorCode);
         this.messageCode = messageCode;
@@ -125,29 +67,14 @@ public class SSQLException extends SQLException {
         }
     }
 
-    /**
-     * メッセージコードを返します。
-     * 
-     * @return メッセージコード
-     */
     public String getMessageCode() {
         return messageCode;
     }
 
-    /**
-     * 引数の配列を返します。
-     * 
-     * @return 引数の配列
-     */
     public Object[] getArgs() {
         return args;
     }
 
-    /**
-     * SQLを返します。
-     * 
-     * @return SQL
-     */
     public String getSql() {
         return sql;
     }

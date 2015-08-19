@@ -239,7 +239,7 @@ public class ClassS2ContainerBuilder extends AbstractLaContainerBuilder {
         String[] classNames;
         int jarSuffix = path.indexOf(JAR_SUFFIX);
         if (jarSuffix >= 0) {
-            // Jar。
+            
             classNames =
                     new String[] { path.substring(jarSuffix + JAR_SUFFIX.length(), path.length() - SUFFIX.length()).replace('/', '.') };
         } else {
@@ -272,7 +272,7 @@ public class ClassS2ContainerBuilder extends AbstractLaContainerBuilder {
 
     ClassLoader getClassLoaderForLoadingPreparer() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        // S2Container関連のクラスがコンテキストクラスローダから見えない場合に備えてこうしている。
+        
         return new CompositeClassLoader(new ClassLoader[] { classLoader, getClass().getClassLoader() });
     }
 

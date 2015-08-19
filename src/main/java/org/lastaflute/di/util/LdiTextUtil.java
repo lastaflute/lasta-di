@@ -20,67 +20,33 @@ import java.io.InputStream;
 import java.io.Reader;
 
 /**
- * テキスト用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiTextUtil {
 
     private static final String UTF8 = "UTF-8";
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiTextUtil() {
     }
 
-    /**
-     * テキストを読み込みます。
-     * 
-     * @param path
-     *            パス
-     * @return 読み込んだテキスト
-     */
     public static String readText(String path) {
         InputStream is = LdiResourceUtil.getResourceAsStream(path);
         Reader reader = LdiInputStreamReaderUtil.create(is);
         return LdiReaderUtil.readText(reader);
     }
 
-    /**
-     * テキストを読み込みます。
-     * 
-     * @param file
-     *            ファイル
-     * @return 読み込んだテキスト
-     */
     public static String readText(File file) {
         InputStream is = LdiFileInputStreamUtil.create(file);
         Reader reader = LdiInputStreamReaderUtil.create(is);
         return LdiReaderUtil.readText(reader);
     }
 
-    /**
-     * UTF8でテキストを読み込みます。
-     * 
-     * @param path
-     *            パス
-     * @return 読み込んだテキスト
-     */
     public static String readUTF8(String path) {
         InputStream is = LdiResourceUtil.getResourceAsStream(path);
         Reader reader = LdiInputStreamReaderUtil.create(is, UTF8);
         return LdiReaderUtil.readText(reader);
     }
 
-    /**
-     * UTF8でテキストを読み込みます。
-     * 
-     * @param file
-     *            ファイル
-     * @return 読み込んだテキスト
-     */
     public static String readUTF8(File file) {
         InputStream is = LdiFileInputStreamUtil.create(file);
         Reader reader = LdiInputStreamReaderUtil.create(is, UTF8);

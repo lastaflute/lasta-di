@@ -22,27 +22,13 @@ import java.util.Properties;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link Properties}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiPropertiesUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiPropertiesUtil() {
     }
 
-    /**
-     * {@link Properties#load(InputStream)}の例外処理をラップします。
-     * 
-     * @param props
-     * @param in
-     * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
-     */
     public static void load(Properties props, InputStream in) throws IORuntimeException {
         try {
             props.load(in);

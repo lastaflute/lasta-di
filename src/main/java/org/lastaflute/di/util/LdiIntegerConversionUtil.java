@@ -18,22 +18,14 @@ package org.lastaflute.di.util;
 import java.text.SimpleDateFormat;
 
 /**
- * {@link Integer}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiIntegerConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiIntegerConversionUtil() {
     }
 
     /**
-     * {@link Integer}に変換します。
-     * 
      * @param o
      * @return {@link Integer}
      */
@@ -42,8 +34,6 @@ public class LdiIntegerConversionUtil {
     }
 
     /**
-     * {@link Integer}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Integer}
@@ -76,23 +66,10 @@ public class LdiIntegerConversionUtil {
         return new Integer(LdiDecimalFormatUtil.normalize(s));
     }
 
-    /**
-     * intに変換します。
-     * 
-     * @param o
-     * @return int
-     */
     public static int toPrimitiveInt(Object o) {
         return toPrimitiveInt(o, null);
     }
 
-    /**
-     * intに変換します。
-     * 
-     * @param o
-     * @param pattern
-     * @return int
-     */
     public static int toPrimitiveInt(Object o, String pattern) {
         if (o == null) {
             return 0;

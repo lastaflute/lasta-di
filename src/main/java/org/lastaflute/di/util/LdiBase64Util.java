@@ -16,10 +16,7 @@
 package org.lastaflute.di.util;
 
 /**
- * Base64を扱うためのユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiBase64Util {
 
@@ -40,12 +37,6 @@ public class LdiBase64Util {
         }
     }
 
-    /**
-     * Base64でエンコードします。
-     * 
-     * @param inData
-     * @return エンコードされたデータ
-     */
     public static String encode(final byte[] inData) {
         if (inData == null || inData.length == 0) {
             return "";
@@ -72,12 +63,6 @@ public class LdiBase64Util {
         return new String(outData);
     }
 
-    /**
-     * Base64でエンコードされたデータをデコードします。
-     * 
-     * @param inData
-     * @return デコードされたデータ
-     */
     public static byte[] decode(final String inData) {
         int num = (inData.length() / 4) - 1;
         int lastBytes = getLastBytes(inData);

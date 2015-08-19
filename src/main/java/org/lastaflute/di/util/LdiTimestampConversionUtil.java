@@ -20,22 +20,14 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * {@link Timestamp}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiTimestampConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiTimestampConversionUtil() {
     }
 
     /**
-     * {@link Timestamp}に変換します。
-     * 
      * @param o
      * @return {@link Timestamp}
      */
@@ -44,8 +36,6 @@ public class LdiTimestampConversionUtil {
     }
 
     /**
-     * {@link Timestamp}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Timestamp}
@@ -61,12 +51,6 @@ public class LdiTimestampConversionUtil {
         return null;
     }
 
-    /**
-     * 日付パターンを返します。
-     * 
-     * @param locale
-     * @return 日付パターン
-     */
     public static String getPattern(Locale locale) {
         return LdiDateConversionUtil.getY4Pattern(locale) + " " + LdiTimeConversionUtil.getPattern(locale);
     }

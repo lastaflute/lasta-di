@@ -26,18 +26,12 @@ import org.lastaflute.di.exception.SAXRuntimeException;
 import org.xml.sax.SAXException;
 
 /**
- * {@link Schema}のためのユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public abstract class LdiSchemaUtil {
 
     /**
-     * ファイルからW3C XML Schemaのための{@link Schema}を生成します。
-     * 
      * @param schema
-     *            W3C XML Schemaファイル
      * @return {@link Schema}
      */
     public static Schema newW3cXmlSchema(final File schema) {
@@ -45,10 +39,7 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * {@link Source}からW3C XML Schemaのための{@link Schema}を生成します。
-     * 
      * @param schema
-     *            W3C XML Schemaを読み込むための{@link Source}
      * @return {@link Schema}
      */
     public static Schema newW3cXmlSchema(final Source schema) {
@@ -56,10 +47,7 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * URLからW3C XML Schemaのための{@link Schema}を生成します。
-     * 
      * @param schema
-     *            W3C XML SchemaのURL
      * @return {@link Schema}
      */
     public static Schema newW3cXmlSchema(final URL schema) {
@@ -67,10 +55,7 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * ファイルからRELAX NGのための{@link Schema}を生成します。
-     * 
      * @param schema
-     *            RELAX NGファイル
      * @return {@link Schema}
      */
     public static Schema newRelaxNgSchema(final File schema) {
@@ -78,10 +63,7 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * {@link Source}からRELAX NGのための{@link Schema}を生成します。
-     * 
      * @param schema
-     *            RELAX NGを読み込むための{@link Source}
      * @return {@link Schema}
      */
     public static Schema newRelaxNgSchema(final Source schema) {
@@ -89,10 +71,7 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * URLからRELAX NGのための{@link Schema}を生成します。
-     * 
      * @param schema
-     *            RELAX NGのURL
      * @return {@link Schema}
      */
     public static Schema newRelaxNgSchema(final URL schema) {
@@ -100,12 +79,8 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * 指定の{@link SchemaFactory}を使用して{@link Schema}を作成します。
-     * 
      * @param factory
-     *            {@link SchemaFactory}
      * @param schema
-     *            スキーマファイル
      * @return {@link Schema}
      */
     public static Schema newSchema(final SchemaFactory factory, final File schema) {
@@ -117,12 +92,8 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * 指定の{@link SchemaFactory}を使用して{@link Schema}を作成します。
-     * 
      * @param factory
-     *            {@link SchemaFactory}
      * @param schema
-     *            スキーマを読み込むための{@link Source}
      * @return {@link Schema}
      */
     public static Schema newSchema(final SchemaFactory factory, final Source schema) {
@@ -134,12 +105,8 @@ public abstract class LdiSchemaUtil {
     }
 
     /**
-     * 指定の{@link SchemaFactory}を使用して{@link Schema}を作成します。
-     * 
      * @param factory
-     *            {@link SchemaFactory}
      * @param schema
-     *            スキーマのURL
      * @return {@link Schema}
      */
     public static Schema newSchema(final SchemaFactory factory, final URL schema) {

@@ -18,10 +18,7 @@ package org.lastaflute.di.exception;
 import org.lastaflute.di.helper.message.MessageFormatter;
 
 /**
- * Seasar2の例外のベースクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SRuntimeException extends RuntimeException {
 
@@ -35,21 +32,10 @@ public class SRuntimeException extends RuntimeException {
 
     private String simpleMessage;
 
-    /**
-     * {@link SRuntimeException}を作成します。
-     * 
-     * @param messageCode
-     */
     public SRuntimeException(String messageCode) {
         this(messageCode, null, null);
     }
 
-    /**
-     * {@link SRuntimeException}を作成します。
-     * 
-     * @param messageCode
-     * @param args
-     */
     public SRuntimeException(String messageCode, Object[] args) {
         this(messageCode, args, null);
     }
@@ -62,20 +48,10 @@ public class SRuntimeException extends RuntimeException {
         this.message = "[" + messageCode + "]" + simpleMessage;
     }
 
-    /**
-     * メッセージコードを返します。
-     * 
-     * @return メッセージコード
-     */
     public final String getMessageCode() {
         return messageCode;
     }
 
-    /**
-     * 引数の配列を返します。
-     * 
-     * @return 引数の配列
-     */
     public final Object[] getArgs() {
         return args;
     }
@@ -84,21 +60,10 @@ public class SRuntimeException extends RuntimeException {
         return message;
     }
 
-    /**
-     * メッセージを設定します。
-     * 
-     * @param message
-     *            メッセージ
-     */
     protected void setMessage(String message) {
         this.message = message;
     }
 
-    /**
-     * メッセージコードなしの単純なメッセージを返します。
-     * 
-     * @return メッセージコードなしの単純なメッセージ
-     */
     public final String getSimpleMessage() {
         return simpleMessage;
     }

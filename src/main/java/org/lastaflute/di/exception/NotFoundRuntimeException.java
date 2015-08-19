@@ -18,18 +18,11 @@ package org.lastaflute.di.exception;
 import javassist.NotFoundException;
 
 /**
- * <code>NotFoundException</code>をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class NotFoundRuntimeException extends SRuntimeException {
     private static final long serialVersionUID = 1960782343618833636L;
 
-    /**
-     * {@link NotFoundRuntimeException}を作成します。
-     * 
-     * @param cause
-     */
     public NotFoundRuntimeException(final NotFoundException cause) {
         super("ESSR0017", new Object[] { cause }, cause);
     }

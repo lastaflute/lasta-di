@@ -23,28 +23,13 @@ import javax.transaction.TransactionManager;
 import org.lastaflute.jta.exception.LjtSystemRuntimeException;
 
 /**
- * {@link TransactionManager}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LjtTransactionManagerUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LjtTransactionManagerUtil() {
     }
 
-    /**
-     * トランザクションを返します。
-     * 
-     * @param tm
-     *            トランザクションマネージャ
-     * @return トランザクション
-     * @throws LjtSystemRuntimeException
-     *             {@link SystemException}が発生した場合
-     */
     public static Transaction getTransaction(TransactionManager tm) throws LjtSystemRuntimeException {
         try {
             return tm.getTransaction();
@@ -53,26 +38,10 @@ public class LjtTransactionManagerUtil {
         }
     }
 
-    /**
-     * トランザクションがアクティブかどうか返します。
-     * 
-     * @param tm
-     *            トランザクションマネージャ
-     * @return トランザクションがアクティブかどうか
-     */
     public static boolean isActive(TransactionManager tm) {
         return getStatus(tm) != Status.STATUS_NO_TRANSACTION;
     }
 
-    /**
-     * ステータスを返します。
-     * 
-     * @param tm
-     *            トランザクションマネージャ
-     * @return ステータス
-     * @throws LjtSystemRuntimeException
-     *             {@link SystemException}が発生した場合
-     */
     public static int getStatus(TransactionManager tm) throws LjtSystemRuntimeException {
         try {
             return tm.getStatus();
@@ -81,14 +50,6 @@ public class LjtTransactionManagerUtil {
         }
     }
 
-    /**
-     * ロールバックオンリーに設定します。
-     * 
-     * @param tm
-     *            トランザクションマネージャ
-     * @throws LjtSystemRuntimeException
-     *             {@link SystemException}が発生した場合
-     */
     public static void setRollbackOnly(TransactionManager tm) throws LjtSystemRuntimeException {
         try {
             tm.setRollbackOnly();

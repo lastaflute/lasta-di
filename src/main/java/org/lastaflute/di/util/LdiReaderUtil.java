@@ -22,26 +22,18 @@ import java.io.Reader;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link Reader}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiReaderUtil {
 
     private static final int BUF_SIZE = 8192;
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiReaderUtil() {
     }
 
     /**
-     * テキストを読み込みます。
-     * 
      * @param reader
-     * @return テキスト
+     * @return 
      * @throws IORuntimeException
      */
     public static String readText(Reader reader) throws IORuntimeException {
