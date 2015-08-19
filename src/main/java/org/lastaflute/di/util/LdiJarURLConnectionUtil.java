@@ -22,26 +22,17 @@ import java.util.jar.JarFile;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link JarURLConnection}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiJarURLConnectionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiJarURLConnectionUtil() {
     }
 
     /**
-     * {@link JarURLConnection#getJarFile()}の例外処理をラップするメソッドです。
-     * 
      * @param conn
      * @return {@link JarFile}
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      */
     public static JarFile getJarFile(JarURLConnection conn) throws IORuntimeException {
         try {

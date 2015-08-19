@@ -18,20 +18,12 @@ package org.lastaflute.di.exception;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * {@link ParserConfigurationException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class ParserConfigurationRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -4610465906028959083L;
 
-    /**
-     * {@link ParserConfigurationRuntimeException}を作成します。
-     * 
-     * @param cause
-     */
     public ParserConfigurationRuntimeException(ParserConfigurationException cause) {
         super("ESSR0053", new Object[] { cause }, cause);
     }

@@ -209,11 +209,6 @@ public class LjtLinkedList implements Cloneable, Externalizable {
         return copy;
     }
 
-    /**
-     * 配列に変換します。
-     * 
-     * @return 配列
-     */
     public Object[] toArray() {
         Object[] result = new Object[size];
         int i = 0;

@@ -16,24 +16,16 @@
 package org.lastaflute.di.util;
 
 /**
- * byte配列用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiBinaryConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiBinaryConversionUtil() {
     }
 
     /**
-     * byteの配列に変換します。
-     * 
      * @param o
-     * @return byteの配列
+     * @return 
      */
     public static byte[] toBinary(Object o) {
         if (o instanceof byte[]) {

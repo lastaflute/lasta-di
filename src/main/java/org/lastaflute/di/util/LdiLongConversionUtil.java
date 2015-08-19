@@ -18,22 +18,14 @@ package org.lastaflute.di.util;
 import java.text.SimpleDateFormat;
 
 /**
- * {@link Long}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiLongConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiLongConversionUtil() {
     }
 
     /**
-     * {@link Long}に変換します。
-     * 
      * @param o
      * @return {@link Long}
      */
@@ -42,8 +34,6 @@ public class LdiLongConversionUtil {
     }
 
     /**
-     * {@link Long}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Long}
@@ -77,8 +67,6 @@ public class LdiLongConversionUtil {
     }
 
     /**
-     * longに変換します。
-     * 
      * @param o
      * @return long
      */
@@ -87,8 +75,6 @@ public class LdiLongConversionUtil {
     }
 
     /**
-     * longに変換します。
-     * 
      * @param o
      * @param pattern
      * @return long

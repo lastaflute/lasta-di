@@ -26,47 +26,30 @@ import org.lastaflute.di.exception.SAXRuntimeException;
 import org.xml.sax.SAXException;
 
 /**
- * {@link SAXParser}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiSAXParserFactoryUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiSAXParserFactoryUtil() {
     }
 
-    /**
-     * {@link SAXParserFactory}の新しいインスタンスを作成します。
-     * 
-     * @return {@link SAXParserFactory}の新しいインスタンス
-     */
     public static SAXParserFactory newInstance() {
         return SAXParserFactory.newInstance();
     }
 
     /**
-     * デフォルト構成の{@link SAXParserFactory}を使って{@link SAXParser}の新しいインスタンスを作成します。
-     * 
-     * @return {@link SAXParser}の新しいインスタンス
+     * @return 
      * @throws SAXRuntimeException
-     *             {@link SAXParser}の作成中に{@link SAXException}がスローされた場合
      */
     public static SAXParser newSAXParser() {
         return newSAXParser(newInstance());
     }
 
     /**
-     * 指定の{@link SAXParserFactory}を使って{@link SAXParser}の新しいインスタンスを作成します。
-     * 
      * @param factory
      *            {@link SAXParserFactory}
-     * @return {@link SAXParser}の新しいインスタンス
+     * @return 
      * @throws SAXRuntimeException
-     *             {@link SAXParser}の作成中に{@link SAXException}がスローされた場合
      */
     public static SAXParser newSAXParser(SAXParserFactory factory) {
         try {
@@ -79,13 +62,10 @@ public class LdiSAXParserFactoryUtil {
     }
 
     /**
-     * XIncludeの有効／無効を設定します。
-     * 
      * @param spf
      *            {@link SAXParserFactory}
      * @param state
-     *            XIncludeを有効にするなら<code>true</code>
-     * @return XIncludeの有効／無効を設定できた場合は<code>true</code>
+     * @return 
      */
     public static boolean setXIncludeAware(final SAXParserFactory spf, final boolean state) {
         try {

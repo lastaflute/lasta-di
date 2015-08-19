@@ -25,25 +25,13 @@ import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * アノテーションのためのユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiAnnotationUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiAnnotationUtil() {
     }
 
-    /**
-     * アノテーションの要素を名前と値の{@link Map}として返します。
-     * 
-     * @param annotation
-     *            アノテーション
-     * @return アノテーションの要素の名前と値からなる{@link Map}
-     */
     public static Map<String, Object> getProperties(Annotation annotation) {
         Map<String, Object> map = new HashMap<String, Object>();
         BeanDesc beanDesc = BeanDescFactory.getBeanDesc(annotation.annotationType());
@@ -58,17 +46,6 @@ public class LdiAnnotationUtil {
         return map;
     }
 
-    /**
-     * アノテーションの要素の値を返します。
-     * 
-     * @param beanDesc
-     *            アノテーションを表す{@link BeanDesc}
-     * @param annotation
-     *            アノテーション
-     * @param name
-     *            要素の名前
-     * @return アノテーションの要素の値
-     */
     public static Object getProperty(BeanDesc beanDesc, Annotation annotation, String name) {
         Method m = beanDesc.getMethodNoException(name);
         if (m == null) {

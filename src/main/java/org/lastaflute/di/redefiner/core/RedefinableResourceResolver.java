@@ -72,7 +72,6 @@ public class RedefinableResourceResolver extends ClassPathResourceResolver {
                     }
                 }
             } catch (MalformedURLException ignore) {
-                // URLの形式でない場合はクラスパス上のリソースとみなす。
             }
         }
         return LdiResourceUtil.getResourceNoException(path);
@@ -99,7 +98,6 @@ public class RedefinableResourceResolver extends ClassPathResourceResolver {
         final String resourceBody =
                 LaContainerBuilderUtils.fromURLToResourcePath(body + RedefinableXmlLaContainerBuilder.DELIMITER + suffix);
         if (resourceBody != null) {
-            // パスがJarのURLの場合はURLをリソースパスに変換した上で作成したパスを候補に含める。
             pathList.add(resourceBody);
         }
         pathList.add(body + RedefinableXmlLaContainerBuilder.DELIMITER + suffix);

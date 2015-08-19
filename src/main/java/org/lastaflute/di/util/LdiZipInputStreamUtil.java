@@ -22,15 +22,11 @@ import java.util.zip.ZipInputStream;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link java.util.zip.ZipInputStream}を扱うユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiZipInputStreamUtil {
 
     /**
-     * {@link ZipInputStream#getNextEntry()}の例外処理をラップするメソッドです。
-     * 
      * @param zis
      * @return {@link ZipEntry}
      * @see ZipInputStream#getNextEntry()
@@ -44,8 +40,6 @@ public class LdiZipInputStreamUtil {
     }
 
     /**
-     * {@link ZipInputStream#reset()}の例外処理をラップするメソッドです。
-     * 
      * @param zis
      * @see ZipInputStream#reset()
      */
@@ -58,8 +52,6 @@ public class LdiZipInputStreamUtil {
     }
 
     /**
-     * {@link ZipInputStream#closeEntry()}の例外処理をラップするメソッドです。
-     * 
      * @param zis
      * @see ZipInputStream#closeEntry()
      */

@@ -19,26 +19,14 @@ import javax.xml.XMLConstants;
 import javax.xml.validation.SchemaFactory;
 
 /**
- * {@link SchemaFactory}のためのユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class LdiSchemaFactoryUtil {
 
-    /**
-     * W3C XML Schemaのための{@link SchemaFactory}を生成します。
-     * 
-     * @return W3C XML Schemaのための{@link SchemaFactory}
-     */
     public static SchemaFactory newW3cXmlSchemaFactory() {
         return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     }
 
-    /**
-     * RELAX NGのための{@link SchemaFactory}を生成します。
-     * 
-     * @return RELAX NGのための{@link SchemaFactory}
-     */
     public static SchemaFactory newRelaxNgSchemaFactory() {
         return SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
     }

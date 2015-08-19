@@ -22,22 +22,14 @@ import java.io.InputStreamReader;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link InputStreamReader}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiInputStreamReaderUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiInputStreamReaderUtil() {
     }
 
     /**
-     * {@link InputStreamReader}を作成します。
-     * 
      * @param is
      * @return {@link InputStreamReader}
      * @see #create(InputStream, String)
@@ -47,13 +39,10 @@ public class LdiInputStreamReaderUtil {
     }
 
     /**
-     * {@link InputStreamReader}を作成します。
-     * 
      * @param is
      * @param encoding
      * @return {@link InputStreamReader}
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see InputStreamReader#InputStreamReader(InputStream, String)
      */
     public static InputStreamReader create(InputStream is, String encoding) throws IORuntimeException {

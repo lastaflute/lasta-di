@@ -27,26 +27,17 @@ import java.util.zip.ZipEntry;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link java.util.jar.JarFile}を扱うユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiJarFileUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiJarFileUtil() {
     }
 
     /**
-     * 指定されたJarファイルを読み取るための<code>JarFile</code>を作成して返します。
-     * 
      * @param file
-     *            ファイルパス
-     * @return 指定されたJarファイルを読み取るための<code>JarFile</code>
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static JarFile create(final String file) {
         try {
@@ -57,13 +48,9 @@ public class LdiJarFileUtil {
     }
 
     /**
-     * 指定されたJarファイルを読み取るための<code>JarFile</code>を作成して返します。
-     * 
      * @param file
-     *            ファイル
-     * @return 指定されたJarファイルを読み取るための<code>JarFile</code>
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static JarFile create(final File file) {
         try {
@@ -74,15 +61,10 @@ public class LdiJarFileUtil {
     }
 
     /**
-     * 指定されたJarファイルエントリの内容を読み込むための入力ストリームを返します。
-     * 
      * @param file
-     *            Jarファイル
      * @param entry
-     *            Jarファイルエントリ
-     * @return 指定されたJarファイルエントリの内容を読み込むための入力ストリーム
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static InputStream getInputStream(final JarFile file, final ZipEntry entry) {
         try {
@@ -93,13 +75,9 @@ public class LdiJarFileUtil {
     }
 
     /**
-     * URLで指定されたJarファイルを読み取るための<code>JarFile</code>を作成して返します。
-     * 
      * @param jarUrl
-     *            Jarファイルを示すURL
-     * @return 指定されたJarファイルを読み取るための<code>JarFile</code>
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static JarFile toJarFile(final URL jarUrl) {
         final URLConnection con = LdiURLUtil.openConnection(jarUrl);
@@ -110,13 +88,9 @@ public class LdiJarFileUtil {
     }
 
     /**
-     * URLで指定されたJarファイルのパスを返します。
-     * 
      * @param jarUrl
-     *            Jarファイルを示すURL
-     * @return URLで指定されたJarファイルのパス
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static String toJarFilePath(final URL jarUrl) {
         final URL nestedUrl = LdiURLUtil.create(jarUrl.getPath());
@@ -128,12 +102,8 @@ public class LdiJarFileUtil {
     }
 
     /**
-     * Jarファイルをクローズします。
-     * 
      * @param jarFile
-     *            Jarファイル
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static void close(final JarFile jarFile) {
         try {

@@ -18,49 +18,26 @@ package org.lastaflute.di.util;
 import java.io.Serializable;
 
 /**
- * 同期しない{@link java.lang.StringBuffer}です。
- * <p>
- * J2SE1.4では{@link java.lang.StringBuilder}が使えないための代替クラスです。
- * </p>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class SStringBuilder implements Serializable, CharSequence {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 値です。
-     */
     protected char value[];
 
-    /**
-     * 文字数です。
-     */
     protected int count;
 
-    /**
-     * {@link SStringBuilder}を作成します。
-     */
     public SStringBuilder() {
         this(16);
     }
 
-    /**
-     * {@link SStringBuilder}を作成します。
-     * 
-     * @param capacity
-     *            キャパシティ
-     */
     public SStringBuilder(final int capacity) {
         value = new char[capacity];
     }
 
     /**
-     * {@link SStringBuilder}を作成します。
-     * 
      * @param str
-     *            文字
      * @see java.lang.StringBuilder#StringBuilder(String)
      */
     public SStringBuilder(final String str) {
@@ -69,8 +46,6 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * {@link SStringBuilder}を作成します。
-     * 
      * @param seq
      *            character sequence
      * @see java.lang.StringBuilder#StringBuilder(CharSequence)
@@ -81,11 +56,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * booleanを追加します。
-     * 
      * @param b
      *            boolean
-     * @return 追加された {@link SStringBuilder}
      * @see java.lang.StringBuilder#StringBuilder(boolean)
      */
     public SStringBuilder append(final boolean b) {
@@ -113,11 +85,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charを追加します。
-     * 
      * @param c
      *            char
-     * @return 追加された {@link SStringBuilder}
      * @see java.lang.StringBuilder#append(char)
      */
     public SStringBuilder append(final char c) {
@@ -130,11 +99,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charの配列を追加します。
-     * 
      * @param str
-     *            charの配列
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(char[])
      */
     public SStringBuilder append(final char[] str) {
@@ -148,15 +114,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charの配列を追加します。
-     * 
      * @param str
-     *            charの配列
      * @param offset
-     *            オフセット
      * @param len
-     *            長さ
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(char[], int, int)
      */
     public SStringBuilder append(final char[] str, final int offset, final int len) {
@@ -170,11 +131,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * doubleを追加します。
-     * 
      * @param d
-     *            double
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(double)
      */
     public SStringBuilder append(final double d) {
@@ -183,11 +141,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * floatを追加します。
-     * 
      * @param f
      *            float
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(float)
      */
     public SStringBuilder append(final float f) {
@@ -196,11 +152,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * intを追加します。
-     * 
      * @param i
      *            int
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(int)
      */
     public SStringBuilder append(final int i) {
@@ -209,11 +163,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * CharSequenceを追加します。
-     * 
      * @param s
      *            char Sequence
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(CharSequence)
      */
     public SStringBuilder append(CharSequence s) {
@@ -233,15 +185,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * CharSequenceを追加します。
-     * 
      * @param s
-     *            CharSequenceを追加します。
      * @param start
-     *            開始位置
      * @param end
-     *            終了位置
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(CharSequence, int, int)
      */
     public SStringBuilder append(CharSequence s, final int start, final int end) {
@@ -267,11 +214,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * Objectを追加します。
-     * 
      * @param obj
-     *            オブジェクト
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(Object)
      */
     public SStringBuilder append(final Object obj) {
@@ -279,11 +223,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字列を追加します。
-     * 
      * @param str
-     *            文字列
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(String)
      */
     public SStringBuilder append(String str) {
@@ -304,11 +245,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * StringBufferを追加します。
-     * 
      * @param sb
      *            {@link StringBuffer}
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(StringBuffer)
      */
     public SStringBuilder append(final StringBuffer sb) {
@@ -326,11 +265,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * longを追加します。
-     * 
      * @param l
      *            long
-     * @return 追加された {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#append(long)
      */
     public SStringBuilder append(final long l) {
@@ -339,9 +276,7 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * キャパシティを返します。
-     * 
-     * @return キャパシティ
+     * @return 
      * @see java.lang.StringBuilder#capacity()
      */
     public int capacity() {
@@ -349,9 +284,7 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字を返します。
-     * 
-     * @return 文字
+     * @return 
      * @see java.lang.StringBuilder#charAt(int)
      */
     public char charAt(final int index) {
@@ -362,11 +295,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字列を削除します。
-     * 
      * @param start
      * @param end
-     * @return 削除された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#delete(int, int)
      */
     public SStringBuilder delete(final int start, int end) {
@@ -388,11 +319,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字を削除します。
-     * 
      * @param index
-     *            位置
-     * @return 削除された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#deleteCharAt(int)
      */
     public SStringBuilder deleteCharAt(final int index) {
@@ -405,10 +333,7 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * キャパシティを確定します。
-     * 
      * @param minimumCapacity
-     *            最低のキャパシティ
      * @see java.lang.StringBuilder#ensureCapacity(int)
      */
     public void ensureCapacity(final int minimumCapacity) {
@@ -418,16 +343,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charの配列に設定します。
-     * 
      * @param srcBegin
-     *            元の開始位置
      * @param srcEnd
-     *            元の終了位置
      * @param dst
-     *            設定対象
      * @param dstBegin
-     *            設定対象の開始位置
      * @see java.lang.StringBuilder#getChars(int, int, char[], int)
      */
     public void getChars(final int srcBegin, final int srcEnd, final char[] dst, final int dstBegin) {
@@ -444,11 +363,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 位置を返します。
-     * 
      * @param str
-     *            文字列
-     * @return 位置
+     * @return 
      * @see java.lang.StringBuilder#indexOf(String)
      */
     public int indexOf(final String str) {
@@ -456,13 +372,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 位置を返します。
-     * 
      * @param str
-     *            文字列
      * @param fromIndex
-     *            開始位置
-     * @return 位置
+     * @return 
      * @see java.lang.StringBuilder#indexOf(String, int)
      */
     public int indexOf(final String str, final int fromIndex) {
@@ -470,13 +382,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * booleanを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param b
      *            boolean
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, boolean)
      */
     public SStringBuilder insert(final int offset, final boolean b) {
@@ -484,13 +393,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param c
-     *            char
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, char)
      */
     public SStringBuilder insert(final int offset, final char c) {
@@ -505,13 +410,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charの配列を挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param str
-     *            charの配列
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, char[])
      */
     public SStringBuilder insert(final int offset, final char[] str) {
@@ -530,17 +431,11 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charの配列を挿入します。
-     * 
      * @param index
-     *            インデックス
      * @param str
-     *            charの配列
      * @param offset
-     *            オフセット
      * @param len
-     *            長さ
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, char[], int, int)
      */
     public SStringBuilder insert(final int index, final char[] str, final int offset, final int len) {
@@ -561,13 +456,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * doubleを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param d
-     *            double
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, double)
      */
     public SStringBuilder insert(final int offset, final double d) {
@@ -575,13 +466,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * floatを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param f
      *            float
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, float)
      */
     public SStringBuilder insert(final int offset, final float f) {
@@ -589,13 +477,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * intを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param i
      *            int
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, int)
      */
     public SStringBuilder insert(final int offset, final int i) {
@@ -603,13 +488,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * CharSequenceを挿入します。
-     * 
      * @param dstOffset
-     *            オフセット
      * @param s
      *            character sequence
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, CharSequence)
      */
     public SStringBuilder insert(final int dstOffset, CharSequence s) {
@@ -623,17 +505,12 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * CharSequenceを挿入します。
-     * 
      * @param dstOffset
-     *            対象のオフセット
      * @param s
      *            character sequence
      * @param start
-     *            開始位置
      * @param end
-     *            終了位置
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, CharSequence, int, int)
      */
     public SStringBuilder insert(int dstOffset, CharSequence s, final int start, final int end) {
@@ -663,13 +540,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * オブジェクトを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param obj
-     *            オブジェクト
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, Object)
      */
     public SStringBuilder insert(final int offset, final Object obj) {
@@ -677,13 +550,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字列を挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param str
-     *            文字列
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, String)
      */
     public SStringBuilder insert(final int offset, String str) {
@@ -705,13 +574,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * longを挿入します。
-     * 
      * @param offset
-     *            オフセット
      * @param l
-     *            long
-     * @return 挿入された結果の {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#insert(int, long)
      */
     public SStringBuilder insert(final int offset, final long l) {
@@ -719,11 +584,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 最後からの位置を返します。
-     * 
      * @param str
-     *            文字列
-     * @return 最後からの位置
+     * @return 
      * @see java.lang.StringBuilder#lastIndexOf(String)
      */
     public int lastIndexOf(final String str) {
@@ -731,13 +593,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 最後からの位置を返します。
-     * 
      * @param str
-     *            文字列
      * @param fromIndex
-     *            開始位置
-     * @return 最後からの位置
+     * @return 
      * @see java.lang.StringBuilder#lastIndexOf(String, int)
      */
     public int lastIndexOf(final String str, int fromIndex) {
@@ -783,8 +641,6 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 長さを返します。
-     * 
      * @see java.lang.StringBuilder#length()
      */
     public int length() {
@@ -792,15 +648,10 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字列を置き換えます。
-     * 
      * @param start
-     *            開始位置
      * @param end
-     *            終了位置
      * @param str
-     *            文字列
-     * @return 置き換えられた {@link SStringBuilder}
+     * @return 
      * @see java.lang.StringBuilder#replace(int, int, String)
      */
     public SStringBuilder replace(final int start, int end, final String str) {
@@ -833,9 +684,7 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 文字列の並びを逆にします。
-     * 
-     * @return 結果の {@link SStringBuilder}
+     * @return 
      * 
      * @see java.lang.StringBuilder#reverse()
      */
@@ -850,10 +699,7 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * charを設定します。
-     * 
      * @param index
-     *            位置
      * @param ch
      *            char
      * @see java.lang.StringBuilder#setCharAt(int, char)
@@ -866,10 +712,7 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 長さを設定します。
-     * 
      * @param newLength
-     *            長さ
      * @see java.lang.StringBuilder#setLength(int)
      */
     public void setLength(final int newLength) {
@@ -897,11 +740,8 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 部分的な文字列を返します。
-     * 
      * @param start
-     *            開始位置
-     * @return 部分的な文字列
+     * @return 
      * @see java.lang.StringBuilder#substring(int)
      */
     public String substring(final int start) {
@@ -909,13 +749,9 @@ public class SStringBuilder implements Serializable, CharSequence {
     }
 
     /**
-     * 部分的な文字列を返します。
-     * 
      * @param start
-     *            開始位置
      * @param end
-     *            終了位置
-     * @return 部分的な文字列
+     * @return 
      * @see java.lang.StringBuilder#substring(int, int)
      */
     public String substring(final int start, final int end) {

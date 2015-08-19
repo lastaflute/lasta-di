@@ -16,49 +16,25 @@
 package org.lastaflute.di.util.tiger;
 
 /**
- * 値を保持するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  * @since 2.4.18
  * @param <T>
- *            値の型
  */
 public class ValueHolder<T> {
 
-    /** 値 */
     protected T value;
 
-    /**
-     * インスタンスを構築します。
-     */
     public ValueHolder() {
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param value
-     *            値
-     */
     public ValueHolder(T value) {
         this.value = value;
     }
 
-    /**
-     * 値を返します。
-     * 
-     * @return 値
-     */
     public T getValue() {
         return value;
     }
 
-    /**
-     * 値を設定します。
-     * 
-     * @param value
-     *            値
-     */
     public void setValue(final T value) {
         this.value = value;
     }

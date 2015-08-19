@@ -22,33 +22,17 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.lastaflute.di.exception.ParserConfigurationRuntimeException;
 
 /**
- * {@link DocumentBuilderFactory}の用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiDocumentBuilderFactoryUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiDocumentBuilderFactoryUtil() {
     }
 
-    /**
-     * 新しい {@link DocumentBuilderFactory}のインスタンスを返します。
-     * 
-     * @return 新しい {@link DocumentBuilderFactory}のインスタンス
-     */
     public static DocumentBuilderFactory newInstance() {
         return DocumentBuilderFactory.newInstance();
     }
 
-    /**
-     * 新しい {@link DocumentBuilder}を作成します。
-     * 
-     * @return 新しい {@link DocumentBuilder}
-     */
     public static DocumentBuilder newDocumentBuilder() {
         try {
             return newInstance().newDocumentBuilder();

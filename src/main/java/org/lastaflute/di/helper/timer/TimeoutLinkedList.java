@@ -106,12 +106,6 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
         return indexOf(o) != -1;
     }
 
-    /**
-     * 要素を削除します。
-     * 
-     * @param o
-     * @return 削除されたかどうか
-     */
     public boolean remove(final Object o) {
         if (o == null) {
             for (Entry e = header._next; e != header; e = e._next) {
@@ -131,33 +125,17 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
         return false;
     }
 
-    /**
-     * 指定した位置の要素を削除します。
-     * 
-     * @param index
-     *            位置
-     * @return 削除された要素
-     */
     public Object remove(final int index) {
         Entry e = getEntry(index);
         e.remove();
         return e._element;
     }
 
-    /**
-     * 要素を空にします。
-     */
     public void clear() {
         header._next = header._previous = header;
         size = 0;
     }
 
-    /**
-     * エントリを返します。
-     * 
-     * @param index
-     * @return エントリ
-     */
     public Entry getEntry(final int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -175,24 +153,10 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
         return e;
     }
 
-    /**
-     * 要素を返します。
-     * 
-     * @param index
-     *            位置
-     * @return 要素
-     */
     public Object get(final int index) {
         return getEntry(index)._element;
     }
 
-    /**
-     * 要素を設定します。
-     * 
-     * @param index
-     * @param element
-     * @return 元の要素
-     */
     public Object set(final int index, final Object element) {
         Entry e = getEntry(index);
         Object oldVal = e._element;
@@ -200,13 +164,6 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
         return oldVal;
     }
 
-    /**
-     * 位置を返します。
-     * 
-     * @param o
-     *            要素
-     * @return 位置
-     */
     public int indexOf(final Object o) {
         int index = 0;
         if (o == null) {
@@ -252,11 +209,6 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
         return copy;
     }
 
-    /**
-     * 配列に変換します。
-     * 
-     * @return 配列
-     */
     public Object[] toArray() {
         Object[] result = new Object[size];
         int i = 0;
@@ -266,10 +218,6 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
         return result;
     }
 
-    /**
-     * 要素を格納するエントリです。
-     * 
-     */
     public class Entry {
 
         private Object _element;
@@ -284,20 +232,10 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
             _previous = previous;
         }
 
-        /**
-         * 要素を返します。
-         * 
-         * @return 要素
-         */
         public Object getElement() {
             return _element;
         }
 
-        /**
-         * 次のエントリを返します。
-         * 
-         * @return 次のエントリ
-         */
         public Entry getNext() {
             if (_next != TimeoutLinkedList.this.header) {
                 return _next;
@@ -305,11 +243,6 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
             return null;
         }
 
-        /**
-         * 前のエントリを返します。
-         * 
-         * @return 前のエントリ
-         */
         public Entry getPrevious() {
             if (_previous != TimeoutLinkedList.this.header) {
                 return _previous;
@@ -317,22 +250,12 @@ public class TimeoutLinkedList implements Cloneable, Externalizable {
             return null;
         }
 
-        /**
-         * 要素を削除します。
-         */
         public void remove() {
             _previous._next = _next;
             _next._previous = _previous;
             TimeoutLinkedList.this.size--;
         }
 
-        /**
-         * 前に追加します。
-         * 
-         * @param o
-         *            要素
-         * @return 追加されたエントリ
-         */
         public Entry addBefore(final Object o) {
             Entry newEntry = new Entry(o, this, _previous);
             _previous._next = newEntry;

@@ -25,10 +25,7 @@ import org.lastaflute.jta.exception.LjtRollbackRuntimeException;
 import org.lastaflute.jta.exception.LjtSystemRuntimeException;
 
 /**
- * {@link Transaction}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LjtTransactionUtil {
 

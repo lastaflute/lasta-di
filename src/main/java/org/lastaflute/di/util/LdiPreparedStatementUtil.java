@@ -22,26 +22,17 @@ import java.sql.SQLException;
 import org.lastaflute.di.exception.SQLRuntimeException;
 
 /**
- * {@link PreparedStatement}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiPreparedStatementUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiPreparedStatementUtil() {
     }
 
     /**
-     * クエリを実行します。
-     * 
      * @param ps
      * @return {@link ResultSet}
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      */
     public static ResultSet executeQuery(PreparedStatement ps) throws SQLRuntimeException {
         try {
@@ -51,14 +42,6 @@ public class LdiPreparedStatementUtil {
         }
     }
 
-    /**
-     * 更新を実行します。
-     * 
-     * @param ps
-     * @return 更新した結果の行数
-     * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
-     */
     public static int executeUpdate(PreparedStatement ps) throws SQLRuntimeException {
         try {
             return ps.executeUpdate();
@@ -68,12 +51,8 @@ public class LdiPreparedStatementUtil {
     }
 
     /**
-     * 実行します。
-     * 
      * @param ps
-     * @return 結果セットを返すかどうか
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      * @see PreparedStatement#execute()
      */
     public static boolean execute(PreparedStatement ps) throws SQLRuntimeException {
@@ -84,14 +63,6 @@ public class LdiPreparedStatementUtil {
         }
     }
 
-    /**
-     * バッチ更新を行ないます。
-     * 
-     * @param ps
-     * @return 更新した結果の行数の配列
-     * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
-     */
     public static int[] executeBatch(PreparedStatement ps) throws SQLRuntimeException {
         try {
             return ps.executeBatch();
@@ -100,13 +71,6 @@ public class LdiPreparedStatementUtil {
         }
     }
 
-    /**
-     * バッチを追加します。
-     * 
-     * @param ps
-     * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
-     */
     public static void addBatch(PreparedStatement ps) throws SQLRuntimeException {
         try {
             ps.addBatch();

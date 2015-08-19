@@ -24,38 +24,25 @@ import java.util.Locale;
 import org.lastaflute.di.exception.ParseRuntimeException;
 
 /**
- * タイム用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiTimeConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiTimeConversionUtil() {
     }
 
     /**
-     * タイムに変換します。
-     * 
      * @param o
-     *            変換したいオブジェクト
-     * @return タイム
+     * @return 
      */
     public static Time toTime(Object o) {
         return toTime(o, null);
     }
 
     /**
-     * タイムに変換します。
-     * 
      * @param o
-     *            変換したいオブジェクト
      * @param pattern
-     *            パターン
-     * @return タイム
+     * @return 
      */
     public static Time toTime(Object o, String pattern) {
         if (o == null) {
@@ -72,28 +59,19 @@ public class LdiTimeConversionUtil {
     }
 
     /**
-     * タイムに変換します。
-     * 
      * @param s
-     *            文字列で表現した値
      * @param pattern
-     *            パターン
-     * @return 変換した値
+     * @return 
      */
     public static Time toTime(String s, String pattern) {
         return toTime(s, pattern, Locale.getDefault());
     }
 
     /**
-     * タイムに変換します。
-     * 
      * @param s
-     *            文字列で表現した値
      * @param pattern
-     *            パターン
      * @param locale
-     *            ロケール
-     * @return 変換した値
+     * @return 
      */
     public static Time toTime(String s, String pattern, Locale locale) {
         if (LdiStringUtil.isEmpty(s)) {
@@ -108,15 +86,10 @@ public class LdiTimeConversionUtil {
     }
 
     /**
-     * 日付フォーマットを返します。
-     * 
      * @param s
-     *            文字列で表現した値
      * @param pattern
-     *            パターン
      * @param locale
-     *            ロケール
-     * @return 日付フォーマット
+     * @return 
      */
     public static SimpleDateFormat getDateFormat(String s, String pattern, Locale locale) {
         if (pattern != null) {
@@ -126,13 +99,9 @@ public class LdiTimeConversionUtil {
     }
 
     /**
-     * 日付フォーマットを返します。
-     * 
      * @param s
-     *            文字列で表現した値
      * @param locale
-     *            ロケール
-     * @return 日付フォーマット
+     * @return 
      */
     public static SimpleDateFormat getDateFormat(String s, Locale locale) {
         String pattern = getPattern(locale);
@@ -146,23 +115,10 @@ public class LdiTimeConversionUtil {
         return new SimpleDateFormat(pattern);
     }
 
-    /**
-     * 日付パターンを返します。
-     * 
-     * @param locale
-     * @return 日付パターン
-     */
     public static String getPattern(Locale locale) {
         return "HH:mm:ss";
     }
 
-    /**
-     * 短いパターンに変換します。
-     * 
-     * @param pattern
-     *            パターン
-     * @return 短いパターン
-     */
     public static String convertShortPattern(String pattern) {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < pattern.length(); ++i) {

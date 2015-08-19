@@ -112,8 +112,6 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
     }
 
     protected boolean isBasePath(String path) {
-        // 厳密には「～+.dicon」形式もbaseでないと判定しなければいけないが、「～+.dicon」は他のリソースと別の仕組みで扱われている
-        // ため、このロジックを通ることはない。そのためここで「～+.dicon」形式の判定を行なわなくても問題ない。
         if (path == null) {
             return true;
         }
@@ -149,8 +147,6 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
         final int delimiter = path.lastIndexOf(DELIMITER);
         final int slash = path.lastIndexOf('/');
         if (delimiter >= 0 && delimiter > slash) {
-            // 訳が分からなくならないよう、現状ではリソース名に「+」が含まれていない場合だけ
-            // 特別な処理を行なうようにしている。
             return new String[0];
         }
 
@@ -187,7 +183,6 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
         final String additionalPath = sb.toString();
         final String additionalResourcePath = LaContainerBuilderUtils.fromURLToResourcePath(additionalPath);
         if (additionalResourcePath != null) {
-            // パスがJarのURLの場合はURLをリソースパスに変換した上で作成したパスを候補に含める。
             pathList.add(additionalResourcePath);
         }
         pathList.add(additionalPath);

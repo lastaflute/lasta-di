@@ -102,15 +102,6 @@ public abstract class LdiClassLoaderUtil {
         }
     }
 
-    /**
-     * クラスローダ<code>other</code>がクラスローダ<code>cl</code>の祖先なら<code>true</code>を返します。
-     * 
-     * @param cl
-     *            クラスローダ
-     * @param other
-     *            クラスローダ
-     * @return クラスローダ<code>other</code>がクラスローダ<code>cl</code>の祖先なら<code>true</code>
-     */
     protected static boolean isAncestor(ClassLoader cl, final ClassLoader other) {
         while (cl != null) {
             if (cl == other) {

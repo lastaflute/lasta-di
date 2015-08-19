@@ -16,76 +16,30 @@
 package org.lastaflute.di.util.tiger;
 
 /**
- * 4つの値の組です。
- * 
  * @author modified by jflute (originated in Seasar)
  * @since 2.4.18
  * @param <T1>
- *            1番目の値の型
  * @param <T2>
- *            2番目の値の型
  * @param <T3>
- *            3番目の値の型
  * @param <T4>
- *            4番目の値の型
  */
 public class Tuple4<T1, T2, T3, T4> {
 
-    /** 1番目の値 */
     protected T1 value1;
 
-    /** 2番目の値 */
     protected T2 value2;
 
-    /** 3番目の値 */
     protected T3 value3;
 
-    /** 4番目の値 */
     protected T4 value4;
 
-    /**
-     * 4つの値の組を作成して返します。
-     * 
-     * @param <T1>
-     *            1番目の値の型
-     * @param <T2>
-     *            2番目の値の型
-     * @param <T3>
-     *            3番目の値の型
-     * @param <T4>
-     *            4番目の値の型
-     * @param value1
-     *            1番目の値
-     * @param value2
-     *            2番目の値
-     * @param value3
-     *            3番目の値
-     * @param value4
-     *            4番目の値
-     * @return 4つの値の組
-     */
     public static <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> tuple4(final T1 value1, final T2 value2, final T3 value3, final T4 value4) {
         return new Tuple4<T1, T2, T3, T4>(value1, value2, value3, value4);
     }
 
-    /**
-     * インスタンスを構築します。
-     */
     public Tuple4() {
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param value1
-     *            1番目の値
-     * @param value2
-     *            2番目の値
-     * @param value3
-     *            3番目の値
-     * @param value4
-     *            4番目の値
-     */
     public Tuple4(final T1 value1, final T2 value2, final T3 value3, final T4 value4) {
         this.value1 = value1;
         this.value2 = value2;
@@ -93,78 +47,34 @@ public class Tuple4<T1, T2, T3, T4> {
         this.value4 = value4;
     }
 
-    /**
-     * 1番目の値を返します。
-     * 
-     * @return 1番目の値
-     */
     public T1 getValue1() {
         return value1;
     }
 
-    /**
-     * 1番目の値を設定します。
-     * 
-     * @param value1
-     *            1番目の値
-     */
     public void setValue1(final T1 value1) {
         this.value1 = value1;
     }
 
-    /**
-     * 2番目の値を返します。
-     * 
-     * @return 2番目の値
-     */
     public T2 getValue2() {
         return value2;
     }
 
-    /**
-     * 2番目の値を設定します。
-     * 
-     * @param value2
-     *            2番目の値
-     */
     public void setValue2(final T2 value2) {
         this.value2 = value2;
     }
 
-    /**
-     * 3番目の値を返します。
-     * 
-     * @return 3番目の値
-     */
     public T3 getValue3() {
         return value3;
     }
 
-    /**
-     * 3番目の値を設定します。
-     * 
-     * @param value3
-     *            3番目の値
-     */
     public void setValue3(final T3 value3) {
         this.value3 = value3;
     }
 
-    /**
-     * 4番目の値を返します。
-     * 
-     * @return 4番目の値
-     */
     public T4 getValue4() {
         return value4;
     }
 
-    /**
-     * 4番目の値を設定します。
-     * 
-     * @param value4
-     *            4番目の値
-     */
     public void setValue4(final T4 value4) {
         this.value4 = value4;
     }
