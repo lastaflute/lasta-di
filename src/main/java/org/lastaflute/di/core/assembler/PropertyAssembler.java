@@ -18,7 +18,7 @@ package org.lastaflute.di.core.assembler;
 import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.core.meta.AutoBindingDef;
 import org.lastaflute.di.core.meta.PropertyDef;
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -32,8 +32,8 @@ public interface PropertyAssembler {
 
     /**
      * @param component
-     * @throws org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException
+     * @throws org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException
      * @throws org.lastaflute.di.exception.EmptyRuntimeException
      */
-    public void assemble(Object component) throws IllegalPropertyRuntimeException;
+    public void assemble(Object component) throws BeanIllegalPropertyException;
 }

@@ -38,7 +38,7 @@ import org.lastaflute.di.core.util.InitMethodDefSupport;
 import org.lastaflute.di.core.util.InterTypeDefSupport;
 import org.lastaflute.di.core.util.MetaDefSupport;
 import org.lastaflute.di.core.util.PropertyDefSupport;
-import org.lastaflute.di.helper.beans.exception.PropertyNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanPropertyNotFoundException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -188,7 +188,7 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
         if (hasPropertyDef(propertyName)) {
             return propertyDefSupport.getPropertyDef(propertyName);
         }
-        throw new PropertyNotFoundRuntimeException(componentClass, propertyName);
+        throw new BeanPropertyNotFoundException(componentClass, propertyName);
     }
 
     public boolean hasPropertyDef(String propertyName) {

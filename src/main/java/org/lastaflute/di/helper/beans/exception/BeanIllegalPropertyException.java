@@ -20,14 +20,14 @@ import org.lastaflute.di.exception.SRuntimeException;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class IllegalPropertyRuntimeException extends SRuntimeException {
+public class BeanIllegalPropertyException extends SRuntimeException {
 
     private static final long serialVersionUID = 3584516316082904020L;
 
     private Class<?> targetClass;
     private String propertyName;
 
-    public IllegalPropertyRuntimeException(Class<?> targetClass, String propertyName, Throwable cause) {
+    public BeanIllegalPropertyException(Class<?> targetClass, String propertyName, Throwable cause) {
         super("ESSR0059", new Object[] { targetClass.getName(), propertyName, cause }, cause);
         this.targetClass = targetClass;
         this.propertyName = propertyName;

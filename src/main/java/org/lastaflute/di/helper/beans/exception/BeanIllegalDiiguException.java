@@ -20,11 +20,11 @@ import org.lastaflute.di.exception.SRuntimeException;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class IllegalDiiguRuntimeException extends SRuntimeException {
+public class BeanIllegalDiiguException extends SRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public IllegalDiiguRuntimeException() {
+    public BeanIllegalDiiguException() {
         super("ESSR0090");
     }
 }

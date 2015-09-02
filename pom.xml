@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.lastaflute</groupId>
 	<artifactId>lasta-di</artifactId>
-	<version>0.6.3-RC4</version> <!-- latest is RC4 -->
+	<version>0.6.3-RC5</version> <!-- latest is RC5 -->
 	<packaging>jar</packaging>
 
 	<name>Lasta Di</name>

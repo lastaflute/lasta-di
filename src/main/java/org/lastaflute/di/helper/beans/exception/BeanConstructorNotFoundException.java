@@ -20,7 +20,7 @@ import org.lastaflute.di.exception.SRuntimeException;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class ConstructorNotFoundRuntimeException extends SRuntimeException {
+public class BeanConstructorNotFoundException extends SRuntimeException {
 
     private static final long serialVersionUID = 8584662068396978822L;
 
@@ -28,14 +28,14 @@ public class ConstructorNotFoundRuntimeException extends SRuntimeException {
     private Object[] methodArgs;
     private Class<?>[] paramTypes;
 
-    public ConstructorNotFoundRuntimeException(Class<?> targetClass, Object[] methodArgs) {
+    public BeanConstructorNotFoundException(Class<?> targetClass, Object[] methodArgs) {
         super("ESSR0048", new Object[] { targetClass.getName(), getSignature(methodArgs) });
 
         this.targetClass = targetClass;
         this.methodArgs = methodArgs;
     }
 
-    public ConstructorNotFoundRuntimeException(Class<?> targetClass, Class<?>[] paramTypes) {
+    public BeanConstructorNotFoundException(Class<?> targetClass, Class<?>[] paramTypes) {
         super("ESSR0048", new Object[] { targetClass.getName(), getSignature(paramTypes) });
         this.targetClass = targetClass;
         this.paramTypes = paramTypes;

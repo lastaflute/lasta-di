@@ -22,7 +22,7 @@ import java.util.Map;
 import org.lastaflute.di.core.aop.frame.MethodInvocation;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
-import org.lastaflute.di.helper.beans.exception.MethodNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
 import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
 import org.lastaflute.di.util.LdiMethodUtil;
 
@@ -71,7 +71,7 @@ public class DelegateInterceptor extends AbstractInterceptor {
         } else if (beanDesc.hasMethod(methodName)) {
             return beanDesc.invoke(target, methodName, invocation.getArguments());
         } else {
-            throw new MethodNotFoundRuntimeException(getTargetClass(invocation), methodName, invocation.getArguments());
+            throw new BeanMethodNotFoundException(getTargetClass(invocation), methodName, invocation.getArguments());
         }
     }
 }

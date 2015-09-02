@@ -27,7 +27,7 @@ import org.lastaflute.di.core.meta.AccessTypeDef;
 import org.lastaflute.di.core.meta.PropertyDef;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 import org.lastaflute.di.redefiner.LaContainerPreparer;
 import org.lastaflute.di.redefiner.annotation.ManualBindingProperties;
 import org.lastaflute.di.redefiner.util.ClassBuilderUtils;
@@ -41,7 +41,7 @@ public class ClassAutoPropertyAssembler extends AbstractPropertyAssembler {
         super(componentDef);
     }
 
-    public void assemble(Object component) throws IllegalPropertyRuntimeException {
+    public void assemble(Object component) throws BeanIllegalPropertyException {
         if (component == null) {
             return;
         }

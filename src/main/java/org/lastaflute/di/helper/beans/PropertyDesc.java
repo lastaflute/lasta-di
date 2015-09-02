@@ -18,7 +18,7 @@ package org.lastaflute.di.helper.beans;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -51,7 +51,7 @@ public interface PropertyDesc {
 
     Object getValue(Object target) throws IllegalStateException;
 
-    void setValue(Object target, Object value) throws IllegalPropertyRuntimeException, IllegalStateException;
+    void setValue(Object target, Object value) throws BeanIllegalPropertyException, IllegalStateException;
 
     Object convertIfNeed(Object value);
 

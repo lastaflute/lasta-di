@@ -25,7 +25,7 @@ import org.lastaflute.di.core.meta.BindingTypeDef;
 import org.lastaflute.di.core.meta.PropertyDef;
 import org.lastaflute.di.core.util.BindingUtil;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiFieldUtil;
 
@@ -117,14 +117,14 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected void setPropertyValue(ComponentDef componentDef, PropertyDesc propertyDesc, Object component, Object value)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         if (value == null) {
             return;
         }
         try {
             propertyDesc.setValue(component, value); // method or non-annotation public field
         } catch (NumberFormatException ex) {
-            throw new IllegalPropertyRuntimeException(componentDef.getComponentClass(), propertyDesc.getPropertyName(), ex);
+            throw new BeanIllegalPropertyException(componentDef.getComponentClass(), propertyDesc.getPropertyName(), ex);
         }
     }
 
@@ -198,14 +198,14 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected void setResourceFieldValue(ComponentDef componentDef, Field field, Object component, Object value)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         if (value == null) {
             return;
         }
         try {
             LdiFieldUtil.set(field, component, value); // annotation field (contains public, private)
         } catch (NumberFormatException ex) {
-            throw new IllegalPropertyRuntimeException(componentDef.getComponentClass(), field.getName(), ex);
+            throw new BeanIllegalPropertyException(componentDef.getComponentClass(), field.getName(), ex);
         }
     }
 
@@ -229,7 +229,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected Object getValue(ComponentDef componentDef, PropertyDef propertyDef, Object component, Class<?> resultType)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         try {
             return propertyDef.getValue(resultType);
         } catch (RuntimeException cause) {
@@ -258,7 +258,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected Object getComponent(ComponentDef componentDef, Object key, Object component, String propertyName)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         try {
             return componentDef.getContainer().getComponent(key);
         } catch (RuntimeException cause) {

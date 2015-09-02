@@ -20,11 +20,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.lastaflute.di.helper.beans.exception.ConstructorNotFoundRuntimeException;
-import org.lastaflute.di.helper.beans.exception.FieldNotFoundRuntimeException;
-import org.lastaflute.di.helper.beans.exception.IllegalDiiguRuntimeException;
-import org.lastaflute.di.helper.beans.exception.MethodNotFoundRuntimeException;
-import org.lastaflute.di.helper.beans.exception.PropertyNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanFieldNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalDiiguException;
+import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanPropertyNotFoundException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -36,9 +36,9 @@ public interface BeanDesc {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    Object newInstance(Object[] args) throws ConstructorNotFoundRuntimeException;
+    Object newInstance(Object[] args) throws BeanConstructorNotFoundException;
 
-    Constructor<?> getSuitableConstructor(Object[] args) throws ConstructorNotFoundRuntimeException;
+    Constructor<?> getSuitableConstructor(Object[] args) throws BeanConstructorNotFoundException;
 
     Constructor<?> getConstructor(Class<?>[] paramTypes);
 
@@ -51,7 +51,7 @@ public interface BeanDesc {
     //                                                                            ========
     boolean hasPropertyDesc(String propertyName);
 
-    PropertyDesc getPropertyDesc(String propertyName) throws PropertyNotFoundRuntimeException;
+    PropertyDesc getPropertyDesc(String propertyName) throws BeanPropertyNotFoundException;
 
     PropertyDesc getPropertyDesc(int index);
 
@@ -60,39 +60,39 @@ public interface BeanDesc {
     // ===================================================================================
     //                                                                              Method
     //                                                                              ======
-    Object invoke(Object target, String methodName, Object[] args) throws MethodNotFoundRuntimeException;
+    Object invoke(Object target, String methodName, Object[] args) throws BeanMethodNotFoundException;
 
-    Method getMethod(String methodName) throws MethodNotFoundRuntimeException;
+    Method getMethod(String methodName) throws BeanMethodNotFoundException;
 
-    Method getMethod(String methodName, Class<?>[] paramTypes) throws MethodNotFoundRuntimeException;
+    Method getMethod(String methodName, Class<?>[] paramTypes) throws BeanMethodNotFoundException;
 
     Method getMethodNoException(String methodName);
 
     Method getMethodNoException(String methodName, Class<?>[] paramTypes);
 
-    Method[] getMethods(String methodName) throws MethodNotFoundRuntimeException;
+    Method[] getMethods(String methodName) throws BeanMethodNotFoundException;
 
     boolean hasMethod(String methodName);
 
     String[] getMethodNames();
 
     String[] getMethodParameterNames(String methodName, final Class<?>[] paramTypes)
-            throws MethodNotFoundRuntimeException, IllegalDiiguRuntimeException;
+            throws BeanMethodNotFoundException, BeanIllegalDiiguException;
 
-    String[] getMethodParameterNamesNoException(String methodName, final Class<?>[] paramTypes) throws MethodNotFoundRuntimeException;
+    String[] getMethodParameterNamesNoException(String methodName, final Class<?>[] paramTypes) throws BeanMethodNotFoundException;
 
-    String[] getMethodParameterNames(Method method) throws MethodNotFoundRuntimeException, IllegalDiiguRuntimeException;
+    String[] getMethodParameterNames(Method method) throws BeanMethodNotFoundException, BeanIllegalDiiguException;
 
-    String[] getMethodParameterNamesNoException(Method method) throws MethodNotFoundRuntimeException;
+    String[] getMethodParameterNamesNoException(Method method) throws BeanMethodNotFoundException;
 
     // ===================================================================================
     //                                                                               Field
     //                                                                               =====
-    Object getFieldValue(String fieldName, Object target) throws FieldNotFoundRuntimeException;
+    Object getFieldValue(String fieldName, Object target) throws BeanFieldNotFoundException;
 
     boolean hasField(String fieldName);
 
-    Field getField(String fieldName) throws FieldNotFoundRuntimeException;
+    Field getField(String fieldName) throws BeanFieldNotFoundException;
 
     Field getField(int index);
 

@@ -15,14 +15,29 @@
  */
 package org.lastaflute.di.helper.beans.exception;
 
+import org.lastaflute.di.exception.SRuntimeException;
+
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class PropertyNotFoundException extends RuntimeException {
+public class BeanFieldNotFoundException extends SRuntimeException {
 
-    private static final long serialVersionUID = -5177019197796206774L;
+    private static final long serialVersionUID = -2715036865146285893L;
 
-    public PropertyNotFoundException(String msg) {
-        super(msg);
+    private Class<?> targetClass;
+    private String fieldName;
+
+    public BeanFieldNotFoundException(Class<?> targetClass, String fieldName) {
+        super("ESSR0070", new Object[] { targetClass.getName(), fieldName });
+        this.targetClass = targetClass;
+        this.fieldName = fieldName;
+    }
+
+    public Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    public String getFieldName() {
+        return fieldName;
     }
 }

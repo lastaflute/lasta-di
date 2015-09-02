@@ -24,7 +24,7 @@ import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -59,7 +59,7 @@ public abstract class AbstractPropertyAssembler extends AbstractAssembler implem
             try {
                 pd.setValue(component, value);
                 names.add(name);
-            } catch (final IllegalPropertyRuntimeException ignore) {}
+            } catch (final BeanIllegalPropertyException ignore) {}
         }
     }
 

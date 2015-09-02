@@ -35,11 +35,11 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.annotation.ParameterName;
-import org.lastaflute.di.helper.beans.exception.ConstructorNotFoundRuntimeException;
-import org.lastaflute.di.helper.beans.exception.FieldNotFoundRuntimeException;
-import org.lastaflute.di.helper.beans.exception.IllegalDiiguRuntimeException;
-import org.lastaflute.di.helper.beans.exception.MethodNotFoundRuntimeException;
-import org.lastaflute.di.helper.beans.exception.PropertyNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanFieldNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalDiiguException;
+import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanPropertyNotFoundException;
 import org.lastaflute.di.helper.beans.factory.ParameterizedClassDescFactory;
 import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.util.ArrayMap;
@@ -106,10 +106,10 @@ public class BeanDescImpl implements BeanDesc {
         return propertyDescCache.get(propertyName) != null;
     }
 
-    public PropertyDesc getPropertyDesc(String propertyName) throws PropertyNotFoundRuntimeException {
+    public PropertyDesc getPropertyDesc(String propertyName) throws BeanPropertyNotFoundException {
         PropertyDesc pd = (PropertyDesc) propertyDescCache.get(propertyName);
         if (pd == null) {
-            throw new PropertyNotFoundRuntimeException(beanClass, propertyName);
+            throw new BeanPropertyNotFoundException(beanClass, propertyName);
         }
         return pd;
     }
@@ -130,7 +130,7 @@ public class BeanDescImpl implements BeanDesc {
         return fieldCache.get(fieldName) != null;
     }
 
-    public Object newInstance(Object[] args) throws ConstructorNotFoundRuntimeException {
+    public Object newInstance(Object[] args) throws BeanConstructorNotFoundException {
         Constructor<?> constructor = getSuitableConstructor(args);
         return LdiConstructorUtil.newInstance(constructor, args);
     }
@@ -140,7 +140,7 @@ public class BeanDescImpl implements BeanDesc {
         return LdiMethodUtil.invoke(method, target, args);
     }
 
-    public Constructor<?> getSuitableConstructor(Object[] args) throws ConstructorNotFoundRuntimeException {
+    public Constructor<?> getSuitableConstructor(Object[] args) throws BeanConstructorNotFoundException {
         if (args == null) {
             args = EMPTY_ARGS;
         }
@@ -152,7 +152,7 @@ public class BeanDescImpl implements BeanDesc {
         if (constructor != null) {
             return constructor;
         }
-        throw new ConstructorNotFoundRuntimeException(beanClass, args);
+        throw new BeanConstructorNotFoundException(beanClass, args);
     }
 
     public Constructor<?> getConstructor(final Class<?>[] paramTypes) {
@@ -161,7 +161,7 @@ public class BeanDescImpl implements BeanDesc {
                 return constructors[i];
             }
         }
-        throw new ConstructorNotFoundRuntimeException(beanClass, paramTypes);
+        throw new BeanConstructorNotFoundException(beanClass, paramTypes);
     }
 
     public Method getMethod(final String methodName) {
@@ -177,7 +177,7 @@ public class BeanDescImpl implements BeanDesc {
         if (method != null) {
             return method;
         }
-        throw new MethodNotFoundRuntimeException(beanClass, methodName, paramTypes);
+        throw new BeanMethodNotFoundException(beanClass, methodName, paramTypes);
     }
 
     public Method getMethodNoException(final String methodName, final Class<?>[] paramTypes) {
@@ -193,10 +193,10 @@ public class BeanDescImpl implements BeanDesc {
         return null;
     }
 
-    public Method[] getMethods(String methodName) throws MethodNotFoundRuntimeException {
+    public Method[] getMethods(String methodName) throws BeanMethodNotFoundException {
         Method[] methods = (Method[]) methodsCache.get(methodName);
         if (methods == null) {
-            throw new MethodNotFoundRuntimeException(beanClass, methodName, null);
+            throw new BeanMethodNotFoundException(beanClass, methodName, null);
         }
         return methods;
     }
@@ -218,7 +218,7 @@ public class BeanDescImpl implements BeanDesc {
             constructorParameterNamesCache = createConstructorParameterNamesCache();
         }
         if (!constructorParameterNamesCache.containsKey(constructor)) {
-            throw new ConstructorNotFoundRuntimeException(beanClass, constructor.getParameterTypes());
+            throw new BeanConstructorNotFoundException(beanClass, constructor.getParameterTypes());
         }
         return (String[]) constructorParameterNamesCache.get(constructor);
 
@@ -235,7 +235,7 @@ public class BeanDescImpl implements BeanDesc {
     public String[] getMethodParameterNames(final Method method) {
         String[] names = getMethodParameterNamesNoException(method);
         if (names == null || names.length != method.getParameterTypes().length) {
-            throw new IllegalDiiguRuntimeException();
+            throw new BeanIllegalDiiguException();
         }
         return names;
     }
@@ -246,7 +246,7 @@ public class BeanDescImpl implements BeanDesc {
         }
 
         if (!methodParameterNamesCache.containsKey(method)) {
-            throw new MethodNotFoundRuntimeException(beanClass, method.getName(), method.getParameterTypes());
+            throw new BeanMethodNotFoundException(beanClass, method.getName(), method.getParameterTypes());
         }
         return (String[]) methodParameterNamesCache.get(method);
     }
@@ -490,7 +490,7 @@ public class BeanDescImpl implements BeanDesc {
         }
     }
 
-    private Method getSuitableMethod(String methodName, Object[] args) throws MethodNotFoundRuntimeException {
+    private Method getSuitableMethod(String methodName, Object[] args) throws BeanMethodNotFoundException {
         if (args == null) {
             args = EMPTY_ARGS;
         }
@@ -503,7 +503,7 @@ public class BeanDescImpl implements BeanDesc {
         if (method != null) {
             return method;
         }
-        throw new MethodNotFoundRuntimeException(beanClass, methodName, args);
+        throw new BeanMethodNotFoundException(beanClass, methodName, args);
     }
 
     private Method findSuitableMethod(Method[] methods, Object[] args) {
@@ -637,7 +637,7 @@ public class BeanDescImpl implements BeanDesc {
     //                                                                        Field Access
     //                                                                        ============
     @Override
-    public Object getFieldValue(String fieldName, Object target) throws FieldNotFoundRuntimeException {
+    public Object getFieldValue(String fieldName, Object target) throws BeanFieldNotFoundException {
         return LdiFieldUtil.get(getField(fieldName), target);
     }
 
@@ -645,7 +645,7 @@ public class BeanDescImpl implements BeanDesc {
     public Field getField(String fieldName) {
         final Field field = fieldCache.get(fieldName);
         if (field == null) {
-            throw new FieldNotFoundRuntimeException(beanClass, fieldName);
+            throw new BeanFieldNotFoundException(beanClass, fieldName);
         }
         return field;
     }

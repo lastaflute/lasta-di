@@ -21,7 +21,7 @@ import org.lastaflute.di.util.LdiMethodUtil;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class MethodNotFoundRuntimeException extends SRuntimeException {
+public class BeanMethodNotFoundException extends SRuntimeException {
 
     private static final long serialVersionUID = -3508955801981550317L;
 
@@ -29,7 +29,7 @@ public class MethodNotFoundRuntimeException extends SRuntimeException {
     private String methodName;
     private Class<?>[] methodArgClasses;
 
-    public MethodNotFoundRuntimeException(Class<?> targetClass, String methodName, Object[] methodArgs) {
+    public BeanMethodNotFoundException(Class<?> targetClass, String methodName, Object[] methodArgs) {
         super("ESSR0049", new Object[] { targetClass.getName(), LdiMethodUtil.getSignature(methodName, methodArgs) });
         this.targetClass = targetClass;
         this.methodName = methodName;
@@ -43,7 +43,7 @@ public class MethodNotFoundRuntimeException extends SRuntimeException {
         }
     }
 
-    public MethodNotFoundRuntimeException(Class<?> targetClass, String methodName, Class<?>[] methodArgClasses) {
+    public BeanMethodNotFoundException(Class<?> targetClass, String methodName, Class<?>[] methodArgClasses) {
         super("ESSR0049", new Object[] { targetClass.getName(), LdiMethodUtil.getSignature(methodName, methodArgClasses) });
         this.targetClass = targetClass;
         this.methodName = methodName;

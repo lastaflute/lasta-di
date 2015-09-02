@@ -29,7 +29,7 @@ import org.lastaflute.di.core.meta.InstanceDef;
 import org.lastaflute.di.core.meta.InterTypeDef;
 import org.lastaflute.di.core.meta.MetaDef;
 import org.lastaflute.di.core.meta.PropertyDef;
-import org.lastaflute.di.helper.beans.exception.PropertyNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanPropertyNotFoundException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -165,7 +165,7 @@ public class SimpleComponentDef implements ComponentDef {
     }
 
     public PropertyDef getPropertyDef(String propertyName) {
-        throw new PropertyNotFoundRuntimeException(componentClass, propertyName);
+        throw new BeanPropertyNotFoundException(componentClass, propertyName);
     }
 
     public void addInitMethodDef(InitMethodDef methodDef) {

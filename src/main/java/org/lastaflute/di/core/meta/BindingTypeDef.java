@@ -44,7 +44,7 @@ public interface BindingTypeDef {
      * @param propertyDef
      * @param propertyDesc
      * @param component
-     * @throws org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException
+     * @throws org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException
      */
     void bind(ComponentDef componentDef, PropertyDef propertyDef, PropertyDesc propertyDesc, Object component);
 
@@ -53,7 +53,7 @@ public interface BindingTypeDef {
      * @param propertyDef
      * @param field
      * @param component
-     * @throws org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException
+     * @throws org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException
      * @throws org.lastaflute.di.exception.IllegalAccessRuntimeException
      */
     void bind(ComponentDef componentDef, PropertyDef propertyDef, Field field, Object component);

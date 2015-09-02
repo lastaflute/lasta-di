@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.lastaflute.di.core.aop.frame.MethodInvocation;
-import org.lastaflute.di.helper.beans.exception.MethodNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
@@ -47,7 +47,7 @@ public abstract class ThrowsInterceptor extends AbstractInterceptor {
             }
         }
         if (methodMap.size() == 0) {
-            throw new MethodNotFoundRuntimeException(getClass(), METHOD_NAME, new Class[] { Throwable.class, MethodInvocation.class });
+            throw new BeanMethodNotFoundException(getClass(), METHOD_NAME, new Class[] { Throwable.class, MethodInvocation.class });
         }
     }
 
