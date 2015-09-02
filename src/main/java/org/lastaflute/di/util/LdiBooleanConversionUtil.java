@@ -23,38 +23,45 @@ public class LdiBooleanConversionUtil {
     protected LdiBooleanConversionUtil() {
     }
 
-    /**
-     * @param o
-     * @return {@link Boolean}
-     */
-    public static Boolean toBoolean(Object o) {
-        if (o == null) {
-            return null;
-        } else if (o instanceof Boolean) {
-            return (Boolean) o;
-        } else if (o instanceof Number) {
-            int num = ((Number) o).intValue();
-            return Boolean.valueOf(num != 0);
-        } else if (o instanceof String) {
-            String s = (String) o;
-            if ("true".equalsIgnoreCase(s)) {
+    public static Boolean toBoolean(Object obj) { // similar with DfTypeUtil.toBoolean()
+        if (obj == null) {
+            return (Boolean) obj;
+        } else if (obj instanceof Boolean) {
+            return (Boolean) obj;
+        } else if (obj instanceof Number) {
+            final int num = ((Number) obj).intValue();
+            if (num == 1) {
                 return Boolean.TRUE;
-            } else if ("false".equalsIgnoreCase(s)) {
-                return Boolean.FALSE;
-            } else if (s.equals("0")) {
+            } else if (num == 0) {
                 return Boolean.FALSE;
             } else {
+                String msg = "Failed to parse the boolean number: number=" + num;
+                throw new IllegalStateException(msg);
+            }
+        } else if (obj instanceof String) {
+            final String str = (String) obj;
+            if ("true".equalsIgnoreCase(str)) {
                 return Boolean.TRUE;
+            } else if ("false".equalsIgnoreCase(str)) {
+                return Boolean.FALSE;
+            } else if (str.equalsIgnoreCase("1")) {
+                return Boolean.TRUE;
+            } else if (str.equalsIgnoreCase("0")) {
+                return Boolean.FALSE;
+            } else if (str.equalsIgnoreCase("t")) {
+                return Boolean.TRUE;
+            } else if (str.equalsIgnoreCase("f")) {
+                return Boolean.FALSE;
+            } else {
+                String msg = "Failed to parse the boolean string:";
+                msg = msg + " value=" + str;
+                throw new IllegalStateException(msg);
             }
         } else {
-            return Boolean.TRUE;
+            return Boolean.FALSE; // couldn't parse
         }
     }
 
-    /**
-     * @param o
-     * @return boolean
-     */
     public static boolean toPrimitiveBoolean(Object o) {
         Boolean b = toBoolean(o);
         if (b != null) {
