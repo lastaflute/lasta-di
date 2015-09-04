@@ -16,20 +16,14 @@
 package org.lastaflute.jta.core;
 
 /**
- * {@link javax.transaction.TransactionManager}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class TransactionManagerImpl extends AbstractTransactionManagerImpl {
 
-    /**
-     * <code>TransactionManagerImpl</code>のインスタンスを構築します。
-     */
     public TransactionManagerImpl() {
     }
 
     protected ExtendedTransaction createTransaction() {
         return new TransactionImpl();
     }
-
 }

@@ -18,41 +18,13 @@ package org.lastaflute.jta.core;
 import javax.transaction.Synchronization;
 
 /**
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public interface SynchronizationRegister {
-    /**
-     * 特定の順序で呼び出される<code>Synchronization</code>インスタンスを登録します。
-     * 
-     * @param sync
-     *            <code>Synchronization</code>インスタンス
-     * @throws IllegalStateException
-     *             トランザクションが一停止状態または非活動中の場合
-     */
     void registerInterposedSynchronization(Synchronization sync) throws IllegalStateException;
 
-    /**
-     * 指定されたキーで指定された値をトランザクションに関連付けます。
-     * 
-     * @param key
-     *            キー
-     * @param value
-     *            値
-     * @throws IllegalStateException
-     *             トランザクションが一停止状態または非活動中の場合
-     */
     void putResource(Object key, Object value) throws IllegalStateException;
 
-    /**
-     * 指定されたキーでトランザクションに関連付けられた値を返します。
-     * 
-     * @param key
-     *            キー
-     * @return トランザクションに関連付けられた値
-     * @throws IllegalStateException
-     *             トランザクションが一停止状態または非活動中の場合
-     */
     Object getResource(Object key) throws IllegalStateException;
 
 }

@@ -30,7 +30,7 @@ import org.lastaflute.di.exception.SIllegalArgumentException;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.ParameterizedClassDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 import org.lastaflute.di.helper.beans.factory.ParameterizedClassDescFactory;
 import org.lastaflute.di.util.LdiBooleanConversionUtil;
 import org.lastaflute.di.util.LdiCalendarConversionUtil;
@@ -193,7 +193,7 @@ public class PropertyDescImpl implements PropertyDesc {
                 return LdiFieldUtil.get(field, target);
             }
         } catch (Throwable t) {
-            throw new IllegalPropertyRuntimeException(beanDesc.getBeanClass(), propertyName, t);
+            throw new BeanIllegalPropertyException(beanDesc.getBeanClass(), propertyName, t);
         }
     }
 
@@ -221,7 +221,7 @@ public class PropertyDescImpl implements PropertyDesc {
             }
         } catch (Throwable t) {
             // TODO jflute lastaflute: [E] fitting DI :: property desc exception message from DBFlute
-            throw new IllegalPropertyRuntimeException(beanDesc.getBeanClass(), propertyName, t);
+            throw new BeanIllegalPropertyException(beanDesc.getBeanClass(), propertyName, t);
         }
     }
 

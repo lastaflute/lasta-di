@@ -18,35 +18,20 @@ package org.lastaflute.di.exception;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * {@link InvocationTargetException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class InvocationTargetRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 7760491787158046906L;
 
-    private Class targetClass;
+    private Class<?> targetClass;
 
-    /**
-     * {@link InvocationTargetRuntimeException}を作成します。
-     * 
-     * @param targetClass
-     * @param cause
-     */
-    public InvocationTargetRuntimeException(Class targetClass, InvocationTargetException cause) {
-
+    public InvocationTargetRuntimeException(Class<?> targetClass, InvocationTargetException cause) {
         super("ESSR0043", new Object[] { targetClass.getName(), cause.getTargetException() }, cause.getTargetException());
         this.targetClass = targetClass;
     }
 
-    /**
-     * ターゲットのクラスを返します。
-     * 
-     * @return
-     */
-    public Class getTargetClass() {
+    public Class<?> getTargetClass() {
         return targetClass;
     }
 }

@@ -30,7 +30,7 @@ public interface ConstructorAssembler {
 
     /**
      * @return 
-     * @throws org.lastaflute.di.helper.beans.exception.ConstructorNotFoundRuntimeException
+     * @throws org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException
      * @throws IllegalConstructorRuntimeException
      * @throws ClassUnmatchRuntimeException
      */

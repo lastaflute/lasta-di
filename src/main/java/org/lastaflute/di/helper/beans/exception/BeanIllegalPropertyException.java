@@ -18,18 +18,26 @@ package org.lastaflute.di.helper.beans.exception;
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * Diiguでエンハンスされていないときにスローされる例外です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
-public class IllegalDiiguRuntimeException extends SRuntimeException {
+public class BeanIllegalPropertyException extends SRuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3584516316082904020L;
 
-    /**
-     * {@link IllegalDiiguRuntimeException}を作成します。
-     */
-    public IllegalDiiguRuntimeException() {
-        super("ESSR0090");
+    private Class<?> targetClass;
+    private String propertyName;
+
+    public BeanIllegalPropertyException(Class<?> targetClass, String propertyName, Throwable cause) {
+        super("ESSR0059", new Object[] { targetClass.getName(), propertyName, cause }, cause);
+        this.targetClass = targetClass;
+        this.propertyName = propertyName;
+    }
+
+    public Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
     }
 }

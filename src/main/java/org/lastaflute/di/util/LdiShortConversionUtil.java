@@ -18,38 +18,25 @@ package org.lastaflute.di.util;
 import java.text.SimpleDateFormat;
 
 /**
- * {@link Short}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiShortConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiShortConversionUtil() {
     }
 
     /**
-     * {@link Short}に変換します。
-     * 
      * @param o
-     *            変換するオブジェクト
-     * @return 変換後のオブジェクト
+     * @return 
      */
     public static Short toShort(Object o) {
         return toShort(o, null);
     }
 
     /**
-     * {@link Short}に変換します。
-     * 
      * @param o
-     *            変換するオブジェクト
      * @param pattern
-     *            パターン
-     * @return 変換後のオブジェクト
+     * @return 
      */
     public static Short toShort(Object o, String pattern) {
         if (o == null) {
@@ -80,24 +67,17 @@ public class LdiShortConversionUtil {
     }
 
     /**
-     * shortに変換します。
-     * 
      * @param o
-     *            変換するオブジェクト
-     * @return 変換されたshort
+     * @return 
      */
     public static short toPrimitiveShort(Object o) {
         return toPrimitiveShort(o, null);
     }
 
     /**
-     * shortに変換します。
-     * 
      * @param o
-     *            変換するオブジェクト
      * @param pattern
-     *            パターン
-     * @return 変換されたshort
+     * @return 
      */
     public static short toPrimitiveShort(Object o, String pattern) {
         if (o == null) {

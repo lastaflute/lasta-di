@@ -34,22 +34,22 @@ import java.util.Set;
  */
 public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<KEY, VALUE>, Cloneable, Externalizable {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private static final int INITIAL_CAPACITY = 17;
-
     private static final float LOAD_FACTOR = 0.75f;
 
     private transient int threshold;
     private transient Entry<KEY, VALUE>[] mapTable;
     private transient Entry<KEY, VALUE>[] listTable;
     private transient int size = 0;
-    private transient Set<Entry<KEY, VALUE>> entrySet = null;
+    private transient Set<java.util.Map.Entry<KEY, VALUE>> entrySet = null;
 
     public ArrayMap() {
         this(INITIAL_CAPACITY);
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayMap(int initialCapacity) {
         if (initialCapacity <= 0) {
             initialCapacity = INITIAL_CAPACITY;
@@ -244,7 +244,8 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
         if (!getClass().isInstance(o)) {
             return false;
         }
-        ArrayMap e = (ArrayMap) o;
+        @SuppressWarnings("unchecked")
+        final ArrayMap<KEY, VALUE> e = (ArrayMap<KEY, VALUE>) o;
         if (size != e.size) {
             return false;
         }
@@ -256,20 +257,21 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
         return true;
     }
 
-    public final Set entrySet() {
+    public final Set<java.util.Map.Entry<KEY, VALUE>> entrySet() {
         if (entrySet == null) {
-            entrySet = new AbstractSet() {
-                public Iterator iterator() {
+            entrySet = new AbstractSet<java.util.Map.Entry<KEY, VALUE>>() {
+                public Iterator<java.util.Map.Entry<KEY, VALUE>> iterator() {
                     return new ArrayMapIterator();
                 }
 
+                @SuppressWarnings("unchecked")
                 public boolean contains(Object o) {
                     if (!(o instanceof Entry)) {
                         return false;
                     }
-                    Entry entry = (Entry) o;
+                    Entry<KEY, VALUE> entry = (Entry<KEY, VALUE>) o;
                     int index = (entry.hashCode & 0x7FFFFFFF) % mapTable.length;
-                    for (Entry e = mapTable[index]; e != null; e = e.next) {
+                    for (Entry<KEY, VALUE> e = mapTable[index]; e != null; e = e.next) {
                         if (e.equals(entry)) {
                             return true;
                         }
@@ -281,7 +283,8 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
                     if (!(o instanceof Entry)) {
                         return false;
                     }
-                    Entry entry = (Entry) o;
+                    @SuppressWarnings("unchecked")
+                    Entry<KEY, VALUE> entry = (Entry<KEY, VALUE>) o;
                     return ArrayMap.this.remove(entry.key) != null;
                 }
 
@@ -306,6 +309,7 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
         }
     }
 
+    @SuppressWarnings("unchecked")
     public final void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
         int num = in.readInt();
         mapTable = new Entry[num];
@@ -313,9 +317,7 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
         threshold = (int) (num * LOAD_FACTOR);
         int size = in.readInt();
         for (int i = 0; i < size; i++) {
-            @SuppressWarnings("unchecked")
             KEY key = (KEY) in.readObject();
-            @SuppressWarnings("unchecked")
             VALUE value = (VALUE) in.readObject();
             put(key, value);
         }
@@ -331,7 +333,7 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
         return copy;
     }
 
-    private final int indexOf(final Entry entry) {
+    private final int indexOf(final Entry<KEY, VALUE> entry) {
         for (int i = 0; i < size; i++) {
             if (listTable[i] == entry) {
                 return i;
@@ -384,10 +386,12 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
 
     private final void ensureCapacity() {
         if (size >= threshold) {
-            Entry[] oldTable = listTable;
+            Entry<KEY, VALUE>[] oldTable = listTable;
             int newCapacity = oldTable.length * 2 + 1;
-            Entry[] newMapTable = new Entry[newCapacity];
-            Entry[] newListTable = new Entry[newCapacity];
+            @SuppressWarnings("unchecked")
+            Entry<KEY, VALUE>[] newMapTable = new Entry[newCapacity];
+            @SuppressWarnings("unchecked")
+            Entry<KEY, VALUE>[] newListTable = new Entry[newCapacity];
             threshold = (int) (newCapacity * LOAD_FACTOR);
             System.arraycopy(oldTable, 0, newListTable, 0, size);
             for (int i = 0; i < size; i++) {
@@ -409,7 +413,7 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
         return old;
     }
 
-    private class ArrayMapIterator implements Iterator {
+    private class ArrayMapIterator implements Iterator<java.util.Map.Entry<KEY, VALUE>> {
 
         private int current = 0;
 
@@ -419,11 +423,12 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
             return current != size;
         }
 
-        public Object next() {
+        @SuppressWarnings("unchecked")
+        public java.util.Map.Entry<KEY, VALUE> next() {
             try {
                 Object n = listTable[current];
                 last = current++;
-                return n;
+                return (java.util.Map.Entry<KEY, VALUE>) n;
             } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }
@@ -505,7 +510,7 @@ public class ArrayMap<KEY, VALUE> extends AbstractMap<KEY, VALUE>implements Map<
             s.writeObject(next);
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({ "unchecked" })
         public void readExternal(final ObjectInput s) throws IOException, ClassNotFoundException {
             hashCode = s.readInt();
             key = (KEY) s.readObject();

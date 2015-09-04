@@ -23,27 +23,20 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SessionComponentDeployer extends AbstractComponentDeployer {
 
-    /**
-     * @param componentDef
-     */
     public SessionComponentDeployer(ComponentDef componentDef) {
         super(componentDef);
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#deploy()
-     */
     public Object deploy() {
         ComponentDef cd = getComponentDef();
         ExternalContext extCtx = cd.getContainer().getRoot().getExternalContext();
         if (extCtx == null) {
             throw new EmptyRuntimeException("externalContext");
         }
-        Map sessionMap = extCtx.getSessionMap();
+        Map<String, Object> sessionMap = extCtx.getSessionMap();
         String componentName = getComponentName();
         Object component = sessionMap.get(componentName);
         if (component == null) {
@@ -59,15 +52,9 @@ public class SessionComponentDeployer extends AbstractComponentDeployer {
         throw new UnsupportedOperationException("injectDependency");
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#init()
-     */
     public void init() {
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#destroy()
-     */
     public void destroy() {
     }
 }

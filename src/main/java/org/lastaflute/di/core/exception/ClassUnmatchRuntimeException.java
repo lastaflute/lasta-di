@@ -19,43 +19,25 @@ import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
- * 
- * @see org.lastaflute.di.core.assembler.ConstructorAssembler#assemble()
- * @see org.lastaflute.di.core.LaContainer#injectDependency(Object,
- *      Class)
- * @see org.lastaflute.di.core.LaContainer#injectDependency(Object,
- *      String)
  */
 public class ClassUnmatchRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 1967770604202235241L;
 
-    private Class componentClass_;
+    private Class<?> componentClass_;
+    private Class<?> realComponentClass_;
 
-    private Class realComponentClass_;
-
-    /**
-     * @param componentClass
-     * @param realComponentClass
-     */
-    public ClassUnmatchRuntimeException(Class componentClass, Class realComponentClass) {
+    public ClassUnmatchRuntimeException(Class<?> componentClass, Class<?> realComponentClass) {
         super("ESSR0069", new Object[] { componentClass.getName(), realComponentClass != null ? realComponentClass.getName() : "null" });
         componentClass_ = componentClass;
         realComponentClass_ = realComponentClass;
     }
 
-    /**
-     * @return 
-     */
-    public Class getComponentClass() {
+    public Class<?> getComponentClass() {
         return componentClass_;
     }
 
-    /**
-     * @return 
-     */
-    public Class getRealComponentClass() {
+    public Class<?> getRealComponentClass() {
         return realComponentClass_;
     }
 }

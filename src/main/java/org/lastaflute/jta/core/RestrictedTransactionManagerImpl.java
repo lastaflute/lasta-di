@@ -28,62 +28,27 @@ import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 
 /**
- * 機能が限定された{@link TransactionManager}の実装クラスです。
- * <p>
- * このトランザクションマネージャは、{@link UserTransaction}と{@link TransactionSynchronizationRegistry}を利用して実装しています。
- * そのため、以下の機能がサポートされません。
- * </p>
- * <ul>
- * <li>{@link TransactionManager#resume(Transaction)}</li>
- * <li>{@link TransactionManager#suspend()}</li>
- * </ul>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class RestrictedTransactionManagerImpl implements TransactionManager {
 
-    /** ユーザトランザクション */
     protected UserTransaction userTransaction;
 
-    /** トランザクションシンクロナイゼーションレジストリ */
     protected TransactionSynchronizationRegistry synchronizationRegistry;
 
-    /**
-     * インスタンスを構築します。
-     */
     public RestrictedTransactionManagerImpl() {
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param userTransaction
-     *            ユーザトランザクション
-     * @param synchronizationRegistry
-     *            トランザクションシンクロナイゼーションレジストリ
-     */
     public RestrictedTransactionManagerImpl(final UserTransaction userTransaction,
             final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
         this.synchronizationRegistry = synchronizationRegistry;
     }
 
-    /**
-     * ユーザトランザクションを設定します。
-     * 
-     * @param userTransaction
-     *            ユーザトランザクション
-     */
     public void setUserTransaction(final UserTransaction userTransaction) {
         this.userTransaction = userTransaction;
     }
 
-    /**
-     * トランザクションシンクロナイゼーションレジストリを設定します。
-     * 
-     * @param synchronizationRegistry
-     *            トランザクションシンクロナイゼーションレジストリ
-     */
     public void setSynchronizationRegistry(final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.synchronizationRegistry = synchronizationRegistry;
     }

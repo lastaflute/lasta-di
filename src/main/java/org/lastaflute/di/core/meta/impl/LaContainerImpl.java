@@ -24,10 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javassist.runtime.Desc;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
-
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.ExternalContext;
@@ -46,6 +42,10 @@ import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.CaseInsensitiveMap;
 import org.lastaflute.di.util.LdiStringUtil;
+
+import javassist.runtime.Desc;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -124,7 +124,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     protected Object[] toComponentArray(Object componentKey, ComponentDef[] componentDefs) {
         int length = componentDefs.length;
         Object[] components =
-                (componentKey instanceof Class) ? (Object[]) Array.newInstance((Class) componentKey, length) : new Object[length];
+                (componentKey instanceof Class) ? (Object[]) Array.newInstance((Class<?>) componentKey, length) : new Object[length];
         for (int i = 0; i < length; ++i) {
             components[i] = componentDefs[i].getComponent();
         }
@@ -135,11 +135,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         injectDependency(outerComponent, outerComponent.getClass());
     }
 
-    /**
-     * @see org.lastaflute.di.core.LaContainer#injectDependency(java.lang.Object,
-     *      java.lang.Class)
-     */
-    public void injectDependency(Object outerComponent, Class componentClass) {
+    public void injectDependency(Object outerComponent, Class<?> componentClass) {
         assertParameterIsNotNull(outerComponent, "outerComponent");
         assertParameterIsNotNull(componentClass, "componentClass");
         ComponentDef cd = LaContainerBehavior.acquireFromInjectDependency(this, componentClass);
@@ -148,10 +144,6 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         }
     }
 
-    /**
-     * @see org.lastaflute.di.core.LaContainer#injectDependency(java.lang.Object,
-     *      java.lang.String)
-     */
     public void injectDependency(Object outerComponent, String componentName) {
         assertParameterIsNotNull(outerComponent, "outerComponent");
         assertParameterIsNotEmpty(componentName, "componentName");
@@ -309,7 +301,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         }
         if (key instanceof String) {
             String name = (String) key;
-            int index = name.indexOf(NS_SEP);
+            final int index = name.indexOf(NS_SEP);
             if (index > 0) {
                 String ns = name.substring(0, index);
                 name = name.substring(index + 1);
@@ -402,9 +394,9 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
 
     public void addParent(LaContainer parent) {
         parents.add(parent);
-        for (Iterator it = componentDefMap.entrySet().iterator(); it.hasNext();) {
-            Entry entry = (Entry) it.next();
-            Object key = entry.getKey();
+        for (Iterator<Entry<Object, ComponentDefHolder>> it = componentDefMap.entrySet().iterator(); it.hasNext();) {
+            final Entry<Object, ComponentDefHolder> entry = (Entry<Object, ComponentDefHolder>) it.next();
+            final Object key = entry.getKey();
             final ComponentDefHolder holder = (ComponentDefHolder) entry.getValue();
             final ComponentDef cd = holder.getComponentDef();
             parent.registerMap(key, cd, this);

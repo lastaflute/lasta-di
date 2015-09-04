@@ -20,23 +20,16 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiMessageDigestUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiMessageDigestUtil() {
     }
 
     /**
-     * {@link MessageDigest#getInstance(String)}の例外処理をラップします。
-     * 
      * @param algorithm
      * @return {@link MessageDigest}
      * @throws RuntimeException
-     *             {@link NoSuchAlgorithmException}が発生した場合
      */
     public static MessageDigest getInstance(String algorithm) throws RuntimeException {
         try {

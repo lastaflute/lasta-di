@@ -18,18 +18,13 @@ package org.lastaflute.jta.exception;
 import javax.transaction.RollbackException;
 
 /**
- * {@link RollbackException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LjtRollbackRuntimeException extends LjtRuntimeException {
 
     private static final long serialVersionUID = -889986104662559877L;
 
     /**
-     * {@link LjtRollbackRuntimeException}を作成します。
-     * 
      * @param cause
      */
     public LjtRollbackRuntimeException(RollbackException cause) {

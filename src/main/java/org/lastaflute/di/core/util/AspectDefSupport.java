@@ -22,28 +22,17 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.AspectDef;
 
 /**
- * {@link AspectDef}の補助クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class AspectDefSupport {
 
-    private List aspectDefs = new ArrayList();
+    private List<AspectDef> aspectDefs = new ArrayList<AspectDef>();
 
     private LaContainer container;
 
-    /**
-     * {@link AspectDefSupport}を作成します。
-     */
     public AspectDefSupport() {
     }
 
-    /**
-     * {@link AspectDef}を追加します。
-     * 
-     * @param aspectDef
-     */
     public void addAspectDef(AspectDef aspectDef) {
         if (container != null) {
             aspectDef.setContainer(container);
@@ -51,12 +40,6 @@ public class AspectDefSupport {
         aspectDefs.add(aspectDef);
     }
 
-    /**
-     * {@link AspectDef}を追加します。
-     * 
-     * @param index
-     * @param aspectDef
-     */
     public void addAspectDef(int index, AspectDef aspectDef) {
         if (container != null) {
             aspectDef.setContainer(container);
@@ -64,30 +47,14 @@ public class AspectDefSupport {
         aspectDefs.add(index, aspectDef);
     }
 
-    /**
-     * {@link AspectDef}の数を返します。
-     * 
-     * @return {@link AspectDef}の数
-     */
     public int getAspectDefSize() {
         return aspectDefs.size();
     }
 
-    /**
-     * {@link AspectDef}を返します。
-     * 
-     * @param index
-     * @return {@link AspectDef}
-     */
     public AspectDef getAspectDef(int index) {
-        return (AspectDef) aspectDefs.get(index);
+        return aspectDefs.get(index);
     }
 
-    /**
-     * {@link LaContainer}を設定します。
-     * 
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
         for (int i = 0; i < getAspectDefSize(); ++i) {

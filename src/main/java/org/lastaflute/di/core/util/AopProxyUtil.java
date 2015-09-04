@@ -25,30 +25,18 @@ import org.lastaflute.di.core.aop.InterType;
 import org.lastaflute.di.core.aop.proxy.AopProxy;
 
 /**
- * {@link AopProxy}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class AopProxyUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected AopProxyUtil() {
     }
 
-    /**
-     * 完全なクラスを返します。
-     * 
-     * @param componentDef
-     * @return 完全なクラス
-     */
-    public static Class getConcreteClass(final ComponentDef componentDef) {
+    public static Class<?> getConcreteClass(final ComponentDef componentDef) {
         if (componentDef.getAspectDefSize() == 0 && componentDef.getInterTypeDefSize() == 0) {
             return componentDef.getComponentClass();
         }
-
-        final Map parameters = new HashMap();
+        final Map<String, ComponentDef> parameters = new HashMap<String, ComponentDef>();
         parameters.put(ContainerConstants.COMPONENT_DEF_NAME, componentDef);
         AopProxy proxy = new AopProxy(componentDef.getComponentClass(), getAspects(componentDef), getInterTypes(componentDef), parameters);
         return proxy.getEnhancedClass();

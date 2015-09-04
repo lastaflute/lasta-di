@@ -27,6 +27,6 @@ import org.lastaflute.di.core.aop.annotation.Interceptor;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
-@Interceptor("tx_aop.mandatoryTx")
-public @interface MandatoryTx {
+@Interceptor("tx_aop.neverTx")
+public @interface AopNeverTx {
 }

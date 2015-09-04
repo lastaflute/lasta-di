@@ -18,22 +18,14 @@ package org.lastaflute.di.util;
 import java.util.Locale;
 
 /**
- * {@link Locale}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiLocaleUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiLocaleUtil() {
     }
 
     /**
-     * {@link Locale}を返します。
-     * 
      * @param localeStr
      * @return {@link Locale}
      */

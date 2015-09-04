@@ -90,7 +90,7 @@ public class AspectDefFactory {
         return null;
     }
 
-    public static Pointcut createPointcut(Class clazz) {
+    public static Pointcut createPointcut(Class<?> clazz) {
         return new PointcutImpl(clazz);
     }
 

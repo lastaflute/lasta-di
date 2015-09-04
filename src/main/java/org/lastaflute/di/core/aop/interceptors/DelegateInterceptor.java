@@ -22,60 +22,41 @@ import java.util.Map;
 import org.lastaflute.di.core.aop.frame.MethodInvocation;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
-import org.lastaflute.di.helper.beans.exception.MethodNotFoundRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
 import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class DelegateInterceptor extends AbstractInterceptor {
 
     private static final long serialVersionUID = 3613140488663554089L;
 
     private Object target;
-
     private BeanDesc beanDesc;
-
-    private Map methodNameMap = new HashMap();
+    private final Map<String, String> methodNameMap = new HashMap<String, String>();
 
     public DelegateInterceptor() {
     }
 
-    /**
-     * @param target
-     */
     public DelegateInterceptor(Object target) {
         setTarget(target);
     }
 
-    /**
-     * @return target
-     */
     public Object getTarget() {
         return target;
     }
 
-    /**
-     * @param target
-     */
     public void setTarget(Object target) {
         this.target = target;
         beanDesc = BeanDescFactory.getBeanDesc(target.getClass());
     }
 
-    /**
-     * @param methodName
-     * @param targetMethodName
-     */
     public void addMethodNameMap(String methodName, String targetMethodName) {
         methodNameMap.put(methodName, targetMethodName);
     }
 
-    /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
-     */
     public Object invoke(MethodInvocation invocation) throws Throwable {
         if (target == null) {
             throw new EmptyRuntimeException("target");
@@ -90,7 +71,7 @@ public class DelegateInterceptor extends AbstractInterceptor {
         } else if (beanDesc.hasMethod(methodName)) {
             return beanDesc.invoke(target, methodName, invocation.getArguments());
         } else {
-            throw new MethodNotFoundRuntimeException(getTargetClass(invocation), methodName, invocation.getArguments());
+            throw new BeanMethodNotFoundException(getTargetClass(invocation), methodName, invocation.getArguments());
         }
     }
 }

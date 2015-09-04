@@ -23,25 +23,17 @@ import java.util.jar.JarInputStream;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link JarInputStream}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiJarInputStreamUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiJarInputStreamUtil() {
     }
 
     /**
-     * {@link JarInputStream}を作成します。
-     * 
      * @param is
      * @return {@link JarInputStream}
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see JarInputStream#JarInputStream(InputStream)
      */
     public static JarInputStream create(final InputStream is) throws IORuntimeException {
@@ -53,12 +45,9 @@ public class LdiJarInputStreamUtil {
     }
 
     /**
-     * {@link JarInputStream#getNextJarEntry()}の例外処理をラップするメソッドです。
-     * 
      * @param is
      * @return {@link JarEntry}
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see JarInputStream#getNextJarEntry()
      */
     public static JarEntry getNextJarEntry(final JarInputStream is) throws IORuntimeException {

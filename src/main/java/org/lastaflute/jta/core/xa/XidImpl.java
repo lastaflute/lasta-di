@@ -20,46 +20,27 @@ import java.io.Serializable;
 import javax.transaction.xa.Xid;
 
 /**
- * {@link Xid}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class XidImpl implements Xid, Serializable {
 
     static final long serialVersionUID = 1L;
 
     private static final int FORMAT_ID = 0x1108;
-
     private static final byte[] INITIAL_BRANCH_ID = convert64bytes(new byte[0]);
-
     private static final String GLOBAL_ID_BASE = System.currentTimeMillis() + "/";
-
     private static int nextId = 0;
 
     private int hashCode;
-
     private byte[] globalId;
-
     private byte[] branchId;
 
-    /**
-     * {@link XidImpl}を作成します。
-     */
     public XidImpl() {
         hashCode = getNextId();
         globalId = createGlobalId();
         branchId = INITIAL_BRANCH_ID;
     }
 
-    /**
-     * {@link XidImpl}を作成します。
-     * 
-     * @param xid
-     *            トランザクション識別子
-     * @param bid
-     *            ブランチ識別子
-     */
     public XidImpl(Xid xid, int bid) {
         hashCode = xid.hashCode();
         globalId = xid.getGlobalTransactionId();

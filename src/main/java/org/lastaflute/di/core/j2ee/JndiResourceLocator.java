@@ -33,7 +33,7 @@ public class JndiResourceLocator {
 
     public static final String ENC_PREFIX = "java:comp/env/";
 
-    protected static final Map MAGIC_COMPONENTS = new HashMap();
+    protected static final Map<String, String> MAGIC_COMPONENTS = new HashMap<String, String>();
 
     static {
         MAGIC_COMPONENTS.put("java:comp/UserTransaction", "jta/UserTransaction");
@@ -44,7 +44,7 @@ public class JndiResourceLocator {
         return lookup(name, null);
     }
 
-    public static Object lookup(final String name, final Hashtable env) throws NamingException {
+    public static Object lookup(final String name, final Hashtable<String, Object> env) throws NamingException {
         final InitialContext context = new InitialContext(env);
         try {
             return context.lookup(name);

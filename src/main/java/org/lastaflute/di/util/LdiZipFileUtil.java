@@ -25,26 +25,17 @@ import java.util.zip.ZipFile;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link java.util.zip.ZipFile}を扱うユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiZipFileUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiZipFileUtil() {
     }
 
     /**
-     * 指定されたZipファイルを読み取るための<code>ZipFile</code>を作成して返します。
-     * 
      * @param file
-     *            ファイルパス
-     * @return 指定されたZipファイルを読み取るための<code>ZipFile</code>
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static ZipFile create(final String file) {
         try {
@@ -55,13 +46,9 @@ public class LdiZipFileUtil {
     }
 
     /**
-     * 指定されたZipファイルを読み取るための<code>ZipFile</code>を作成して返します。
-     * 
      * @param file
-     *            ファイル
-     * @return 指定されたZipファイルを読み取るための<code>ZipFile</code>
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static ZipFile create(final File file) {
         try {
@@ -72,15 +59,10 @@ public class LdiZipFileUtil {
     }
 
     /**
-     * 指定されたZipファイルエントリの内容を読み込むための入力ストリームを返します。
-     * 
      * @param file
-     *            Zipファイル
      * @param entry
-     *            Zipファイルエントリ
-     * @return 指定されたZipファイルエントリの内容を読み込むための入力ストリーム
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static InputStream getInputStream(final ZipFile file, final ZipEntry entry) {
         try {
@@ -91,26 +73,18 @@ public class LdiZipFileUtil {
     }
 
     /**
-     * URLで指定されたZipファイルを読み取るための<code>ZipFile</code>を作成して返します。
-     * 
      * @param zipUrl
-     *            Zipファイルを示すURL
-     * @return 指定されたZipファイルを読み取るための<code>ZipFile</code>
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static ZipFile toZipFile(final URL zipUrl) {
         return create(new File(toZipFilePath(zipUrl)));
     }
 
     /**
-     * URLで指定されたZipファイルのパスを返します。
-     * 
      * @param zipUrl
-     *            Zipファイルを示すURL
-     * @return URLで指定されたZipファイルのパス
+     * @return 
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static String toZipFilePath(final URL zipUrl) {
         final String urlString = zipUrl.getPath();
@@ -121,12 +95,8 @@ public class LdiZipFileUtil {
     }
 
     /**
-     * Zipファイルをクローズします。
-     * 
      * @param zipFile
-     *            Zipファイル
      * @throws IORuntimeException
-     *             入出力エラーが発生した場合にスローされます
      */
     public static void close(final ZipFile zipFile) {
         try {

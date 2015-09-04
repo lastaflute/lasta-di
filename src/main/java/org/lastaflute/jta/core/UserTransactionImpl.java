@@ -24,23 +24,12 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 /**
- * {@link UserTransaction}の実装クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class UserTransactionImpl implements UserTransaction {
 
-    /**
-     * トランザクションマネージャです。
-     */
     protected TransactionManager tm;
 
-    /**
-     * {@link UserTransactionImpl}を作成します。
-     * 
-     * @param tm
-     */
     public UserTransactionImpl(final TransactionManager tm) {
         this.tm = tm;
     }

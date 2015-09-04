@@ -18,8 +18,6 @@ package org.lastaflute.di.exception;
 import java.lang.instrument.IllegalClassFormatException;
 
 /**
- * {@link IllegalClassFormatException}をラップする実行時例外クラスです。
- * 
  * @author taedium
  */
 public class IllegalClassFormatRuntimeException extends SRuntimeException {
@@ -28,44 +26,19 @@ public class IllegalClassFormatRuntimeException extends SRuntimeException {
 
     private String className;
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param cause
-     *            原因
-     */
     public IllegalClassFormatRuntimeException(final IllegalClassFormatException cause) {
         this(null, cause);
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param className
-     *            クラス名
-     * @param cause
-     *            原因
-     */
     public IllegalClassFormatRuntimeException(final String className, final IllegalClassFormatException cause) {
         super("ESSR0092", new Object[] { cause }, cause);
         setClassName(className);
     }
 
-    /**
-     * クラス名を設定します。
-     * 
-     * @return クラス名
-     */
     public String getClassName() {
         return className;
     }
 
-    /**
-     * クラス名を取得します。
-     * 
-     * @param className
-     *            クラス名
-     */
     public void setClassName(String className) {
         this.className = className;
     }

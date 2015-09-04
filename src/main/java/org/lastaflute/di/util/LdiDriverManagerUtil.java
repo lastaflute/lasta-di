@@ -23,42 +23,18 @@ import java.util.Enumeration;
 import org.lastaflute.di.exception.SQLRuntimeException;
 
 /**
- * {@link java.sql.DriverManager}のためのユーティリティクラスです。
- * 
- * @since 2.4.10
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class LdiDriverManagerUtil {
 
-    /**
-     * JDBCドライバを登録します。
-     * 
-     * @param driverClassName
-     *            登録するJDBCドライバのクラス名
-     * @since 2.4.10
-     */
     public static void registerDriver(final String driverClassName) {
         registerDriver(LdiClassUtil.forName(driverClassName));
     }
 
-    /**
-     * JDBCドライバを登録します。
-     * 
-     * @param driverClass
-     *            登録するJDBCドライバのクラス
-     * @since 2.4.10
-     */
-    public static void registerDriver(final Class driverClass) {
+    public static void registerDriver(final Class<?> driverClass) {
         registerDriver((Driver) LdiClassUtil.newInstance(driverClass));
     }
 
-    /**
-     * JDBCドライバを登録します。
-     * 
-     * @param driver
-     *            登録するJDBCドライバ
-     * @since 2.4.10
-     */
     public static void registerDriver(final Driver driver) {
         try {
             DriverManager.registerDriver(driver);
@@ -67,13 +43,6 @@ public abstract class LdiDriverManagerUtil {
         }
     }
 
-    /**
-     * JDBCドライバを登録解除します。
-     * 
-     * @param driver
-     *            登録解除するJDBCドライバ
-     * @since 2.4.10
-     */
     public static void deregisterDriver(final Driver driver) {
         try {
             DriverManager.deregisterDriver(driver);
@@ -82,15 +51,9 @@ public abstract class LdiDriverManagerUtil {
         }
     }
 
-    /**
-     * 現在のクラスローダに結びつけられている全てのJDBCドライバを登録解除します。
-     * 
-     * @since 2.4.10
-     */
     public static synchronized void deregisterAllDrivers() {
-        for (final Enumeration e = DriverManager.getDrivers(); e.hasMoreElements();) {
-            deregisterDriver((Driver) e.nextElement());
+        for (final Enumeration<Driver> e = DriverManager.getDrivers(); e.hasMoreElements();) {
+            deregisterDriver(e.nextElement());
         }
     }
-
 }

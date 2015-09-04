@@ -26,22 +26,14 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * {@link DocumentBuilder}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiDocumentBuilderUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiDocumentBuilderUtil() {
     }
 
     /**
-     * XMLを解析します。
-     * 
      * @param builder
      * @param is
      * @return {@link Document}

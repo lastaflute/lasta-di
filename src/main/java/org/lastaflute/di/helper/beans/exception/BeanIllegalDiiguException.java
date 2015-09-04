@@ -13,4 +13,18 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.core.aop.intertype;
+package org.lastaflute.di.helper.beans.exception;
+
+import org.lastaflute.di.exception.SRuntimeException;
+
+/**
+ * @author modified by jflute (originated in Seasar)
+ */
+public class BeanIllegalDiiguException extends SRuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
+    public BeanIllegalDiiguException() {
+        super("ESSR0090");
+    }
+}

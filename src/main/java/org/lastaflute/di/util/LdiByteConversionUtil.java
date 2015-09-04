@@ -18,22 +18,14 @@ package org.lastaflute.di.util;
 import java.text.SimpleDateFormat;
 
 /**
- * {@link Byte}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiByteConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiByteConversionUtil() {
     }
 
     /**
-     * {@link Byte}に変換します。
-     * 
      * @param o
      * @return {@link Byte}
      */
@@ -42,8 +34,6 @@ public class LdiByteConversionUtil {
     }
 
     /**
-     * {@link Byte}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Byte}
@@ -77,8 +67,6 @@ public class LdiByteConversionUtil {
     }
 
     /**
-     * byteに変換します。
-     * 
      * @param o
      * @return byte
      */
@@ -87,8 +75,6 @@ public class LdiByteConversionUtil {
     }
 
     /**
-     * byteに変換します。
-     * 
      * @param o
      * @param pattern
      * @return byte

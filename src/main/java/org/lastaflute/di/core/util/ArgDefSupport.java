@@ -22,28 +22,16 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.ArgDef;
 
 /**
- * {@link ArgDef}の補助クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class ArgDefSupport {
 
-    private List argDefs = new ArrayList();
-
+    private final List<ArgDef> argDefs = new ArrayList<ArgDef>();
     private LaContainer container;
 
-    /**
-     * {@link ArgDefSupport}を作成します。
-     */
     public ArgDefSupport() {
     }
 
-    /**
-     * {@link ArgDef}を追加します。
-     * 
-     * @param argDef
-     */
     public void addArgDef(ArgDef argDef) {
         if (container != null) {
             argDef.setContainer(container);
@@ -51,30 +39,14 @@ public class ArgDefSupport {
         argDefs.add(argDef);
     }
 
-    /**
-     * {@link ArgDef}の数を返します。
-     * 
-     * @return {@link ArgDef}の数
-     */
     public int getArgDefSize() {
         return argDefs.size();
     }
 
-    /**
-     * {@link ArgDef}を返します。
-     * 
-     * @param index
-     * @return {@link ArgDef}
-     */
     public ArgDef getArgDef(int index) {
         return (ArgDef) argDefs.get(index);
     }
 
-    /**
-     * {@link LaContainer}を設定します。
-     * 
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
         for (int i = 0; i < getArgDefSize(); ++i) {

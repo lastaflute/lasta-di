@@ -36,6 +36,7 @@ public class MockSeaLogic {
     protected MockIkspiaryLogic mockIkspiaryLogic;
 
     protected MockAmphiLogic mockAmphiLogic; // under org.dbflute so injected
+    protected MockAmphiLogic anotherNameMockAmphiLogic; // under org.dbflute so injected
 
     public void dockside() {
         logger.debug("dockside");
@@ -52,7 +53,16 @@ public class MockSeaLogic {
         mockAmphiLogic.theater();
     }
 
+    public void mermaid() {
+        logger.debug("mermaid");
+        anotherNameMockAmphiLogic.theater();
+    }
+
     public void setMockAmphiLogic(MockAmphiLogic mockAmphiLogic) {
         this.mockAmphiLogic = mockAmphiLogic;
+    }
+
+    public void setAnotherNameMockAmphiLogic(MockAmphiLogic anotherNameMockAmphiLogic) {
+        this.anotherNameMockAmphiLogic = anotherNameMockAmphiLogic;
     }
 }

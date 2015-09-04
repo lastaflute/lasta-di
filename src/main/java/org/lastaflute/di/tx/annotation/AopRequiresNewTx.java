@@ -13,7 +13,20 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+package org.lastaflute.di.tx.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.lastaflute.di.core.aop.annotation.Interceptor;
+
 /**
- * {@link org.lastaflute.di.helper.beans.BeanDesc.BeanDesc}が引数名を取得するために利用するアノテーションを提供します。
+ * @author modified by jflute (originated in Seasar)
  */
-package org.lastaflute.di.helper.beans.annotation;
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Interceptor("tx_aop.requiresNewTx")
+public @interface AopRequiresNewTx {
+}

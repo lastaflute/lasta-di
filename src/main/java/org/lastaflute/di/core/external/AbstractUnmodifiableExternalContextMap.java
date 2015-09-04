@@ -28,15 +28,15 @@ public abstract class AbstractUnmodifiableExternalContextMap extends AbstractExt
     public AbstractUnmodifiableExternalContextMap() {
     }
 
-    public final Set entrySet() {
+    public final Set<Map.Entry<String, Object>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public final Set keySet() {
+    public final Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public final Collection values() {
+    public final Collection<Object> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
@@ -44,11 +44,11 @@ public abstract class AbstractUnmodifiableExternalContextMap extends AbstractExt
         throw new UnsupportedOperationException();
     }
 
-    public final Object put(Object key, Object value) {
+    public final Object put(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
-    public final void putAll(Map map) {
+    public final void putAll(Map<? extends String, ? extends Object> map) {
         throw new UnsupportedOperationException();
     }
 

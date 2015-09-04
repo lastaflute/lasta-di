@@ -22,26 +22,16 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.InterTypeDef;
 
 /**
- * {@link InterTypeDef}を補助するクラスです。
- * 
+ * @author modified by jflute (originated in Seasar)
  */
 public class InterTypeDefSupport {
 
-    private List interTypeDefs = new ArrayList();
-
+    private final List<InterTypeDef> interTypeDefs = new ArrayList<InterTypeDef>();
     private LaContainer container;
 
-    /**
-     * {@link InterTypeDefSupport}を作成します。
-     */
     public InterTypeDefSupport() {
     }
 
-    /**
-     * {@link InterTypeDef}を追加します。
-     * 
-     * @param interTypeDef
-     */
     public void addInterTypeDef(InterTypeDef interTypeDef) {
         if (container != null) {
             interTypeDef.setContainer(container);
@@ -49,30 +39,14 @@ public class InterTypeDefSupport {
         interTypeDefs.add(interTypeDef);
     }
 
-    /**
-     * {@link InterTypeDef}の数を返します。
-     * 
-     * @return {@link InterTypeDef}の数
-     */
     public int getInterTypeDefSize() {
         return interTypeDefs.size();
     }
 
-    /**
-     * {@link InterTypeDef}を返します。
-     * 
-     * @param index
-     * @return {@link InterTypeDef}
-     */
     public InterTypeDef getInterTypeDef(int index) {
         return (InterTypeDef) interTypeDefs.get(index);
     }
 
-    /**
-     * {@link LaContainer}を設定します。
-     * 
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
         for (int i = 0; i < getInterTypeDefSize(); ++i) {

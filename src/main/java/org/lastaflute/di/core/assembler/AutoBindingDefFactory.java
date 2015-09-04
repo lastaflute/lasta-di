@@ -27,16 +27,12 @@ import org.lastaflute.di.core.meta.AutoBindingDef;
 public class AutoBindingDefFactory {
 
     public static final AutoBindingDef AUTO = new AutoBindingAutoDef(AutoBindingDef.AUTO_NAME);
-
     public static final AutoBindingDef CONSTRUCTOR = new AutoBindingConstructorDef(AutoBindingDef.CONSTRUCTOR_NAME);
-
     public static final AutoBindingDef PROPERTY = new AutoBindingPropertyDef(AutoBindingDef.PROPERTY_NAME);
-
     public static final AutoBindingDef NONE = new AutoBindingNoneDef(AutoBindingDef.NONE_NAME);
-
     public static final AutoBindingDef SEMIAUTO = new AutoBindingSemiAutoDef(AutoBindingDef.SEMIAUTO_NAME);
 
-    private static Map autoBindingDefs = new HashMap();
+    private static Map<String, AutoBindingDef> autoBindingDefs = new HashMap<String, AutoBindingDef>();
 
     static {
         addAutoBindingDef(AUTO);
@@ -49,29 +45,18 @@ public class AutoBindingDefFactory {
     protected AutoBindingDefFactory() {
     }
 
-    /**
-     * @param autoBindingDef
-     */
     public static void addAutoBindingDef(AutoBindingDef autoBindingDef) {
         autoBindingDefs.put(autoBindingDef.getName(), autoBindingDef);
     }
 
-    /**
-     * @param name
-     * @return
-     */
     public static boolean existAutoBindingDef(String name) {
         return autoBindingDefs.containsKey(name);
     }
 
-    /**
-     * @param name
-     * @return
-     */
     public static AutoBindingDef getAutoBindingDef(String name) {
         if (!autoBindingDefs.containsKey(name)) {
             throw new IllegalAutoBindingDefRuntimeException(name);
         }
-        return (AutoBindingDef) autoBindingDefs.get(name);
+        return autoBindingDefs.get(name);
     }
 }

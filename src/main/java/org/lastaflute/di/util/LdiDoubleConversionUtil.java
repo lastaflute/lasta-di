@@ -18,22 +18,14 @@ package org.lastaflute.di.util;
 import java.text.SimpleDateFormat;
 
 /**
- * {@link Double}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiDoubleConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiDoubleConversionUtil() {
     }
 
     /**
-     * {@link Double}に変換します。
-     * 
      * @param o
      * @return {@link Double}
      */
@@ -42,8 +34,6 @@ public class LdiDoubleConversionUtil {
     }
 
     /**
-     * {@link Double}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Double}
@@ -75,8 +65,6 @@ public class LdiDoubleConversionUtil {
     }
 
     /**
-     * doubleに変換します。
-     * 
      * @param o
      * @return double
      */
@@ -85,8 +73,6 @@ public class LdiDoubleConversionUtil {
     }
 
     /**
-     * doubleに変換します。
-     * 
      * @param o
      * @param pattern
      * @return double

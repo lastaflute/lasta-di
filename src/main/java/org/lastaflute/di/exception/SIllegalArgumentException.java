@@ -18,8 +18,6 @@ package org.lastaflute.di.exception;
 import org.lastaflute.di.helper.message.MessageFormatter;
 
 /**
- * Seasar2用の{@link IllegalArgumentException}です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class SIllegalArgumentException extends IllegalArgumentException {
@@ -29,14 +27,6 @@ public class SIllegalArgumentException extends IllegalArgumentException {
 
     private Object[] args;
 
-    /**
-     * {@link SIllegalArgumentException}を作成します。
-     * 
-     * @param messageCode
-     *            メッセージコード
-     * @param args
-     *            引数の配列
-     */
     public SIllegalArgumentException(String messageCode, Object[] args) {
         super(MessageFormatter.getMessage(messageCode, args));
 
@@ -44,16 +34,6 @@ public class SIllegalArgumentException extends IllegalArgumentException {
         this.args = args;
     }
 
-    /**
-     * {@link SIllegalArgumentException}を作成します。
-     * 
-     * @param messageCode
-     *            メッセージコード
-     * @param args
-     *            引数の配列
-     * @param cause
-     *            原因
-     */
     public SIllegalArgumentException(String messageCode, Object[] args, IllegalArgumentException cause) {
         super(MessageFormatter.getMessage(messageCode, args));
 
@@ -62,20 +42,10 @@ public class SIllegalArgumentException extends IllegalArgumentException {
         initCause(cause);
     }
 
-    /**
-     * メッセージコードを返します。
-     * 
-     * @return メッセージコード
-     */
     public String getMessageCode() {
         return messageCode;
     }
 
-    /**
-     * 引数の配列を返します。
-     * 
-     * @return 引数の配列
-     */
     public Object[] getArgs() {
         return args;
     }

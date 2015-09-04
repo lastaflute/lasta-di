@@ -19,41 +19,19 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * {@link SAXException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class SAXRuntimeException extends SRuntimeException {
     private static final long serialVersionUID = -4933312103385038765L;
 
-    /**
-     * {@link SAXRuntimeException}を作成します。
-     * 
-     * @param cause
-     */
     public SAXRuntimeException(SAXException cause) {
         super("ESSR0054", createArgs(cause), cause);
     }
 
-    /**
-     * 引数の配列を作成します。
-     * 
-     * @param cause
-     *            原因
-     * @return 引数の配列
-     */
     protected static Object[] createArgs(SAXException cause) {
         return new Object[] { createMessage(cause) };
     }
 
-    /**
-     * メッセージを作成します。
-     * 
-     * @param cause
-     *            原因
-     * @return メッセージ
-     */
     protected static String createMessage(final SAXException cause) {
         StringBuffer buf = new StringBuffer(100);
         buf.append(cause);

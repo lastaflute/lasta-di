@@ -22,26 +22,17 @@ import java.io.IOException;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link FileOutputStream}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiFileOutputStreamUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiFileOutputStreamUtil() {
     }
 
     /**
-     * {@link FileOutputStream}を作成します。
-     * 
      * @param file
      * @return {@link FileOutputStream}
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see FileOutputStream#FileOutputStream(File)
      */
     public static FileOutputStream create(File file) throws IORuntimeException {

@@ -15,36 +15,21 @@
  */
 package org.lastaflute.di.helper.beans.exception;
 
-import java.lang.reflect.Method;
-
 import org.lastaflute.di.exception.SRuntimeException;
 import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
- * {@link Method}が見つからなかったときにスローされる例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
-public class MethodNotFoundRuntimeException extends SRuntimeException {
+public class BeanMethodNotFoundException extends SRuntimeException {
 
     private static final long serialVersionUID = -3508955801981550317L;
 
-    private Class targetClass;
-
+    private Class<?> targetClass;
     private String methodName;
+    private Class<?>[] methodArgClasses;
 
-    private Class[] methodArgClasses;
-
-    /**
-     * {@link MethodNotFoundRuntimeException}を作成します。
-     * 
-     * @param targetClass
-     * @param methodName
-     * @param methodArgs
-     */
-    public MethodNotFoundRuntimeException(Class targetClass, String methodName, Object[] methodArgs) {
-
+    public BeanMethodNotFoundException(Class<?> targetClass, String methodName, Object[] methodArgs) {
         super("ESSR0049", new Object[] { targetClass.getName(), LdiMethodUtil.getSignature(methodName, methodArgs) });
         this.targetClass = targetClass;
         this.methodName = methodName;
@@ -56,49 +41,24 @@ public class MethodNotFoundRuntimeException extends SRuntimeException {
                 }
             }
         }
-
     }
 
-    /**
-     * {@link MethodNotFoundRuntimeException}を作成します。
-     * 
-     * @param targetClass
-     * @param methodName
-     * @param methodArgClasses
-     */
-    public MethodNotFoundRuntimeException(Class targetClass, String methodName, Class[] methodArgClasses) {
-
+    public BeanMethodNotFoundException(Class<?> targetClass, String methodName, Class<?>[] methodArgClasses) {
         super("ESSR0049", new Object[] { targetClass.getName(), LdiMethodUtil.getSignature(methodName, methodArgClasses) });
         this.targetClass = targetClass;
         this.methodName = methodName;
         this.methodArgClasses = methodArgClasses;
     }
 
-    /**
-     * ターゲットの{@link Class}を返します。
-     * 
-     * @return ターゲットの{@link Class}
-     */
-    public Class getTargetClass() {
+    public Class<?> getTargetClass() {
         return targetClass;
     }
 
-    /**
-     * メソッド名を返します。
-     * 
-     * @return メソッド名
-     */
     public String getMethodName() {
         return methodName;
     }
 
-    /**
-     * メソッドの引数の{@link Class}の配列を返します。
-     * 
-     * @return メソッドの引数の{@link Class}の配列
-     */
-    public Class[] getMethodArgClasses() {
+    public Class<?>[] getMethodArgClasses() {
         return methodArgClasses;
     }
-
 }

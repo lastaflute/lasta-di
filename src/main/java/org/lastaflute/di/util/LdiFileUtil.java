@@ -26,24 +26,16 @@ import java.net.URL;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link File}を扱うユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiFileUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiFileUtil() {
     }
 
     /**
-     * この抽象パス名の正規の形式を返します。
-     * 
      * @param file
-     *            ファイル
-     * @return この抽象パス名と同じファイルまたはディレクトリを示す正規パス名文字列
+     * @return 
      */
     public static String getCanonicalPath(File file) {
         try {
@@ -54,11 +46,8 @@ public class LdiFileUtil {
     }
 
     /**
-     * この抽象パス名を<code>file:</code> URLに変換します。
-     * 
      * @param file
-     *            ファイル
-     * @return ファイルURLを表すURLオブジェクト
+     * @return 
      */
     @SuppressWarnings("deprecation")
     public static URL toURL(final File file) {
@@ -70,23 +59,16 @@ public class LdiFileUtil {
     }
 
     /**
-     * ファイルの内容をバイト配列に読み込んで返します。
-     * 
      * @param file
-     *            ファイル
-     * @return ファイルの内容を読み込んだバイト配列
+     * @return 
      */
     public static byte[] getBytes(File file) {
         return LdiInputStreamUtil.getBytes(LdiFileInputStreamUtil.create(file));
     }
 
     /**
-     * <code>src</code>の内容を<code>dest</code>にコピーします。
-     * 
      * @param src
-     *            コピー元のファイル
      * @param dest
-     *            コピー先のファイル
      */
     public static void copy(File src, File dest) {
         if (dest.exists() && !dest.canWrite()) {
@@ -112,18 +94,11 @@ public class LdiFileUtil {
     }
 
     /**
-     * バイトの配列をファイルに書き出します。
-     * 
      * @param path
-     *            ファイルのパス
      * @param data
-     *            バイトの配列
      * @param offset
-     *            オフセット
      * @param length
-     *            配列の長さ
      * @throws NullPointerException
-     *             pathやdataがnullの場合。
      */
     public static void write(String path, byte[] data) {
         if (path == null) {
@@ -136,18 +111,11 @@ public class LdiFileUtil {
     }
 
     /**
-     * バイトの配列をファイルに書き出します。
-     * 
      * @param path
-     *            ファイルのパス
      * @param data
-     *            バイトの配列
      * @param offset
-     *            オフセット
      * @param length
-     *            配列の長さ
      * @throws NullPointerException
-     *             pathやdataがnullの場合。
      */
     public static void write(String path, byte[] data, int offset, int length) {
         if (path == null) {

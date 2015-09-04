@@ -23,32 +23,16 @@ import org.lastaflute.di.exception.IORuntimeException;
 import org.lastaflute.di.exception.SAXRuntimeException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * {@link SAXParser}用のユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiSAXParserUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiSAXParserUtil() {
     }
 
-    /**
-     * 指定された{@link InputSource}のコンテンツを、指定された{@link DefaultHandler}を使用してXMLとして構文解析します。
-     * 
-     * @param parser
-     *            使用する{@link SAXParser}
-     * @param inputSource
-     *            構文解析されるコンテンツを含む{@link InputSource}
-     * @param handler
-     *            使用するSAX {@link DefaultHandler}
-     */
     public static void parse(SAXParser parser, InputSource inputSource, DefaultHandler handler) {
         try {
             parser.parse(inputSource, handler);
@@ -59,16 +43,6 @@ public class LdiSAXParserUtil {
         }
     }
 
-    /**
-     * {@link XMLReader}の基本となる実装に特定のプロパティを設定します。
-     * 
-     * @param parser
-     *            プロパティを設定する{@link SAXParser}
-     * @param name
-     *            設定されるプロパティの名前
-     * @param value
-     *            設定されるプロパティの値
-     */
     public static void setProperty(final SAXParser parser, final String name, final String value) {
         try {
             parser.setProperty(name, value);

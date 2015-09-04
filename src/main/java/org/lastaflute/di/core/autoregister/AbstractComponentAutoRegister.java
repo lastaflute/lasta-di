@@ -52,73 +52,42 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
 
     private ComponentCustomizer customizer;
 
-    /**
-     * @return AutoNaming
-     */
     public AutoNaming getAutoNaming() {
         return autoNaming;
     }
 
-    /**
-     * @param autoNaming
-     *            AutoNaming
-     */
     public void setAutoNaming(AutoNaming autoNaming) {
         this.autoNaming = autoNaming;
     }
 
-    /**
-     * @return 
-     */
     public InstanceDef getInstanceDef() {
         return instanceDef;
     }
 
-    /**
-     * @param instanceDef
-     */
     public void setInstanceDef(InstanceDef instanceDef) {
         this.instanceDef = instanceDef;
     }
 
-    /**
-     * @return 
-     */
     public AutoBindingDef getAutoBindingDef() {
         return autoBindingDef;
     }
 
-    /**
-     * @param autoBindingDef
-     */
     public void setAutoBindingDef(AutoBindingDef autoBindingDef) {
         this.autoBindingDef = autoBindingDef;
     }
 
-    /**
-     * @return 
-     */
     public boolean isExternalBinding() {
         return externalBinding;
     }
 
-    /**
-     * @param externalBinding
-     */
     public void setExternalBinding(boolean externalBinding) {
         this.externalBinding = externalBinding;
     }
 
-    /**
-     * @return 
-     */
     public ComponentCustomizer getCustomizer() {
         return customizer;
     }
 
-    /**
-     * @param customizer
-     */
     public void setCustomizer(ComponentCustomizer customizer) {
         this.customizer = customizer;
     }
@@ -137,9 +106,6 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
         }
     }
 
-    /**
-     * @param className
-     */
     protected void register(final String className) {
         final AnnotationHandler annoHandler = AnnotationHandlerFactory.getAnnotationHandler();
         final ComponentDef cd = annoHandler.createComponentDef(className, instanceDef, autoBindingDef, externalBinding);
@@ -156,20 +122,14 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
         getContainer().register(cd);
     }
 
-    /**
-     * @param componentDef
-     */
     protected void customize(ComponentDef componentDef) {
         if (customizer != null) {
             customizer.customize(componentDef);
         }
     }
 
-    /**
-     * @return 
-     */
     protected String[] getTargetPackages() {
-        final List result = new ArrayList();
+        final List<String> result = new ArrayList<String>();
         for (int i = 0; i < getClassPatternSize(); ++i) {
             final String packageName = getClassPattern(i).getPackageName();
             boolean append = true;
@@ -193,5 +153,4 @@ public abstract class AbstractComponentAutoRegister extends AbstractAutoRegister
         }
         return (String[]) result.toArray(new String[result.size()]);
     }
-
 }

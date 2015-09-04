@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javassist.ClassPool;
-
 import org.lastaflute.di.core.aop.InterType;
 import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 import org.lastaflute.di.core.util.ClassPoolUtil;
@@ -33,6 +31,8 @@ import org.lastaflute.di.exception.NoSuchFieldRuntimeException;
 import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiFieldUtil;
 import org.lastaflute.di.util.LdiMethodUtil;
+
+import javassist.ClassPool;
 
 /**
  * @author modified by jflute (originated in Seasar)

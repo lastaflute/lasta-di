@@ -26,7 +26,8 @@ import javax.naming.spi.InitialContextFactory;
  */
 public class JndiContextFactory implements InitialContextFactory {
 
-    public Context getInitialContext(Hashtable env) throws NamingException {
-        return new JndiContext(env);
+    @SuppressWarnings("unchecked")
+    public Context getInitialContext(Hashtable<?, ?> env) throws NamingException {
+        return new JndiContext((Hashtable<String, Object>) env);
     }
 }

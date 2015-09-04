@@ -49,13 +49,13 @@ public class LdiNumberConversionUtil {
         return o;
     }
 
-    public static Object convertPrimitiveWrapper(Class type, Object o) {
+    public static Object convertPrimitiveWrapper(Class<?> type, Object o) {
         if (type == int.class) {
             Integer i = LdiIntegerConversionUtil.toInteger(o);
             if (i != null) {
                 return i;
             }
-            return new Integer(0);
+            return Integer.valueOf(0);
         } else if (type == double.class) {
             Double d = LdiDoubleConversionUtil.toDouble(o);
             if (d != null) {
@@ -67,7 +67,7 @@ public class LdiNumberConversionUtil {
             if (l != null) {
                 return l;
             }
-            return new Long(0);
+            return Long.valueOf(0L);
         } else if (type == float.class) {
             Float f = LdiFloatConversionUtil.toFloat(o);
             if (f != null) {

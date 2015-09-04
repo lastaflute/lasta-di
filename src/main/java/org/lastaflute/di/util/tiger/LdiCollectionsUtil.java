@@ -46,26 +46,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
- * Java5のgenericsや可変長を活用する、コレクションのためのユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public abstract class LdiCollectionsUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiCollectionsUtil() {
     }
 
     /**
-     * {@link ArrayBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ArrayBlockingQueue}の要素型
      * @param capacity
-     *            キューの容量
-     * @return {@link ArrayBlockingQueue}の新しいインスタンス
+     * @return 
      * @see ArrayBlockingQueue#ArrayBlockingQueue(int)
      */
     public static <E> ArrayBlockingQueue<E> newArrayBlockingQueue(final int capacity) {
@@ -73,15 +64,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ArrayBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ArrayBlockingQueue}の要素型
      * @param capacity
-     *            キューの容量
      * @param fair
-     *            {@code true}の場合、挿入または削除時にブロックされたスレッドに対するキューアクセス
-     * @return {@link ArrayBlockingQueue}の新しいインスタンス
+     * @return 
      * @see ArrayBlockingQueue#ArrayBlockingQueue(int, boolean)
      */
     public static <E> ArrayBlockingQueue<E> newArrayBlockingQueue(final int capacity, final boolean fair) {
@@ -89,17 +75,11 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ArrayBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ArrayBlockingQueue}の要素型
      * @param capacity
-     *            キューの容量
      * @param fair
-     *            {@code true}の場合、挿入または削除時にブロックされたスレッドに対するキューアクセス
      * @param c
-     *            最初に含む要素のコレクション
-     * @return {@link ArrayBlockingQueue}の新しいインスタンス
+     * @return 
      * @see ArrayBlockingQueue#ArrayBlockingQueue(int, boolean, Collection)
      */
     public static <E> ArrayBlockingQueue<E> newArrayBlockingQueue(final int capacity, final boolean fair, final Collection<? extends E> c) {
@@ -107,11 +87,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ArrayList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ArrayList}の要素型
-     * @return {@link ArrayList}の新しいインスタンス
+     * @return 
      * @see ArrayList#ArrayList()
      */
     public static <E> ArrayList<E> newArrayList() {
@@ -119,13 +96,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ArrayList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ArrayList}の要素型
      * @param c
-     *            要素がリストに配置されるコレクション
-     * @return {@link ArrayList}の新しいインスタンス
+     * @return 
      * @see ArrayList#ArrayList(Collection)
      */
     public static <E> ArrayList<E> newArrayList(final Collection<? extends E> c) {
@@ -133,13 +106,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ArrayList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ArrayList}の要素型
      * @param initialCapacity
-     *            リストの初期容量
-     * @return {@link ArrayList}の新しいインスタンス
+     * @return 
      * @see ArrayList#ArrayList(int)
      */
     public static <E> ArrayList<E> newArrayList(final int initialCapacity) {
@@ -147,13 +116,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ConcurrentHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link ConcurrentHashMap}のキーの型
      * @param <V>
-     *            {@link ConcurrentHashMap}の値の型
-     * @return {@link ConcurrentHashMap}の新しいインスタンス
+     * @return 
      * @see ConcurrentHashMap#ConcurrentHashMap()
      */
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
@@ -161,15 +126,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ConcurrentHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link ConcurrentHashMap}のキーの型
      * @param <V>
-     *            {@link ConcurrentHashMap}の値の型
      * @param initialCapacity
-     *            初期容量
-     * @return {@link ConcurrentHashMap}の新しいインスタンス
+     * @return 
      * @see ConcurrentHashMap#ConcurrentHashMap(int)
      */
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(final int initialCapacity) {
@@ -177,19 +137,12 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ConcurrentHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link ConcurrentHashMap}のキーの型
      * @param <V>
-     *            {@link ConcurrentHashMap}の値の型
      * @param initialCapacity
-     *            初期容量
      * @param loadFactor
-     *            サイズ変更の制御に使用される負荷係数のしきい値
      * @param concurrencyLevel
-     *            同時更新を行うスレッドの推定数
-     * @return {@link ConcurrentHashMap}の新しいインスタンス
+     * @return 
      * @see ConcurrentHashMap#ConcurrentHashMap(int, float, int)
      */
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(final int initialCapacity, final float loadFactor,
@@ -198,15 +151,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ConcurrentHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link ConcurrentHashMap}のキーの型
      * @param <V>
-     *            {@link ConcurrentHashMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link ConcurrentHashMap}の新しいインスタンス
+     * @return 
      * @see ConcurrentHashMap#ConcurrentHashMap(Map)
      */
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(final Map<? extends K, ? extends V> m) {
@@ -214,11 +162,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ConcurrentLinkedQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ConcurrentLinkedQueue}の要素型
-     * @return {@link ConcurrentLinkedQueue}の新しいインスタンス
+     * @return 
      * @see ConcurrentLinkedQueue#ConcurrentLinkedQueue()
      */
     public static <E> ConcurrentLinkedQueue<E> newConcurrentLinkedQueue() {
@@ -226,13 +171,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link ConcurrentLinkedQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link ConcurrentLinkedQueue}の要素型
      * @param c
-     *            最初に含む要素のコレクション
-     * @return {@link ConcurrentLinkedQueue}の新しいインスタンス
+     * @return 
      * @see ConcurrentLinkedQueue#ConcurrentLinkedQueue(Collection)
      */
     public static <E> ConcurrentLinkedQueue<E> newConcurrentLinkedQueue(final Collection<? extends E> c) {
@@ -240,11 +181,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link CopyOnWriteArrayList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArrayList}の要素型
-     * @return {@link CopyOnWriteArrayList}の新しいインスタンス
+     * @return 
      * @see CopyOnWriteArrayList#CopyOnWriteArrayList()
      */
     public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList() {
@@ -252,13 +190,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link CopyOnWriteArrayList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArrayList}の要素型
      * @param c
-     *            最初に保持していた要素のコレクション
-     * @return {@link CopyOnWriteArrayList}の新しいインスタンス
+     * @return 
      * @see CopyOnWriteArrayList#CopyOnWriteArrayList(Collection)
      */
     public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(final Collection<? extends E> c) {
@@ -266,13 +200,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link CopyOnWriteArrayList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArrayList}の要素型
      * @param toCopyIn
-     *            配列 (この配列のコピーは内部配列として使用される)
-     * @return {@link CopyOnWriteArrayList}の新しいインスタンス
+     * @return 
      * @see CopyOnWriteArrayList#CopyOnWriteArrayList(Object[])
      */
     public static <E> CopyOnWriteArrayList<E> newCopyOnWriteArrayList(final E[] toCopyIn) {
@@ -280,11 +210,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link CopyOnWriteArraySet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArraySet}の要素型
-     * @return {@link CopyOnWriteArraySet}の新しいインスタンス
+     * @return 
      * @see CopyOnWriteArraySet#CopyOnWriteArraySet()
      */
     public static <E> CopyOnWriteArraySet<E> newCopyOnWriteArraySet() {
@@ -292,13 +219,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link CopyOnWriteArraySet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArraySet}の要素型
      * @param c
-     *            コレクション
-     * @return {@link CopyOnWriteArraySet}の新しいインスタンス
+     * @return 
      * @see CopyOnWriteArraySet#CopyOnWriteArraySet(Collection)
      */
     public static <E> CopyOnWriteArraySet<E> newCopyOnWriteArraySet(final Collection<? extends E> c) {
@@ -306,11 +229,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link DelayQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArraySet}の要素型
-     * @return {@link DelayQueue}の新しいインスタンス
+     * @return 
      * @see DelayQueue#DelayQueue()
      */
     public static <E extends Delayed> DelayQueue<E> newDelayQueue() {
@@ -318,13 +238,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link DelayQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link CopyOnWriteArraySet}の要素型
      * @param c
-     *            コレクション
-     * @return {@link DelayQueue}の新しいインスタンス
+     * @return 
      * @see DelayQueue#DelayQueue(Collection)
      */
     public static <E extends Delayed> DelayQueue<E> newDelayQueue(final Collection<? extends E> c) {
@@ -332,13 +248,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link HashMap}のキーの型
      * @param <V>
-     *            {@link HashMap}の値の型
-     * @return {@link HashMap}の新しいインスタンス
+     * @return 
      * @see HashMap#HashMap()
      */
     public static <K, V> HashMap<K, V> newHashMap() {
@@ -346,15 +258,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link HashMap}のキーの型
      * @param <V>
-     *            {@link HashMap}の値の型
      * @param initialCapacity
-     *            初期容量
-     * @return {@link HashMap}の新しいインスタンス
+     * @return 
      * @see HashMap#HashMap(int)
      */
     public static <K, V> HashMap<K, V> newHashMap(final int initialCapacity) {
@@ -362,17 +269,11 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link HashMap}のキーの型
      * @param <V>
-     *            {@link HashMap}の値の型
      * @param initialCapacity
-     *            初期容量
      * @param loadFactor
-     *            サイズ変更の制御に使用される負荷係数のしきい値
-     * @return {@link HashMap}の新しいインスタンス
+     * @return 
      * @see HashMap#HashMap(int, float)
      */
     public static <K, V> HashMap<K, V> newHashMap(final int initialCapacity, final float loadFactor) {
@@ -380,15 +281,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link HashMap}のキーの型
      * @param <V>
-     *            {@link HashMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link HashMap}の新しいインスタンス
+     * @return 
      * @see HashMap#HashMap(int, float)
      */
     public static <K, V> HashMap<K, V> newHashMap(final Map<? extends K, ? extends V> m) {
@@ -396,11 +292,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link HashSet}の要素型
-     * @return {@link HashSet}の新しいインスタンス
+     * @return 
      * @see HashSet#HashSet()
      */
     public static <E> HashSet<E> newHashSet() {
@@ -408,13 +301,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link HashSet}の要素型
      * @param c
-     *            要素がセットに配置されるコレクション
-     * @return {@link HashSet}の新しいインスタンス
+     * @return 
      * @see HashSet#HashSet()
      */
     public static <E> HashSet<E> newHashSet(final Collection<? extends E> c) {
@@ -422,13 +311,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link HashSet}の要素型
      * @param initialCapacity
-     *            初期容量
-     * @return {@link HashSet}の新しいインスタンス
+     * @return 
      * @see HashSet#HashSet()
      */
     public static <E> HashSet<E> newHashSet(final int initialCapacity) {
@@ -436,15 +321,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link HashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link HashSet}の要素型
      * @param initialCapacity
-     *            初期容量
      * @param loadFactor
-     *            負荷係数
-     * @return {@link HashSet}の新しいインスタンス
+     * @return 
      * @see HashSet#HashSet()
      */
     public static <E> HashSet<E> newHashSet(final int initialCapacity, final float loadFactor) {
@@ -452,13 +332,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Hashtable}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link Hashtable}のキーの型
      * @param <V>
-     *            {@link Hashtable}の値の型
-     * @return {@link Hashtable}の新しいインスタンス
+     * @return 
      * @see Hashtable#Hashtable()
      */
     public static <K, V> Hashtable<K, V> newHashtable() {
@@ -466,15 +342,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Hashtable}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link Hashtable}のキーの型
      * @param <V>
-     *            {@link Hashtable}の値の型
      * @param initialCapacity
-     *            ハッシュテーブルの初期容量
-     * @return {@link Hashtable}の新しいインスタンス
+     * @return 
      * @see Hashtable#Hashtable(int)
      */
     public static <K, V> Hashtable<K, V> newHashtable(final int initialCapacity) {
@@ -482,17 +353,11 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Hashtable}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link Hashtable}のキーの型
      * @param <V>
-     *            {@link Hashtable}の値の型
      * @param initialCapacity
-     *            ハッシュテーブルの初期容量
      * @param loadFactor
-     *            ハッシュテーブルの負荷係数
-     * @return {@link Hashtable}の新しいインスタンス
+     * @return 
      * @see Hashtable#Hashtable(int, float)
      */
     public static <K, V> Hashtable<K, V> newHashtable(final int initialCapacity, final float loadFactor) {
@@ -500,15 +365,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Hashtable}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link Hashtable}のキーの型
      * @param <V>
-     *            {@link Hashtable}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link Hashtable}の新しいインスタンス
+     * @return 
      * @see Hashtable#Hashtable(Map)
      */
     public static <K, V> Hashtable<K, V> newHashtable(final Map<? extends K, ? extends V> m) {
@@ -516,13 +376,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link IdentityHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link IdentityHashMap}のキーの型
      * @param <V>
-     *            {@link IdentityHashMap}の値の型
-     * @return {@link IdentityHashMap}の新しいインスタンス
+     * @return 
      * @see IdentityHashMap#IdentityHashMap()
      */
     public static <K, V> IdentityHashMap<K, V> newIdentityHashMap() {
@@ -530,15 +386,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link IdentityHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link IdentityHashMap}のキーの型
      * @param <V>
-     *            {@link IdentityHashMap}の値の型
      * @param expectedMaxSize
-     *            マップの予想最大サイズ
-     * @return {@link IdentityHashMap}の新しいインスタンス
+     * @return 
      * @see IdentityHashMap#IdentityHashMap(int)
      */
     public static <K, V> IdentityHashMap<K, V> newIdentityHashMap(final int expectedMaxSize) {
@@ -546,15 +397,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link IdentityHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link IdentityHashMap}のキーの型
      * @param <V>
-     *            {@link IdentityHashMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link IdentityHashMap}の新しいインスタンス
+     * @return 
      * @see IdentityHashMap#IdentityHashMap(Map)
      */
     public static <K, V> IdentityHashMap<K, V> newIdentityHashMap(final Map<? extends K, ? extends V> m) {
@@ -562,11 +408,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedBlockingQueue}の要素型
-     * @return {@link LinkedBlockingQueue}の新しいインスタンス
+     * @return 
      * @see LinkedBlockingQueue#LinkedBlockingQueue()
      */
     public static <E> LinkedBlockingQueue<E> newLinkedBlockingQueue() {
@@ -574,13 +417,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedBlockingQueue}の要素型
      * @param c
-     *            最初に含む要素のコレクション
-     * @return {@link LinkedBlockingQueue}の新しいインスタンス
+     * @return 
      * @see LinkedBlockingQueue#LinkedBlockingQueue(Collection)
      */
     public static <E> LinkedBlockingQueue<E> newLinkedBlockingQueue(final Collection<? extends E> c) {
@@ -588,13 +427,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedBlockingQueue}の要素型
      * @param initialCapacity
-     *            このキューの容量
-     * @return {@link LinkedBlockingQueue}の新しいインスタンス
+     * @return 
      * @see LinkedBlockingQueue#LinkedBlockingQueue(int)
      */
     public static <E> LinkedBlockingQueue<E> newLinkedBlockingQueue(final int initialCapacity) {
@@ -602,13 +437,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link LinkedHashMap}のキーの型
      * @param <V>
-     *            {@link LinkedHashMap}の値の型
-     * @return {@link LinkedHashMap}の新しいインスタンス
+     * @return 
      * @see LinkedHashMap#LinkedHashMap()
      */
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
@@ -616,15 +447,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link LinkedHashMap}のキーの型
      * @param <V>
-     *            {@link LinkedHashMap}の値の型
      * @param initialCapacity
-     *            初期容量
-     * @return {@link LinkedHashMap}の新しいインスタンス
+     * @return 
      * @see LinkedHashMap#LinkedHashMap(int)
      */
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMap(final int initialCapacity) {
@@ -632,17 +458,11 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link LinkedHashMap}のキーの型
      * @param <V>
-     *            {@link LinkedHashMap}の値の型
      * @param initialCapacity
-     *            初期容量
      * @param loadFactor
-     *            負荷係数
-     * @return {@link LinkedHashMap}の新しいインスタンス
+     * @return 
      * @see LinkedHashMap#LinkedHashMap(int, float)
      */
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMap(final int initialCapacity, final float loadFactor) {
@@ -650,15 +470,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link LinkedHashMap}のキーの型
      * @param <V>
-     *            {@link LinkedHashMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link LinkedHashMap}の新しいインスタンス
+     * @return 
      * @see LinkedHashMap#LinkedHashMap(Map)
      */
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMap(final Map<? extends K, ? extends V> m) {
@@ -666,11 +481,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedHashSet}の要素型
-     * @return {@link LinkedHashSet}の新しいインスタンス
+     * @return 
      * @see LinkedHashSet#LinkedHashSet()
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet() {
@@ -678,13 +490,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedHashSet}の要素型
      * @param c
-     *            要素がセットに配置されるコレクション
-     * @return {@link LinkedHashSet}の新しいインスタンス
+     * @return 
      * @see LinkedHashSet#LinkedHashSet(Collection)
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet(final Collection<? extends E> c) {
@@ -692,13 +500,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedHashSet}の要素型
      * @param initialCapacity
-     *            初期容量
-     * @return {@link LinkedHashSet}の新しいインスタンス
+     * @return 
      * @see LinkedHashSet#LinkedHashSet(int)
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet(final int initialCapacity) {
@@ -706,15 +510,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedHashSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedHashSet}の要素型
      * @param initialCapacity
-     *            初期容量
      * @param loadFactor
-     *            負荷係数
-     * @return {@link LinkedHashSet}の新しいインスタンス
+     * @return 
      * @see LinkedHashSet#LinkedHashSet(int, float)
      */
     public static <E> LinkedHashSet<E> newLinkedHashSet(final int initialCapacity, final float loadFactor) {
@@ -722,11 +521,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedList}の要素型
-     * @return {@link LinkedList}の新しいインスタンス
+     * @return 
      * @see LinkedList#LinkedList()
      */
     public static <E> LinkedList<E> newLinkedList() {
@@ -734,13 +530,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link LinkedList}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link LinkedList}の要素型
      * @param c
-     *            要素がリストに配置されるコレクション
-     * @return {@link LinkedList}の新しいインスタンス
+     * @return 
      * @see LinkedList#LinkedList(Collection)
      */
     public static <E> LinkedList<E> newLinkedList(final Collection<? extends E> c) {
@@ -748,11 +540,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityBlockingQueue}の要素型
-     * @return {@link PriorityBlockingQueue}の新しいインスタンス
+     * @return 
      * @see PriorityBlockingQueue#PriorityBlockingQueue()
      */
     public static <E> PriorityBlockingQueue<E> newPriorityBlockingQueue() {
@@ -760,13 +549,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityBlockingQueue}の要素型
      * @param c
-     *            最初に含む要素のコレクション
-     * @return {@link PriorityBlockingQueue}の新しいインスタンス
+     * @return 
      * @see PriorityBlockingQueue#PriorityBlockingQueue(Collection)
      */
     public static <E> PriorityBlockingQueue<E> newPriorityBlockingQueue(final Collection<? extends E> c) {
@@ -774,13 +559,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityBlockingQueue}の要素型
      * @param initialCapacity
-     *            この優先度キューの初期容量
-     * @return {@link PriorityBlockingQueue}の新しいインスタンス
+     * @return 
      * @see PriorityBlockingQueue#PriorityBlockingQueue(int)
      */
     public static <E> PriorityBlockingQueue<E> newPriorityBlockingQueue(final int initialCapacity) {
@@ -788,15 +569,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityBlockingQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityBlockingQueue}の要素型
      * @param initialCapacity
-     *            この優先度キューの初期容量
      * @param comparator
-     *            この優先度キューの順序付けに使用するコンパレータ
-     * @return {@link PriorityBlockingQueue}の新しいインスタンス
+     * @return 
      * @see PriorityBlockingQueue#PriorityBlockingQueue(int, Comparator)
      */
     public static <E> PriorityBlockingQueue<E> newPriorityBlockingQueue(final int initialCapacity, final Comparator<? super E> comparator) {
@@ -804,11 +580,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityQueue}の要素型
-     * @return {@link PriorityQueue}の新しいインスタンス
+     * @return 
      * @see PriorityQueue#PriorityQueue()
      */
     public static <E> PriorityQueue<E> newPriorityQueue() {
@@ -816,13 +589,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityQueue}の要素型
      * @param c
-     *            要素が優先度キューに配置されるコレクション
-     * @return {@link PriorityQueue}の新しいインスタンス
+     * @return 
      * @see PriorityQueue#PriorityQueue(Collection)
      */
     public static <E> PriorityQueue<E> newPriorityQueue(final Collection<? extends E> c) {
@@ -830,13 +599,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityQueue}の要素型
      * @param initialCapacity
-     *            この優先度キューの初期容量
-     * @return {@link PriorityQueue}の新しいインスタンス
+     * @return 
      * @see PriorityQueue#PriorityQueue(int)
      */
     public static <E> PriorityQueue<E> newPriorityQueue(final int initialCapacity) {
@@ -844,15 +609,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityQueue}の要素型
      * @param initialCapacity
-     *            この優先度キューの初期容量
      * @param comparator
-     *            この優先度キューの順序付けに使用するコンパレータ
-     * @return {@link PriorityQueue}の新しいインスタンス
+     * @return 
      * @see PriorityQueue#PriorityQueue(int, Comparator)
      */
     public static <E> PriorityQueue<E> newPriorityQueue(final int initialCapacity, final Comparator<? super E> comparator) {
@@ -860,13 +620,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityQueue}の要素型
      * @param c
-     *            要素が優先度キューに配置されるコレクション
-     * @return {@link PriorityQueue}の新しいインスタンス
+     * @return 
      * @see PriorityQueue#PriorityQueue(PriorityQueue)
      */
     public static <E> PriorityQueue<E> newPriorityQueue(final PriorityQueue<? extends E> c) {
@@ -874,13 +630,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link PriorityQueue}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link PriorityQueue}の要素型
      * @param c
-     *            要素が優先度キューに配置されるコレクション
-     * @return {@link PriorityQueue}の新しいインスタンス
+     * @return 
      * @see PriorityQueue#PriorityQueue(SortedSet)
      */
     public static <E> PriorityQueue<E> newPriorityQueue(final SortedSet<? extends E> c) {
@@ -888,11 +640,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Stack}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link Stack}の要素型
-     * @return {@link Stack}の新しいインスタンス
+     * @return 
      * @see Stack#Stack()
      */
     public static <E> Stack<E> newStack() {
@@ -900,13 +649,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link TreeMap}のキーの型
      * @param <V>
-     *            {@link TreeMap}の値の型
-     * @return {@link TreeMap}の新しいインスタンス
+     * @return 
      * @see TreeMap#TreeMap()
      */
     public static <K, V> TreeMap<K, V> newTreeMap() {
@@ -914,14 +659,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link TreeMap}のキーの型
      * @param <V>
-     *            {@link TreeMap}の値の型
      * @param c
-     * @return {@link TreeMap}の新しいインスタンス
+     * @return 
      * @see TreeMap#TreeMap()
      */
     public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<? super K> c) {
@@ -929,15 +670,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link TreeMap}のキーの型
      * @param <V>
-     *            {@link TreeMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link TreeMap}の新しいインスタンス
+     * @return 
      * @see TreeMap#TreeMap(Map)
      */
     public static <K, V> TreeMap<K, V> newTreeMap(final Map<? extends K, ? extends V> m) {
@@ -945,15 +681,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link TreeMap}のキーの型
      * @param <V>
-     *            {@link TreeMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link TreeMap}の新しいインスタンス
+     * @return 
      * @see TreeMap#TreeMap(SortedMap)
      */
     public static <K, V> TreeMap<K, V> newTreeMap(final SortedMap<K, ? extends V> m) {
@@ -961,11 +692,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link TreeSet}の要素型
-     * @return {@link TreeSet}の新しいインスタンス
+     * @return 
      * @see TreeSet#TreeSet()
      */
     public static <E> TreeSet<E> newTreeSet() {
@@ -973,13 +701,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link TreeSet}の要素型
      * @param c
-     *            要素がセットに配置されるコレクション
-     * @return {@link TreeSet}の新しいインスタンス
+     * @return 
      * @see TreeSet#TreeSet(Collection)
      */
     public static <E> TreeSet<E> newTreeSet(final Collection<? extends E> c) {
@@ -987,13 +711,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link TreeSet}の要素型
      * @param c
-     *            このセットをソートするために使用されるコンパレータ
-     * @return {@link TreeSet}の新しいインスタンス
+     * @return 
      * @see TreeSet#TreeSet(Comparator)
      */
     public static <E> TreeSet<E> newTreeSet(final Comparator<? super E> c) {
@@ -1001,13 +721,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link TreeSet}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link TreeSet}の要素型
      * @param s
-     *            要素がセットに配置されるコレクション
-     * @return {@link TreeSet}の新しいインスタンス
+     * @return 
      * @see TreeSet#TreeSet(SortedSet)
      */
     public static <E> TreeSet<E> newTreeSet(final SortedSet<? extends E> s) {
@@ -1015,11 +731,8 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Vector}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link Vector}の要素型
-     * @return {@link Vector}の新しいインスタンス
+     * @return 
      * @see Vector#Vector()
      */
     public static <E> Vector<E> newVector() {
@@ -1027,13 +740,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Vector}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link Vector}の要素型
      * @param c
-     *            要素がセットに配置されるコレクション
-     * @return {@link Vector}の新しいインスタンス
+     * @return 
      * @see Vector#Vector(Collection)
      */
     public static <E> Vector<E> newVector(final Collection<? extends E> c) {
@@ -1041,13 +750,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Vector}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link Vector}の要素型
      * @param initialCapacity
-     *            {@link Vector}の初期容量
-     * @return {@link Vector}の新しいインスタンス
+     * @return 
      * @see Vector#Vector(int)
      */
     public static <E> Vector<E> newVector(final int initialCapacity) {
@@ -1055,15 +760,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link Vector}の新しいインスタンスを作成して返します。
-     * 
      * @param <E>
-     *            {@link Vector}の要素型
      * @param initialCapacity
-     *            {@link Vector}の初期容量
      * @param capacityIncrement
-     *            {@link Vector}があふれたときに増加される容量
-     * @return {@link Vector}の新しいインスタンス
+     * @return 
      * @see Vector#Vector(int, int)
      */
     public static <E> Vector<E> newVector(final int initialCapacity, final int capacityIncrement) {
@@ -1071,13 +771,9 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link WeakHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link WeakHashMap}のキーの型
      * @param <V>
-     *            {@link WeakHashMap}の値の型
-     * @return {@link WeakHashMap}の新しいインスタンス
+     * @return 
      * @see WeakHashMap#WeakHashMap()
      */
     public static <K, V> WeakHashMap<K, V> newWeakHashMap() {
@@ -1085,15 +781,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link WeakHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link WeakHashMap}のキーの型
      * @param <V>
-     *            {@link WeakHashMap}の値の型
      * @param initialCapacity
-     *            初期容量
-     * @return {@link WeakHashMap}の新しいインスタンス
+     * @return 
      * @see WeakHashMap#WeakHashMap(int)
      */
     public static <K, V> WeakHashMap<K, V> newWeakHashMap(final int initialCapacity) {
@@ -1101,17 +792,11 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link WeakHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link WeakHashMap}のキーの型
      * @param <V>
-     *            {@link WeakHashMap}の値の型
      * @param initialCapacity
-     *            初期容量
      * @param loadFactor
-     *            サイズ変更の制御に使用される負荷係数のしきい値
-     * @return {@link WeakHashMap}の新しいインスタンス
+     * @return 
      * @see WeakHashMap#WeakHashMap(int, float)
      */
     public static <K, V> WeakHashMap<K, V> newWeakHashMap(final int initialCapacity, final float loadFactor) {
@@ -1119,15 +804,10 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * {@link WeakHashMap}の新しいインスタンスを作成して返します。
-     * 
      * @param <K>
-     *            {@link WeakHashMap}のキーの型
      * @param <V>
-     *            {@link WeakHashMap}の値の型
      * @param m
-     *            作成されるマップに配置されるマップ
-     * @return {@link WeakHashMap}の新しいインスタンス
+     * @return 
      * @see WeakHashMap#WeakHashMap(Map)
      */
     public static <K, V> WeakHashMap<K, V> newWeakHashMap(final Map<? extends K, ? extends V> m) {
@@ -1135,24 +815,12 @@ public abstract class LdiCollectionsUtil {
     }
 
     /**
-     * マップが指定されたキーを含んでいない場合は、キーを指定された値に関連付けます。
-     * <p>
-     * マップがすでに指定されたキーを含んでいる場合は、 キーに関連づけられている値を返します。 マップは変更されず、 指定された値は使われません。
-     * マップがまだ指定されたキーを含んでいない場合は、 指定された値を値を返します。 マップは変更され、指定されたキーと指定された値が関連づけられます。
-     * いずれの場合も、返される値はマップがその時点でキーと関連づけている値です。
-     * </p>
-     * 
      * @param <K>
-     *            {@link HashMap}のキーの型
      * @param <V>
-     *            {@link HashMap}の値の型
      * @param map
-     *            マップ
      * @param key
-     *            指定される値が関連付けられるキー
      * @param value
-     *            指定されるキーに関連付けられる値
-     * @return 指定されたキーと関連付けられていた以前の値または、キーに関連付けられる値
+     * @return 
      * @see ConcurrentHashMap#putIfAbsent(Object, Object)
      */
     public static <K, V> V putIfAbsent(final ConcurrentMap<K, V> map, final K key, final V value) {

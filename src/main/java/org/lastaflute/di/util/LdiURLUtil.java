@@ -32,27 +32,17 @@ import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
 
 /**
- * {@link URL}を扱うユーティリティ・クラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class LdiURLUtil {
 
-    /** プロトコルを正規化するためのマップ */
-    protected static final Map CANONICAL_PROTOCOLS = new HashMap();
+    protected static final Map<String, String> CANONICAL_PROTOCOLS = new HashMap<String, String>();
 
     static {
-        CANONICAL_PROTOCOLS.put("wsjar", "jar"); // WebSphereがJarファイルのために使用する固有のプロトコル
-        CANONICAL_PROTOCOLS.put("vfsfile", "file"); // JBossAS5がファイルシステムのために使用する固有のプロトコル
+        CANONICAL_PROTOCOLS.put("wsjar", "jar"); // for WebSphere
+        CANONICAL_PROTOCOLS.put("vfsfile", "file"); // for JBossAS5
     }
 
-    /**
-     * URLをオープンして{@link InputStream}を返します。
-     * 
-     * @param url
-     *            URL
-     * @return URLが表すリソースを読み込むための{@link InputStream}
-     */
     public static InputStream openStream(URL url) {
         try {
             URLConnection connection = url.openConnection();
@@ -63,13 +53,6 @@ public class LdiURLUtil {
         }
     }
 
-    /**
-     * URLが参照するリモートオブジェクトへの接続を表す{@link URLConnection}オブジェクトを返します。
-     * 
-     * @param url
-     *            URL
-     * @return URLへの{@link URLConnection}オブジェクト
-     */
     public static URLConnection openConnection(URL url) {
         try {
             URLConnection connection = url.openConnection();
@@ -80,13 +63,6 @@ public class LdiURLUtil {
         }
     }
 
-    /**
-     * <code>String</code>表現から<code>URL</code>オブジェクトを作成します。
-     * 
-     * @param spec
-     *            <code>URL</code>として構文解析される<code>String</code>
-     * @return <code>URL</code>
-     */
     public static URL create(String spec) {
         try {
             return new URL(spec);
@@ -95,15 +71,6 @@ public class LdiURLUtil {
         }
     }
 
-    /**
-     * 指定されたコンテキスト内の指定された仕様で構文解析することによって、<code>URL</code>を生成します。
-     * 
-     * @param context
-     *            仕様を構文解析するコンテキスト
-     * @param spec
-     *            <code>URL</code>として構文解析される<code>String</code>
-     * @return <code>URL</code>
-     */
     public static URL create(URL context, String spec) {
         try {
             return new URL(context, spec);
@@ -112,15 +79,6 @@ public class LdiURLUtil {
         }
     }
 
-    /**
-     * 特定の符号化方式を使用して文字列を<code>application/x-www-form-urlencoded</code>形式に変換します。
-     * 
-     * @param s
-     *            変換対象の String
-     * @param enc
-     *            サポートされる文字エンコーディングの名前
-     * @return 変換後の<code>String</code>
-     */
     public static String encode(final String s, final String enc) {
         try {
             return URLEncoder.encode(s, enc);
@@ -129,15 +87,6 @@ public class LdiURLUtil {
         }
     }
 
-    /**
-     * 特別な符号化方式を使用して<code>application/x-www-form-urlencoded</code>文字列をデコードします。
-     * 
-     * @param s
-     *            デコード対象の<code>String</code>
-     * @param enc
-     *            サポートされる文字エンコーディングの名前
-     * @return 新しくデコードされた String
-     */
     public static String decode(final String s, final String enc) {
         try {
             return URLDecoder.decode(s, enc);
@@ -146,13 +95,6 @@ public class LdiURLUtil {
         }
     }
 
-    /**
-     * プロトコルを正規化して返します。
-     * 
-     * @param protocol
-     *            プロトコル
-     * @return 正規化されたプロトコル
-     */
     public static String toCanonicalProtocol(final String protocol) {
         final String canonicalProtocol = (String) CANONICAL_PROTOCOLS.get(protocol);
         if (canonicalProtocol != null) {
@@ -161,13 +103,6 @@ public class LdiURLUtil {
         return protocol;
     }
 
-    /**
-     * URLが示すJarファイルの{@link File}オブジェクトを返します。
-     * 
-     * @param fileUrl
-     *            JarファイルのURL
-     * @return Jarファイルの{@link File}
-     */
     public static File toFile(final URL fileUrl) {
         try {
             final String path = URLDecoder.decode(fileUrl.getPath(), "UTF-8");
@@ -178,14 +113,10 @@ public class LdiURLUtil {
     }
 
     /**
-     * <a
-     * href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4167874">このバグ<
-     * /a>に対する対応です。
-     * 
+     * for http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4167874
      */
     public static void disableURLCaches() {
         BeanDesc bd = BeanDescFactory.getBeanDesc(URLConnection.class);
         LdiFieldUtil.set(bd.getField("defaultUseCaches"), null, Boolean.FALSE);
     }
-
 }

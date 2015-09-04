@@ -19,21 +19,14 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * {@link Iterator}を {@link Enumeration}にするためのアダブタです。
- * 
+ * @param <ELEMENT> The element of enumeration.
  * @author modified by jflute (originated in Seasar)
- * 
  */
-public class EnumerationAdapter implements Enumeration {
+public class EnumerationAdapter<ELEMENT> implements Enumeration<ELEMENT> {
 
-    private Iterator iterator;
+    private Iterator<ELEMENT> iterator;
 
-    /**
-     * {@link EnumerationAdapter}を作成します。
-     * 
-     * @param iterator
-     */
-    public EnumerationAdapter(Iterator iterator) {
+    public EnumerationAdapter(Iterator<ELEMENT> iterator) {
         this.iterator = iterator;
     }
 
@@ -41,7 +34,7 @@ public class EnumerationAdapter implements Enumeration {
         return iterator.hasNext();
     }
 
-    public Object nextElement() {
+    public ELEMENT nextElement() {
         return iterator.next();
     }
 }

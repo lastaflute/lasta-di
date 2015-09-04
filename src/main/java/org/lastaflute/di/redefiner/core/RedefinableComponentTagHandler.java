@@ -120,7 +120,6 @@ public class RedefinableComponentTagHandler extends ComponentTagHandler {
         }
         final String resourcePath = LaContainerBuilderUtils.fromURLToResourcePath(body + DELIMITER + name + suffix);
         if (resourcePath != null) {
-            // パスがJarのURLの場合はURLをリソースパスに変換した上で作成したパスを候補に含める。
             pathList.add(resourcePath);
         }
         pathList.add(body + DELIMITER + name + suffix);

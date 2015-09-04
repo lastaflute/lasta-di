@@ -24,31 +24,19 @@ import org.lastaflute.di.util.LdiStringUtil;
 import org.lastaflute.di.util.Tokenizer;
 
 /**
- * 定数アノテーション用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class ConstantAnnotationUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected ConstantAnnotationUtil() {
     }
 
-    /**
-     * key=value, key2=value2形式の式を {@link Map}に変換します。
-     * 
-     * @param expression
-     * @return {@link Map}に変換された式
-     */
-    public static Map convertExpressionToMap(String expression) {
+    public static Map<String, String> convertExpressionToMap(String expression) {
         if (LdiStringUtil.isEmpty(expression)) {
             return null;
         }
         MyTokenizer tokenizer = new MyTokenizer(expression);
-        Map ret = new HashMap();
+        Map<String, String> ret = new HashMap<String, String>();
         for (int token = tokenizer.nextToken(); token != MyTokenizer.TT_EOF; token = tokenizer.nextToken()) {
             String s = tokenizer.getStringValue();
             token = tokenizer.nextToken();
@@ -67,53 +55,24 @@ public class ConstantAnnotationUtil {
         return ret;
     }
 
-    /**
-     * 定数アノテーションかどうか返します。
-     * 
-     * @param field
-     * @return 定数アノテーションかどうか
-     */
     public static boolean isConstantAnnotation(Field field) {
         return LdiModifierUtil.isPublicStaticFinalField(field) && field.getType().equals(String.class);
     }
 
-    /**
-     * 定数アノテーション用のトークン認識クラスです。
-     * 
-     */
     protected static class MyTokenizer extends Tokenizer {
 
-        /**
-         * 等号です。
-         */
         public static final int TT_EQUAL = '=';
-
-        /**
-         * カンマです。
-         */
         public static final int TT_COMMA = ',';
-
         private static byte[] defaultCtype = new byte[256];
 
         static {
             setup(defaultCtype);
         }
 
-        /**
-         * {@link org.lastaflute.di.core.util.ConstantAnnotationUtil.MyTokenizer}を作成します。
-         * 
-         * @param str
-         */
         public MyTokenizer(String str) {
             super(str, defaultCtype);
         }
 
-        /**
-         * {@link org.lastaflute.di.core.util.ConstantAnnotationUtil.MyTokenizer}を作成します。
-         * 
-         * @param str
-         * @param ctype
-         */
         public MyTokenizer(String str, byte[] ctype) {
             super(str, ctype);
         }

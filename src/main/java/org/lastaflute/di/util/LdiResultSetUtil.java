@@ -21,27 +21,13 @@ import java.sql.SQLException;
 import org.lastaflute.di.exception.SQLRuntimeException;
 
 /**
- * {@link ResultSet}のためのユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiResultSetUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiResultSetUtil() {
     }
 
-    /**
-     * 結果セットを閉じます。
-     * 
-     * @param resultSet
-     *            結果セット
-     * @throws SQLRuntimeException
-     *             SQL例外が起こった場合。
-     */
     public static void close(ResultSet resultSet) throws SQLRuntimeException {
         if (resultSet == null) {
             return;
@@ -54,13 +40,9 @@ public class LdiResultSetUtil {
     }
 
     /**
-     * 結果セットを次に進めます。
-     * 
      * @param resultSet
-     *            結果セット
-     * @return 次に進めたかどうか
+     * @return 
      * @throws SQLRuntimeException
-     *             SQL例外が起こった場合。
      */
     public static boolean next(ResultSet resultSet) {
         try {
@@ -70,17 +52,6 @@ public class LdiResultSetUtil {
         }
     }
 
-    /**
-     * カーソルを指定した位置まで進めます。
-     * 
-     * @param resultSet
-     *            結果セット
-     * @param index
-     *            位置
-     * @return 指定した位置まで進めたかどうか
-     * @throws SQLRuntimeException
-     *             SQL例外が起こった場合。
-     */
     public static boolean absolute(ResultSet resultSet, int index) throws SQLRuntimeException {
         try {
             return resultSet.absolute(index);

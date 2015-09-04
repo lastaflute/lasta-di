@@ -47,25 +47,16 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
     private static Logger logger = LoggerFactory.getLogger(TransactionImpl.class);
 
     private static final int VOTE_READONLY = 0;
-
     private static final int VOTE_COMMIT = 1;
-
     private static final int VOTE_ROLLBACK = 2;
 
     private Xid xid;
-
     private int status = Status.STATUS_NO_TRANSACTION;
-
     private List<XAResourceWrapper> xaResourceWrappers = new ArrayList<XAResourceWrapper>();
-
     private List<Synchronization> synchronizations = new ArrayList<Synchronization>();
-
     private List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
-
     private Map<Object, Object> resourceMap = new HashMap<Object, Object>();
-
     private boolean suspended = false;
-
     private int branchId = 0;
 
     public TransactionImpl() {
@@ -75,7 +66,7 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
         status = Status.STATUS_ACTIVE;
         init();
         if (logger.isDebugEnabled()) {
-            logger.debug("Begin the transaction: {}", this);
+            logger.debug("Begin transaction: {}", this);
         }
     }
 
@@ -187,7 +178,7 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
                 }
                 if (status == Status.STATUS_COMMITTED) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Commit the transaction: {}", this);
+                        logger.debug("Commit transaction: {}", this);
                     }
                 }
             }
@@ -359,7 +350,7 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
             endResources(XAResource.TMFAIL);
             rollbackResources();
             if (logger.isDebugEnabled()) {
-                logger.debug("Rollback the transaction: {}", this);
+                logger.debug("Rollback transaction: {}", this);
             }
             afterCompletion();
         } finally {

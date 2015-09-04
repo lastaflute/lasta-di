@@ -22,27 +22,18 @@ import java.sql.Statement;
 import org.lastaflute.di.exception.SQLRuntimeException;
 
 /**
- * {@link Statement}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiStatementUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiStatementUtil() {
     }
 
     /**
-     * SQLを実行します。
-     * 
      * @param statement
      * @param sql
-     * @return 実行した結果
+     * @return 
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      * @see Statement#execute(String)
      */
     public static boolean execute(Statement statement, String sql) throws SQLRuntimeException {
@@ -54,12 +45,9 @@ public class LdiStatementUtil {
     }
 
     /**
-     * フェッチサイズを設定します。
-     * 
      * @param statement
      * @param fetchSize
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      * @see Statement#setFetchSize(int)
      */
     public static void setFetchSize(Statement statement, int fetchSize) throws SQLRuntimeException {
@@ -71,12 +59,9 @@ public class LdiStatementUtil {
     }
 
     /**
-     * 最大行数を設定します。
-     * 
      * @param statement
      * @param maxRows
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      * @see Statement#setMaxRows(int)
      */
     public static void setMaxRows(Statement statement, int maxRows) throws SQLRuntimeException {
@@ -88,12 +73,9 @@ public class LdiStatementUtil {
     }
 
     /**
-     * クエリタイムアウトを設定します。
-     * 
      * @param statement
      * @param queryTimeout
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      * @see Statement#setQueryTimeout(int)
      */
     public static void setQueryTimeout(Statement statement, int queryTimeout) throws SQLRuntimeException {
@@ -105,11 +87,8 @@ public class LdiStatementUtil {
     }
 
     /**
-     * {@link Statement}を閉じます。
-     * 
      * @param statement
      * @throws SQLRuntimeException
-     *             {@link SQLException}が発生した場合
      * @see Statement#close()
      */
     public static void close(Statement statement) throws SQLRuntimeException {
@@ -124,10 +103,8 @@ public class LdiStatementUtil {
     }
 
     /**
-     * 結果セットを返します。
-     * 
      * @param statement
-     * @return 結果セット
+     * @return 
      * @throws SQLRuntimeException
      */
     public static ResultSet getResultSet(Statement statement) throws SQLRuntimeException {
@@ -139,11 +116,8 @@ public class LdiStatementUtil {
     }
 
     /**
-     * 更新カウントを返します。
-     * 
      * @param statement
-     *            ステートメント
-     * @return 更新カウント
+     * @return 
      * @see Statement#getUpdateCount()
      */
     public static int getUpdateCount(Statement statement) {

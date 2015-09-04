@@ -32,7 +32,7 @@ public class BindingUtil implements ContainerConstants {
     }
 
     public static final boolean isPropertyAutoBindable(Class<?> clazz) {
-        return clazz.isInterface() && isAnywayAutoBindable(clazz); // interface only (no change), only for DBFlute package
+        return isAnywayAutoBindable(clazz); // allows injection by non-interface type
     }
 
     public static final boolean isPropertyAutoBindable(Class<?>[] classes) { // for e.g. method, constructor

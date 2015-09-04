@@ -23,13 +23,9 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class ApplicationComponentDeployer extends AbstractComponentDeployer {
 
-    /**
-     * @param componentDef
-     */
     public ApplicationComponentDeployer(ComponentDef componentDef) {
         super(componentDef);
     }
@@ -40,7 +36,7 @@ public class ApplicationComponentDeployer extends AbstractComponentDeployer {
         if (extCtx == null) {
             throw new EmptyRuntimeException("externalContext");
         }
-        Map applicationMap = extCtx.getApplicationMap();
+        Map<String, Object> applicationMap = extCtx.getApplicationMap();
         String componentName = getComponentName();
         Object component = applicationMap.get(componentName);
         if (component == null) {

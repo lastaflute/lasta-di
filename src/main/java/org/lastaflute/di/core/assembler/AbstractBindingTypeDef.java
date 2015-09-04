@@ -25,7 +25,7 @@ import org.lastaflute.di.core.meta.BindingTypeDef;
 import org.lastaflute.di.core.meta.PropertyDef;
 import org.lastaflute.di.core.util.BindingUtil;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.beans.exception.IllegalPropertyRuntimeException;
+import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiFieldUtil;
 
@@ -74,9 +74,10 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
         final LaContainer container = componentDef.getContainer();
         final String propName = propertyDesc.getPropertyName();
         final Class<?> propType = propertyDesc.getPropertyType();
-        if (container.hasComponentDef(propType)) {
+        final boolean hasComponentByType = container.hasComponentDef(propType);
+        if (hasComponentByType) {
             final ComponentDef cd = container.getComponentDef(propType);
-            if (isAutoBindable(propName, propType, cd)) {
+            if (isSimpleNamingAutoBindable(propName, propType, cd)) {
                 final Object value = getComponent(componentDef, propType, component, propName);
                 setPropertyValue(componentDef, propertyDesc, component, value);
                 return true;
@@ -90,7 +91,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
             }
         }
         if (isPropertyAutoBindable(propType)) {
-            if (container.hasComponentDef(propType)) {
+            if (hasComponentByType) {
                 final Object value = getComponent(componentDef, propType, component, propName);
                 setPropertyValue(componentDef, propertyDesc, component, value);
                 return true;
@@ -116,14 +117,14 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected void setPropertyValue(ComponentDef componentDef, PropertyDesc propertyDesc, Object component, Object value)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         if (value == null) {
             return;
         }
         try {
             propertyDesc.setValue(component, value); // method or non-annotation public field
         } catch (NumberFormatException ex) {
-            throw new IllegalPropertyRuntimeException(componentDef.getComponentClass(), propertyDesc.getPropertyName(), ex);
+            throw new BeanIllegalPropertyException(componentDef.getComponentClass(), propertyDesc.getPropertyName(), ex);
         }
     }
 
@@ -151,14 +152,13 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected boolean bindAutoResourceField(ComponentDef componentDef, Field field, Object component) { // #injection_point
-        // TODO jflute lastaflute: [F] research: DI :: injection logic sliming
         final LaContainer container = componentDef.getContainer();
         final String propName = field.getName();
         final Class<?> propType = field.getType();
         final boolean hasComponentByType = container.hasComponentDef(propType);
         if (hasComponentByType) {
             final ComponentDef cd = container.getComponentDef(propType);
-            if (isAutoBindable(propName, propType, cd)) {
+            if (isSimpleNamingAutoBindable(propName, propType, cd)) {
                 Object value = getComponent(componentDef, propType, component, propName);
                 setResourceFieldValue(componentDef, field, component, value);
                 return true;
@@ -198,23 +198,23 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected void setResourceFieldValue(ComponentDef componentDef, Field field, Object component, Object value)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         if (value == null) {
             return;
         }
         try {
             LdiFieldUtil.set(field, component, value); // annotation field (contains public, private)
         } catch (NumberFormatException ex) {
-            throw new IllegalPropertyRuntimeException(componentDef.getComponentClass(), field.getName(), ex);
+            throw new BeanIllegalPropertyException(componentDef.getComponentClass(), field.getName(), ex);
         }
     }
 
     protected abstract void doBindResourceField(ComponentDef componentDef, Field field, Object component);
 
     // ===================================================================================
-    //                                                                        Small Helper
+    //                                                                        Assist Logic
     //                                                                        ============
-    protected boolean isAutoBindable(String propertyName, Class<?> propertyType, ComponentDef cd) {
+    protected boolean isSimpleNamingAutoBindable(String propertyName, Class<?> propertyType, ComponentDef cd) {
         final String componentName = cd.getComponentName();
         if (componentName == null) {
             return false;
@@ -229,7 +229,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected Object getValue(ComponentDef componentDef, PropertyDef propertyDef, Object component, Class<?> resultType)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         try {
             return propertyDef.getValue(resultType);
         } catch (RuntimeException cause) {
@@ -258,7 +258,7 @@ public abstract class AbstractBindingTypeDef implements BindingTypeDef {
     }
 
     protected Object getComponent(ComponentDef componentDef, Object key, Object component, String propertyName)
-            throws IllegalPropertyRuntimeException {
+            throws BeanIllegalPropertyException {
         try {
             return componentDef.getContainer().getComponent(key);
         } catch (RuntimeException cause) {

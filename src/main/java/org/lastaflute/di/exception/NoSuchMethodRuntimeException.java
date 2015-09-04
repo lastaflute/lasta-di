@@ -24,20 +24,18 @@ public class NoSuchMethodRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -5673845060079098617L;
 
-    private Class targetClass;
-
+    private Class<?> targetClass;
     private String methodName;
+    private Class<?>[] argTypes;
 
-    private Class[] argTypes;
-
-    public NoSuchMethodRuntimeException(Class targetClass, String methodName, Class[] argTypes, NoSuchMethodException cause) {
+    public NoSuchMethodRuntimeException(Class<?> targetClass, String methodName, Class<?>[] argTypes, NoSuchMethodException cause) {
         super("ESSR0057", new Object[] { targetClass.getName(), LdiMethodUtil.getSignature(methodName, argTypes), cause }, cause);
         this.targetClass = targetClass;
         this.methodName = methodName;
         this.argTypes = argTypes;
     }
 
-    public Class getTargetClass() {
+    public Class<?> getTargetClass() {
         return targetClass;
     }
 
@@ -45,7 +43,7 @@ public class NoSuchMethodRuntimeException extends SRuntimeException {
         return methodName;
     }
 
-    public Class[] getArgTypes() {
+    public Class<?>[] getArgTypes() {
         return argTypes;
     }
 }

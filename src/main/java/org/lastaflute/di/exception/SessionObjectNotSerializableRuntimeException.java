@@ -16,33 +16,18 @@
 package org.lastaflute.di.exception;
 
 import java.io.NotSerializableException;
-import java.io.Serializable;
 
 /**
- * {@link NotSerializableException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class SessionObjectNotSerializableRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * {@link SessionObjectNotSerializableRuntimeException}を作成します。
-     * 
-     * @param clazz
-     *            {@link Serializable}でないクラス
-     */
-    public SessionObjectNotSerializableRuntimeException(final Class clazz) {
+    public SessionObjectNotSerializableRuntimeException(final Class<?> clazz) {
         super("ESSR0099", new Object[] { clazz });
     }
 
-    /**
-     * {@link SessionObjectNotSerializableRuntimeException}を作成します。
-     * 
-     * @param cause
-     *            原因となった例外
-     */
     public SessionObjectNotSerializableRuntimeException(final NotSerializableException cause) {
         super("ESSR0100", new Object[] { cause }, cause);
     }

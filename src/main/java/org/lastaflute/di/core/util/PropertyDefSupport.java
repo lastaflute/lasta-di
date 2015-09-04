@@ -20,10 +20,7 @@ import org.lastaflute.di.core.meta.PropertyDef;
 import org.lastaflute.di.util.CaseInsensitiveMap;
 
 /**
- * {@link PropertyDef}を補助するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class PropertyDefSupport {
 
@@ -31,9 +28,6 @@ public class PropertyDefSupport {
 
     private LaContainer container;
 
-    /**
-     * {@link PropertyDefSupport}を作成します。
-     */
     public PropertyDefSupport() {
     }
 

@@ -16,26 +16,16 @@
 package org.lastaflute.di.util;
 
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
- * {@link Calendar}用の変換ユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiCalendarConversionUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiCalendarConversionUtil() {
     }
 
     /**
-     * {@link Calendar}に変換します。
-     * 
      * @param o
      * @return {@link Calendar}
      */
@@ -44,8 +34,6 @@ public class LdiCalendarConversionUtil {
     }
 
     /**
-     * {@link Calendar}に変換します。
-     * 
      * @param o
      * @param pattern
      * @return {@link Calendar}
@@ -64,8 +52,6 @@ public class LdiCalendarConversionUtil {
     }
 
     /**
-     * ローカルの{@link TimeZone}と{@link Locale}をもつ{@link Calendar}に変換します。
-     * 
      * @param calendar
      *            {@link Calendar}
      * @return

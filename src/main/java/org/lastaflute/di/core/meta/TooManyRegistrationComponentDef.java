@@ -22,18 +22,9 @@ import org.lastaflute.di.core.ComponentDef;
  */
 public interface TooManyRegistrationComponentDef extends ComponentDef {
 
-    /**
-     * @param cd
-     */
     void addComponentDef(ComponentDef cd);
 
-    /**
-     * @return 
-     */
-    Class[] getComponentClasses();
+    Class<?>[] getComponentClasses();
 
-    /**
-     * @return 
-     */
     ComponentDef[] getComponentDefs();
 }

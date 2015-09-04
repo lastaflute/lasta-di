@@ -18,20 +18,12 @@ package org.lastaflute.di.exception;
 import javax.naming.NamingException;
 
 /**
- * {@link NamingException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class NamingRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -3176447530746274091L;
 
-    /**
-     * {@link NamingRuntimeException}を作成します。
-     * 
-     * @param cause
-     */
     public NamingRuntimeException(NamingException cause) {
         super("ESSR0066", new Object[] { cause }, cause);
     }

@@ -22,28 +22,16 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.DestroyMethodDef;
 
 /**
- * {@link DestroyMethodDef}を補助するクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class DestroyMethodDefSupport {
 
-    private List methodDefs = new ArrayList();
-
+    private List<DestroyMethodDef> methodDefs = new ArrayList<DestroyMethodDef>();
     private LaContainer container;
 
-    /**
-     * {@link DestroyMethodDefSupport}を作成します。
-     */
     public DestroyMethodDefSupport() {
     }
 
-    /**
-     * {@link DestroyMethodDef}を追加します。
-     * 
-     * @param methodDef
-     */
     public void addDestroyMethodDef(DestroyMethodDef methodDef) {
         if (container != null) {
             methodDef.setContainer(container);
@@ -51,30 +39,14 @@ public class DestroyMethodDefSupport {
         methodDefs.add(methodDef);
     }
 
-    /**
-     * {@link DestroyMethodDef}の数を返します。
-     * 
-     * @return {@link DestroyMethodDef}
-     */
     public int getDestroyMethodDefSize() {
         return methodDefs.size();
     }
 
-    /**
-     * {@link DestroyMethodDef}を返します。
-     * 
-     * @param index
-     * @return {@link DestroyMethodDef}
-     */
     public DestroyMethodDef getDestroyMethodDef(int index) {
         return (DestroyMethodDef) methodDefs.get(index);
     }
 
-    /**
-     * {@link LaContainer}を設定します。
-     * 
-     * @param container
-     */
     public void setContainer(LaContainer container) {
         this.container = container;
         for (int i = 0; i < getDestroyMethodDefSize(); ++i) {

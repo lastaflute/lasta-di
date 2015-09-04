@@ -15,20 +15,13 @@
  */
 package org.lastaflute.di.util;
 
-import java.util.Enumeration;
-
 /**
- * 空の {@link Enumeration}です。
- * 
+ * @param <ELEMENT> The element of enumeration.
  * @author modified by jflute (originated in Seasar)
- * 
  */
-public class EmptyEnumeration extends EnumerationAdapter {
+public class EmptyEnumeration<ELEMENT> extends EnumerationAdapter<ELEMENT> {
 
-    /**
-     * {@link EmptyEnumeration}を作成します。
-     */
     public EmptyEnumeration() {
-        super(new EmptyIterator());
+        super(new EmptyIterator<ELEMENT>());
     }
 }

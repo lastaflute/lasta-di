@@ -32,39 +32,25 @@ import org.lastaflute.di.util.LdiStringUtil;
 public abstract class AbstractAutoNaming implements AutoNaming {
 
     protected static final String IMPL = "Impl";
-
     protected static final String BEAN = "Bean";
 
     protected boolean decapitalize = true;
-
-    protected Map customizedNames = new HashMap();
-
-    protected Map replaceRules = new LinkedHashMap();
+    protected Map<String, String> customizedNames = new HashMap<String, String>();
+    protected Map<Pattern, String> replaceRules = new LinkedHashMap<Pattern, String>();
 
     public AbstractAutoNaming() {
         addIgnoreClassSuffix(IMPL);
         addIgnoreClassSuffix(BEAN);
     }
 
-    /**
-     * @param fqcn
-     * @param name
-     */
     public void setCustomizedName(final String fqcn, final String name) {
         customizedNames.put(fqcn, name);
     }
 
-    /**
-     * @param classSuffix
-     */
     public void addIgnoreClassSuffix(final String classSuffix) {
         addReplaceRule(classSuffix + "$", "");
     }
 
-    /**
-     * @param regex
-     * @param replacement
-     */
     public void addReplaceRule(final String regex, final String replacement) {
         replaceRules.put(Pattern.compile(regex), replacement);
     }
@@ -74,9 +60,6 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         replaceRules.clear();
     }
 
-    /**
-     * @param decapitalize
-     */
     public void setDecapitalize(final boolean decapitalize) {
         this.decapitalize = decapitalize;
     }
@@ -89,30 +72,16 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         return makeDefineName(packageName, shortClassName);
     }
 
-    /**
-     * @param packageName
-     * @param shortClassName
-     * @return 
-     */
     protected String getCustomizedName(final String packageName, final String shortClassName) {
         final String fqn = LdiClassUtil.concatName(packageName, shortClassName);
         return (String) customizedNames.get(fqn);
     }
 
-    /**
-     * @param packageName
-     * @param shortClassName
-     * @return 
-     */
     protected abstract String makeDefineName(final String packageName, final String shortClassName);
 
-    /**
-     * @param name
-     * @return 
-     */
     protected String applyRule(String name) {
-        for (Iterator it = replaceRules.entrySet().iterator(); it.hasNext();) {
-            final Entry entry = (Entry) it.next();
+        for (Iterator<Entry<Pattern, String>> it = replaceRules.entrySet().iterator(); it.hasNext();) {
+            final Entry<Pattern, String> entry = (Entry<Pattern, String>) it.next();
             final Pattern pattern = (Pattern) entry.getKey();
             final String replacement = (String) entry.getValue();
             final Matcher matcher = pattern.matcher(name);
@@ -125,10 +94,6 @@ public abstract class AbstractAutoNaming implements AutoNaming {
         return name;
     }
 
-    /**
-     * @param name
-     * @return 
-     */
     protected String normalize(final String name) {
         final String[] names = name.split("\\.");
         final StringBuffer buf = new StringBuffer(name.length());

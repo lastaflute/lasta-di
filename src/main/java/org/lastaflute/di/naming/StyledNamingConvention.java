@@ -31,8 +31,8 @@ import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiMapUtil;
 import org.lastaflute.di.util.LdiResourceUtil;
 import org.lastaflute.di.util.LdiResourcesUtil;
-import org.lastaflute.di.util.LdiStringUtil;
 import org.lastaflute.di.util.LdiResourcesUtil.Resources;
+import org.lastaflute.di.util.LdiStringUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)

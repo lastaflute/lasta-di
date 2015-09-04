@@ -19,44 +19,21 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * {@link Enumeration}を{@link Iterable}として扱うためのユーティリティ。
- * 
  * @param <E>
- *            {@link java.util.Enumeration}の要素型
  * @author modified by jflute (originated in Seasar)
  */
 public class IterableAdapter<E> implements Iterable<E>, Iterator<E> {
 
     Enumeration<E> enumeration;
 
-    /**
-     * {@link Enumeration}を{@link Iterable}として扱う<code>IterableAdapter</code>を作成して返します。
-     * 
-     * @param <E>
-     *            {@link Enumeration}の要素型
-     * @param enumeration
-     *            反復対象となる{@link java.util.Enumeration}
-     * @return {@link Enumeration}を{@link Iterable}として扱う<code>IterableAdapter</code>
-     */
     public static <E> IterableAdapter<E> iterable(Enumeration<E> enumeration) {
         return new IterableAdapter<E>(enumeration);
     }
 
-    /**
-     * インスタンスを構築します。
-     * 
-     * @param enumeration
-     *            反復対象となる{@link java.util.Enumeration}
-     */
     public IterableAdapter(final Enumeration<E> enumeration) {
         this.enumeration = enumeration;
     }
 
-    /**
-     * {@link java.util.Enumeration}の反復子を返します。
-     * 
-     * @return {@link java.util.Enumeration}の反復子
-     */
     public Iterator<E> iterator() {
         return this;
     }
@@ -76,8 +53,6 @@ public class IterableAdapter<E> implements Iterable<E>, Iterator<E> {
     }
 
     /**
-     * このメソッドはサポートされません。
-     * 
      * @see java.util.Iterator#remove
      */
     public void remove() {

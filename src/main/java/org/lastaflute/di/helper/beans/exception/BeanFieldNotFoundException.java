@@ -15,50 +15,28 @@
  */
 package org.lastaflute.di.helper.beans.exception;
 
-import java.lang.reflect.Field;
-
 import org.lastaflute.di.exception.SRuntimeException;
 
 /**
- * {@link Field}が見つからない場合にスローされる例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
-public class FieldNotFoundRuntimeException extends SRuntimeException {
+public class BeanFieldNotFoundException extends SRuntimeException {
 
     private static final long serialVersionUID = -2715036865146285893L;
 
-    private Class targetClass;
-
+    private Class<?> targetClass;
     private String fieldName;
 
-    /**
-     * {@link FieldNotFoundRuntimeException}を作成します。
-     * 
-     * @param targetClass
-     * @param fieldName
-     */
-    public FieldNotFoundRuntimeException(Class targetClass, String fieldName) {
+    public BeanFieldNotFoundException(Class<?> targetClass, String fieldName) {
         super("ESSR0070", new Object[] { targetClass.getName(), fieldName });
         this.targetClass = targetClass;
         this.fieldName = fieldName;
     }
 
-    /**
-     * ターゲットの{@link Class}を返します。
-     * 
-     * @return ターゲットの{@link Class}
-     */
-    public Class getTargetClass() {
+    public Class<?> getTargetClass() {
         return targetClass;
     }
 
-    /**
-     * フィールド名を返します。
-     * 
-     * @return
-     */
     public String getFieldName() {
         return fieldName;
     }

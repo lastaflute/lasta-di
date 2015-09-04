@@ -26,13 +26,11 @@ import org.lastaflute.di.core.smart.hot.HotdeployUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @see HotdeployUtil#rebuildValue(Object)
  */
 public abstract class RebuildableExternalContextMap extends AbstractExternalContextMap {
 
-    protected static WeakReference hotdeployClassLoader = new WeakReference(null);
-
-    protected static Set rebuiltNames = new HashSet(64);
+    protected static WeakReference<ClassLoader> hotdeployClassLoader = new WeakReference<ClassLoader>(null);
+    protected static Set<Object> rebuiltNames = new HashSet<Object>(64);
 
     public Object get(final Object key) {
         final Object value = getAttribute(key.toString());
@@ -48,7 +46,7 @@ public abstract class RebuildableExternalContextMap extends AbstractExternalCont
         return rebuiltValue;
     }
 
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         final Object oldValue = super.put(key, value);
         if (isHotdeployMode()) {
             rebuiltNames.add(key);
@@ -56,16 +54,14 @@ public abstract class RebuildableExternalContextMap extends AbstractExternalCont
         return oldValue;
     }
 
-    public void putAll(Map map) {
-        for (final Iterator it = map.entrySet().iterator(); it.hasNext();) {
-            final Entry entry = (Entry) it.next();
+    public void putAll(Map<? extends String, ? extends Object> map) {
+        for (final Iterator<?> it = map.entrySet().iterator(); it.hasNext();) {
+            @SuppressWarnings("unchecked")
+            final Entry<String, Object> entry = (Entry<String, Object>) it.next();
             put(entry.getKey(), entry.getValue());
         }
     }
 
-    /**
-     * @return 
-     */
     protected boolean isHotdeployMode() {
         if (!HotdeployUtil.isHotdeploy()) {
             return false;
@@ -75,10 +71,9 @@ public abstract class RebuildableExternalContextMap extends AbstractExternalCont
             return false;
         }
         if (currentLoader != hotdeployClassLoader.get()) {
-            hotdeployClassLoader = new WeakReference(currentLoader);
+            hotdeployClassLoader = new WeakReference<ClassLoader>(currentLoader);
             rebuiltNames.clear();
         }
         return true;
     }
-
 }

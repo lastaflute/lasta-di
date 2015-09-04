@@ -20,10 +20,7 @@ import java.net.UnknownHostException;
 import java.security.SecureRandom;
 
 /**
- * UUIDを作成するユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class UUID {
 
@@ -33,17 +30,9 @@ public class UUID {
 
     private static String _base = LdiStringUtil.toHex(getAddress()) + LdiStringUtil.toHex(System.identityHashCode(_random));
 
-    /**
-     * インスタンスを構築します。
-     */
     protected UUID() {
     }
 
-    /**
-     * UUIDを作成します。
-     * 
-     * @return
-     */
     public static String create() {
         StringBuffer buf = new StringBuffer(_base.length() * 2);
         buf.append(_base);

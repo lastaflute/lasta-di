@@ -15,25 +15,26 @@
  */
 package org.lastaflute.di.core.aop.intertype;
 
-import javassist.CtClass;
-
 import org.lastaflute.di.core.aop.InterType;
 import org.lastaflute.di.util.LdiArrayUtil;
 
+import javassist.CtClass;
+
+/**
+ * @author modified by jflute (originated in Seasar)
+ */
 public class InterTypeChain implements InterType {
+
     protected InterType[] interTypes = new InterType[0];
 
     public InterTypeChain() {
     }
 
-    /**
-     * @param interType
-     */
     public void add(final InterType interType) {
         interTypes = (InterType[]) LdiArrayUtil.add(interTypes, interType);
     }
 
-    public void introduce(final Class targetClass, final CtClass enhancedClass) {
+    public void introduce(final Class<?> targetClass, final CtClass enhancedClass) {
         for (int i = 0; i < interTypes.length; ++i) {
             interTypes[i].introduce(targetClass, enhancedClass);
         }

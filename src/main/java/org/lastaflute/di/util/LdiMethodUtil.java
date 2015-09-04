@@ -89,13 +89,6 @@ public class LdiMethodUtil {
         return buf.toString();
     }
 
-    /**
-     * シグニチャを返します。
-     * 
-     * @param methodName
-     * @param methodArgs
-     * @return シグニチャ
-     */
     public static String getSignature(String methodName, Object[] methodArgs) {
         StringBuffer buf = new StringBuffer(100);
         buf.append(methodName);
@@ -116,45 +109,21 @@ public class LdiMethodUtil {
         return buf.toString();
     }
 
-    /**
-     * equalsメソッドかどうかを返します。
-     * 
-     * @param method
-     * @return equalsメソッドかどうか
-     */
     public static boolean isEqualsMethod(Method method) {
         return method != null && method.getName().equals("equals") && method.getReturnType() == boolean.class
                 && method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == Object.class;
     }
 
-    /**
-     * hashCodeメソッドかどうか返します。
-     * 
-     * @param method
-     * @return hashCodeメソッドかどうか
-     */
     public static boolean isHashCodeMethod(Method method) {
         return method != null && method.getName().equals("hashCode") && method.getReturnType() == int.class
                 && method.getParameterTypes().length == 0;
     }
 
-    /**
-     * toStringメソッドかどうか返します。
-     * 
-     * @param method
-     * @return toStringメソッドかどうか
-     */
     public static boolean isToStringMethod(Method method) {
         return method != null && method.getName().equals("toString") && method.getReturnType() == String.class
                 && method.getParameterTypes().length == 0;
     }
 
-    /**
-     * ブリッジメソッドかどうか返します。
-     * 
-     * @param method
-     * @return ブリッジメソッドかどうか
-     */
     public static boolean isBridgeMethod(final Method method) {
         if (IS_BRIDGE_METHOD == null) {
             return false;
@@ -162,12 +131,6 @@ public class LdiMethodUtil {
         return ((Boolean) LdiMethodUtil.invoke(IS_BRIDGE_METHOD, method, null)).booleanValue();
     }
 
-    /**
-     * 合成メソッドかどうかを返します。
-     * 
-     * @param method
-     * @return 合成メソッドかどうか
-     */
     public static boolean isSyntheticMethod(final Method method) {
         if (IS_SYNTHETIC_METHOD == null) {
             return false;
@@ -191,130 +154,64 @@ public class LdiMethodUtil {
         }
     }
 
-    /**
-     * Java5以上の場合は、メソッドの引数型 (パラメタ化されたコレクション) の要素型を返します。
-     * 
-     * @param method
-     *            メソッド
-     * @param position
-     *            パラメタ化されたコレクションが宣言されているメソッド引数の位置
-     * @return 指定されたメソッドの引数型として宣言されているパラメタ化されたコレクションの要素型
-     */
-    public static Class getElementTypeOfCollectionFromParameterType(final Method method, final int position) {
+    public static Class<?> getElementTypeOfCollectionFromParameterType(final Method method, final int position) {
         if (GET_ELEMENT_TYPE_OF_COLLECTION_FROM_PARAMETER_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_COLLECTION_FROM_PARAMETER_METHOD, null,
+        return (Class<?>) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_COLLECTION_FROM_PARAMETER_METHOD, null,
                 new Object[] { method, new Integer(position) });
     }
 
-    /**
-     * 指定されたメソッドの戻り値型として宣言されているパラメタ化されたコレクションの要素型を返します。
-     * 
-     * @param method
-     *            メソッド
-     * @return 指定されたメソッドの戻り値型として宣言されているパラメタ化されたコレクションの要素型
-     */
-    public static Class getElementTypeOfCollectionFromReturnType(final Method method) {
+    public static Class<?> getElementTypeOfCollectionFromReturnType(final Method method) {
         if (GET_ELEMENT_TYPE_OF_COLLECTION_FROM_RETURN_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_COLLECTION_FROM_RETURN_METHOD, null, new Object[] { method });
+        return (Class<?>) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_COLLECTION_FROM_RETURN_METHOD, null, new Object[] { method });
     }
 
-    /**
-     * Java5以上の場合は、メソッドの引数型 (パラメタ化されたリスト) の要素型を返します。
-     * 
-     * @param method
-     *            メソッド
-     * @param position
-     *            パラメタ化されたリストが宣言されているメソッド引数の位置
-     * @return 指定されたメソッドの引数型として宣言されているパラメタ化されたリストの要素型
-     */
-    public static Class getElementTypeOfListFromParameterType(final Method method, final int position) {
+    public static Class<?> getElementTypeOfListFromParameterType(final Method method, final int position) {
         if (GET_ELEMENT_TYPE_OF_LIST_FROM_PARAMETER_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_LIST_FROM_PARAMETER_METHOD, null,
+        return (Class<?>) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_LIST_FROM_PARAMETER_METHOD, null,
                 new Object[] { method, new Integer(position) });
     }
 
-    /**
-     * 指定されたメソッドの戻り値型として宣言されているパラメタ化されたリストの要素型を返します。
-     * 
-     * @param method
-     *            メソッド
-     * @return 指定されたメソッドの戻り値型として宣言されているパラメタ化されたリストの要素型
-     */
-    public static Class getElementTypeOfListFromReturnType(final Method method) {
+    public static Class<?> getElementTypeOfListFromReturnType(final Method method) {
         if (GET_ELEMENT_TYPE_OF_LIST_FROM_RETURN_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_LIST_FROM_RETURN_METHOD, null, new Object[] { method });
+        return (Class<?>) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_LIST_FROM_RETURN_METHOD, null, new Object[] { method });
     }
 
-    /**
-     * Java5以上の場合は、メソッドの引数型 (パラメタ化されたセット) の要素型を返します。
-     * 
-     * @param method
-     *            メソッド
-     * @param position
-     *            パラメタ化されたコレクションが宣言されているメソッド引数の位置
-     * @return 指定されたメソッドの引数型として宣言されているパラメタ化されたセットの要素型
-     */
-    public static Class getElementTypeOfSetFromParameterType(final Method method, final int position) {
+    public static Class<?> getElementTypeOfSetFromParameterType(final Method method, final int position) {
         if (GET_ELEMENT_TYPE_OF_SET_FROM_PARAMETER_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_SET_FROM_PARAMETER_METHOD, null,
+        return (Class<?>) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_SET_FROM_PARAMETER_METHOD, null,
                 new Object[] { method, new Integer(position) });
     }
 
-    /**
-     * 指定されたメソッドの戻り値型として宣言されているパラメタ化されたセットの要素型を返します。
-     * 
-     * @param method
-     *            メソッド
-     * @return 指定されたメソッドの戻り値型として宣言されているパラメタ化されたセットの要素型
-     */
-    public static Class getElementTypeOfSetFromReturnType(final Method method) {
+    public static Class<?> getElementTypeOfSetFromReturnType(final Method method) {
         if (GET_ELEMENT_TYPE_OF_SET_FROM_RETURN_METHOD == null) {
             return null;
         }
-        return (Class) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_SET_FROM_RETURN_METHOD, null, new Object[] { method });
+        return (Class<?>) LdiMethodUtil.invoke(GET_ELEMENT_TYPE_OF_SET_FROM_RETURN_METHOD, null, new Object[] { method });
     }
 
-    /**
-     * <code>ReflectionUtil#getElementTypeOf<var>Xxx</var>FromParameter</code>の
-     * {@link Method}を返します。
-     * 
-     * @param type
-     *            取得するメソッドが対象とする型名
-     * 
-     * @return {@link Method}
-     */
     protected static Method getElementTypeFromParameterMethod(final String type) {
         try {
-            final Class reflectionUtilClass = Class.forName(REFLECTION_UTIL_CLASS_NAME);
+            final Class<?> reflectionUtilClass = Class.forName(REFLECTION_UTIL_CLASS_NAME);
             return reflectionUtilClass.getMethod("getElementTypeOf" + type + "FromParameterType", new Class[] { Method.class, int.class });
         } catch (final Throwable ignore) {}
         return null;
     }
 
-    /**
-     * <code>ReflectionUtil#getElementTypeOf<var>Xxx</var>FromReturn</code>の
-     * {@link Method}を返します。
-     * 
-     * @param type
-     *            取得するメソッドが対象とする型名
-     * @return {@link Method}
-     */
     protected static Method getElementTypeFromReturnMethod(final String type) {
         try {
-            final Class reflectionUtilClass = Class.forName(REFLECTION_UTIL_CLASS_NAME);
+            final Class<?> reflectionUtilClass = Class.forName(REFLECTION_UTIL_CLASS_NAME);
             return reflectionUtilClass.getMethod("getElementTypeOf" + type + "FromReturnType", new Class[] { Method.class });
         } catch (final Throwable ignore) {}
         return null;
     }
-
 }

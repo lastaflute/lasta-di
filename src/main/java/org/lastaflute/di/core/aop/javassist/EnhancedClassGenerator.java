@@ -22,28 +22,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.lastaflute.di.core.aop.InterType;
+
 import javassist.ClassPool;
 import javassist.CtClass;
-
-import org.lastaflute.di.core.aop.InterType;
 
 /**
  * @author modified by jflute (originated in Seasar)
  */
 public class EnhancedClassGenerator extends AbstractGenerator {
 
-    protected final Class targetClass;
-
+    protected final Class<?> targetClass;
     protected final String enhancedClassName;
-
     protected CtClass enhancedClass;
 
-    /**
-     * @param classPool
-     * @param targetClass
-     * @param enhancedClassName
-     */
-    public EnhancedClassGenerator(final ClassPool classPool, final Class targetClass, final String enhancedClassName) {
+    public EnhancedClassGenerator(final ClassPool classPool, final Class<?> targetClass, final String enhancedClassName) {
         super(classPool);
         this.targetClass = targetClass;
         this.enhancedClassName = enhancedClassName;
@@ -53,45 +46,28 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         setupConstructor();
     }
 
-    /**
-     * ターゲットのメソッドを作成します。
-     * 
-     * @param method
-     * @param methodInvocationClassName
-     */
     public void createTargetMethod(final Method method, final String methodInvocationClassName) {
         createMethod(enhancedClass, method, createTargetMethodSource(method, methodInvocationClassName));
     }
 
-    /**
-     * @param method
-     * @param invokeSuperMethodName
-     */
     public void createInvokeSuperMethod(final Method method, final String invokeSuperMethodName) {
         createMethod(enhancedClass, method.getModifiers(), method.getReturnType(), invokeSuperMethodName, method.getParameterTypes(),
                 method.getExceptionTypes(), createInvokeSuperMethodSource(method));
     }
 
-    /**
-     * @param interType
-     */
     public void applyInterType(final InterType interType) {
         interType.introduce(targetClass, enhancedClass);
     }
 
-    /**
-     * @param classLoader
-     * @return
-     */
-    public Class toClass(final ClassLoader classLoader) {
-        final Class clazz = toClass(classLoader, enhancedClass);
+    public Class<?> toClass(final ClassLoader classLoader) {
+        final Class<?> clazz = toClass(classLoader, enhancedClass);
         enhancedClass.detach();
         enhancedClass = null;
         return clazz;
     }
 
     public void setupClass() {
-        final Class superClass = (targetClass.isInterface()) ? Object.class : targetClass;
+        final Class<?> superClass = (targetClass.isInterface()) ? Object.class : targetClass;
         enhancedClass = createCtClass(enhancedClassName, superClass);
     }
 
@@ -102,7 +78,7 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     }
 
     public void setupConstructor() {
-        final Constructor[] constructors = targetClass.getDeclaredConstructors();
+        final Constructor<?>[] constructors = targetClass.getDeclaredConstructors();
         if (constructors.length == 0) {
             createDefaultConstructor(enhancedClass);
         } else {
@@ -117,15 +93,10 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         }
     }
 
-    /**
-     * @param method
-     * @param methodInvocationClassName
-     * @return 
-     */
     public static String createTargetMethodSource(final Method method, final String methodInvocationClassName) {
         final StringBuffer buf = new StringBuffer(200);
         buf.append("Object result = new ").append(methodInvocationClassName).append("(this, $args).proceed();");
-        final Class returnType = method.getReturnType();
+        final Class<?> returnType = method.getReturnType();
         if (returnType.equals(void.class)) {
             buf.append("return;");
         } else if (returnType.isPrimitive()) {
@@ -141,7 +112,7 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         }
         String code = new String(buf);
 
-        final Class[] exceptionTypes = normalizeExceptionTypes(method.getExceptionTypes());
+        final Class<?>[] exceptionTypes = normalizeExceptionTypes(method.getExceptionTypes());
         if (exceptionTypes.length != 1 || !exceptionTypes[0].equals(Throwable.class)) {
             code = aroundTryCatchBlock(exceptionTypes, code);
         }
@@ -149,25 +120,17 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         return "{" + code + "}";
     }
 
-    /**
-     * @param method
-     * @return 
-     */
     public static String createInvokeSuperMethodSource(final Method method) {
         return "{" + "return ($r) super." + method.getName() + "($$);" + "}";
     }
 
-    /**
-     * @param exceptionTypes
-     * @return
-     */
-    public static Class[] normalizeExceptionTypes(final Class[] exceptionTypes) {
-        final List list = new LinkedList();
+    public static Class<?>[] normalizeExceptionTypes(final Class<?>[] exceptionTypes) {
+        final List<Class<?>> list = new LinkedList<Class<?>>();
         outer: for (int i = 0; i < exceptionTypes.length; ++i) {
-            final Class currentException = exceptionTypes[i];
-            final ListIterator it = list.listIterator();
+            final Class<?> currentException = exceptionTypes[i];
+            final ListIterator<Class<?>> it = list.listIterator();
             while (it.hasNext()) {
-                final Class comparisonException = (Class) it.next();
+                final Class<?> comparisonException = (Class<?>) it.next();
                 if (comparisonException.isAssignableFrom(currentException)) {
                     continue outer;
                 }
@@ -180,18 +143,13 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         return (Class[]) list.toArray(new Class[list.size()]);
     }
 
-    /**
-     * @param exceptionTypes
-     * @param code
-     * @return 
-     */
-    public static String aroundTryCatchBlock(final Class[] exceptionTypes, final String code) {
+    public static String aroundTryCatchBlock(final Class<?>[] exceptionTypes, final String code) {
         final TryBlockSupport tryBlock = new TryBlockSupport(code);
 
         boolean needRuntimeException = true;
         boolean needError = true;
         for (int i = 0; i < exceptionTypes.length; ++i) {
-            final Class exceptionType = exceptionTypes[i];
+            final Class<?> exceptionType = exceptionTypes[i];
             tryBlock.addCatchBlock(exceptionType, "throw e;");
             if (exceptionType.equals(RuntimeException.class)) {
                 needRuntimeException = false;

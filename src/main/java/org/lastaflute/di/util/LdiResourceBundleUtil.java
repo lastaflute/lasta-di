@@ -23,27 +23,13 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * {@link ResourceBundle}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiResourceBundleUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiResourceBundleUtil() {
     }
 
-    /**
-     * バンドルを返します。 見つからない場合は、<code>null</code>を返します。
-     * 
-     * @param name
-     * @param locale
-     * @return {@link ResourceBundle}
-     * @see ResourceBundle#getBundle(String, Locale)
-     */
     public static final ResourceBundle getBundle(String name, Locale locale) {
         if (locale == null) {
             locale = Locale.getDefault();
@@ -55,15 +41,6 @@ public class LdiResourceBundleUtil {
         }
     }
 
-    /**
-     * バンドルを返します。 見つからない場合は、<code>null</code>を返します。
-     * 
-     * @param name
-     * @param locale
-     * @param classLoader
-     * @return {@link ResourceBundle}
-     * @see ResourceBundle#getBundle(String, Locale, ClassLoader)
-     */
     public static final ResourceBundle getBundle(String name, Locale locale, ClassLoader classLoader) {
         if (locale == null) {
             locale = Locale.getDefault();
@@ -75,15 +52,9 @@ public class LdiResourceBundleUtil {
         }
     }
 
-    /**
-     * {@link Map}に変換します。
-     * 
-     * @param bundle
-     * @return {@link Map}
-     */
-    public static final Map convertMap(ResourceBundle bundle) {
-        Map ret = new HashMap();
-        for (Enumeration e = bundle.getKeys(); e.hasMoreElements();) {
+    public static final Map<String, String> convertMap(ResourceBundle bundle) {
+        Map<String, String> ret = new HashMap<String, String>();
+        for (Enumeration<String> e = bundle.getKeys(); e.hasMoreElements();) {
             String key = (String) e.nextElement();
             String value = bundle.getString(key);
             ret.put(key, value);
@@ -91,14 +62,7 @@ public class LdiResourceBundleUtil {
         return ret;
     }
 
-    /**
-     * {@link Map}に変換します。
-     * 
-     * @param name
-     * @param locale
-     * @return {@link Map}
-     */
-    public static final Map convertMap(String name, Locale locale) {
+    public static final Map<String, String> convertMap(String name, Locale locale) {
         ResourceBundle bundle = getBundle(name, locale);
         return convertMap(bundle);
     }

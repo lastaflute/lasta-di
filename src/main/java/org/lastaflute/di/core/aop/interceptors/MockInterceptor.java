@@ -22,81 +22,49 @@ import org.lastaflute.di.core.aop.frame.MethodInvocation;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class MockInterceptor extends AbstractInterceptor {
 
     private static final long serialVersionUID = 6438214603532050462L;
 
-    private Map returnValueMap = new HashMap();
-
-    private Map throwableMap = new HashMap();
-
-    private Map invokedMap = new HashMap();
-
-    private Map argsMap = new HashMap();
+    private final Map<String, Object> returnValueMap = new HashMap<String, Object>();
+    private final Map<String, Throwable> throwableMap = new HashMap<String, Throwable>();
+    private final Map<String, Boolean> invokedMap = new HashMap<String, Boolean>();
+    private final Map<String, Object[]> argsMap = new HashMap<String, Object[]>();
 
     public MockInterceptor() {
     }
 
-    /**
-     * @param value
-     */
     public MockInterceptor(Object value) {
         setReturnValue(value);
     }
 
-    /**
-     * @param returnValue
-     */
     public void setReturnValue(Object returnValue) {
         setReturnValue(null, returnValue);
     }
 
-    /**
-     * @param methodName
-     * @param returnValue
-     */
     public void setReturnValue(String methodName, Object returnValue) {
         returnValueMap.put(methodName, returnValue);
     }
 
-    /**
-     * @param throwable
-     */
     public void setThrowable(Throwable throwable) {
         setThrowable(null, throwable);
     }
 
-    /**
-     * @param methodName
-     * @param throwable
-     */
     public void setThrowable(String methodName, Throwable throwable) {
         throwableMap.put(methodName, throwable);
     }
 
-    /**
-     * @param methodName
-     * @return
-     */
     public boolean isInvoked(String methodName) {
         return invokedMap.containsKey(methodName);
     }
 
-    /**
-     * @param methodName
-     * @return
-     */
     public Object[] getArgs(String methodName) {
         return (Object[]) argsMap.get(methodName);
     }
 
-    /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
-     */
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        String methodName = invocation.getMethod().getName();
+        final String methodName = invocation.getMethod().getName();
         invokedMap.put(invocation.getMethod().getName(), Boolean.TRUE);
         argsMap.put(methodName, invocation.getArguments());
         if (throwableMap.containsKey(methodName)) {

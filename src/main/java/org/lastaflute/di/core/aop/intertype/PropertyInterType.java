@@ -81,9 +81,9 @@ public class PropertyInterType extends AbstractInterType {
         }
 
         int defaultValue = annotationHandler.getPropertyType(getTargetClass(), defaultPropertyType);
-        List targetFields = getTargetFields(targetClass);
+        List<Field> targetFields = getTargetFields(targetClass);
 
-        for (Iterator iter = targetFields.iterator(); iter.hasNext();) {
+        for (Iterator<Field> iter = targetFields.iterator(); iter.hasNext();) {
             Field field = (Field) iter.next();
             int property = annotationHandler.getPropertyType(field, defaultValue);
             switch (property) {

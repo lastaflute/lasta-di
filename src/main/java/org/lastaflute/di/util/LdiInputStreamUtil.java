@@ -23,19 +23,13 @@ import java.io.OutputStream;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * {@link InputStream}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiInputStreamUtil {
 
     /**
-     * {@link InputStream}を閉じます。
-     * 
      * @param is
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see InputStream#close()
      */
     public static void close(InputStream is) throws IORuntimeException {
@@ -50,11 +44,8 @@ public class LdiInputStreamUtil {
     }
 
     /**
-     * {@link InputStream}を閉じます。
-     * 
      * @param is
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see InputStream#close()
      */
     public static void closeSilently(InputStream is) throws IORuntimeException {
@@ -66,14 +57,6 @@ public class LdiInputStreamUtil {
         } catch (IOException e) {}
     }
 
-    /**
-     * {@link InputStream}からbyteの配列を取得します。
-     * 
-     * @param is
-     * @return byteの配列
-     * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
-     */
     public static final byte[] getBytes(InputStream is) throws IORuntimeException {
         byte[] bytes = null;
         byte[] buf = new byte[8192];
@@ -94,14 +77,6 @@ public class LdiInputStreamUtil {
         return bytes;
     }
 
-    /**
-     * {@link InputStream}の内容を {@link OutputStream}にコピーします。
-     * 
-     * @param is
-     * @param os
-     * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
-     */
     public static final void copy(InputStream is, OutputStream os) throws IORuntimeException {
         byte[] buf = new byte[8192];
         try {
@@ -114,14 +89,6 @@ public class LdiInputStreamUtil {
         }
     }
 
-    /**
-     * {@link InputStream#available()}の例外処理をラップしたメソッドです。
-     * 
-     * @param is
-     * @return 可能なサイズ
-     * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
-     */
     public static int available(InputStream is) throws IORuntimeException {
         try {
             return is.available();
@@ -131,11 +98,8 @@ public class LdiInputStreamUtil {
     }
 
     /**
-     * {@link InputStream}をリセットします。
-     * 
      * @param is
      * @throws IORuntimeException
-     *             {@link IOException}が発生した場合
      * @see InputStream#reset()
      */
     public static void reset(InputStream is) throws IORuntimeException {

@@ -31,9 +31,9 @@ public class CircularIncludeRuntimeException extends SRuntimeException {
     private static final long serialVersionUID = -8674493688526055877L;
 
     protected String path;
-    protected Collection paths;
+    protected Collection<String> paths;
 
-    public CircularIncludeRuntimeException(final String path, final Collection paths) {
+    public CircularIncludeRuntimeException(final String path, final Collection<String> paths) {
         super("ESSR0076", new Object[] { path, toString(path, paths) });
         this.path = path;
         this.paths = paths;
@@ -43,13 +43,13 @@ public class CircularIncludeRuntimeException extends SRuntimeException {
         return path;
     }
 
-    public Collection getPaths() {
+    public Collection<String> getPaths() {
         return paths;
     }
 
-    protected static String toString(final String path, final Collection paths) {
+    protected static String toString(final String path, final Collection<String> paths) {
         final StringBuffer buf = new StringBuffer(200);
-        for (final Iterator it = paths.iterator(); it.hasNext();) {
+        for (final Iterator<String> it = paths.iterator(); it.hasNext();) {
             buf.append("\"").append(it.next()).append("\" includes ");
         }
         buf.append("\"").append(path).append("\"");

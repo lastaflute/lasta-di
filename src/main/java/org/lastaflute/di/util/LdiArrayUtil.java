@@ -23,26 +23,13 @@ import java.util.List;
 import org.lastaflute.di.exception.EmptyRuntimeException;
 
 /**
- * 配列に対するユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiArrayUtil {
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiArrayUtil() {
     }
 
-    /**
-     * 配列にオブジェクトを追加します。
-     * 
-     * @param array
-     * @param obj
-     * @return オブジェクトが追加された結果の配列
-     */
     public static Object[] add(Object[] array, Object obj) {
         if (array == null) {
             throw new EmptyRuntimeException("array");
@@ -53,13 +40,6 @@ public class LdiArrayUtil {
         return newArray;
     }
 
-    /**
-     * intの配列にintを追加します。
-     * 
-     * @param array
-     * @param value
-     * @return オブジェクトが追加された結果の配列
-     */
     public static int[] add(int[] array, int value) {
         if (array == null) {
             throw new EmptyRuntimeException("array");
@@ -70,13 +50,6 @@ public class LdiArrayUtil {
         return newArray;
     }
 
-    /**
-     * 配列に配列を追加します。
-     * 
-     * @param a
-     * @param b
-     * @return 配列が追加された結果の配列
-     */
     public static Object[] add(final Object[] a, final Object[] b) {
         if (a != null && b != null) {
             if (a.length != 0 && b.length != 0) {
@@ -96,13 +69,6 @@ public class LdiArrayUtil {
         }
     }
 
-    /**
-     * 配列中のオブジェクトのindexを返します。
-     * 
-     * @param array
-     * @param obj
-     * @return 配列中のオブジェクトのindex
-     */
     public static int indexOf(Object[] array, Object obj) {
         if (array != null) {
             for (int i = 0; i < array.length; ++i) {
@@ -120,13 +86,6 @@ public class LdiArrayUtil {
         return -1;
     }
 
-    /**
-     * 配列中のcharのindexを返します。
-     * 
-     * @param array
-     * @param ch
-     * @return 配列中のcharのindex
-     */
     public static int indexOf(char[] array, char ch) {
         if (array != null) {
             for (int i = 0; i < array.length; ++i) {
@@ -139,13 +98,6 @@ public class LdiArrayUtil {
         return -1;
     }
 
-    /**
-     * 配列中から対象のオブジェクトを削除します。
-     * 
-     * @param array
-     * @param obj
-     * @return 削除後の配列
-     */
     public static Object[] remove(Object[] array, Object obj) {
         int index = indexOf(array, obj);
         if (index < 0) {
@@ -161,45 +113,18 @@ public class LdiArrayUtil {
         return newArray;
     }
 
-    /**
-     * 配列が空かどうかを返します。
-     * 
-     * @param arrays
-     * @return 配列が空かどうか
-     */
     public static boolean isEmpty(Object[] arrays) {
         return (arrays == null || arrays.length == 0);
     }
 
-    /**
-     * 配列にオブジェクトが含まれているかどうかを返します。
-     * 
-     * @param array
-     * @param obj
-     * @return 配列にオブジェクトが含まれているかどうか
-     */
     public static boolean contains(Object[] array, Object obj) {
         return -1 < indexOf(array, obj);
     }
 
-    /**
-     * 配列にcharが含まれているかどうかを返します。
-     * 
-     * @param array
-     * @param ch
-     * @return 配列にcharが含まれているかどうか
-     */
     public static boolean contains(char[] array, char ch) {
         return -1 < indexOf(array, ch);
     }
 
-    /**
-     * 順番は無視して2つの配列が等しいかどうかを返します。
-     * 
-     * @param array1
-     * @param array2
-     * @return 順番は無視して2つの配列が等しいかどうか
-     */
     public static boolean equalsIgnoreSequence(Object[] array1, Object[] array2) {
         if (array1 == null && array2 == null) {
             return true;
@@ -209,7 +134,7 @@ public class LdiArrayUtil {
         if (array1.length != array2.length) {
             return false;
         }
-        List list = Arrays.asList(array2);
+        List<Object> list = Arrays.asList(array2);
         for (int i = 0; i < array1.length; i++) {
             Object o1 = array1[i];
             if (!list.contains(o1)) {
@@ -219,12 +144,6 @@ public class LdiArrayUtil {
         return true;
     }
 
-    /**
-     * 配列を文字列に変換します。
-     * 
-     * @param array
-     * @return 配列の文字列表現
-     */
     public static String toString(Object[] array) {
         if (array == null) {
             return "null";
@@ -245,15 +164,7 @@ public class LdiArrayUtil {
         return sb.toString();
     }
 
-    /**
-     * <code>primitive</code>型を考慮して配列に値を設定します。
-     * 
-     * @param array
-     * @param valueType
-     * @param value
-     * @param index
-     */
-    public static void setArrayValue(Object array, Class valueType, Object value, int index) {
+    public static void setArrayValue(Object array, Class<?> valueType, Object value, int index) {
         if (value == null) {
             return;
         }

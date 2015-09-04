@@ -28,29 +28,27 @@ import java.util.Set;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public abstract class AbstractExternalContextMap extends AbstractMap {
+public abstract class AbstractExternalContextMap extends AbstractMap<String, Object> {
 
-    private Set entrySet;
-    private Set keySet;
-    private Collection values;
+    private Set<Map.Entry<String, Object>> entrySet;
+    private Set<String> keySet;
+    private Collection<Object> values;
 
     public AbstractExternalContextMap() {
     }
 
     @Override
     public void clear() {
-        final List list = new ArrayList(); // to avoid ConcurrentModificationException
-        for (Iterator it = getAttributeNames(); it.hasNext();) {
-            String key = (String) it.next();
-            list.add(key);
+        final List<String> list = new ArrayList<String>(); // to avoid ConcurrentModificationException
+        for (Iterator<String> it = getAttributeNames(); it.hasNext();) {
+            list.add(it.next());
         }
         clearReally(list);
     }
 
-    private void clearReally(List keys) {
-        for (Iterator itr = keys.iterator(); itr.hasNext();) {
-            String key = (String) itr.next();
-            removeAttribute(key);
+    private void clearReally(List<String> keys) {
+        for (Iterator<String> itr = keys.iterator(); itr.hasNext();) {
+            removeAttribute(itr.next());
         }
     }
 
@@ -62,10 +60,8 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
     @Override
     public boolean containsValue(Object value) {
         if (value != null) {
-            for (Iterator it = getAttributeNames(); it.hasNext();) {
-                String key = (String) it.next();
-                Object attributeValue = getAttribute(key);
-                if (value.equals(attributeValue)) {
+            for (Iterator<String> it = getAttributeNames(); it.hasNext();) {
+                if (value.equals(getAttribute(it.next()))) {
                     return true;
                 }
             }
@@ -73,7 +69,7 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
         return false;
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String, Object>> entrySet() {
         if (entrySet == null) {
             entrySet = new EntrySet(this);
         }
@@ -86,7 +82,7 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
     }
 
     @Override
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         String keyStr = key.toString();
         Object o = getAttribute(keyStr);
         setAttribute(keyStr, value);
@@ -94,11 +90,11 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
     }
 
     @Override
-    public void putAll(Map map) {
-        for (Iterator itr = map.entrySet().iterator(); itr.hasNext();) {
-            Map.Entry entry = (Map.Entry) itr.next();
-            String key = (String) entry.getKey();
-            setAttribute(key, entry.getValue());
+    public void putAll(Map<? extends String, ? extends Object> map) {
+        for (Iterator<?> itr = map.entrySet().iterator(); itr.hasNext();) {
+            @SuppressWarnings("unchecked")
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) itr.next();
+            setAttribute(entry.getKey(), entry.getValue());
         }
     }
 
@@ -108,7 +104,7 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
     }
 
     @Override
-    public Set keySet() {
+    public Set<String> keySet() {
         if (keySet == null) {
             keySet = new KeySet(this);
         }
@@ -124,7 +120,7 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
     }
 
     @Override
-    public Collection values() {
+    public Collection<Object> values() {
         if (values == null) {
             values = new ValuesCollection(this);
         }
@@ -135,22 +131,22 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
 
     protected abstract void setAttribute(String key, Object value);
 
-    protected abstract Iterator getAttributeNames();
+    protected abstract Iterator<String> getAttributeNames();
 
     protected abstract void removeAttribute(String key);
 
-    abstract class AbstractExternalContextSet extends AbstractSet {
+    abstract class AbstractExternalContextSet<ELEMENT> extends AbstractSet<ELEMENT> {
 
         public int size() {
             int size = 0;
-            for (Iterator itr = iterator(); itr.hasNext(); size++) {
+            for (Iterator<ELEMENT> itr = iterator(); itr.hasNext(); size++) {
                 itr.next();
             }
             return size;
         }
     }
 
-    class EntrySet extends AbstractExternalContextSet {
+    class EntrySet extends AbstractExternalContextSet<Map.Entry<String, Object>> {
 
         private AbstractExternalContextMap contextMap;
 
@@ -158,7 +154,7 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
             this.contextMap = contextMap;
         }
 
-        public Iterator iterator() {
+        public Iterator<Map.Entry<String, Object>> iterator() {
             return new EntryIterator(contextMap);
         }
 
@@ -166,13 +162,13 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
             if (!(o instanceof Map.Entry)) {
                 return false;
             }
-            Map.Entry entry = (Map.Entry) o;
-            Object returnObj = contextMap.remove(entry.getKey());
-            return (returnObj != null);
+            @SuppressWarnings("unchecked")
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
+            return contextMap.remove(entry.getKey()) != null;
         }
     }
 
-    class KeySet extends AbstractExternalContextSet {
+    class KeySet extends AbstractExternalContextSet<String> {
 
         private AbstractExternalContextMap contextMap;
 
@@ -180,7 +176,7 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
             this.contextMap = contextMap;
         }
 
-        public Iterator iterator() {
+        public Iterator<String> iterator() {
             return new KeyIterator(contextMap);
         }
 
@@ -190,12 +186,11 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
                 return false;
             }
             String s = (String) o;
-            Object returnObj = contextMap.remove(s);
-            return (returnObj != null);
+            return contextMap.remove(s) != null;
         }
     }
 
-    class ValuesCollection extends AbstractCollection {
+    class ValuesCollection extends AbstractCollection<Object> {
 
         private AbstractExternalContextMap contextMap;
 
@@ -205,20 +200,20 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
 
         public int size() {
             int size = 0;
-            for (Iterator itr = iterator(); itr.hasNext(); size++) {
+            for (Iterator<Object> itr = iterator(); itr.hasNext(); size++) {
                 itr.next();
             }
             return size;
         }
 
-        public Iterator iterator() {
+        public Iterator<Object> iterator() {
             return new ValuesIterator(contextMap);
         }
     }
 
-    abstract class AbstractExternalContextIterator implements Iterator {
+    abstract class AbstractExternalContextIterator<ELEMENT> implements Iterator<ELEMENT> {
 
-        private final Iterator iterator;
+        private final Iterator<String> iterator;
 
         private final AbstractExternalContextMap contextMap;
 
@@ -235,8 +230,8 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
             return iterator.hasNext();
         }
 
-        public Object next() {
-            currentKey = (String) iterator.next();
+        public ELEMENT next() {
+            currentKey = iterator.next();
             try {
                 return doNext();
             } finally {
@@ -268,46 +263,44 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
 
         protected void removeValueFromMap(Object value) {
             if (containsValue(value)) {
-                for (Iterator itr = entrySet().iterator(); itr.hasNext();) {
-                    Map.Entry e = (Map.Entry) itr.next();
-                    if (value.equals(e.getValue())) {
-                        contextMap.remove(e.getKey());
+                for (Iterator<Map.Entry<String, Object>> itr = entrySet().iterator(); itr.hasNext();) {
+                    Map.Entry<String, Object> entry = itr.next();
+                    if (value.equals(entry.getValue())) {
+                        contextMap.remove(entry.getKey());
                     }
                 }
             }
 
         }
 
-        protected abstract Object doNext();
+        protected abstract ELEMENT doNext();
 
         protected abstract void doRemove();
     }
 
-    class EntryIterator extends AbstractExternalContextIterator {
+    class EntryIterator extends AbstractExternalContextIterator<Map.Entry<String, Object>> {
 
         public EntryIterator(AbstractExternalContextMap contextMap) {
             super(contextMap);
         }
 
-        protected Object doNext() {
+        protected Map.Entry<String, Object> doNext() {
             String key = getCurrentKey();
             return new ImmutableEntry(key, getValueFromMap(key));
         }
 
         protected void doRemove() {
-            String key = getCurrentKey();
-            removeKeyFromMap(key);
+            removeKeyFromMap(getCurrentKey());
         }
-
     }
 
-    class KeyIterator extends AbstractExternalContextIterator {
+    class KeyIterator extends AbstractExternalContextIterator<String> {
 
         public KeyIterator(AbstractExternalContextMap contextMap) {
             super(contextMap);
         }
 
-        protected Object doNext() {
+        protected String doNext() {
             return getCurrentKey();
         }
 
@@ -316,36 +309,32 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
         }
     }
 
-    class ValuesIterator extends AbstractExternalContextIterator {
+    class ValuesIterator extends AbstractExternalContextIterator<Object> {
 
         public ValuesIterator(AbstractExternalContextMap contextMap) {
             super(contextMap);
         }
 
         protected Object doNext() {
-            String key = getCurrentKey();
-            return getValueFromMap(key);
+            return getValueFromMap(getCurrentKey());
         }
 
         protected void doRemove() {
-            String key = getCurrentKey();
-            Object value = getValueFromMap(key);
-            removeValueFromMap(value);
+            removeValueFromMap(getValueFromMap(getCurrentKey()));
         }
     }
 
-    protected static class ImmutableEntry implements Map.Entry {
+    protected static class ImmutableEntry implements Map.Entry<String, Object> {
 
-        private final Object key;
-
+        private final String key;
         private final Object value;
 
-        public ImmutableEntry(Object key, Object value) {
+        public ImmutableEntry(String key, Object value) {
             this.key = key;
             this.value = value;
         }
 
-        public Object getKey() {
+        public String getKey() {
             return key;
         }
 
@@ -365,7 +354,6 @@ public abstract class AbstractExternalContextMap extends AbstractMap {
             ImmutableEntry entry = (ImmutableEntry) obj;
             Object k = entry.getKey();
             Object v = entry.getValue();
-
             return (k == key || (k != null && k.equals(key))) && (v == value || (v != null && v.equals(value)));
         }
 

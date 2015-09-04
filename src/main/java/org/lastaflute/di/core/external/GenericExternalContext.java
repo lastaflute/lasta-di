@@ -27,50 +27,56 @@ import org.lastaflute.di.util.LdiMapUtil;
  */
 public class GenericExternalContext implements ExternalContext {
 
-    protected static final Map EMPTY_MAP = Collections.unmodifiableMap(new HashMap());
+    protected static final Map<?, ?> EMPTY_MAP = Collections.unmodifiableMap(new HashMap<Object, Object>());
 
-    protected Map application = LdiMapUtil.createHashMap();
-
-    protected ThreadLocal requests = new ThreadLocal();
+    protected Map<String, Object> application = LdiMapUtil.createHashMap();
+    protected ThreadLocal<Object> requests = new ThreadLocal<Object>();
 
     public Object getApplication() {
         return application;
     }
 
-    public Map getApplicationMap() {
+    public Map<String, Object> getApplicationMap() {
         return application;
     }
 
-    public Map getInitParameterMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getInitParameterMap() {
+        return (Map<String, Object>) EMPTY_MAP;
     }
 
     public Object getRequest() {
         return requests.get();
     }
 
-    public Map getRequestCookieMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getRequestCookieMap() {
+        return (Map<String, Object>) EMPTY_MAP;
     }
 
-    public Map getRequestHeaderMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getRequestHeaderMap() {
+        return (Map<String, Object>) EMPTY_MAP;
     }
 
-    public Map getRequestHeaderValuesMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object[]> getRequestHeaderValuesMap() {
+        return (Map<String, Object[]>) EMPTY_MAP;
     }
 
-    public Map getRequestMap() {
-        return (Map) requests.get();
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getRequestMap() {
+        return (Map<String, Object>) requests.get();
     }
 
-    public Map getRequestParameterMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getRequestParameterMap() {
+        return (Map<String, Object>) EMPTY_MAP;
     }
 
-    public Map getRequestParameterValuesMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object[]> getRequestParameterValuesMap() {
+        return (Map<String, Object[]>) EMPTY_MAP;
     }
 
     public Object getResponse() {
@@ -81,8 +87,9 @@ public class GenericExternalContext implements ExternalContext {
         return null;
     }
 
-    public Map getSessionMap() {
-        return EMPTY_MAP;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getSessionMap() {
+        return (Map<String, Object>) EMPTY_MAP;
     }
 
     public void setApplication(final Object application) {
@@ -94,5 +101,4 @@ public class GenericExternalContext implements ExternalContext {
 
     public void setResponse(final Object response) {
     }
-
 }

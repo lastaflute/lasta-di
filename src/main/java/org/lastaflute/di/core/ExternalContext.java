@@ -36,21 +36,21 @@ public interface ExternalContext {
 
     void setApplication(Object application);
 
-    Map getApplicationMap();
+    Map<String, Object> getApplicationMap();
 
-    Map getInitParameterMap();
+    Map<String, Object> getInitParameterMap();
 
-    Map getSessionMap();
+    Map<String, Object> getSessionMap();
 
-    Map getRequestCookieMap();
+    Map<String, Object> getRequestCookieMap();
 
-    Map getRequestHeaderMap();
+    Map<String, Object> getRequestHeaderMap();
 
-    Map getRequestHeaderValuesMap();
+    Map<String, Object[]> getRequestHeaderValuesMap();
 
-    Map getRequestMap();
+    Map<String, Object> getRequestMap();
 
-    Map getRequestParameterMap();
+    Map<String, Object> getRequestParameterMap();
 
-    Map getRequestParameterValuesMap();
+    Map<String, Object[]> getRequestParameterValuesMap();
 }

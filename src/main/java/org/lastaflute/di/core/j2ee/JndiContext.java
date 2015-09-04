@@ -17,9 +17,11 @@ package org.lastaflute.di.core.j2ee;
 
 import java.util.Hashtable;
 
+import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.NameAlreadyBoundException;
+import javax.naming.NameClassPair;
 import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -36,10 +38,10 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class JndiContext implements Context {
 
-    protected final Hashtable env;
+    protected final Hashtable<String, Object> env;
     protected final String path;
 
-    public JndiContext(final Hashtable env) {
+    public JndiContext(final Hashtable<String, Object> env) {
         this.env = env;
         this.path = (String) env.get(PROVIDER_URL);
     }
@@ -86,7 +88,7 @@ public class JndiContext implements Context {
         throw new OperationNotSupportedException("destroySubcontext");
     }
 
-    public Hashtable getEnvironment() throws NamingException {
+    public Hashtable<String, Object> getEnvironment() throws NamingException {
         return env;
     }
 
@@ -102,32 +104,32 @@ public class JndiContext implements Context {
         throw new OperationNotSupportedException("getNameParser");
     }
 
-    public NamingEnumeration list(final Name name) throws NamingException {
+    public NamingEnumeration<NameClassPair> list(final Name name) throws NamingException {
         throw new OperationNotSupportedException("list");
     }
 
-    public NamingEnumeration list(final String name) throws NamingException {
+    public NamingEnumeration<NameClassPair> list(final String name) throws NamingException {
         throw new OperationNotSupportedException("list");
     }
 
-    public NamingEnumeration listBindings(final Name name) throws NamingException {
+    public NamingEnumeration<Binding> listBindings(final Name name) throws NamingException {
         throw new OperationNotSupportedException("listBindings");
     }
 
-    public NamingEnumeration listBindings(final String name) throws NamingException {
+    public NamingEnumeration<Binding> listBindings(final String name) throws NamingException {
         throw new OperationNotSupportedException("listBindings");
     }
 
     public Object lookup(final Name name) throws NamingException {
         if (name.isEmpty()) {
-            return new JndiContext(new Hashtable(env));
+            return new JndiContext(new Hashtable<String, Object>(env));
         }
         return lookup(name.toString());
     }
 
     public Object lookup(final String name) throws NamingException {
         if (LdiStringUtil.isEmpty(name)) {
-            return new JndiContext(new Hashtable(env));
+            return new JndiContext(new Hashtable<String, Object>(env));
         }
         return SingletonLaContainerFactory.getContainer().getComponent(JndiResourceLocator.resolveName(name));
     }

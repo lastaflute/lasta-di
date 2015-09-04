@@ -22,53 +22,25 @@ import javax.transaction.RollbackException;
 import javax.transaction.Synchronization;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 import javax.transaction.xa.XAResource;
 
 /**
- * 機能が限定された{@link Transaction}の実装クラスです。
- * <p>
- * このトランザクションは、{@link UserTransaction}と{@link TransactionSynchronizationRegistry}を利用して実装しています。
- * そのため、以下の機能がサポートされません。
- * </p>
- * <ul>
- * <li>{@link TransactionManager#resume(Transaction)}</li>
- * <li>{@link TransactionManager#suspend()}</li>
- * </ul>
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class RestrictedTransactionImpl implements Transaction {
 
-    /** ユーザトランザクション */
     protected UserTransaction userTransaction;
 
-    /** トランザクションシンクロナイゼーションレジストリ */
     protected TransactionSynchronizationRegistry synchronizationRegistry;
 
-    /**
-     * トランザクションのインスタンスを構築します。
-     * 
-     * @param userTransaction
-     *            ユーザトランザクション
-     * @param synchronizationRegistry
-     *            トランザクションシンクロナイゼーションレジストリ
-     */
     public RestrictedTransactionImpl(final UserTransaction userTransaction,
             final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
         this.synchronizationRegistry = synchronizationRegistry;
     }
 
-    /**
-     * トランザクションを開始します。
-     * 
-     * @throws SystemException
-     * @throws NotSupportedException
-     * 
-     */
     public void begin() throws NotSupportedException, SystemException {
         userTransaction.begin();
     }

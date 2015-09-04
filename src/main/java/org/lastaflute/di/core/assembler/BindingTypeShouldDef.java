@@ -18,33 +18,33 @@ package org.lastaflute.di.core.assembler;
 import java.lang.reflect.Field;
 
 import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.util.BindingUtil;
 import org.lastaflute.di.helper.beans.PropertyDesc;
-import org.lastaflute.di.helper.log.LaLogger;
 
 /**
  * @author modified by jflute (originated in Seasar)
  */
 public class BindingTypeShouldDef extends AbstractBindingTypeDef {
 
-    private static final LaLogger logger = LaLogger.getLogger(BindingTypeShouldDef.class);
-
     protected BindingTypeShouldDef(String name) {
         super(name);
     }
 
     protected void doBindProperty(ComponentDef componentDef, PropertyDesc propertyDesc, Object component) {
-        if (!bindAutoProperty(componentDef, propertyDesc, component)
-                && BindingUtil.isPropertyAutoBindable(propertyDesc.getPropertyType())) {
-            logger.log("WSSR0008",
-                    new Object[] { BindingUtil.getComponentClass(componentDef, component).getName(), propertyDesc.getPropertyName() });
-        }
+        // unneeded warning so remove it
+        //if (!bindAutoProperty(componentDef, propertyDesc, component)
+        //        && BindingUtil.isPropertyAutoBindable(propertyDesc.getPropertyType())) {
+        //    logger.log("WSSR0008",
+        //            new Object[] { BindingUtil.getComponentClass(componentDef, component).getName(), propertyDesc.getPropertyName() });
+        //}
+        bindAutoProperty(componentDef, propertyDesc, component);
     }
 
     protected void doBindResourceField(ComponentDef componentDef, Field field, Object component) {
-        if (!bindAutoResourceField(componentDef, field, component) && BindingUtil.isFieldAutoBindable(field.getType())) {
-            logger.log("WSSR0008", new Object[] { BindingUtil.getComponentClass(componentDef, component).getName(), field.getName() });
-        }
+        // unneeded warning so remove it
+        //if (!bindAutoResourceField(componentDef, field, component) && BindingUtil.isFieldAutoBindable(field.getType())) {
+        //    logger.log("WSSR0008", new Object[] { BindingUtil.getComponentClass(componentDef, component).getName(), field.getName() });
+        //}
+        bindAutoResourceField(componentDef, field, component);
     }
 
     @Override

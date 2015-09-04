@@ -21,7 +21,6 @@ import org.lastaflute.di.util.LdiClassUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public abstract class AbstractComponentTargetAutoRegister extends AbstractAutoRegister {
 
@@ -35,21 +34,13 @@ public abstract class AbstractComponentTargetAutoRegister extends AbstractAutoRe
         }
     }
 
-    /**
-     * @param cd
-     */
     protected abstract void register(ComponentDef cd);
 
-    /**
-     * @param cd
-     * @return 
-     */
     protected boolean isAppliedComponent(final ComponentDef cd) {
-        final Class componentClass = cd.getComponentClass();
+        final Class<?> componentClass = cd.getComponentClass();
         if (componentClass == null) {
             return false;
         }
-
         final String packageName = LdiClassUtil.getPackageName(componentClass);
         final String shortClassName = LdiClassUtil.getShortClassName(componentClass);
         for (int i = 0; i < getClassPatternSize(); ++i) {

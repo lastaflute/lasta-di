@@ -152,18 +152,10 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         }
     }
 
-    /**
-     * {@link PropertyDefBuilder}を追加します。
-     * 
-     * @param builder
-     */
     public static void addPropertyDefBuilder(final PropertyDefBuilder builder) {
         propertyDefBuilders.add(builder);
     }
 
-    /**
-     * @param builder
-     */
     public static void removePropertyDefBuilder(final PropertyDefBuilder builder) {
         propertyDefBuilders.remove(builder);
     }
@@ -177,16 +169,10 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         aspectDefBuilders.add(new MetaAnnotationAspectDefBuilder(Interceptor.class, "Interceptor"));
     }
 
-    /**
-     * @param builder
-     */
     public static void addAspectDefBuilder(final AspectDefBuilder builder) {
         aspectDefBuilders.add(builder);
     }
 
-    /**
-     * @param builder
-     */
     public static void removeAspectDefBuilder(final AspectDefBuilder builder) {
         aspectDefBuilders.remove(builder);
     }
@@ -199,16 +185,10 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         intertypeDefBuilders.add(new S2IntertypeDefBuilder());
     }
 
-    /**
-     * @param builder
-     */
     public static void addIntertypeDefBuilder(final IntertypeDefBuilder builder) {
         intertypeDefBuilders.add(builder);
     }
 
-    /**
-     * @param builder
-     */
     public static void removeIntertypeDefBuilder(final IntertypeDefBuilder builder) {
         intertypeDefBuilders.remove(builder);
     }
@@ -221,9 +201,6 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         initMethodDefBuilders.add(new InitMethodDefBuilderImpl());
     }
 
-    /**
-     * @param builder
-     */
     public static void addInitMethodDefBuilder(final InitMethodDefBuilder builder) {
         initMethodDefBuilders.add(builder);
     }
@@ -329,5 +306,4 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         }
         super.appendDestroyMethod(componentDef);
     }
-
 }

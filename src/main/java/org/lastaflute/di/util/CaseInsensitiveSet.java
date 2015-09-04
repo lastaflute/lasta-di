@@ -23,46 +23,29 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 大文字小文字を気にしない {@link Set}です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
-public class CaseInsensitiveSet extends AbstractSet implements Set, Serializable {
+public class CaseInsensitiveSet extends AbstractSet<String>implements Set<String>, Serializable {
 
     static final long serialVersionUID = 0L;
-
-    private transient Map map;
-
     private static final Object PRESENT = new Object();
 
-    /**
-     * {@link CaseInsensitiveSet}を作成します。
-     */
+    private transient Map<String, Object> map;
+
     public CaseInsensitiveSet() {
         map = new CaseInsensitiveMap();
     }
 
-    /**
-     * {@link CaseInsensitiveSet}を作成します。
-     * 
-     * @param c
-     */
-    public CaseInsensitiveSet(Collection c) {
+    public CaseInsensitiveSet(Collection<String> c) {
         map = new CaseInsensitiveMap(Math.max((int) (c.size() / .75f) + 1, 16));
         addAll(c);
     }
 
-    /**
-     * {@link CaseInsensitiveSet}を作成します。
-     * 
-     * @param initialCapacity
-     */
     public CaseInsensitiveSet(int initialCapacity) {
         map = new CaseInsensitiveMap(initialCapacity);
     }
 
-    public Iterator iterator() {
+    public Iterator<String> iterator() {
         return map.keySet().iterator();
     }
 
@@ -78,7 +61,7 @@ public class CaseInsensitiveSet extends AbstractSet implements Set, Serializable
         return map.containsKey(o);
     }
 
-    public boolean add(Object o) {
+    public boolean add(String o) {
         return map.put(o, PRESENT) == null;
     }
 

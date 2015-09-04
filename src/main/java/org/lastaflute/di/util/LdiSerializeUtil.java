@@ -25,41 +25,21 @@ import org.lastaflute.di.exception.ClassNotFoundRuntimeException;
 import org.lastaflute.di.exception.IORuntimeException;
 
 /**
- * オブジェクトをシリアライズするためのユーティリティです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiSerializeUtil {
 
     private static final int BYTE_ARRAY_SIZE = 8 * 1024;
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiSerializeUtil() {
     }
 
-    /**
-     * オブジェクトをシリアライズできるかテストします。
-     * 
-     * @param o
-     * @return
-     * @throws IORuntimeException
-     * @throws ClassNotFoundRuntimeException
-     */
     public static Object serialize(final Object o) throws IORuntimeException, ClassNotFoundRuntimeException {
 
         byte[] binary = fromObjectToBinary(o);
         return fromBinaryToObject(binary);
     }
 
-    /**
-     * オブジェクトをbyteの配列に変換します。
-     * 
-     * @param o
-     * @return
-     */
     public static byte[] fromObjectToBinary(Object o) {
 
         try {
@@ -76,12 +56,6 @@ public class LdiSerializeUtil {
         }
     }
 
-    /**
-     * byteの配列をオブジェクトに変換します。
-     * 
-     * @param binary
-     * @return
-     */
     public static Object fromBinaryToObject(byte[] binary) {
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(binary);

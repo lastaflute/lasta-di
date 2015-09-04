@@ -20,36 +20,19 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * {@link DecimalFormatSymbols}用のユーティリティクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class LdiDecimalFormatSymbolsUtil {
 
-    private static Map cache = LdiMapUtil.createHashMap();
+    private static Map<Locale, DecimalFormatSymbols> cache = LdiMapUtil.createHashMap();
 
-    /**
-     * インスタンスを構築します。
-     */
     protected LdiDecimalFormatSymbolsUtil() {
     }
 
-    /**
-     * {@link DecimalFormatSymbols}を返します。
-     * 
-     * @return {@link DecimalFormatSymbols}
-     */
     public static DecimalFormatSymbols getDecimalFormatSymbols() {
         return getDecimalFormatSymbols(Locale.getDefault());
     }
 
-    /**
-     * {@link DecimalFormatSymbols}を返します。
-     * 
-     * @param locale
-     * @return {@link DecimalFormatSymbols}
-     */
     public static DecimalFormatSymbols getDecimalFormatSymbols(Locale locale) {
         DecimalFormatSymbols symbols = (DecimalFormatSymbols) cache.get(locale);
         if (symbols == null) {

@@ -22,62 +22,22 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 
 /**
- * トラバースするためのクラスです。
- * 
  * @author modified by jflute (originated in Seasar)
  */
 public class Traversal {
 
-    /**
-     * {@link LaContainer}を処理するためのインターフェースです。
-     * 
-     */
     public static interface S2ContainerHandler {
-        /**
-         * {@link LaContainer}を処理します。
-         * 
-         * @param container
-         * @return 処理した結果
-         */
         Object processContainer(LaContainer container);
     }
 
-    /**
-     * {@link ComponentDef}を処理するためのインターフェースです。
-     * 
-     */
     public static interface ComponentDefHandler {
-        /**
-         * {@link ComponentDef}を処理します。
-         * 
-         * @param componentDef
-         * @return 処理した結果
-         */
         Object processComponent(ComponentDef componentDef);
     }
 
-    /**
-     * コンポーネントをトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @return 処理した結果
-     * @see #forEachComponent(LaContainer,
-     *      org.lastaflute.di.core.util.Traversal.ComponentDefHandler,
-     *      boolean)
-     */
     public static Object forEachComponent(final LaContainer container, final ComponentDefHandler handler) {
         return forEachComponent(container, handler, true);
     }
 
-    /**
-     * コンポーネントをトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @param parentFirst
-     * @return 処理した結果
-     */
     public static Object forEachComponent(final LaContainer container, final ComponentDefHandler handler, final boolean parentFirst) {
         return forEachContainer(container, new S2ContainerHandler() {
             public Object processContainer(final LaContainer container) {
@@ -92,46 +52,16 @@ public class Traversal {
         }, parentFirst);
     }
 
-    /**
-     * {@link LaContainer}をトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @return 処理した結果
-     * @see #forEachContainer(LaContainer,
-     *      org.lastaflute.di.core.util.Traversal.S2ContainerHandler,
-     *      boolean, Set)
-     */
     public static Object forEachContainer(final LaContainer container, final S2ContainerHandler handler) {
-        return forEachContainer(container, handler, true, new HashSet());
+        return forEachContainer(container, handler, true, new HashSet<LaContainer>());
     }
 
-    /**
-     * {@link LaContainer}をトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @param parentFirst
-     * @return 処理した結果
-     * @see #forEachContainer(LaContainer,
-     *      org.lastaflute.di.core.util.Traversal.S2ContainerHandler,
-     *      boolean, Set)
-     */
     public static Object forEachContainer(final LaContainer container, final S2ContainerHandler handler, final boolean parentFirst) {
-        return forEachContainer(container, handler, parentFirst, new HashSet());
+        return forEachContainer(container, handler, parentFirst, new HashSet<LaContainer>());
     }
 
-    /**
-     * {@link LaContainer}をトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @param parentFirst
-     * @param processed
-     * @return 処理した結果
-     */
     protected static Object forEachContainer(final LaContainer container, final S2ContainerHandler handler, final boolean parentFirst,
-            final Set processed) {
+            final Set<LaContainer> processed) {
         if (parentFirst) {
             final Object result = handler.processContainer(container);
             if (result != null) {
@@ -155,46 +85,16 @@ public class Traversal {
         return null;
     }
 
-    /**
-     * 親の {@link LaContainer}をトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @return 処理した結果
-     * @see #forEachParentContainer(LaContainer,
-     *      org.lastaflute.di.core.util.Traversal.S2ContainerHandler,
-     *      boolean, Set)
-     */
     public static Object forEachParentContainer(final LaContainer container, final S2ContainerHandler handler) {
-        return forEachParentContainer(container, handler, true, new HashSet());
+        return forEachParentContainer(container, handler, true, new HashSet<LaContainer>());
     }
 
-    /**
-     * 親の {@link LaContainer}をトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @param childFirst
-     * @return 処理した結果
-     * @see #forEachParentContainer(LaContainer,
-     *      org.lastaflute.di.core.util.Traversal.S2ContainerHandler,
-     *      boolean, Set)
-     */
     public static Object forEachParentContainer(final LaContainer container, final S2ContainerHandler handler, final boolean childFirst) {
-        return forEachParentContainer(container, handler, childFirst, new HashSet());
+        return forEachParentContainer(container, handler, childFirst, new HashSet<LaContainer>());
     }
 
-    /**
-     * 親の {@link LaContainer}をトラバースします。
-     * 
-     * @param container
-     * @param handler
-     * @param childFirst
-     * @param processed
-     * @return 処理した結果
-     */
     protected static Object forEachParentContainer(final LaContainer container, final S2ContainerHandler handler, final boolean childFirst,
-            final Set processed) {
+            final Set<LaContainer> processed) {
         if (childFirst) {
             final Object result = handler.processContainer(container);
             if (result != null) {

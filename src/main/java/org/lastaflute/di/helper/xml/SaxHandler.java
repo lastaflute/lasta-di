@@ -36,7 +36,7 @@ public class SaxHandler extends DefaultHandler {
 
     private TagHandlerRule tagHandlerRule;
     private TagHandlerContext context = new TagHandlerContext();
-    private Map dtdPaths = new HashMap();
+    private Map<String, String> dtdPaths = new HashMap<String, String>();
     private Locator locator;
 
     public SaxHandler(TagHandlerRule tagHandlerRule) {

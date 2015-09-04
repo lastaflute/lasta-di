@@ -16,47 +16,25 @@
 package org.lastaflute.di.exception;
 
 /**
- * {@link NoSuchFieldException}をラップする例外です。
- * 
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class NoSuchFieldRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 6609175673610180338L;
 
-    private Class targetClass;
-
+    private Class<?> targetClass;
     private String fieldName;
 
-    /**
-     * {@link NoSuchFieldRuntimeException}を作成します。
-     * 
-     * @param targetClass
-     * @param fieldName
-     * @param cause
-     */
-    public NoSuchFieldRuntimeException(Class targetClass, String fieldName, NoSuchFieldException cause) {
-
+    public NoSuchFieldRuntimeException(Class<?> targetClass, String fieldName, NoSuchFieldException cause) {
         super("ESSR0070", new Object[] { targetClass.getName(), fieldName }, cause);
         this.targetClass = targetClass;
         this.fieldName = fieldName;
     }
 
-    /**
-     * ターゲットのクラスを返します。
-     * 
-     * @return ターゲットのクラス
-     */
-    public Class getTargetClass() {
+    public Class<?> getTargetClass() {
         return targetClass;
     }
 
-    /**
-     * フィールド名を返します。
-     * 
-     * @return フィールド名
-     */
     public String getFieldName() {
         return fieldName;
     }
