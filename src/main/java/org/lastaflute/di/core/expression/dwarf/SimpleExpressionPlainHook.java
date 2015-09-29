@@ -13,11 +13,14 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.core.expression.hook;
+package org.lastaflute.di.core.expression.dwarf;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.lastaflute.di.core.LaContainer;
+import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
@@ -31,12 +34,24 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class SimpleExpressionPlainHook implements ExpressionPlainHook {
 
+    protected static final ExpressionCastResolver castResolver = new ExpressionCastResolver();
+
     // ===================================================================================
     //                                                                        Hook Plainly
     //                                                                        ============
     @Override
     public Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
-        return doHookPlainly(exp.trim(), contextMap, container, resultType);
+        final CastResolved resolved = castResolver.resolveCast(exp, resultType);
+        final String realExp;
+        final Class<?> realType;
+        if (resolved != null) {
+            realExp = resolved.getFilteredExp();
+            realType = resolved.getResolvedType();
+        } else {
+            realExp = exp.trim();
+            realType = resultType;
+        }
+        return doHookPlainly(realExp, contextMap, container, realType);
     }
 
     protected Object doHookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
@@ -65,6 +80,10 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             return resovled;
         }
         resovled = resolveProviderConfig(exp, contextMap, container, resultType);
+        if (resovled != null) {
+            return resovled;
+        }
+        resovled = resolveComponentList(exp, contextMap, container, resultType); // e.g. [sea, land]
         if (resovled != null) {
             return resovled;
         }
@@ -189,7 +208,6 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                              ======================
     protected Object resolveProviderConfig(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> resultType) {
-        // TODO jflute lastaflute: [E] fitting: DI :: JavaScript performance tuning, e.g. ? :
         if (exp.startsWith(PROVIDER_GET) && exp.endsWith(METHOD_MARK) && exp.contains(".") && !exp.contains("\"")) {
             final String[] tokens = exp.split("\\.");
             if (tokens.length > 1) {
@@ -225,6 +243,33 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
                 if (component != null) {
                     return component;
                 }
+            }
+        }
+        return null;
+    }
+
+    // ===================================================================================
+    //                                                                  Component List/Map
+    //                                                                  ==================
+    protected Object resolveComponentList(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> resultType) {
+        if (!exp.contains(DQ) && !exp.contains(SQ) && exp.startsWith("[") && exp.endsWith("]")) {
+            final String listContents = exp.substring(1, exp.length() - 1);
+            final String[] elements = LdiStringUtil.split(listContents, ",");
+            boolean compAry = false;
+            for (String comp : elements) {
+                if (!LdiStringUtil.isNumber(comp)) {
+                    compAry = true;
+                    break;
+                }
+            }
+            if (compAry) {
+                final List<Object> resultList = new ArrayList<Object>();
+                for (String comp : elements) {
+                    final Object component = container.getComponent(comp.trim()); // in same or child container
+                    resultList.add(component);
+                }
+                return castResolver.convertListTo(exp, contextMap, container, resultType, resultList);
             }
         }
         return null;

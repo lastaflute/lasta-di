@@ -23,11 +23,12 @@ import org.lastaflute.di.exception.SRuntimeException;
 public class CyclicReferenceRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = -5993824919440261214L;
+    private static final Object[] EMPTY_ARRAY = new Object[0];
 
     private Class<?> componentClass_;
 
     public CyclicReferenceRuntimeException(Class<?> componentClass) {
-        super("ESSR0047", new Object[] { componentClass.getName() });
+        super("ESSR0047", componentClass != null ? new Object[] { componentClass.getName() } : EMPTY_ARRAY);
         componentClass_ = componentClass;
     }
 

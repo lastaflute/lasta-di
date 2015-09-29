@@ -16,8 +16,6 @@
 package org.lastaflute.di.core.expression.engine;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -29,6 +27,8 @@ import javax.script.ScriptException;
 
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.exception.ExpressionClassCreateFailureException;
+import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver;
+import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiStringUtil;
@@ -43,12 +43,12 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                          ==========
     protected static final String SQ = "'";
     protected static final String DQ = "\"";
-    protected static final String CAST_INT_ARRAY = "(int[])";
-    protected static final String CAST_STRING_ARRAY = "(String[])";
-    protected static final String CAST_SET = "(Set)";
 
     // thread-safe without e.g. put, register
     protected static final ScriptEngineManager defaultManager = new ScriptEngineManager();
+
+    // of course thread-safe
+    protected static final ExpressionCastResolver castResolver = new ExpressionCastResolver();
 
     // ===================================================================================
     //                                                                    Parse Expression
@@ -62,47 +62,36 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                            Evaluate
     //                                                                            ========
     @Override
-    public Object evaluate(Object exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
-        return viaVariableResolvedEvaluate((String) exp, contextMap, container, conversionType);
+    public Object evaluate(Object exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+        return viaVariableResolvedEvaluate((String) exp, contextMap, container, resultType);
     }
 
     protected Object viaVariableResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> conversionType) {
+            Class<?> resultType) {
         String filteredExp = exp;
         for (Entry<String, ? extends Object> entry : contextMap.entrySet()) { // e.g. #SMART => 'cool'
             filteredExp = LdiStringUtil.replace(filteredExp, "#" + entry.getKey(), SQ + entry.getValue() + SQ);
         }
-        return viaCastResolvedEvaluate(filteredExp, contextMap, container, conversionType);
+        return viaCastResolvedEvaluate(filteredExp, contextMap, container, resultType);
     }
 
     protected Object viaCastResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> conversionType) {
-        final String filteredExp;
-        final Class<?> resolvedType;
-        if (exp.startsWith(CAST_INT_ARRAY)) {
-            filteredExp = exp.substring(CAST_INT_ARRAY.length());
-            resolvedType = int[].class;
-        } else if (exp.startsWith(CAST_STRING_ARRAY)) {
-            filteredExp = exp.substring(CAST_STRING_ARRAY.length());
-            resolvedType = String[].class;
-        } else if (exp.startsWith(CAST_SET)) {
-            filteredExp = exp.substring(CAST_SET.length());
-            resolvedType = Set.class;
-        } else if (exp.startsWith("{") && exp.endsWith("}")) {
-            filteredExp = "[" + exp + "]";
-            resolvedType = MarkedMap.class;
+            Class<?> resultType) {
+        final CastResolved resolved = castResolver.resolveCast(exp, resultType);
+        final String realExp;
+        final Class<?> realType;
+        if (resolved != null) {
+            realExp = resolved.getFilteredExp();
+            realType = resolved.getResolvedType();
         } else {
-            filteredExp = exp;
-            resolvedType = conversionType;
+            realExp = exp.trim();
+            realType = resultType;
         }
-        return viaFirstNameResolvedEvaluate(filteredExp, contextMap, container, resolvedType);
-    }
-
-    protected static class MarkedMap { // marker class
+        return viaFirstNameResolvedEvaluate(realExp, contextMap, container, realType);
     }
 
     protected Object viaFirstNameResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> conversionType) {
+            Class<?> resultType) {
         final String filteredExp;
         String firstName = null;
         Object firstComponent = null;
@@ -142,7 +131,10 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             filteredExp = exp;
         }
         final Object evaluated = actuallyEvaluate(filteredExp, contextMap, container, firstName, firstComponent);
-        return filterEvaluated(filteredExp, contextMap, container, evaluated, conversionType);
+        final Object filtered = filterEvaluated(filteredExp, contextMap, container, evaluated, resultType);
+        // needs deep thinking time for e.g. primitive, Object.class
+        //checkResultTypeMatched(filtered, contextMap, container, resultType);
+        return filtered;
     }
 
     // ===================================================================================
@@ -184,7 +176,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                           Filtering
     //                                                                           =========
     protected Object filterEvaluated(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Object evaluated,
-            Class<?> conversionType) {
+            Class<?> resultType) {
         if (evaluated instanceof String) {
             // e.g. jp. cannot create the instance with this error,
             // ReferenceError: "jp" is not defined in <eval> at line number 1
@@ -205,7 +197,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         if (evaluated instanceof Map) {
             @SuppressWarnings("unchecked")
             final Map<String, Object> map = (Map<String, Object>) evaluated;
-            return handleMap(exp, contextMap, container, map, conversionType);
+            return handleMap(exp, contextMap, container, map, resultType);
         }
         return evaluated;
     }
@@ -227,51 +219,10 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     }
 
     protected Object handleMap(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Map<String, Object> map,
-            Class<?> conversionType) {
+            Class<?> resultType) {
         final List<Object> challengeList = challengeList(map);
         if (challengeList != null) { // e.g. [1,2] or ...
-            if (int[].class.isAssignableFrom(conversionType)) { // e.g. (int[])[1,2]
-                final int[] intAry = new int[challengeList.size()];
-                int index = 0;
-                try {
-                    for (Object element : challengeList) {
-                        if (element == null) {
-                            throw new IllegalStateException("Cannot handle null element in array: index=" + index);
-                        }
-                        intAry[index] = Integer.parseInt(element.toString());
-                        ++index;
-                    }
-                } catch (RuntimeException e) {
-                    throwExpressionCannotConvertException(exp, contextMap, container, conversionType, index, e);
-                }
-                return intAry;
-            } else if (String[].class.isAssignableFrom(conversionType)) { // e.g. (String[])["sea","land"]
-                final String[] strAry = new String[challengeList.size()];
-                int index = 0;
-                try {
-                    for (Object element : challengeList) {
-                        if (element == null) {
-                            throw new IllegalStateException("Cannot handle null element in array: index=" + index);
-                        }
-                        if (!(element instanceof String)) {
-                            throw new IllegalStateException("Non-string element in array: index=" + index);
-                        }
-                        strAry[index] = (String) element;
-                        ++index;
-                    }
-                } catch (RuntimeException e) {
-                    throwExpressionCannotConvertException(exp, contextMap, container, conversionType, index, e);
-                }
-                return strAry;
-            } else if (Set.class.isAssignableFrom(conversionType)) { // e.g. (Set)["sea","land"]
-                return new LinkedHashSet<Object>(challengeList);
-            } else if (MarkedMap.class.isAssignableFrom(conversionType)) { // e.g. {"sea":"land"} as [{"sea":"land"}]
-                @SuppressWarnings("unchecked")
-                final Map<Object, Object> wrappedMap = (Map<Object, Object>) challengeList.get(0);
-                return new LinkedHashMap<Object, Object>(wrappedMap); // convert to normal map
-            } else { // e.g. [1,2]
-                return challengeList;
-            }
+            return castResolver.convertListTo(exp, contextMap, container, resultType, challengeList);
         } else {
             return map;
         }
@@ -288,26 +239,6 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             return null;
         }
         return new ArrayList<Object>(map.values());
-    }
-
-    protected void throwExpressionCannotConvertException(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> conversionType, Integer index, RuntimeException cause) {
-        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
-        br.addNotice("Failed to convert the value to the type in the expression.");
-        br.addItem("Di XML");
-        br.addElement(container.getPath());
-        br.addItem("Expression");
-        br.addElement(exp);
-        br.addItem("Context Map");
-        br.addElement(contextMap);
-        br.addItem("Conversion Type");
-        br.addElement(conversionType);
-        if (index != null) {
-            br.addItem("Array Index");
-            br.addElement(index);
-        }
-        final String msg = br.buildExceptionMessage();
-        throw new ExpressionClassCreateFailureException(msg, cause);
     }
 
     // ===================================================================================

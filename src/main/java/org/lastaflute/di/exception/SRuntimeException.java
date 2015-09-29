@@ -25,11 +25,8 @@ public class SRuntimeException extends RuntimeException {
     private static final long serialVersionUID = -4452607868694297329L;
 
     private String messageCode;
-
     private Object[] args;
-
     private String message;
-
     private String simpleMessage;
 
     public SRuntimeException(String messageCode) {
@@ -56,6 +53,7 @@ public class SRuntimeException extends RuntimeException {
         return args;
     }
 
+    @Override
     public final String getMessage() {
         return message;
     }
