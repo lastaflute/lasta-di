@@ -55,31 +55,31 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     }
 
     protected Object doHookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
-        Object resovled = resolveSimpleString(exp, contextMap, container, resultType);
+        Object resovled = resolveSimpleString(exp, contextMap, container, resultType); // "sea"
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleNumber(exp, contextMap, container, resultType);
+        resovled = resolveSimpleNumber(exp, contextMap, container, resultType); // e.g. 7
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleEqualEqual(exp, contextMap, container, resultType);
+        resovled = resolveSimpleEqualEqual(exp, contextMap, container, resultType); // e.g. 'hot' == 'cool'
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleType(exp, contextMap, container, resultType);
+        resovled = resolveSimpleType(exp, contextMap, container, resultType); // e.g. @org.dbflute.Entity@class
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleComponent(exp, contextMap, container, resultType);
+        resovled = resolveSimpleComponent(exp, contextMap, container, resultType); // e.g. sea
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveExistsResource(exp, contextMap, container, resultType);
+        resovled = resolveExistsResource(exp, contextMap, container, resultType); // e.g. .exists()
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveProviderConfig(exp, contextMap, container, resultType);
+        resovled = resolveProviderConfig(exp, contextMap, container, resultType); // e.g. provider.config...
         if (resovled != null) {
             return resovled;
         }
@@ -249,8 +249,8 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     }
 
     // ===================================================================================
-    //                                                                  Component List/Map
-    //                                                                  ==================
+    //                                                                      Component List
+    //                                                                      ==============
     protected Object resolveComponentList(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> resultType) {
         if (!exp.contains(DQ) && !exp.contains(SQ) && exp.startsWith("[") && exp.endsWith("]")) {
