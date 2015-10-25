@@ -21,9 +21,9 @@ import java.io.StringWriter;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class SPrintWriter extends PrintWriter {
+public class LdiPrintWriter extends PrintWriter {
 
-    public SPrintWriter() {
+    public LdiPrintWriter() {
         super(new StringWriter());
     }
 
