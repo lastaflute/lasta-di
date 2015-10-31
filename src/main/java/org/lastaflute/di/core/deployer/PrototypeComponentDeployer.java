@@ -23,16 +23,10 @@ import org.lastaflute.di.core.ComponentDef;
  */
 public class PrototypeComponentDeployer extends AbstractComponentDeployer {
 
-    /**
-     * @param componentDef
-     */
     public PrototypeComponentDeployer(ComponentDef componentDef) {
         super(componentDef);
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#deploy()
-     */
     public Object deploy() {
         Object component = getConstructorAssembler().assemble();
         getPropertyAssembler().assemble(component);
@@ -44,15 +38,9 @@ public class PrototypeComponentDeployer extends AbstractComponentDeployer {
         throw new UnsupportedOperationException("injectDependency");
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#init()
-     */
     public void init() {
     }
 
-    /**
-     * @see org.lastaflute.di.core.deployer.ComponentDeployer#destroy()
-     */
     public void destroy() {
     }
 }
