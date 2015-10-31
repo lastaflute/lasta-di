@@ -144,7 +144,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             Class<?> resultType) {
         if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END_CLASS)) { // @org.docksidestage.Sea@class
             // mainly for OGNL compatibility
-            final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END));
+            final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END_CLASS));
             return LdiClassUtil.forName(className);
         }
         if (exp.startsWith(TYPE_BEGIN) && exp.contains(TYPE_END)) { // @org.docksidestage.Sea@call()
