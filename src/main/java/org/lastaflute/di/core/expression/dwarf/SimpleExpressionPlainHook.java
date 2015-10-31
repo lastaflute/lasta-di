@@ -15,6 +15,8 @@
  */
 package org.lastaflute.di.core.expression.dwarf;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,7 @@ import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiResourceUtil;
 import org.lastaflute.di.util.LdiSrl;
 import org.lastaflute.di.util.LdiStringUtil;
+import org.lastaflute.di.util.tiger.LdiReflectionUtil;
 
 /**
  * @author jflute
@@ -67,7 +70,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleType(exp, contextMap, container, resultType); // e.g. @org.dbflute.Entity@class
+        resovled = resolveSimpleTypeExp(exp, contextMap, container, resultType); // e.g. @org.docksidestage.Sea@class
         if (resovled != null) {
             return resovled;
         }
@@ -134,14 +137,36 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         return null;
     }
 
-    protected Object resolveSimpleType(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
-        if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END)) {
+    // ===================================================================================
+    //                                                              Simple Type Expression
+    //                                                              ======================
+    protected Object resolveSimpleTypeExp(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
+            Class<?> resultType) {
+        if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END_CLASS)) { // @org.docksidestage.Sea@class
+            // mainly for OGNL compatibility
             final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END));
             return LdiClassUtil.forName(className);
+        }
+        if (exp.startsWith(TYPE_BEGIN) && exp.contains(TYPE_END)) { // @org.docksidestage.Sea@call()
+            // minor domain, e.g. jp, cannot be parsed by Nashon so original logic here
+            final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END));
+            final String rear = exp.substring(exp.lastIndexOf(TYPE_END) + TYPE_END.length());
+            final Class<?> clazz = LdiClassUtil.forName(className);
+            if (rear.endsWith(METHOD_MARK)) {
+                final String methodName = rear.substring(0, rear.lastIndexOf(METHOD_MARK));
+                final Method method = LdiReflectionUtil.getMethod(clazz, methodName, (Class<?>[]) null);
+                return LdiReflectionUtil.invoke(method, null, (Object[]) null);
+            } else {
+                final Field field = LdiReflectionUtil.getField(clazz, rear);
+                return LdiReflectionUtil.getValue(field, null);
+            }
         }
         return null;
     }
 
+    // ===================================================================================
+    //                                                                    Simple Component
+    //                                                                    ================
     protected Object resolveSimpleComponent(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> resultType) {
         if (!LdiSrl.containsAny(exp, ".", ",", SQ, DQ, "@", "#")) { // main except, just in case

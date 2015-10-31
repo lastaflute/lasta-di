@@ -37,25 +37,10 @@ public abstract class LdiReflectionUtil {
     protected LdiReflectionUtil() {
     }
 
-    /**
-     * @param <T>
-     * @param className
-     * @return 
-     * @throws ClassNotFoundRuntimeException
-     * @see Class#forName(String)
-     */
     public static <T> Class<T> forName(final String className) throws ClassNotFoundRuntimeException {
         return forName(className, Thread.currentThread().getContextClassLoader());
     }
 
-    /**
-     * @param <T>
-     * @param className
-     * @param loader
-     * @return 
-     * @throws ClassNotFoundRuntimeException
-     * @see Class#forName(String, boolean, ClassLoader)
-     */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> forName(final String className, final ClassLoader loader) throws ClassNotFoundRuntimeException {
         try {
@@ -65,23 +50,10 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param <T>
-     * @param className
-     * @return 
-     * @see Class#forName(String)
-     */
     public static <T> Class<T> forNameNoException(final String className) {
         return forNameNoException(className, Thread.currentThread().getContextClassLoader());
     }
 
-    /**
-     * @param <T>
-     * @param className
-     * @param loader
-     * @return 
-     * @see Class#forName(String)
-     */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> forNameNoException(final String className, final ClassLoader loader) {
         try {
@@ -109,13 +81,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param clazz
-     * @param name
-     * @return 
-     * @throws NoSuchFieldRuntimeException
-     * @see Class#getField(String)
-     */
     public static Field getField(final Class<?> clazz, final String name) throws NoSuchFieldRuntimeException {
         try {
             return clazz.getField(name);
@@ -124,13 +89,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param clazz
-     * @param name
-     * @return 
-     * @throws NoSuchFieldRuntimeException
-     * @see Class#getDeclaredField(String)
-     */
     public static Field getDeclaredField(final Class<?> clazz, final String name) throws NoSuchFieldRuntimeException {
         try {
             return clazz.getDeclaredField(name);
@@ -139,14 +97,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param clazz
-     * @param name
-     * @param argTypes
-     * @return 
-     * @throws NoSuchMethodRuntimeException
-     * @see Class#getMethod(String, Class[])
-     */
     public static Method getMethod(final Class<?> clazz, final String name, final Class<?>... argTypes)
             throws NoSuchMethodRuntimeException {
         try {
@@ -156,14 +106,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param clazz
-     * @param name
-     * @param argTypes
-     * @return 
-     * @throws NoSuchMethodRuntimeException
-     * @see Class#getDeclaredMethod(String, Class[])
-     */
     public static Method getDeclaredMethod(final Class<?> clazz, final String name, final Class<?>... argTypes)
             throws NoSuchMethodRuntimeException {
         try {
@@ -173,14 +115,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param <T>
-     * @param clazz
-     * @return 
-     * @throws InstantiationRuntimeException
-     * @throws IllegalAccessRuntimeException
-     * @see Constructor#newInstance(Object[])
-     */
     public static <T> T newInstance(final Class<T> clazz) throws InstantiationRuntimeException, IllegalAccessRuntimeException {
         try {
             return clazz.newInstance();
@@ -191,15 +125,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param <T>
-     * @param constructor
-     * @param args
-     * @return 
-     * @throws InstantiationRuntimeException
-     * @throws IllegalAccessRuntimeException
-     * @see Constructor#newInstance(Object[])
-     */
     public static <T> T newInstance(final Constructor<T> constructor, final Object... args)
             throws InstantiationRuntimeException, IllegalAccessRuntimeException {
         try {
@@ -213,14 +138,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param <T>
-     * @param field
-     * @param target
-     * @return 
-     * @throws IllegalAccessRuntimeException
-     * @see Field#get(Object)
-     */
     @SuppressWarnings("unchecked")
     public static <T> T getValue(final Field field, final Object target) throws IllegalAccessRuntimeException {
         try {
@@ -230,25 +147,11 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param <T>
-     * @param field
-     * @return 
-     * @throws IllegalAccessRuntimeException
-     * @see Field#get(Object)
-     */
     @SuppressWarnings("unchecked")
     public static <T> T getStaticValue(final Field field) throws IllegalAccessRuntimeException {
         return (T) getValue(field, null);
     }
 
-    /**
-     * @param field
-     * @param target
-     * @param value
-     * @throws IllegalAccessRuntimeException
-     * @see Field#set(Object, Object)
-     */
     public static void setValue(final Field field, final Object target, final Object value) throws IllegalAccessRuntimeException {
         try {
             field.set(target, value);
@@ -257,26 +160,10 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param field
-     * @param value
-     * @throws IllegalAccessRuntimeException
-     * @see Field#set(Object, Object)
-     */
     public static void setStaticValue(final Field field, final Object value) throws IllegalAccessRuntimeException {
         setValue(field, null, value);
     }
 
-    /**
-     * @param <T>
-     * @param method
-     * @param target
-     * @param args
-     * @return 
-     * @throws IllegalAccessRuntimeException
-     * @throws InvocationTargetRuntimeException
-     * @see Method#invoke(Object, Object[])
-     */
     @SuppressWarnings("unchecked")
     public static <T> T invoke(final Method method, final Object target, final Object... args)
             throws IllegalAccessRuntimeException, InvocationTargetRuntimeException {
@@ -289,15 +176,6 @@ public abstract class LdiReflectionUtil {
         }
     }
 
-    /**
-     * @param <T>
-     * @param method
-     * @param args
-     * @return 
-     * @throws IllegalAccessRuntimeException
-     * @throws InvocationTargetRuntimeException
-     * @see Method#invoke(Object, Object[])
-     */
     @SuppressWarnings("unchecked")
     public static <T> T invokeStatic(final Method method, final Object... args)
             throws IllegalAccessRuntimeException, InvocationTargetRuntimeException {
@@ -326,11 +204,6 @@ public abstract class LdiReflectionUtil {
         return LdiGenericUtil.getRawClass(LdiGenericUtil.getElementTypeOfList(parameterizedList));
     }
 
-    /**
-     * @param field
-     * @return 
-     * since 2.4.18
-     */
     public static Class<?> getElementTypeOfListFromFieldType(final Field field) {
         final Type type = field.getGenericType();
         return getElementTypeOfList(type);
@@ -349,11 +222,6 @@ public abstract class LdiReflectionUtil {
         return LdiGenericUtil.getRawClass(LdiGenericUtil.getElementTypeOfSet(parameterizedSet));
     }
 
-    /**
-     * @param field
-     * @return 
-     * since 2.4.18
-     */
     public static Class<?> getElementTypeOfSetFromFieldType(final Field field) {
         final Type type = field.getGenericType();
         return getElementTypeOfSet(type);
@@ -364,12 +232,7 @@ public abstract class LdiReflectionUtil {
         return getElementTypeOfSet(parameterTypes[parameterPosition]);
     }
 
-    /**
-     * @param method
-     * @return 
-     */
     public static Class<?> getElementTypeOfSetFromReturnType(final Method method) {
         return getElementTypeOfSet(method.getGenericReturnType());
     }
-
 }
