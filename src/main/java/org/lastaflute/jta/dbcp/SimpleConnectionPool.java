@@ -276,11 +276,11 @@ public class SimpleConnectionPool implements ConnectionPool {
         wrapper.saveCheckInHistory();
         if (getMaxPoolSize() > 0) {
             try {
-                final Connection pc = wrapper.getPhysicalConnection();
-                pc.setAutoCommit(true);
-                final ConnectionWrapper newCon = createInheritingConnectionWrapper(wrapper, pc);
+                final Connection physicalConn = wrapper.getPhysicalConnection();
+                physicalConn.setAutoCommit(true);
+                final ConnectionWrapper inheriting = createInheritingConnectionWrapper(wrapper, physicalConn);
                 wrapper.cleanup(); // good bye, instance
-                freePool.addLast(new FreeItem(newCon));
+                freePool.addLast(new FreeItem(inheriting));
                 notify();
             } catch (SQLException e) {
                 throw new LjtRuntimeException("Failed to check in the free pool: " + wrapper, e);

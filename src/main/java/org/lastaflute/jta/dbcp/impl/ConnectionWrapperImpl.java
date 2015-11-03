@@ -128,7 +128,7 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
                 }
                 physicalConnection.close();
             }
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             logger.info("Failed to close physical connection when closing really: " + physicalConnection, e);
         } finally {
             physicalConnection = null;
@@ -154,7 +154,7 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
         }
     }
 
-    protected String buildAlreadyClosedMessage() {
+    protected String buildAlreadyClosedMessage() { // might be overridden for traceable message
         return "Already closed the connection: " + xaConnection;
     }
 
