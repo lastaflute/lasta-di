@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.core.expression.hook;
+package org.lastaflute.di.core.expression.dwarf;
 
 import java.util.Map;
 
@@ -32,8 +32,9 @@ public interface ExpressionPlainHook {
     String SQ = "'";
     String EXISTS_BEGIN = LdiResourceUtil.class.getName() + ".exists('";
     String EXISTS_END = "')";
-    String TYPE_BEGIN = "@"; // compatible with OGNL e.g. @org.dbflute.Entity@class
-    String TYPE_END = "@class"; // me too
+    String TYPE_BEGIN = "@"; // compatible with OGNL e.g. @org.dbflute.Entity@class, and for minor domain
+    String TYPE_END = "@"; // me too
+    String TYPE_END_CLASS = TYPE_END + "class"; // me too
     String METHOD_MARK = "()";
     String PROVIDER_GET = "provider.config().get";
 

@@ -60,12 +60,12 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    private XAConnection xaConnection;
-    private Connection physicalConnection;
-    private XAResource xaResource;
-    private ConnectionPool connectionPool;
-    private boolean closed = false;
-    private Transaction tx;
+    protected XAConnection xaConnection;
+    protected Connection physicalConnection;
+    protected XAResource xaResource;
+    protected ConnectionPool connectionPool;
+    protected boolean closed = false;
+    protected Transaction tx;
 
     // ===================================================================================
     //                                                                         Constructor
@@ -80,14 +80,17 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
         this.xaConnection.addConnectionEventListener(this);
     }
 
-    public void init(final Transaction tx) {
-        closed = false;
+    // ===================================================================================
+    //                                                              Wrapper Implementation
+    //                                                              ======================
+    // -----------------------------------------------------
+    //                                               Control
+    //                                               -------
+    public void init(Transaction tx) {
+        this.closed = false;
         this.tx = tx;
     }
 
-    // ===================================================================================
-    //                                                                      Implementation
-    //                                                                      ==============
     public Connection getPhysicalConnection() {
         return physicalConnection;
     }
@@ -119,34 +122,43 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
                     try {
                         physicalConnection.rollback();
                         physicalConnection.setAutoCommit(true);
-                    } catch (final SQLException e) {
+                    } catch (SQLException e) {
                         logger.info("Failed to roll-back physical connection when closing really: " + physicalConnection, e);
                     }
                 }
                 physicalConnection.close();
             }
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             logger.info("Failed to close physical connection when closing really: " + physicalConnection, e);
         } finally {
             physicalConnection = null;
         }
         try {
             xaConnection.close();
-            logger.debug("Closed the physical connection: " + xaConnection);
-        } catch (final SQLException e) {
+            if (logger.isDebugEnabled()) {
+                final String view = toTraceableView(); // to confirm history
+                final StringBuilder sb = new StringBuilder();
+                sb.append("Closed the physical connection: ").append(view.contains("\n") ? "\n" : "").append(view);
+                logger.debug(sb.toString());
+            }
+        } catch (SQLException e) {
             logger.info("Failed to close XA connection when closing really: " + xaConnection, e);
         } finally {
             xaConnection = null;
         }
     }
 
-    private void assertOpened() throws SQLException {
+    protected void assertOpened() throws SQLException {
         if (closed) {
-            throw new LjtSQLException("Already closed the connection: " + xaConnection);
+            throw new LjtSQLException(buildAlreadyClosedMessage());
         }
     }
 
-    private void assertLocalTx() throws SQLException {
+    protected String buildAlreadyClosedMessage() { // might be overridden for traceable message
+        return "Already closed the connection: " + xaConnection;
+    }
+
+    protected void assertLocalTx() throws SQLException {
         if (tx != null) {
             throw new LjtSQLException("Cannot use when distributed transaction: " + tx);
         }
@@ -158,6 +170,28 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
         }
     }
 
+    // -----------------------------------------------------
+    //                                             Traceable
+    //                                             ---------
+    // basically do nothing here, keep simple, might be overridden
+    public void saveCheckOutHistory() {
+    }
+
+    public void saveCheckInHistory() {
+    }
+
+    @Override
+    public void inheritHistory(ConnectionWrapper wrapper) {
+    }
+
+    @Override
+    public String toTraceableView() {
+        return toString();
+    }
+
+    // ===================================================================================
+    //                                                           Connection Implementation
+    //                                                           =========================
     public void connectionClosed(final ConnectionEvent event) {
     }
 
@@ -619,5 +653,22 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         throw new IllegalStateException("Not implemented yet");
+    }
+
+    // ===================================================================================
+    //                                                                      Basic Override
+    //                                                                      ==============
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(":{").append(closed ? "closed" : "open");
+        sb.append(", ").append(xaConnection);
+        sb.append("}@").append(Integer.toHexString(hashCode()));
+        return sb.toString();
+    }
+
+    protected String buildSupplementInfoToString() {
+        return "";
     }
 }

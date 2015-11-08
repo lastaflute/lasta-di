@@ -27,6 +27,9 @@ import javax.transaction.xa.XAResource;
  */
 public interface ConnectionWrapper extends Connection {
 
+    // ===================================================================================
+    //                                                                             Control
+    //                                                                             =======
     void init(Transaction tx);
 
     void cleanup();
@@ -40,4 +43,15 @@ public interface ConnectionWrapper extends Connection {
     XAConnection getXAConnection();
 
     void release() throws SQLException;
+
+    // ===================================================================================
+    //                                                                           Traceable
+    //                                                                           =========
+    void saveCheckOutHistory();
+
+    void saveCheckInHistory();
+
+    String toTraceableView();
+
+    void inheritHistory(ConnectionWrapper wrapper);
 }

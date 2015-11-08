@@ -19,7 +19,6 @@ import org.lastaflute.di.core.ComponentDef;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class ExternalComponentDeployerProvider extends ComponentDeployerFactory.DefaultProvider {
 

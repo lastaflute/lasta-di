@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class SStringBuilder implements Serializable, CharSequence {
+public class LdiStringBuilder implements Serializable, CharSequence {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,25 +28,25 @@ public class SStringBuilder implements Serializable, CharSequence {
 
     protected int count;
 
-    public SStringBuilder() {
+    public LdiStringBuilder() {
         this(16);
     }
 
-    public SStringBuilder(final int capacity) {
+    public LdiStringBuilder(final int capacity) {
         value = new char[capacity];
     }
 
-    public SStringBuilder(final String str) {
+    public LdiStringBuilder(final String str) {
         this(str.length() + 16);
         append(str);
     }
 
-    public SStringBuilder(final CharSequence seq) {
+    public LdiStringBuilder(final CharSequence seq) {
         this(seq.length() + 16);
         append(seq);
     }
 
-    public SStringBuilder append(final boolean b) {
+    public LdiStringBuilder append(final boolean b) {
         if (b) {
             final int newCount = count + 4;
             if (newCount > value.length) {
@@ -70,7 +70,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final char c) {
+    public LdiStringBuilder append(final char c) {
         final int newCount = count + 1;
         if (newCount > value.length) {
             expandCapacity(newCount);
@@ -79,7 +79,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final char[] str) {
+    public LdiStringBuilder append(final char[] str) {
         final int newCount = count + str.length;
         if (newCount > value.length) {
             expandCapacity(newCount);
@@ -89,7 +89,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final char[] str, final int offset, final int len) {
+    public LdiStringBuilder append(final char[] str, final int offset, final int len) {
         final int newCount = count + len;
         if (newCount > value.length) {
             expandCapacity(newCount);
@@ -99,22 +99,22 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final double d) {
+    public LdiStringBuilder append(final double d) {
         append(String.valueOf(d));
         return this;
     }
 
-    public SStringBuilder append(final float f) {
+    public LdiStringBuilder append(final float f) {
         append(String.valueOf(f));
         return this;
     }
 
-    public SStringBuilder append(final int i) {
+    public LdiStringBuilder append(final int i) {
         append(String.valueOf(i));
         return this;
     }
 
-    public SStringBuilder append(CharSequence s) {
+    public LdiStringBuilder append(CharSequence s) {
         if (s == null) {
             s = "null";
         }
@@ -124,13 +124,13 @@ public class SStringBuilder implements Serializable, CharSequence {
         if (s instanceof StringBuffer) {
             return this.append((StringBuffer) s);
         }
-        if (s instanceof SStringBuilder) {
-            return this.append((SStringBuilder) s);
+        if (s instanceof LdiStringBuilder) {
+            return this.append((LdiStringBuilder) s);
         }
         return append(s, 0, s.length());
     }
 
-    public SStringBuilder append(CharSequence s, final int start, final int end) {
+    public LdiStringBuilder append(CharSequence s, final int start, final int end) {
         if (s == null) {
             s = "null";
         }
@@ -152,11 +152,11 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final Object obj) {
+    public LdiStringBuilder append(final Object obj) {
         return append(String.valueOf(obj));
     }
 
-    public SStringBuilder append(String str) {
+    public LdiStringBuilder append(String str) {
         if (str == null) {
             str = "null";
         }
@@ -173,7 +173,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final StringBuffer sb) {
+    public LdiStringBuilder append(final StringBuffer sb) {
         if (sb == null) {
             return append("null");
         }
@@ -187,7 +187,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder append(final long l) {
+    public LdiStringBuilder append(final long l) {
         append(String.valueOf(l));
         return this;
     }
@@ -203,7 +203,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return value[index];
     }
 
-    public SStringBuilder delete(final int start, int end) {
+    public LdiStringBuilder delete(final int start, int end) {
         if (start < 0) {
             throw new StringIndexOutOfBoundsException(start);
         }
@@ -221,7 +221,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return this;
     }
 
-    public SStringBuilder deleteCharAt(final int index) {
+    public LdiStringBuilder deleteCharAt(final int index) {
         if ((index < 0) || (index >= count)) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -257,11 +257,11 @@ public class SStringBuilder implements Serializable, CharSequence {
         return indexOf(value, 0, count, str.toCharArray(), 0, str.length(), fromIndex);
     }
 
-    public SStringBuilder insert(final int offset, final boolean b) {
+    public LdiStringBuilder insert(final int offset, final boolean b) {
         return insert(offset, String.valueOf(b));
     }
 
-    public SStringBuilder insert(final int offset, final char c) {
+    public LdiStringBuilder insert(final int offset, final char c) {
         final int newCount = count + 1;
         if (newCount > value.length) {
             expandCapacity(newCount);
@@ -278,7 +278,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, char[])
      */
-    public SStringBuilder insert(final int offset, final char[] str) {
+    public LdiStringBuilder insert(final int offset, final char[] str) {
         if ((offset < 0) || (offset > length())) {
             throw new StringIndexOutOfBoundsException(offset);
         }
@@ -301,7 +301,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, char[], int, int)
      */
-    public SStringBuilder insert(final int index, final char[] str, final int offset, final int len) {
+    public LdiStringBuilder insert(final int index, final char[] str, final int offset, final int len) {
         if ((index < 0) || (index > length())) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -324,7 +324,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, double)
      */
-    public SStringBuilder insert(final int offset, final double d) {
+    public LdiStringBuilder insert(final int offset, final double d) {
         return insert(offset, String.valueOf(d));
     }
 
@@ -335,7 +335,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, float)
      */
-    public SStringBuilder insert(final int offset, final float f) {
+    public LdiStringBuilder insert(final int offset, final float f) {
         return insert(offset, String.valueOf(f));
     }
 
@@ -346,7 +346,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, int)
      */
-    public SStringBuilder insert(final int offset, final int i) {
+    public LdiStringBuilder insert(final int offset, final int i) {
         return insert(offset, String.valueOf(i));
     }
 
@@ -357,7 +357,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, CharSequence)
      */
-    public SStringBuilder insert(final int dstOffset, CharSequence s) {
+    public LdiStringBuilder insert(final int dstOffset, CharSequence s) {
         if (s == null) {
             s = "null";
         }
@@ -376,7 +376,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, CharSequence, int, int)
      */
-    public SStringBuilder insert(int dstOffset, CharSequence s, final int start, final int end) {
+    public LdiStringBuilder insert(int dstOffset, CharSequence s, final int start, final int end) {
         if (s == null) {
             s = "null";
         }
@@ -408,7 +408,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, Object)
      */
-    public SStringBuilder insert(final int offset, final Object obj) {
+    public LdiStringBuilder insert(final int offset, final Object obj) {
         return insert(offset, String.valueOf(obj));
     }
 
@@ -418,7 +418,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, String)
      */
-    public SStringBuilder insert(final int offset, String str) {
+    public LdiStringBuilder insert(final int offset, String str) {
         if ((offset < 0) || (offset > length())) {
             throw new StringIndexOutOfBoundsException(offset);
         }
@@ -442,7 +442,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#insert(int, long)
      */
-    public SStringBuilder insert(final int offset, final long l) {
+    public LdiStringBuilder insert(final int offset, final long l) {
         return insert(offset, String.valueOf(l));
     }
 
@@ -517,7 +517,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * @return 
      * @see java.lang.StringBuilder#replace(int, int, String)
      */
-    public SStringBuilder replace(final int start, int end, final String str) {
+    public LdiStringBuilder replace(final int start, int end, final String str) {
         if (start < 0) {
             throw new StringIndexOutOfBoundsException(start);
         }
@@ -551,7 +551,7 @@ public class SStringBuilder implements Serializable, CharSequence {
      * 
      * @see java.lang.StringBuilder#reverse()
      */
-    public SStringBuilder reverse() {
+    public LdiStringBuilder reverse() {
         int j = count - 1;
         for (int i = 0; i < j; ++i, --j) {
             final char temp = value[i];
@@ -700,7 +700,7 @@ public class SStringBuilder implements Serializable, CharSequence {
         return -1;
     }
 
-    private SStringBuilder append(final SStringBuilder sb) {
+    private LdiStringBuilder append(final LdiStringBuilder sb) {
         if (sb == null) {
             return append("null");
         }

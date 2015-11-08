@@ -20,10 +20,10 @@ import java.util.function.Function;
 
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.LastaDiProperties;
+import org.lastaflute.di.core.expression.dwarf.ExpressionPlainHook;
+import org.lastaflute.di.core.expression.dwarf.SimpleExpressionPlainHook;
 import org.lastaflute.di.core.expression.engine.ExpressionEngine;
 import org.lastaflute.di.core.expression.engine.JavaScriptExpressionEngine;
-import org.lastaflute.di.core.expression.hook.ExpressionPlainHook;
-import org.lastaflute.di.core.expression.hook.SimpleExpressionPlainHook;
 import org.lastaflute.di.util.LdiClassUtil;
 
 /**
@@ -75,20 +75,19 @@ public class ScriptingExpression implements Expression {
     //                                                                            Evaluate
     //                                                                            ========
     @Override
-    public Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container, Class<?> conversionType) {
+    public Object evaluate(Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
         if (parsed instanceof String) {
-            final Object hooked = hookPlainly((String) parsed, contextMap, container, conversionType);
+            final Object hooked = hookPlainly((String) parsed, contextMap, container, resultType);
             if (hooked != null) {
                 return hooked;
             }
         }
-        return engine.evaluate(parsed, contextMap, container, conversionType);
+        return engine.evaluate(parsed, contextMap, container, resultType);
     }
 
-    protected Object hookPlainly(String expression, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> conversionType) {
+    protected Object hookPlainly(String expression, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
         final ExpressionPlainHook plainHook = preparePlainHook();
-        return plainHook != null ? plainHook.hookPlainly(expression, contextMap, container, conversionType) : null;
+        return plainHook != null ? plainHook.hookPlainly(expression, contextMap, container, resultType) : null;
     }
 
     public ExpressionPlainHook preparePlainHook() {

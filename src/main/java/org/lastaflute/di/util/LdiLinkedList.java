@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class SLinkedList implements Cloneable, Externalizable {
+public class LdiLinkedList implements Cloneable, Externalizable {
 
     static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public class SLinkedList implements Cloneable, Externalizable {
 
     private transient int size = 0;
 
-    public SLinkedList() {
+    public LdiLinkedList() {
         header._next = header._previous = header;
     }
 
@@ -202,7 +202,7 @@ public class SLinkedList implements Cloneable, Externalizable {
     }
 
     public Object clone() {
-        SLinkedList copy = new SLinkedList();
+        LdiLinkedList copy = new LdiLinkedList();
         for (Entry e = header._next; e != header; e = e._next) {
             copy.addLast(e._element);
         }
@@ -237,14 +237,14 @@ public class SLinkedList implements Cloneable, Externalizable {
         }
 
         public Entry getNext() {
-            if (_next != SLinkedList.this.header) {
+            if (_next != LdiLinkedList.this.header) {
                 return _next;
             }
             return null;
         }
 
         public Entry getPrevious() {
-            if (_previous != SLinkedList.this.header) {
+            if (_previous != LdiLinkedList.this.header) {
                 return _previous;
             }
             return null;
@@ -253,14 +253,14 @@ public class SLinkedList implements Cloneable, Externalizable {
         public void remove() {
             _previous._next = _next;
             _next._previous = _previous;
-            SLinkedList.this.size--;
+            LdiLinkedList.this.size--;
         }
 
         public Entry addBefore(final Object o) {
             Entry newEntry = new Entry(o, this, _previous);
             _previous._next = newEntry;
             _previous = newEntry;
-            SLinkedList.this.size++;
+            LdiLinkedList.this.size++;
             return newEntry;
         }
     }

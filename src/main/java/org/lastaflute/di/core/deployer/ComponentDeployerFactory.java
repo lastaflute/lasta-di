@@ -24,115 +24,53 @@ public class ComponentDeployerFactory {
 
     private static Provider provider = new DefaultProvider();
 
-    /**
-     * @return
-     */
     public static Provider getProvider() {
         return provider;
     }
 
-    /**
-     * @param p
-     */
     public static void setProvider(final Provider p) {
         provider = p;
     }
 
-    /**
-     * @param cd
-     * @return
-     */
     public static ComponentDeployer createSingletonComponentDeployer(final ComponentDef cd) {
         return getProvider().createSingletonComponentDeployer(cd);
     }
 
-    /**
-     * @param cd
-     * @return
-     */
     public static ComponentDeployer createPrototypeComponentDeployer(final ComponentDef cd) {
         return getProvider().createPrototypeComponentDeployer(cd);
     }
 
-    /**
-     * @param cd
-     * @return
-     */
     public static ComponentDeployer createServletContextComponentDeployer(final ComponentDef cd) {
         return getProvider().createApplicationComponentDeployer(cd);
     }
 
-    /**
-     * @param cd
-     * @return
-     */
     public static ComponentDeployer createSessionComponentDeployer(final ComponentDef cd) {
         return getProvider().createSessionComponentDeployer(cd);
     }
 
-    /**
-     * @param cd
-     * @return
-     */
     public static ComponentDeployer createRequestComponentDeployer(final ComponentDef cd) {
         return getProvider().createRequestComponentDeployer(cd);
     }
 
-    /**
-     * @param cd
-     * @return
-     */
     public static ComponentDeployer createOuterComponentDeployer(final ComponentDef cd) {
         return getProvider().createOuterComponentDeployer(cd);
     }
 
-    /**
-     * @author koichk
-     * 
-     */
     public interface Provider {
 
-        /**
-         * @param cd
-         * @return
-         */
         ComponentDeployer createSingletonComponentDeployer(ComponentDef cd);
 
-        /**
-         * @param cd
-         * @return
-         */
         ComponentDeployer createPrototypeComponentDeployer(ComponentDef cd);
 
-        /**
-         * @param cd
-         * @return
-         */
         ComponentDeployer createApplicationComponentDeployer(ComponentDef cd);
 
-        /**
-         * @param cd
-         * @return
-         */
         ComponentDeployer createSessionComponentDeployer(ComponentDef cd);
 
-        /**
-         * @param cd
-         * @return
-         */
         ComponentDeployer createRequestComponentDeployer(ComponentDef cd);
 
-        /**
-         * @param cd
-         * @return
-         */
         ComponentDeployer createOuterComponentDeployer(ComponentDef cd);
     }
 
-    /**
-     * @author koichk
-     * 
-     */
     public static class DefaultProvider implements Provider {
 
         public ComponentDeployer createSingletonComponentDeployer(final ComponentDef cd) {

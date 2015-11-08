@@ -16,19 +16,11 @@
 package org.lastaflute.di.core.customizer;
 
 import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.creator.ComponentCreator;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
- * 
- * @see ComponentCreator
- * @see org.lastaflute.di.core.customizer.AspectCustomizer
  */
 public interface ComponentCustomizer {
 
-    /**
-     * @param componentDef
-     */
     void customize(ComponentDef componentDef);
 }

@@ -17,37 +17,14 @@ package org.lastaflute.di.core.deployer;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * @author belltree
  */
 public interface ComponentDeployer {
 
-    /**
-     * @return 
-     * 
-     * @see org.lastaflute.di.core.deployer.SingletonComponentDeployer#deploy()
-     * @see org.lastaflute.di.core.deployer.PrototypeComponentDeployer#deploy()
-     * @see org.lastaflute.di.core.deployer.ApplicationComponentDeployer#deploy()
-     * @see org.lastaflute.di.core.deployer.RequestComponentDeployer#deploy()
-     * @see org.lastaflute.di.core.deployer.SessionComponentDeployer#deploy()
-     */
-    public Object deploy();
+    Object deploy();
 
-    /**
-     * @param outerComponent
-     * 
-     * @see org.lastaflute.di.core.deployer.OuterComponentDeployer#injectDependency(Object)
-     */
-    public void injectDependency(Object outerComponent);
+    void injectDependency(Object outerComponent);
 
-    /**
-     * @see org.lastaflute.di.core.deployer.SingletonComponentDeployer#init()
-     * @see org.lastaflute.di.core.assembler.DefaultInitMethodAssembler#assemble(Object)
-     */
-    public void init();
+    void init();
 
-    /**
-     * @see org.lastaflute.di.core.deployer.SingletonComponentDeployer#destroy()
-     * @see org.lastaflute.di.core.assembler.DefaultDestroyMethodAssembler#assemble(Object)
-     */
-    public void destroy();
+    void destroy();
 }
