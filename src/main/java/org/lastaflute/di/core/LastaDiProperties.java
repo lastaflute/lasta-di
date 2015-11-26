@@ -45,6 +45,7 @@ public class LastaDiProperties {
     public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
     public static final String INTERNAL_DEBUG_KEY = "internal.debug";
+    public static final String SUPPRESS_LASTA_ENV_KEY = "suppress.lasta.env";
     public static final String LASTA_ENV = "lasta.env"; // system property
 
     private static final Logger logger = LoggerFactory.getLogger(LastaDiProperties.class);
@@ -66,6 +67,7 @@ public class LastaDiProperties {
     //                                                                           =========
     protected final Properties props;
     protected final boolean internalDebug;
+    protected final boolean suppressLastaEnv;
     protected String smartDeployMode; // load loaded
     protected boolean smartDeployLocationDone;
     protected List<String> smartPackageList; // load loaded
@@ -85,7 +87,15 @@ public class LastaDiProperties {
             props = new Properties();
         }
         final String debugProp = getProperty(INTERNAL_DEBUG_KEY);
-        internalDebug = debugProp != null ? debugProp.equalsIgnoreCase("true") : false;
+        internalDebug = debugProp != null && debugProp.equalsIgnoreCase("true");
+        if (internalDebug) {
+            logger.info("Lasta Di as Internal Debug by {}", INTERNAL_DEBUG_KEY);
+        }
+        final String suppressLastaEnvProp = getProperty(SUPPRESS_LASTA_ENV_KEY);
+        suppressLastaEnv = suppressLastaEnvProp != null && suppressLastaEnvProp.equalsIgnoreCase("true");
+        if (suppressLastaEnv) {
+            logger.info("Lasta Di suppresses lasta.env by {}", SUPPRESS_LASTA_ENV_KEY);
+        }
     }
 
     // ===================================================================================
@@ -264,7 +274,14 @@ public class LastaDiProperties {
         }
     }
 
+    public boolean isSuppressLastaEnv() {
+        return suppressLastaEnv;
+    }
+
     public String getLastaEnv() { // null allowed
+        if (isSuppressLastaEnv()) {
+            return null;
+        }
         return System.getProperty(LASTA_ENV);
     }
 
