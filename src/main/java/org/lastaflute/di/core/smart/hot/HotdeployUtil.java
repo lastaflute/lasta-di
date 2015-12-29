@@ -31,7 +31,6 @@ import org.lastaflute.di.util.LdiClassUtil;
 public class HotdeployUtil {
 
     public static final String REBUILDER_CLASS_NAME = HotdeployUtil.class.getName() + "$RebuilderImpl";
-
     private static Boolean hotdeploy;
 
     protected HotdeployUtil() {
@@ -63,6 +62,10 @@ public class HotdeployUtil {
         if (isHotdeploy()) {
             ((HotdeployBehavior) LaContainerBehavior.getProvider()).stop();
         }
+    }
+
+    public static boolean isAlreadyHotdeploy() {
+        return isHotdeploy() && ((HotdeployBehavior) LaContainerBehavior.getProvider()).isAlreadyHotdeploy();
     }
 
     public static Object rebuildValue(Object value) {

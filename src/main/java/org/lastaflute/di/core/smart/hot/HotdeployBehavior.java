@@ -34,38 +34,26 @@ import org.lastaflute.di.naming.NamingConvention;
  */
 public class HotdeployBehavior extends DefaultProvider {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final LaLogger logger = LaLogger.getLogger(HotdeployBehavior.class);
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     private ClassLoader originalClassLoader;
-
     private HotdeployClassLoader hotdeployClassLoader;
-
     private Map<Object, ComponentDef> componentDefCache = new HashMap<Object, ComponentDef>();
-
     private NamingConvention namingConvention;
-
     private ComponentCreator[] creators = new ComponentCreator[0];
 
     public static final String keep_BINDING = "bindingType=may";
-
     private boolean keep;
 
-    public NamingConvention getNamingConvention() {
-        return namingConvention;
-    }
-
-    public void setNamingConvention(NamingConvention namingConvention) {
-        this.namingConvention = namingConvention;
-    }
-
-    public ComponentCreator[] getCreators() {
-        return creators;
-    }
-
-    public void setCreators(ComponentCreator[] creators) {
-        this.creators = creators;
-    }
-
+    // ===================================================================================
+    //                                                                              Option
+    //                                                                              ======
     public void setKeep(boolean keep) {
         this.keep = keep;
         if (hotdeployClassLoader != null) {
@@ -73,6 +61,9 @@ public class HotdeployBehavior extends DefaultProvider {
         }
     }
 
+    // ===================================================================================
+    //                                                                      Start and Stop
+    //                                                                      ==============
     public void start() {
         originalClassLoader = Thread.currentThread().getContextClassLoader();
         if (!keep || hotdeployClassLoader == null) {
@@ -99,6 +90,14 @@ public class HotdeployBehavior extends DefaultProvider {
         DisposableUtil.dispose();
     }
 
+    public boolean isAlreadyHotdeploy() {
+        return Thread.currentThread().getContextClassLoader() instanceof HotdeployClassLoader;
+    }
+
+    // ===================================================================================
+    //                                                                       Core Override
+    //                                                                       =============
+    @Override
     protected ComponentDef getComponentDef(LaContainer container, Object key) {
         ComponentDef cd = super.getComponentDef(container, key);
         if (cd != null) {
@@ -184,5 +183,24 @@ public class HotdeployBehavior extends DefaultProvider {
             ComponentDef tmrcd = LaContainerImpl.createTooManyRegistration(key, previousCd, componentDef);
             componentDefCache.put(key, tmrcd);
         }
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public NamingConvention getNamingConvention() {
+        return namingConvention;
+    }
+
+    public void setNamingConvention(NamingConvention namingConvention) {
+        this.namingConvention = namingConvention;
+    }
+
+    public ComponentCreator[] getCreators() {
+        return creators;
+    }
+
+    public void setCreators(ComponentCreator[] creators) {
+        this.creators = creators;
     }
 }
