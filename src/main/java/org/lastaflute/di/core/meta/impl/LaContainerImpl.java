@@ -97,7 +97,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     public <COMPONENT> COMPONENT getComponent(Object componentKey) {
         assertParameterIsNotNull(componentKey, "componentKey");
         final ComponentDef cd = LaContainerBehavior.acquireFromGetComponent(this, componentKey);
-        if (cd == null) {
+        if (cd == null) { // maybe unneeded, exception when not found but keep just in case by jflute
             return null;
         }
         return (COMPONENT) cd.getComponent();
@@ -259,7 +259,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         return LaContainerBehavior.acquireFromGetComponentDef(this, key);
     }
 
-    public ComponentDef[] findComponentDefs(Object key) throws ComponentNotFoundRuntimeException {
+    public ComponentDef[] findComponentDefs(Object key) {
         assertParameterIsNotNull(key, "key");
         ComponentDef cd = internalGetComponentDef(key);
         return toComponentDefArray(cd);
