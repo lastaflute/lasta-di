@@ -30,7 +30,7 @@ import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef implements TooManyRegistrationComponentDef {
 
     private final Object key;
-    private List<ComponentDef> componentDefs = new ArrayList<ComponentDef>();
+    private final List<ComponentDef> componentDefs = new ArrayList<ComponentDef>();
 
     public TooManyRegistrationComponentDefImpl(Object key) {
         this.key = key;
@@ -58,7 +58,7 @@ public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef impl
             br.addElement("name=" + componentName + ", type=" + typeName + ", path=" + definedPath);
         }
         final String msg = br.buildExceptionMessage();
-        throw new TooManyRegistrationComponentException(msg);
+        throw new TooManyRegistrationComponentException(msg, key, componentDefs);
     }
 
     public int getComponentDefSize() {

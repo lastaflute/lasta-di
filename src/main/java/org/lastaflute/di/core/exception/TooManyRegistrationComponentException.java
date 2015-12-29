@@ -15,6 +15,10 @@
  */
 package org.lastaflute.di.core.exception;
 
+import java.util.List;
+
+import org.lastaflute.di.core.ComponentDef;
+
 /**
  * @author jflute
  */
@@ -22,7 +26,20 @@ public class TooManyRegistrationComponentException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public TooManyRegistrationComponentException(String msg) {
+    protected final Object componentKey;
+    protected final List<ComponentDef> componentDefList; // for e.g. LastaFlute login manager handling
+
+    public TooManyRegistrationComponentException(String msg, Object componentKey, List<ComponentDef> componentDefList) {
         super(msg);
+        this.componentKey = componentKey;
+        this.componentDefList = componentDefList;
+    }
+
+    public Object getComponentKey() {
+        return componentKey;
+    }
+
+    public List<ComponentDef> getComponentDefList() {
+        return componentDefList;
     }
 }
