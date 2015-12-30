@@ -22,7 +22,14 @@ public class ComponentNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ComponentNotFoundException(String msg) {
+    protected final Object componentKey;
+
+    public ComponentNotFoundException(String msg, Object componentKey) {
         super(msg);
+        this.componentKey = componentKey;
+    }
+
+    public Object getComponentKey() {
+        return componentKey;
     }
 }

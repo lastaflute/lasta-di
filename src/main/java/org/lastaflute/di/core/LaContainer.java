@@ -16,10 +16,10 @@
 package org.lastaflute.di.core;
 
 import org.lastaflute.di.core.exception.ClassUnmatchRuntimeException;
-import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
+import org.lastaflute.di.core.exception.ComponentNotFoundException;
 import org.lastaflute.di.core.exception.ContainerNotRegisteredRuntimeException;
-import org.lastaflute.di.core.exception.CyclicReferenceRuntimeException;
-import org.lastaflute.di.core.exception.TooManyRegistrationRuntimeException;
+import org.lastaflute.di.core.exception.CyclicReferenceComponentException;
+import org.lastaflute.di.core.exception.TooManyRegistrationComponentException;
 import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
 import org.lastaflute.di.core.meta.MetaDefAware;
 
@@ -29,18 +29,18 @@ import org.lastaflute.di.core.meta.MetaDefAware;
 public interface LaContainer extends MetaDefAware {
 
     <COMPONENT> COMPONENT getComponent(Object componentKey)
-            throws ComponentNotFoundRuntimeException, TooManyRegistrationRuntimeException, CyclicReferenceRuntimeException;
+            throws ComponentNotFoundException, TooManyRegistrationComponentException, CyclicReferenceComponentException;
 
-    Object[] findComponents(Object componentKey) throws CyclicReferenceRuntimeException;
+    Object[] findComponents(Object componentKey) throws CyclicReferenceComponentException;
 
-    Object[] findAllComponents(Object componentKey) throws CyclicReferenceRuntimeException;
+    Object[] findAllComponents(Object componentKey) throws CyclicReferenceComponentException;
 
     /**
      * @param componentKey The key of the component. (NotNull)
      * @return The array of found components. (NotNull: if not found, returns empty)
-     * @throws CyclicReferenceRuntimeException
+     * @throws CyclicReferenceComponentException When the components refers each other.
      */
-    Object[] findLocalComponents(Object componentKey) throws CyclicReferenceRuntimeException;
+    Object[] findLocalComponents(Object componentKey) throws CyclicReferenceComponentException;
 
     void injectDependency(Object outerComponent) throws ClassUnmatchRuntimeException;
 
@@ -64,7 +64,7 @@ public interface LaContainer extends MetaDefAware {
 
     ComponentDef getComponentDef(int index);
 
-    ComponentDef getComponentDef(Object componentKey) throws ComponentNotFoundRuntimeException;
+    ComponentDef getComponentDef(Object componentKey);
 
     ComponentDef[] findComponentDefs(Object componentKey);
 

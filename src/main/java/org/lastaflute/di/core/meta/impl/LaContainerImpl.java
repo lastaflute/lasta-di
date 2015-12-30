@@ -28,9 +28,8 @@ import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.ContainerConstants;
 import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.core.LaContainer;
-import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
 import org.lastaflute.di.core.exception.ContainerNotRegisteredRuntimeException;
-import org.lastaflute.di.core.exception.CyclicReferenceRuntimeException;
+import org.lastaflute.di.core.exception.CyclicReferenceComponentException;
 import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
 import org.lastaflute.di.core.meta.MetaDef;
 import org.lastaflute.di.core.meta.TooManyRegistrationComponentDef;
@@ -109,13 +108,13 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         return toComponentArray(componentKey, componentDefs);
     }
 
-    public Object[] findAllComponents(Object componentKey) throws CyclicReferenceRuntimeException {
+    public Object[] findAllComponents(Object componentKey) throws CyclicReferenceComponentException {
         assertParameterIsNotNull(componentKey, "componentKey");
         ComponentDef[] componentDefs = findAllComponentDefs(componentKey);
         return toComponentArray(componentKey, componentDefs);
     }
 
-    public Object[] findLocalComponents(Object componentKey) throws CyclicReferenceRuntimeException {
+    public Object[] findLocalComponents(Object componentKey) throws CyclicReferenceComponentException {
         assertParameterIsNotNull(componentKey, "componentKey");
         ComponentDef[] componentDefs = findLocalComponentDefs(componentKey);
         return toComponentArray(componentKey, componentDefs);
@@ -254,7 +253,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         return (ComponentDef) componentDefList.get(index);
     }
 
-    public ComponentDef getComponentDef(Object key) throws ComponentNotFoundRuntimeException {
+    public ComponentDef getComponentDef(Object key) {
         assertParameterIsNotNull(key, "key");
         return LaContainerBehavior.acquireFromGetComponentDef(this, key);
     }

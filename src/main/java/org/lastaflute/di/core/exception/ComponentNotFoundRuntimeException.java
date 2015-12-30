@@ -19,6 +19,7 @@ import org.lastaflute.di.exception.SRuntimeException;
 
 /**
  * @author modified by jflute (originated in Seasar)
+ * @deprecated use {@link ComponentNotFoundException}
  */
 public class ComponentNotFoundRuntimeException extends SRuntimeException {
 

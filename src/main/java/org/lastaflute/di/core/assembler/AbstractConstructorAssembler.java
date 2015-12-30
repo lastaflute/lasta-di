@@ -21,7 +21,7 @@ import java.util.Collections;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.exception.ClassUnmatchRuntimeException;
-import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
+import org.lastaflute.di.core.exception.ComponentNotFoundException;
 import org.lastaflute.di.core.exception.IllegalConstructorRuntimeException;
 import org.lastaflute.di.core.expression.Expression;
 import org.lastaflute.di.helper.beans.BeanDesc;
@@ -72,7 +72,7 @@ public abstract class AbstractConstructorAssembler extends AbstractAssembler imp
         for (int i = 0; i < args.length; ++i) {
             try {
                 args[i] = getComponentDef().getArgDef(i).getValue(Object.class);
-            } catch (ComponentNotFoundRuntimeException cause) {
+            } catch (ComponentNotFoundException cause) {
                 throw new IllegalConstructorRuntimeException(getComponentDef().getComponentClass(), cause);
             }
         }

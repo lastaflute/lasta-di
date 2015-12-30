@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.exception.TooManyRegistrationComponentException;
-import org.lastaflute.di.core.exception.TooManyRegistrationRuntimeException;
 import org.lastaflute.di.core.meta.TooManyRegistrationComponentDef;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 
@@ -40,12 +39,12 @@ public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef impl
         componentDefs.add(cd);
     }
 
-    public Object getComponent() throws TooManyRegistrationRuntimeException {
-        throwTooManyRegistrationRuntimeException();
+    public Object getComponent() throws TooManyRegistrationComponentException {
+        throwTooManyRegistrationComponentException();
         return null; // unreachacle
     }
 
-    protected void throwTooManyRegistrationRuntimeException() {
+    protected void throwTooManyRegistrationComponentException() {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Too many registration components.");
         br.addItem("Component Key");

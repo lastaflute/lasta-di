@@ -16,7 +16,7 @@
 package org.lastaflute.di.core.assembler;
 
 import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
+import org.lastaflute.di.core.exception.ComponentNotFoundException;
 import org.lastaflute.di.core.util.BindingUtil;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.log.LaLogger;
@@ -56,8 +56,8 @@ public abstract class AbstractAssembler {
         for (int i = 0; i < argTypes.length; ++i) {
             try {
                 args[i] = getComponentDef().getContainer().getComponent(argTypes[i]);
-            } catch (ComponentNotFoundRuntimeException ex) {
-                logger.log("WSSR0007", new Object[] { getComponentDef().getComponentClass().getName(), ex.getComponentKey() });
+            } catch (ComponentNotFoundException e) {
+                logger.log("WSSR0007", new Object[] { getComponentDef().getComponentClass().getName(), e.getComponentKey() });
                 args[i] = null;
             }
         }

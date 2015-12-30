@@ -16,7 +16,7 @@
 package org.lastaflute.di.core.deployer;
 
 import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.exception.CyclicReferenceRuntimeException;
+import org.lastaflute.di.core.exception.CyclicReferenceComponentException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -45,7 +45,7 @@ public class SingletonComponentDeployer extends AbstractComponentDeployer {
 
     private void assemble() {
         if (instantiating) {
-            throw new CyclicReferenceRuntimeException(getComponentDef().getComponentClass());
+            throw new CyclicReferenceComponentException(getComponentDef().getComponentClass());
         }
         instantiating = true;
         try {

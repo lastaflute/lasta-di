@@ -86,7 +86,7 @@ public class LaContainerBehavior {
             br.addItem("Definition Path");
             br.addElement(container.getPath());
             final String msg = br.buildExceptionMessage();
-            throw new ComponentNotFoundException(msg);
+            throw new ComponentNotFoundException(msg, key);
         }
 
         public ComponentDef acquireFromHasComponentDef(final LaContainer container, final Object key) {

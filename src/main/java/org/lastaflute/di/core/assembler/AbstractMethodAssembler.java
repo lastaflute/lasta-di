@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
-import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
+import org.lastaflute.di.core.exception.ComponentNotFoundException;
 import org.lastaflute.di.core.exception.IllegalMethodRuntimeException;
 import org.lastaflute.di.core.meta.MethodDef;
 import org.lastaflute.di.core.util.BindingUtil;
@@ -76,7 +76,7 @@ public abstract class AbstractMethodAssembler extends AbstractAssembler implemen
                         args = getArgs(method.getParameterTypes());
                     }
                 }
-            } catch (ComponentNotFoundRuntimeException cause) {
+            } catch (ComponentNotFoundException cause) {
                 throw new IllegalMethodRuntimeException(getComponentClass(component), methodName, cause);
             }
             if (method != null) {

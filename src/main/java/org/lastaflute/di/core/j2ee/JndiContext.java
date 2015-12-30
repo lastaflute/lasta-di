@@ -28,7 +28,7 @@ import javax.naming.NamingException;
 import javax.naming.OperationNotSupportedException;
 
 import org.lastaflute.di.core.LaContainer;
-import org.lastaflute.di.core.exception.ComponentNotFoundRuntimeException;
+import org.lastaflute.di.core.exception.ComponentNotFoundException;
 import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
 import org.lastaflute.di.exception.SRuntimeException;
 import org.lastaflute.di.util.LdiStringUtil;
@@ -185,7 +185,7 @@ public class JndiContext implements Context {
                 throw new NameAlreadyBoundException(new String(buf));
             }
             context.register(obj, name);
-        } catch (final ComponentNotFoundRuntimeException e) {
+        } catch (final ComponentNotFoundException e) {
             throw createNamingException(new String(buf), e);
         } catch (final SRuntimeException e) {
             throw createNamingException(e.getMessage(), e);
