@@ -118,9 +118,9 @@ public interface NamingConvention {
     // -----------------------------------------------------
     //                                          Root Package
     //                                          ------------
-    String[] getRootPackageNames();
+    String[] getRootPackageNames(); // not null
 
-    String[] getIgnorePackageNames();
+    String[] getIgnorePackageNames(); // not null
 
-    String getSubApplicationRootPackageName();
+    String getSubApplicationRootPackageName(); // not null basically 'web'
 }
