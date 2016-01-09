@@ -89,8 +89,8 @@ public class HotdeployUtil {
         }
     }
 
-    // *quit because of checked exception headache
-    //public static void callAsHot(Runnable runnable) {
+    // *quit because of checked exception headache and also method return in middle process
+    //public static void runAsHot(Runnable runnable) {
     //    synchronized (HotdeployLock.class) {
     //        try {
     //            start();

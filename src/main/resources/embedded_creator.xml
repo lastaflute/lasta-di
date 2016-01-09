@@ -11,4 +11,5 @@
 	<component name="logicCreator" class="org.lastaflute.di.core.creator.LogicCreator"/>
 	<component name="serviceCreator" class="org.lastaflute.di.core.creator.ServiceCreator"/>
 	<component name="helperCreator" class="org.lastaflute.di.core.creator.HelperCreator"/>
+	<component name="jobCreator" class="org.lastaflute.di.core.creator.JobCreator"/>
 </components>

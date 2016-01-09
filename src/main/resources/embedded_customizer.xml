@@ -26,4 +26,6 @@
 	</component>
 	<component name="helperCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
+	<component name="jobCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	</component>
 </components>

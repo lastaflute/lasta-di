@@ -87,6 +87,8 @@ public interface NamingConvention {
 
     String getConverterSuffix();
 
+    String getJobSuffix();
+
     String getImplementationSuffix();
 
     // -----------------------------------------------------
