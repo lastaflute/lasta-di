@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package org.lastaflute.di.core;
 
-import org.lastaflute.di.core.exception.CyclicReferenceRuntimeException;
-import org.lastaflute.di.core.exception.TooManyRegistrationRuntimeException;
+import org.lastaflute.di.core.exception.CyclicReferenceComponentException;
+import org.lastaflute.di.core.exception.TooManyRegistrationComponentException;
 import org.lastaflute.di.core.expression.Expression;
 import org.lastaflute.di.core.meta.ArgDefAware;
 import org.lastaflute.di.core.meta.AspectDefAware;
@@ -42,7 +42,7 @@ public interface ComponentDef
     // ===================================================================================
     //                                                                           Injection
     //                                                                           =========
-    Object getComponent() throws TooManyRegistrationRuntimeException, CyclicReferenceRuntimeException;
+    Object getComponent() throws TooManyRegistrationComponentException, CyclicReferenceComponentException;
 
     void injectDependency(Object outerComponent);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.lastaflute.di.core.meta.impl.LaContainerBehavior;
-import org.lastaflute.di.core.meta.impl.LaContainerBehavior.Provider;
 import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiClassUtil;
 
@@ -30,41 +29,94 @@ import org.lastaflute.di.util.LdiClassUtil;
  */
 public class HotdeployUtil {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     public static final String REBUILDER_CLASS_NAME = HotdeployUtil.class.getName() + "$RebuilderImpl";
 
-    private static Boolean hotdeploy;
-
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     protected HotdeployUtil() {
     }
 
-    public static void setHotdeploy(boolean hotdeploy) {
-        HotdeployUtil.hotdeploy = Boolean.valueOf(hotdeploy);
+    // ===================================================================================
+    //                                                                         Flg Control
+    //                                                                         ===========
+    // *anyone uses
+    //public static void setHotdeploy(boolean hotdeploy) {
+    //    HotdeployUtil.hotdeploy = Boolean.valueOf(hotdeploy);
+    //}
+    //
+    //public static void clearHotdeploy() {
+    //    hotdeploy = null;
+    //}
+
+    // ===================================================================================
+    //                                                                  HotDeploy Behavior
+    //                                                                  ==================
+    public static HotdeployBehavior getHotdeployBehavior() { // null allowed when non-HotDeploy
+        if (isHotdeploy()) {
+            return (HotdeployBehavior) LaContainerBehavior.getProvider();
+        } else {
+            return null;
+        }
     }
 
-    public static void clearHotdeploy() {
-        hotdeploy = null;
-    }
-
+    // ===================================================================================
+    //                                                                       Determination
+    //                                                                       =============
     public static boolean isHotdeploy() {
-        if (hotdeploy != null) {
-            return hotdeploy.booleanValue();
-        }
-        Provider provider = LaContainerBehavior.getProvider();
-        return provider instanceof HotdeployBehavior;
+        return LaContainerBehavior.getProvider() instanceof HotdeployBehavior;
     }
 
-    public static void start() {
-        if (isHotdeploy()) {
-            ((HotdeployBehavior) LaContainerBehavior.getProvider()).start();
-        }
+    public static boolean isAlreadyHotdeploy() {
+        return isHotdeploy() && getHotdeployBehavior().isAlreadyHotdeploy();
     }
 
-    public static void stop() {
-        if (isHotdeploy()) {
-            ((HotdeployBehavior) LaContainerBehavior.getProvider()).stop();
+    // ===================================================================================
+    //                                                                          Start/Stop
+    //                                                                          ==========
+    public static void start() { // if needs
+        if (isHotdeploy() && !isAlreadyHotdeploy()) {
+            getHotdeployBehavior().start();
         }
     }
 
+    public static void stop() { // if needs
+        if (isHotdeploy() && isAlreadyHotdeploy()) {
+            getHotdeployBehavior().stop();
+        }
+    }
+
+    // *quit because of checked exception headache and also method return in middle process
+    //public static void runAsHot(Runnable runnable) {
+    //    synchronized (HotdeployLock.class) {
+    //        try {
+    //            start();
+    //            runnable.run();
+    //        } finally {
+    //            stop();
+    //        }
+    //    }
+    //}
+
+    // ===================================================================================
+    //                                                                         Deserialize
+    //                                                                         ===========
+    public static Object deserializeInternal(final byte[] bytes) throws Exception {
+        if (bytes == null) {
+            return null;
+        }
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final Class<?> rebuilderClass = LdiClassLoaderUtil.loadClass(loader, REBUILDER_CLASS_NAME);
+        final Rebuilder rebuilder = (Rebuilder) LdiClassUtil.newInstance(rebuilderClass);
+        return rebuilder.deserialize(bytes);
+    }
+
+    // ===================================================================================
+    //                                                                            Re-Build
+    //                                                                            ========
     public static Object rebuildValue(Object value) {
         if (isHotdeploy()) {
             return rebuildValueInternal(value);
@@ -80,16 +132,6 @@ public class HotdeployUtil {
         final Class<?> rebuilderClass = LdiClassLoaderUtil.loadClass(loader, REBUILDER_CLASS_NAME);
         final Rebuilder rebuilder = (Rebuilder) LdiClassUtil.newInstance(rebuilderClass);
         return rebuilder.rebuild(value);
-    }
-
-    public static Object deserializeInternal(final byte[] bytes) throws Exception {
-        if (bytes == null) {
-            return null;
-        }
-        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        final Class<?> rebuilderClass = LdiClassLoaderUtil.loadClass(loader, REBUILDER_CLASS_NAME);
-        final Rebuilder rebuilder = (Rebuilder) LdiClassUtil.newInstance(rebuilderClass);
-        return rebuilder.deserialize(bytes);
     }
 
     public interface Rebuilder {

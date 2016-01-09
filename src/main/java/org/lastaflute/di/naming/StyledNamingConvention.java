@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,6 +58,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     protected String interceptorSuffix = "Interceptor";
     protected String validatorSuffix = "Validator";
     protected String converterSuffix = "Converter";
+    protected String jobSuffix = "Job";
     protected String implementationSuffix = "Impl";
     protected String viewRootPath = "/view";
     protected String viewExtension = ".html";
@@ -561,6 +562,15 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
 
     public void setConverterSuffix(final String converterSuffix) {
         this.converterSuffix = converterSuffix;
+    }
+
+    @Override
+    public String getJobSuffix() {
+        return jobSuffix;
+    }
+
+    public void setJobSuffix(final String jobSuffix) {
+        this.jobSuffix = jobSuffix;
     }
 
     @Override

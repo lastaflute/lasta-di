@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.lastaflute.di.core.meta.impl;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.assembler.AutoBindingDefFactory;
-import org.lastaflute.di.core.exception.TooManyRegistrationRuntimeException;
 import org.lastaflute.di.core.expression.Expression;
 import org.lastaflute.di.core.meta.ArgDef;
 import org.lastaflute.di.core.meta.AspectDef;
@@ -68,7 +67,7 @@ public class SimpleComponentDef implements ComponentDef {
         this.componentName = componentName;
     }
 
-    public Object getComponent() throws TooManyRegistrationRuntimeException {
+    public Object getComponent() {
         return component;
     }
 

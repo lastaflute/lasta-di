@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.exception.TooManyRegistrationComponentException;
-import org.lastaflute.di.core.exception.TooManyRegistrationRuntimeException;
 import org.lastaflute.di.core.meta.TooManyRegistrationComponentDef;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 
@@ -30,7 +29,7 @@ import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef implements TooManyRegistrationComponentDef {
 
     private final Object key;
-    private List<ComponentDef> componentDefs = new ArrayList<ComponentDef>();
+    private final List<ComponentDef> componentDefs = new ArrayList<ComponentDef>();
 
     public TooManyRegistrationComponentDefImpl(Object key) {
         this.key = key;
@@ -40,12 +39,12 @@ public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef impl
         componentDefs.add(cd);
     }
 
-    public Object getComponent() throws TooManyRegistrationRuntimeException {
-        throwTooManyRegistrationRuntimeException();
+    public Object getComponent() throws TooManyRegistrationComponentException {
+        throwTooManyRegistrationComponentException();
         return null; // unreachacle
     }
 
-    protected void throwTooManyRegistrationRuntimeException() {
+    protected void throwTooManyRegistrationComponentException() {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Too many registration components.");
         br.addItem("Component Key");
@@ -58,7 +57,7 @@ public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef impl
             br.addElement("name=" + componentName + ", type=" + typeName + ", path=" + definedPath);
         }
         final String msg = br.buildExceptionMessage();
-        throw new TooManyRegistrationComponentException(msg);
+        throw new TooManyRegistrationComponentException(msg, key, componentDefs);
     }
 
     public int getComponentDefSize() {
