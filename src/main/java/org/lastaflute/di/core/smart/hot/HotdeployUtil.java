@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
 import org.lastaflute.di.core.meta.impl.LaContainerBehavior;
 import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiClassUtil;
@@ -53,7 +54,7 @@ public class HotdeployUtil {
     //}
 
     // ===================================================================================
-    //                                                                  HotDeploy Behavior
+    //                                                                  HotDeploy Resource
     //                                                                  ==================
     public static HotdeployBehavior getHotdeployBehavior() { // null allowed when non-HotDeploy
         if (isHotdeploy()) {
@@ -63,6 +64,18 @@ public class HotdeployUtil {
         }
     }
 
+    public static ClassLoader getLaContainerClassLoader() {
+        return SingletonLaContainerFactory.getContainer().getClassLoader();
+    }
+
+    public static ClassLoader getThreadContextClassLoader() {
+        return Thread.currentThread().getContextClassLoader();
+    }
+
+    public static void setThreadContextClassLoader(ClassLoader classLoader) {
+        Thread.currentThread().setContextClassLoader(classLoader);
+    }
+
     // ===================================================================================
     //                                                                       Determination
     //                                                                       =============
@@ -70,21 +83,25 @@ public class HotdeployUtil {
         return LaContainerBehavior.getProvider() instanceof HotdeployBehavior;
     }
 
-    public static boolean isAlreadyHotdeploy() {
-        return isHotdeploy() && getHotdeployBehavior().isAlreadyHotdeploy();
+    public static boolean isLaContainerHotdeploy() {
+        return isHotdeploy() && getHotdeployBehavior().isLaContainerHotdeploy();
+    }
+
+    public static boolean isThreadContextHotdeploy() {
+        return isHotdeploy() && getHotdeployBehavior().isThreadContextHotdeploy();
     }
 
     // ===================================================================================
     //                                                                          Start/Stop
     //                                                                          ==========
     public static void start() { // if needs
-        if (isHotdeploy() && !isAlreadyHotdeploy()) {
+        if (isHotdeploy()) {
             getHotdeployBehavior().start();
         }
     }
 
     public static void stop() { // if needs
-        if (isHotdeploy() && isAlreadyHotdeploy()) {
+        if (isHotdeploy()) {
             getHotdeployBehavior().stop();
         }
     }
