@@ -62,6 +62,17 @@ public class HotdeployBehavior extends DefaultProvider {
     }
 
     // ===================================================================================
+    //                                                                       Determination
+    //                                                                       =============
+    public boolean isLaContainerHotdeploy() {
+        return SingletonLaContainerFactory.getContainer().getClassLoader() instanceof HotdeployClassLoader;
+    }
+
+    public boolean isThreadContextHotdeploy() {
+        return Thread.currentThread().getContextClassLoader() instanceof HotdeployClassLoader;
+    }
+
+    // ===================================================================================
     //                                                                      Start and Stop
     //                                                                      ==============
     public void start() {
@@ -70,7 +81,7 @@ public class HotdeployBehavior extends DefaultProvider {
             hotdeployClassLoader = new HotdeployClassLoader(originalClassLoader, namingConvention);
         }
         Thread.currentThread().setContextClassLoader(hotdeployClassLoader);
-        LaContainerImpl container = (LaContainerImpl) SingletonLaContainerFactory.getContainer();
+        LaContainer container = SingletonLaContainerFactory.getContainer();
         container.setClassLoader(hotdeployClassLoader);
     }
 
@@ -78,7 +89,7 @@ public class HotdeployBehavior extends DefaultProvider {
         if (!keep) {
             finish();
         }
-        LaContainerImpl container = (LaContainerImpl) SingletonLaContainerFactory.getContainer();
+        LaContainer container = SingletonLaContainerFactory.getContainer();
         container.setClassLoader(originalClassLoader);
         Thread.currentThread().setContextClassLoader(originalClassLoader);
         originalClassLoader = null;
@@ -88,10 +99,6 @@ public class HotdeployBehavior extends DefaultProvider {
         componentDefCache.clear();
         hotdeployClassLoader = null;
         DisposableUtil.dispose();
-    }
-
-    public boolean isAlreadyHotdeploy() {
-        return Thread.currentThread().getContextClassLoader() instanceof HotdeployClassLoader;
     }
 
     // ===================================================================================
