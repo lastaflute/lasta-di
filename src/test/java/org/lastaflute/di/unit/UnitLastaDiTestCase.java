@@ -19,12 +19,12 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import junit.framework.TestCase;
-
 import org.lastaflute.di.core.SingletonLaContainer;
 import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import junit.framework.TestCase;
 
 /**
  * @author jflute
@@ -50,13 +50,17 @@ public abstract class UnitLastaDiTestCase extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         xreserveShowTitle();
-        SingletonLaContainerFactory.setConfigPath("test_app.xml");
+        SingletonLaContainerFactory.setConfigPath(getConfigPath());
         SingletonLaContainerFactory.init();
     }
 
     protected void xreserveShowTitle() {
         // lazy-logging (no logging test case, no title)
         _xreservedTitle = "<<< " + xgetCaseDisp() + " >>>";
+    }
+
+    protected String getConfigPath() {
+        return "test_app.xml";
     }
 
     @Override

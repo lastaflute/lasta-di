@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.core;
+package org.lastaflute.di.core.injection;
 
 import org.lastaflute.di.mockapp.logic.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
@@ -23,7 +23,7 @@ import org.lastaflute.di.unit.UnitLastaDiTestCase;
 /**
  * @author jflute
  */
-public class InjectionTest extends UnitLastaDiTestCase {
+public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
 
     public void test_injection_by_resource_annotation() throws Exception {
         // ## Arrange ##

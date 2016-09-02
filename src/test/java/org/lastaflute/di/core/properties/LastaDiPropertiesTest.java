@@ -1,5 +1,6 @@
-package org.lastaflute.di.core;
+package org.lastaflute.di.core.properties;
 
+import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
 /**
