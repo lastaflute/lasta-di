@@ -84,7 +84,7 @@ public class SimpleConnectionPool implements ConnectionPool {
     protected long maxWait = 10000; // milliseconds of waiting for free connection (-1: unlimited, 0: no wait)
     protected int timeout = 600; // timeout seconds until closing free connection
 
-    protected boolean allowLocalTx = true; // allow to check out when non-transaction (local transaction)?
+    protected boolean suppressLocalTx; // suppress checking out when local transaction (non-transaction)?
     protected boolean readOnly; // read-only connection?
     protected int transactionIsolationLevel = DEFAULT_TRANSACTION_ISOLATION_LEVEL;
 
@@ -130,7 +130,7 @@ public class SimpleConnectionPool implements ConnectionPool {
     //                                                                           =========
     public synchronized ConnectionWrapper checkOut() throws SQLException {
         final Transaction tx = getTransaction();
-        if (tx == null && !isAllowLocalTx()) { // rare case
+        if (tx == null && isSuppressLocalTx()) { // rare case
             throw new LjtIllegalStateException("Not begun transaction. (not allowed local transaction)");
         }
         ConnectionWrapper wrapper = getConnectionTxActivePool(tx);
@@ -532,12 +532,12 @@ public class SimpleConnectionPool implements ConnectionPool {
         this.timeout = timeout;
     }
 
-    public boolean isAllowLocalTx() {
-        return allowLocalTx;
+    public boolean isSuppressLocalTx() {
+        return suppressLocalTx;
     }
 
-    public void setAllowLocalTx(boolean allowLocalTx) {
-        this.allowLocalTx = allowLocalTx;
+    public void setSuppressLocalTx(boolean suppressLocalTx) {
+        this.suppressLocalTx = suppressLocalTx;
     }
 
     public boolean isReadOnly() {
