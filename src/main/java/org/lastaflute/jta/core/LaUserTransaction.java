@@ -26,36 +26,36 @@ import javax.transaction.UserTransaction;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class UserTransactionImpl implements UserTransaction {
+public class LaUserTransaction implements UserTransaction {
 
-    protected TransactionManager tm;
+    protected final TransactionManager transactionManager;
 
-    public UserTransactionImpl(final TransactionManager tm) {
-        this.tm = tm;
+    public LaUserTransaction(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     public void begin() throws NotSupportedException, SystemException {
-        tm.begin();
+        transactionManager.begin();
     }
 
     public void commit() throws HeuristicMixedException, HeuristicRollbackException, IllegalStateException, RollbackException,
             SecurityException, SystemException {
-        tm.commit();
+        transactionManager.commit();
     }
 
     public int getStatus() throws SystemException {
-        return tm.getStatus();
+        return transactionManager.getStatus();
     }
 
     public void rollback() throws IllegalStateException, SecurityException, SystemException {
-        tm.rollback();
+        transactionManager.rollback();
     }
 
     public void setRollbackOnly() throws IllegalStateException, SystemException {
-        tm.setRollbackOnly();
+        transactionManager.setRollbackOnly();
     }
 
-    public void setTransactionTimeout(final int timeout) throws SystemException {
-        tm.setTransactionTimeout(timeout);
+    public void setTransactionTimeout(int timeout) throws SystemException {
+        transactionManager.setTransactionTimeout(timeout);
     }
 }

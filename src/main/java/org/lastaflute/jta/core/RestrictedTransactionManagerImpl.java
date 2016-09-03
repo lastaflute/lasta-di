@@ -32,24 +32,11 @@ import javax.transaction.UserTransaction;
  */
 public class RestrictedTransactionManagerImpl implements TransactionManager {
 
-    protected UserTransaction userTransaction;
+    protected final UserTransaction userTransaction;
+    protected final TransactionSynchronizationRegistry synchronizationRegistry;
 
-    protected TransactionSynchronizationRegistry synchronizationRegistry;
-
-    public RestrictedTransactionManagerImpl() {
-    }
-
-    public RestrictedTransactionManagerImpl(final UserTransaction userTransaction,
-            final TransactionSynchronizationRegistry synchronizationRegistry) {
+    public RestrictedTransactionManagerImpl(UserTransaction userTransaction, TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
-        this.synchronizationRegistry = synchronizationRegistry;
-    }
-
-    public void setUserTransaction(final UserTransaction userTransaction) {
-        this.userTransaction = userTransaction;
-    }
-
-    public void setSynchronizationRegistry(final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.synchronizationRegistry = synchronizationRegistry;
     }
 
@@ -79,7 +66,7 @@ public class RestrictedTransactionManagerImpl implements TransactionManager {
         return tx;
     }
 
-    public void resume(final Transaction tx) throws IllegalStateException, InvalidTransactionException, SystemException {
+    public void resume(Transaction tx) throws IllegalStateException, InvalidTransactionException, SystemException {
         throw new UnsupportedOperationException("resume");
     }
 
@@ -91,12 +78,11 @@ public class RestrictedTransactionManagerImpl implements TransactionManager {
         userTransaction.setRollbackOnly();
     }
 
-    public void setTransactionTimeout(final int seconds) throws SystemException {
+    public void setTransactionTimeout(int seconds) throws SystemException {
         userTransaction.setTransactionTimeout(seconds);
     }
 
     public Transaction suspend() throws SystemException {
         throw new UnsupportedOperationException("suspend");
     }
-
 }

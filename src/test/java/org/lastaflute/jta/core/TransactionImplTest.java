@@ -25,7 +25,7 @@ import javax.transaction.xa.Xid;
 
 import junit.framework.TestCase;
 
-import org.lastaflute.jta.core.TransactionImpl;
+import org.lastaflute.jta.core.LaTransaction;
 import org.lastaflute.jta.core.xa.DefaultXAResource;
 import org.lastaflute.jta.util.LjtTransactionUtil;
 
@@ -35,10 +35,10 @@ import org.lastaflute.jta.util.LjtTransactionUtil;
  */
 public class TransactionImplTest extends TestCase {
 
-    private TransactionImpl tx_;
+    private LaTransaction tx_;
 
     protected void setUp() throws Exception {
-        tx_ = new TransactionImpl();
+        tx_ = new LaTransaction();
     }
 
     /**
@@ -47,7 +47,7 @@ public class TransactionImplTest extends TestCase {
     public void testEquals() throws Exception {
         assertEquals("1", tx_, tx_);
         assertTrue("2", !tx_.equals(null));
-        assertTrue("3", !tx_.equals(new TransactionImpl()));
+        assertTrue("3", !tx_.equals(new LaTransaction()));
         assertTrue("4", !tx_.equals("test"));
     }
 

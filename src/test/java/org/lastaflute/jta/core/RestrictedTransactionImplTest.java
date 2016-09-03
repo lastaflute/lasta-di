@@ -38,8 +38,8 @@ public class RestrictedTransactionImplTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        underlyingTm = new TransactionManagerImpl();
-        userTransaction = new UserTransactionImpl(underlyingTm);
+        underlyingTm = new LaTransactionManager();
+        userTransaction = new LaUserTransaction(underlyingTm);
         synchronizationRegistry = new TransactionSynchronizationRegistryImpl(underlyingTm);
         tx = new RestrictedTransactionImpl(userTransaction, synchronizationRegistry);
     }

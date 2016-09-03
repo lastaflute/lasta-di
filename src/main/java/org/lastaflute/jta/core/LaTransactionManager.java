@@ -18,12 +18,12 @@ package org.lastaflute.jta.core;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class TransactionManagerImpl extends AbstractTransactionManagerImpl {
+public class LaTransactionManager extends AbstractTransactionManager {
 
-    public TransactionManagerImpl() {
+    public LaTransactionManager() {
     }
 
     protected ExtendedTransaction createTransaction() {
-        return new TransactionImpl();
+        return new LaTransaction();
     }
 }

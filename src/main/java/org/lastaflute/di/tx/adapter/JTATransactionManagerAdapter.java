@@ -15,6 +15,7 @@
  */
 package org.lastaflute.di.tx.adapter;
 
+import javax.transaction.NotSupportedException;
 import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
@@ -123,12 +124,16 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
         return status != STATUS_NO_TRANSACTION && status != STATUS_UNKNOWN;
     }
 
-    protected boolean begin() throws Exception {
+    protected boolean begin() throws NotSupportedException, SystemException {
         if (hasTransaction()) {
             return false;
         }
-        userTransaction.begin();
+        doBegin();
         return true;
+    }
+
+    protected void doBegin() throws NotSupportedException, SystemException {
+        userTransaction.begin();
     }
 
     protected void end() throws Exception {

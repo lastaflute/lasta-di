@@ -19,7 +19,7 @@ import javax.transaction.Status;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
-import org.lastaflute.jta.core.TransactionManagerImpl;
+import org.lastaflute.jta.core.LaTransactionManager;
 
 import junit.framework.TestCase;
 
@@ -62,6 +62,6 @@ public class TransactionManagerImplTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        tm_ = new TransactionManagerImpl();
+        tm_ = new LaTransactionManager();
     }
 }
