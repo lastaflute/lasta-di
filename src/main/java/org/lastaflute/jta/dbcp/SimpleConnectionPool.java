@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.PreDestroy;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 import javax.transaction.Status;
@@ -60,34 +61,43 @@ public class SimpleConnectionPool implements ConnectionPool {
     //                                                                          ==========
     private static final Logger logger = LoggerFactory.getLogger(SimpleConnectionPool.class);
 
-    public static final String readOnly_BINDING = "bindingType=may";
-    public static final String transactionIsolationLevel_BINDING = "bindingType=may";
-    public static final int DEFAULT_TRANSACTION_ISOLATION_LEVEL = -1;
+    protected static final int DEFAULT_TRANSACTION_ISOLATION_LEVEL = -1; // means no specified
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // -----------------------------------------------------
+    //                                          DI Component
+    //                                          ------------
     protected XADataSource xaDataSource;
     protected TransactionManager transactionManager;
-    protected int timeout = 600; // timeout seconds until closing free connection
+
+    // -----------------------------------------------------
+    //                                                Option
+    //                                                ------
     protected int maxPoolSize = 10; // maximum count of pooled connection
     protected int minPoolSize = 0; // minimum count of pooled connection
-
     // change default value from -1 to the big value *extension
     // because unlimited gives us system ending without info if application bugs
     // failure with big value might mean application bugs
     // so want to output exception and to show error message to user
     protected long maxWait = 10000; // milliseconds of waiting for free connection (-1: unlimited, 0: no wait)
+    protected int timeout = 600; // timeout seconds until closing free connection
 
-    protected boolean allowLocalTx = true; // allow to check out in out of transaction?
-    protected boolean readOnly = false;
+    protected boolean allowLocalTx = true; // allow to check out when non-transaction (local transaction)?
+    protected boolean readOnly; // read-only connection?
     protected int transactionIsolationLevel = DEFAULT_TRANSACTION_ISOLATION_LEVEL;
-    protected String validationQuery;
-    protected long validationInterval;
+
+    protected String validationQuery; // SQL to check connection life when checking out e.g. select 1 from dual
+    protected long validationInterval; // milliseconds as validation query interval
+
+    // -----------------------------------------------------
+    //                                       Internal Helper
+    //                                       ---------------
     protected final Set<ConnectionWrapper> activePool = createActivePoolSet();
     protected final Map<Transaction, ConnectionWrapper> txActivePool = createTxActivePoolMap();
     protected final LjtLinkedList freePool = createFreePoolList();
-    protected LjtTimeoutTask timeoutTask;
+    protected final LjtTimeoutTask timeoutTask;
 
     protected Set<ConnectionWrapper> createActivePoolSet() {
         return new HashSet<ConnectionWrapper>();
@@ -206,7 +216,7 @@ public class SimpleConnectionPool implements ConnectionPool {
             } finally {
                 ps.close();
             }
-        } catch (final Exception e) {
+        } catch (Exception e) {
             try {
                 wrapper.close();
             } catch (final Exception ignore) {}
@@ -217,7 +227,7 @@ public class SimpleConnectionPool implements ConnectionPool {
                 } catch (final Exception ignore) {}
             }
             freePool.clear();
-            logger.error("Destroyed the pooled connections because validation error: " + pooledTime, e);
+            logger.info("*Destroyed the pooled connections because validation error: " + pooledTime, e);
             return false;
         }
         return true;
@@ -312,7 +322,8 @@ public class SimpleConnectionPool implements ConnectionPool {
     // ===================================================================================
     //                                                                               Close
     //                                                                               =====
-    public final synchronized void close() {
+    @PreDestroy
+    public synchronized void close() {
         for (LjtLinkedList.Entry entry = freePool.getFirstEntry(); entry != null; entry = entry.getNext()) {
             final FreeItem item = (FreeItem) entry.getElement();
             item.getConnection().closeReally();
@@ -422,10 +433,10 @@ public class SimpleConnectionPool implements ConnectionPool {
         final LjtExceptionMessageBuilder br = new LjtExceptionMessageBuilder();
         br.addNotice("Connection pool did not have a free connection.");
         br.addItem("Pool Settings");
-        br.addElement("timeout: " + timeout);
         br.addElement("maxPoolSize: " + maxPoolSize);
         br.addElement("minPoolSize: " + minPoolSize);
         br.addElement("maxWait: " + maxWait);
+        br.addElement("timeout: " + timeout);
         br.addItem("Plain ActivePool");
         br.addElement("size: " + activePool.size());
         for (ConnectionWrapper wrapper : activePool) {
@@ -467,6 +478,9 @@ public class SimpleConnectionPool implements ConnectionPool {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    // -----------------------------------------------------
+    //                                          DI Component
+    //                                          ------------
     public XADataSource getXADataSource() {
         return xaDataSource;
     }
@@ -483,14 +497,9 @@ public class SimpleConnectionPool implements ConnectionPool {
         this.transactionManager = transactionManager;
     }
 
-    public int getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
+    // -----------------------------------------------------
+    //                                                Option
+    //                                                ------
     public int getMaxPoolSize() {
         return maxPoolSize;
     }
@@ -513,6 +522,14 @@ public class SimpleConnectionPool implements ConnectionPool {
 
     public void setMaxWait(long maxWait) {
         this.maxWait = maxWait;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 
     public boolean isAllowLocalTx() {
@@ -555,6 +572,9 @@ public class SimpleConnectionPool implements ConnectionPool {
         this.validationInterval = validationInterval;
     }
 
+    // -----------------------------------------------------
+    //                                             Pool Size
+    //                                             ---------
     public int getActivePoolSize() {
         return activePool.size();
     }
