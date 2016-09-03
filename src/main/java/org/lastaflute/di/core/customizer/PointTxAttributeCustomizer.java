@@ -68,7 +68,7 @@ public abstract class PointTxAttributeCustomizer extends AbstractCustomizer {
     }
 
     protected boolean isOutOfTxMethod(Transactional methodAttr, Method method) {
-        return methodAttr == null && !isImplicitTxSupportedMethod(method);
+        return methodAttr == null || isImplicitTxSupportedMethod(method);
     }
 
     protected abstract boolean isImplicitTxSupportedMethod(Method method);
