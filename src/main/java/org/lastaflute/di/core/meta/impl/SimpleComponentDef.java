@@ -18,6 +18,7 @@ package org.lastaflute.di.core.meta.impl;
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.assembler.AutoBindingDefFactory;
+import org.lastaflute.di.core.exception.ComponentPropertyNotFoundException;
 import org.lastaflute.di.core.expression.Expression;
 import org.lastaflute.di.core.meta.ArgDef;
 import org.lastaflute.di.core.meta.AspectDef;
@@ -28,7 +29,6 @@ import org.lastaflute.di.core.meta.InstanceDef;
 import org.lastaflute.di.core.meta.InterTypeDef;
 import org.lastaflute.di.core.meta.MetaDef;
 import org.lastaflute.di.core.meta.PropertyDef;
-import org.lastaflute.di.helper.beans.exception.BeanPropertyNotFoundException;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -164,7 +164,9 @@ public class SimpleComponentDef implements ComponentDef {
     }
 
     public PropertyDef getPropertyDef(String propertyName) {
-        throw new BeanPropertyNotFoundException(componentClass, propertyName);
+        String exp = (componentClass != null ? componentClass.getName() : componentName) + "@" + propertyName;
+        String msg = "Not found the property of the component: " + exp;
+        throw new ComponentPropertyNotFoundException(msg, componentClass, propertyName);
     }
 
     public void addInitMethodDef(InitMethodDef methodDef) {

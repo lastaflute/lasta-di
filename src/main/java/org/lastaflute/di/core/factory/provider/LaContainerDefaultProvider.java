@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.core.LaContainer;
-import org.lastaflute.di.core.exception.ExtensionNotFoundRuntimeException;
+import org.lastaflute.di.core.exception.DiXmlExtensionNotFoundException;
 import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
 import org.lastaflute.di.core.factory.LaContainerFactory;
 import org.lastaflute.di.core.factory.conbuilder.LaContainerBuilder;
@@ -118,15 +118,15 @@ public class LaContainerDefaultProvider implements LaContainerProvider {
         }
     }
 
-    protected String getExtension(final String path) {
+    protected String getExtension(String path) {
         final String ext = LdiResourceUtil.getExtension(path);
-        if (ext == null) {
-            throw new ExtensionNotFoundRuntimeException(path);
+        if (ext == null) { // translated by outer process with parent info so simple here
+            throw new DiXmlExtensionNotFoundException("Not found the extension in the Di xml path: " + path, path);
         }
         return ext;
     }
 
-    protected LaContainerBuilder getBuilder(final String ext) {
+    protected LaContainerBuilder getBuilder(String ext) {
         final String componentName = ext + "Redefined";
         final LaContainer configurationContainer = LaContainerFactory.getConfigurationContainer();
         if (configurationContainer != null && configurationContainer.hasComponentDef(componentName)) {

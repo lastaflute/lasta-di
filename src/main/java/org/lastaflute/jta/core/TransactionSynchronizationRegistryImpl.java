@@ -38,22 +38,31 @@ import org.slf4j.LoggerFactory;
  */
 public class TransactionSynchronizationRegistryImpl implements TransactionSynchronizationRegistry {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final Logger logger = LoggerFactory.getLogger(TransactionSynchronizationRegistryImpl.class);
 
-    private TransactionManager tm;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private final TransactionManager transactionManager;
     private final Map<Transaction, SynchronizationRegisterImpl> transactionContexts =
             Collections.synchronizedMap(new HashMap<Transaction, SynchronizationRegisterImpl>());
 
-    public TransactionSynchronizationRegistryImpl() {
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    public TransactionSynchronizationRegistryImpl(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
-    public TransactionSynchronizationRegistryImpl(TransactionManager tm) {
-        this.tm = tm;
-    }
-
+    // ===================================================================================
+    //                                                                      Implementation
+    //                                                                      ==============
     public void putResource(final Object key, final Object value) {
         if (key == null) {
-            throw new NullPointerException("key");
+            throw new IllegalArgumentException("key");
         }
         assertActive();
         getContext().putResource(key, value);
@@ -61,7 +70,7 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
 
     public Object getResource(final Object key) {
         if (key == null) {
-            throw new NullPointerException("key");
+            throw new IllegalArgumentException("key");
         }
         assertActive();
         return getContext().getResource(key);
@@ -69,7 +78,7 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
 
     public void setRollbackOnly() {
         assertActive();
-        LjtTransactionManagerUtil.setRollbackOnly(tm);
+        LjtTransactionManagerUtil.setRollbackOnly(transactionManager);
     }
 
     public boolean getRollbackOnly() {
@@ -90,7 +99,7 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
     }
 
     public int getTransactionStatus() {
-        return LjtTransactionManagerUtil.getStatus(tm);
+        return LjtTransactionManagerUtil.getStatus(transactionManager);
     }
 
     public void registerInterposedSynchronization(final Synchronization sync) {
@@ -98,18 +107,21 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
         getContext().registerInterposedSynchronization(sync);
     }
 
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
     protected Transaction getTransaction() {
-        return LjtTransactionManagerUtil.getTransaction(tm);
+        return LjtTransactionManagerUtil.getTransaction(transactionManager);
     }
 
     protected void assertActive() throws IllegalStateException {
         if (!isActive()) {
-            throw new LjtIllegalStateException("Not begun transaction: transaction=" + tm);
+            throw new LjtIllegalStateException("Not begun transaction: transaction=" + transactionManager);
         }
     }
 
     protected boolean isActive() {
-        return LjtTransactionManagerUtil.isActive(tm);
+        return LjtTransactionManagerUtil.isActive(transactionManager);
     }
 
     protected SynchronizationRegister getContext() {
@@ -126,6 +138,9 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
         return context;
     }
 
+    // ===================================================================================
+    //                                                            Synchronization Register
+    //                                                            ========================
     public class SynchronizationRegisterImpl implements SynchronizationRegister, Synchronization {
 
         private final Transaction tx;
@@ -168,12 +183,5 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
             }
             transactionContexts.remove(tx);
         }
-    }
-
-    // ===================================================================================
-    //                                                                            Accessor
-    //                                                                            ========
-    public void setTransactionManager(TransactionManager tm) {
-        this.tm = tm;
     }
 }

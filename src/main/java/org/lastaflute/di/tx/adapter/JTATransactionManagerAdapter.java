@@ -31,17 +31,29 @@ import org.lastaflute.di.tx.TransactionManagerAdapter;
  */
 public class JTATransactionManagerAdapter implements TransactionManagerAdapter, Status {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final LaLogger logger = LaLogger.getLogger(JTATransactionManagerAdapter.class);
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     protected final UserTransaction userTransaction;
     protected final TransactionManager transactionManager;
 
-    public JTATransactionManagerAdapter(final UserTransaction userTransaction, final TransactionManager transactionManager) {
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    public JTATransactionManagerAdapter(UserTransaction userTransaction, TransactionManager transactionManager) {
         this.userTransaction = userTransaction;
         this.transactionManager = transactionManager;
     }
 
-    public Object required(final TransactionCallback callback) throws Throwable {
+    // ===================================================================================
+    //                                                                      Implementation
+    //                                                                      ==============
+    public Object required(TransactionCallback callback) throws Throwable {
         final boolean began = begin();
         try {
             return callback.execute(this);
@@ -52,7 +64,7 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
         }
     }
 
-    public Object requiresNew(final TransactionCallback callback) throws Throwable {
+    public Object requiresNew(TransactionCallback callback) throws Throwable {
         final Transaction tx = suspend();
         try {
             begin();
@@ -68,14 +80,14 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
         }
     }
 
-    public Object mandatory(final TransactionCallback callback) throws Throwable {
+    public Object mandatory(TransactionCallback callback) throws Throwable {
         if (!hasTransaction()) {
             throw new SIllegalStateException("ESSR0311", null);
         }
         return callback.execute(this);
     }
 
-    public Object notSupported(final TransactionCallback callback) throws Throwable {
+    public Object notSupported(TransactionCallback callback) throws Throwable {
         final Transaction tx = suspend();
         try {
             return callback.execute(this);
@@ -86,7 +98,7 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
         }
     }
 
-    public Object never(final TransactionCallback callback) throws Throwable {
+    public Object never(TransactionCallback callback) throws Throwable {
         if (hasTransaction()) {
             throw new SIllegalStateException("ESSR0317", null);
         }
@@ -103,6 +115,9 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
         }
     }
 
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
     protected boolean hasTransaction() throws SystemException {
         final int status = userTransaction.getStatus();
         return status != STATUS_NO_TRANSACTION && status != STATUS_UNKNOWN;
@@ -128,7 +143,7 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
         return hasTransaction() ? transactionManager.suspend() : null;
     }
 
-    protected void resume(final Transaction transaction) throws Exception {
+    protected void resume(Transaction transaction) throws Exception {
         transactionManager.resume(transaction);
     }
 }

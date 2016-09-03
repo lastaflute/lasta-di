@@ -21,11 +21,6 @@ import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 
-import org.lastaflute.jta.core.RestrictedTransactionImpl;
-import org.lastaflute.jta.core.TransactionManagerImpl;
-import org.lastaflute.jta.core.TransactionSynchronizationRegistryImpl;
-import org.lastaflute.jta.core.UserTransactionImpl;
-
 import junit.framework.TestCase;
 
 /**

@@ -13,25 +13,23 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockcomp.dockside;
-
-import javax.annotation.Resource;
+package org.lastaflute.di.core.exception;
 
 /**
- * @author jflute
+ * @author modified by jflute (originated in Seasar)
  */
-public class MockDocksideStage {
+public class DiXmlExtensionNotFoundException extends RuntimeException {
 
-    @Resource
-    private MockOverTheWaves overTheWaves;
+    private static final long serialVersionUID = 1L;
 
-    public MockTableIsWaiting tableIsWaiting; // as property
+    protected final String specifiedPath;
 
-    public MockOverTheWaves takeOverTheWaves() {
-        return overTheWaves;
+    public DiXmlExtensionNotFoundException(String msg, String specifiedPath) {
+        super(msg);
+        this.specifiedPath = specifiedPath;
     }
 
-    public MockTableIsWaiting takeTableIsWaiting() {
-        return tableIsWaiting;
+    public String getSpecifiedPath() {
+        return specifiedPath;
     }
 }

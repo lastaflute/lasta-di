@@ -13,25 +13,22 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockcomp.dockside;
-
-import javax.annotation.Resource;
+package org.lastaflute.di.mockcomp.hangar;
 
 /**
  * @author jflute
  */
-public class MockDocksideStage {
+public class MockMysticRhythms {
 
-    @Resource
-    private MockOverTheWaves overTheWaves;
+    private boolean createdByFactoryMethod;
 
-    public MockTableIsWaiting tableIsWaiting; // as property
-
-    public MockOverTheWaves takeOverTheWaves() {
-        return overTheWaves;
+    public static MockMysticRhythms create() { // for expression test
+        MockMysticRhythms rhythms = new MockMysticRhythms();
+        rhythms.createdByFactoryMethod = true;
+        return rhythms;
     }
 
-    public MockTableIsWaiting takeTableIsWaiting() {
-        return tableIsWaiting;
+    public boolean isCreatedByFactoryMethod() {
+        return createdByFactoryMethod;
     }
 }

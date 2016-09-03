@@ -2,13 +2,7 @@
 <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
 	"http://dbflute.org/meta/lastadi10.dtd">
 <components namespace="jta">
-
-	<component name="userTransaction" class="org.lastaflute.jta.core.UserTransactionImpl"/>
-	<component name="transactionManager" class="org.lastaflute.jta.core.TransactionManagerImpl"/>
-
-	<!-- TransactionSynchronizationRegistry using TransactionManager -->
-	<component name="transactionSynchronizationRegistry" class="org.lastaflute.jta.core.TransactionSynchronizationRegistryImpl"/>
-
-	<!-- TransactionManagerAdapter using JTA's TransactionManager -->
-	<component name="transactionManagerAdapter" class="org.lastaflute.di.tx.adapter.JTATransactionManagerAdapter"/>
+	<include condition="#exists('#path')" path="my_jta.xml"/>
+	<include condition="#exists('#path')" path="lastafw_jta.xml"/>
+	<include path="embedded_jta.xml"/>
 </components>

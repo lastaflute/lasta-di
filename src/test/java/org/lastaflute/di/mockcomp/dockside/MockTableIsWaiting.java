@@ -15,23 +15,20 @@
  */
 package org.lastaflute.di.mockcomp.dockside;
 
-import javax.annotation.Resource;
-
 /**
  * @author jflute
  */
-public class MockDocksideStage {
+public class MockTableIsWaiting {
 
-    @Resource
-    private MockOverTheWaves overTheWaves;
+    private boolean createdByFactoryMethod;
 
-    public MockTableIsWaiting tableIsWaiting; // as property
-
-    public MockOverTheWaves takeOverTheWaves() {
-        return overTheWaves;
+    public static MockTableIsWaiting create() { // for expression test
+        MockTableIsWaiting waiting = new MockTableIsWaiting();
+        waiting.createdByFactoryMethod = true;
+        return waiting;
     }
 
-    public MockTableIsWaiting takeTableIsWaiting() {
-        return tableIsWaiting;
+    public boolean isCreatedByFactoryMethod() {
+        return createdByFactoryMethod;
     }
 }
