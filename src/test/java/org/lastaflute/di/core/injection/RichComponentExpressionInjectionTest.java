@@ -17,6 +17,8 @@ package org.lastaflute.di.core.injection;
 
 import org.lastaflute.di.mockcomp.dockside.MockDocksideStage;
 import org.lastaflute.di.mockcomp.dockside.MockOverTheWaves;
+import org.lastaflute.di.mockcomp.hangar.MockHangarStage;
+import org.lastaflute.di.mockcomp.hangar.MockMysticRhythms;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
 /**
@@ -29,7 +31,7 @@ public class RichComponentExpressionInjectionTest extends UnitLastaDiTestCase {
         return "test_expression.xml";
     }
 
-    public void test_injection_by_expressionComponent() throws Exception {
+    public void test_injection_by_expressionComponent_factory() throws Exception {
         // ## Arrange ##
         MockDocksideStage stage = getComponent(MockDocksideStage.class);
         log(stage);
@@ -40,5 +42,18 @@ public class RichComponentExpressionInjectionTest extends UnitLastaDiTestCase {
         MockOverTheWaves overTheWaves = stage.takeOverTheWaves();
         assertNotNull(overTheWaves);
         assertTrue(overTheWaves.isCreatedByFactoryMethod());
+    }
+
+    public void test_injection_by_expressionComponent_switchedFactory() throws Exception {
+        // ## Arrange ##
+        MockHangarStage stage = getComponent(MockHangarStage.class);
+        log(stage);
+        assertNotNull(stage);
+
+        // ## Act ##
+        // ## Assert ##
+        MockMysticRhythms mysticRhythms = stage.takeMysticRhythms();
+        assertNotNull(mysticRhythms);
+        assertTrue(mysticRhythms.isCreatedByFactoryMethod());
     }
 }

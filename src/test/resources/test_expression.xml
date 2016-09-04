@@ -8,4 +8,11 @@
 	<component name="overTheWaves" class="org.lastaflute.di.mockcomp.dockside.MockOverTheWaves">
 		@org.lastaflute.di.mockcomp.dockside.MockOverTheWaves@create()
 	</component>
+
+	<component name="hangarStage" class="org.lastaflute.di.mockcomp.hangar.MockHangarStage"/>
+	<component name="mysticRhythms" class="org.lastaflute.di.mockcomp.hangar.MockMysticRhythms">
+		true
+			? org.lastaflute.di.mockcomp.hangar.MockMysticRhythms.create()
+			: new org.lastaflute.di.mockcomp.hangar.MockMysticRhythms()
+	</component>
 </components>
