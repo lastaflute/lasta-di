@@ -34,11 +34,14 @@ import org.lastaflute.di.redefiner.util.LaContainerBuilderUtils;
  * used in DefaultProvider#getBuilder()
  * @author modified by jflute (originated in Ymir)
  */
-public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
+public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder { // for e.g. ++jta.xml, ++jta.xml
 
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    // e.g.
+    //  ++jta.xml => [NAME_ADDITIONAL][DELIMITER]jta.xml
+    //  jta++.xml => jta.xml[DELIMITER][NAME_ADDITIONAL]
     public static final String DELIMITER = "+";
     protected static final String NAME_ADDITIONAL = "+";
 
@@ -71,8 +74,8 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
     protected LaContainer parse(LaContainer parent, String path) {
         pushPath(path);
         try {
-            final LaContainer container = super.parse(parent, path);
-            mergeContainers(container, path, true);
+            final LaContainer container = super.parse(parent, path); // contains e.g. jta+.xml, jta+userTransaction.xml handling
+            mergeContainers(container, path, true); // fixedly tail e.g. jta++.xml
             return container;
         } finally {
             popPath(path);
@@ -143,7 +146,7 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
         return urlSet;
     }
 
-    protected String[] constructAdditionalDiconPaths(String path, boolean addToTail) {
+    protected String[] constructAdditionalDiconPaths(String path, boolean addToTail) { // e.g. ++jta.xml, jta++.xml
         final int delimiter = path.lastIndexOf(DELIMITER);
         final int slash = path.lastIndexOf('/');
         if (delimiter >= 0 && delimiter > slash) {
@@ -176,7 +179,7 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
             sb.append(NAME_ADDITIONAL).append(DELIMITER);
         }
         sb.append(name);
-        if (addToTail) {
+        if (addToTail) { // fixedly here e.g. jta++.xml
             sb.append(DELIMITER).append(NAME_ADDITIONAL);
         }
         sb.append(suffix);
@@ -186,6 +189,7 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder {
             pathList.add(additionalResourcePath);
         }
         pathList.add(additionalPath);
+
         return pathList.toArray(new String[0]);
     }
 }

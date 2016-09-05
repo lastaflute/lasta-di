@@ -2,7 +2,7 @@
 <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
 	"http://dbflute.org/meta/lastadi10.dtd">
 <components namespace="rdb"> <!-- included by e.g. dbflute.xml, for main schema -->
-	<include path="jta.xml"/>
-	<include path="jdbc.xml"/> <!-- provided by e.g. LastaFlute or application -->
-	<include path="tx_aop.xml"/>
+	<include path="jta.xml"/> <!-- transaction components, basically common in all databases -->
+	<include path="jdbc.xml"/> <!-- connection settings provided by e.g. LastaFlute or application -->
+	<include path="tx_aop.xml"/> <!-- transaction handling by annotation  -->
 </components>

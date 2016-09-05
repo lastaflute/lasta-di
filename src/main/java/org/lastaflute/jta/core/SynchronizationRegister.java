@@ -21,10 +21,10 @@ import javax.transaction.Synchronization;
  * @author modified by jflute (originated in Seasar)
  */
 public interface SynchronizationRegister {
+
     void registerInterposedSynchronization(Synchronization sync) throws IllegalStateException;
 
     void putResource(Object key, Object value) throws IllegalStateException;
 
     Object getResource(Object key) throws IllegalStateException;
-
 }

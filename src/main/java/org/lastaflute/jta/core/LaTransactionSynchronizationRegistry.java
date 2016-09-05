@@ -36,12 +36,12 @@ import org.slf4j.LoggerFactory;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class TransactionSynchronizationRegistryImpl implements TransactionSynchronizationRegistry {
+public class LaTransactionSynchronizationRegistry implements TransactionSynchronizationRegistry {
 
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final Logger logger = LoggerFactory.getLogger(TransactionSynchronizationRegistryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(LaTransactionSynchronizationRegistry.class);
 
     // ===================================================================================
     //                                                                           Attribute
@@ -53,7 +53,7 @@ public class TransactionSynchronizationRegistryImpl implements TransactionSynchr
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public TransactionSynchronizationRegistryImpl(TransactionManager transactionManager) {
+    public LaTransactionSynchronizationRegistry(TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 

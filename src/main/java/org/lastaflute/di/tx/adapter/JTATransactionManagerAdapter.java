@@ -40,15 +40,15 @@ public class JTATransactionManagerAdapter implements TransactionManagerAdapter, 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected final UserTransaction userTransaction;
     protected final TransactionManager transactionManager;
+    protected final UserTransaction userTransaction;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public JTATransactionManagerAdapter(UserTransaction userTransaction, TransactionManager transactionManager) {
-        this.userTransaction = userTransaction;
+    public JTATransactionManagerAdapter(TransactionManager transactionManager, UserTransaction userTransaction) {
         this.transactionManager = transactionManager;
+        this.userTransaction = userTransaction;
     }
 
     // ===================================================================================

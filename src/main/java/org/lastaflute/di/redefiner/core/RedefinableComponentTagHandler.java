@@ -38,7 +38,7 @@ import org.lastaflute.di.util.LdiStringUtil;
 /**
  * @author modified by jflute (originated in Ymir)
  */
-public class RedefinableComponentTagHandler extends ComponentTagHandler {
+public class RedefinableComponentTagHandler extends ComponentTagHandler { // for e.g. jta+userTransaction.xml
 
     private static final long serialVersionUID = 2513809305883784501L;
 
@@ -69,12 +69,12 @@ public class RedefinableComponentTagHandler extends ComponentTagHandler {
                 final String basePath = (String) context.getParameter(PARAMETER_BASEPATH);
                 final RedefinableXmlLaContainerBuilder builder = (RedefinableXmlLaContainerBuilder) context.getParameter(PARAMETER_BUILDER);
                 final LaContainer redefined = redefine(componentDef, basePath, builder);
-                if (redefined != null) {
+                if (redefined != null) { // switch the component by name e.g. jta+userTransaction.xml
                     LaContainerBuilderUtils.mergeContainer(container, redefined);
-                } else {
+                } else { // normally here
                     container.register(componentDef);
                 }
-            } else {
+            } else { // no-name component
                 container.register(componentDef);
             }
         } else {
@@ -86,7 +86,7 @@ public class RedefinableComponentTagHandler extends ComponentTagHandler {
     protected LaContainer redefine(ComponentDef componentDef, String path, RedefinableXmlLaContainerBuilder builder) {
         int delimiter = path.lastIndexOf(DELIMITER);
         int slash = path.lastIndexOf('/');
-        if (delimiter >= 0 && delimiter > slash) {
+        if (delimiter >= 0 && delimiter > slash) { // e.g. jta+userTransaction.xml, jta++.xml
             return null; // no handling if the resource name contains '+'
         }
 
@@ -122,7 +122,7 @@ public class RedefinableComponentTagHandler extends ComponentTagHandler {
         if (resourcePath != null) {
             pathList.add(resourcePath);
         }
-        pathList.add(body + DELIMITER + name + suffix);
+        pathList.add(body + DELIMITER + name + suffix); // e.g. jta+userTransaction.xml
         return pathList.toArray(new String[0]);
     }
 }

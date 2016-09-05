@@ -30,7 +30,7 @@ import org.lastaflute.di.util.LdiResourceUtil;
 /**
  * @author modified by jflute (originated in Ymir)
  */
-public class RedefinableResourceResolver extends ClassPathResourceResolver {
+public class RedefinableResourceResolver extends ClassPathResourceResolver { // for e.g. jta+.xml
 
     private static final char COLON = ':';
 
@@ -40,6 +40,7 @@ public class RedefinableResourceResolver extends ClassPathResourceResolver {
             try {
                 InputStream is = super.getInputStream(paths[i]);
                 if (is != null) {
+                    // #hope logging but difficult for beautiful style by jflute (2016/09/05)
                     return is;
                 }
             } catch (IORuntimeException ignored) {
@@ -71,8 +72,7 @@ public class RedefinableResourceResolver extends ClassPathResourceResolver {
                         } catch (IOException ignore) {}
                     }
                 }
-            } catch (MalformedURLException ignore) {
-            }
+            } catch (MalformedURLException ignore) {}
         }
         return LdiResourceUtil.getResourceNoException(path);
     }
@@ -83,7 +83,6 @@ public class RedefinableResourceResolver extends ClassPathResourceResolver {
         if (delimiter >= 0 && delimiter > slash) {
             return new String[0]; // no handling if the resource name contains '+'
         }
-
         final List<String> pathList = new ArrayList<String>();
         final String body;
         final String suffix;
@@ -100,7 +99,7 @@ public class RedefinableResourceResolver extends ClassPathResourceResolver {
         if (resourceBody != null) {
             pathList.add(resourceBody);
         }
-        pathList.add(body + RedefinableXmlLaContainerBuilder.DELIMITER + suffix);
+        pathList.add(body + RedefinableXmlLaContainerBuilder.DELIMITER + suffix); // e.g. jta+.xml
         return pathList.toArray(new String[0]);
     }
 }

@@ -34,14 +34,14 @@ public class RestrictedTransactionImplTest extends TestCase {
 
     TransactionSynchronizationRegistry synchronizationRegistry;
 
-    RestrictedTransactionImpl tx;
+    RestrictedTransaction tx;
 
     protected void setUp() throws Exception {
         super.setUp();
         underlyingTm = new LaTransactionManager();
         userTransaction = new LaUserTransaction(underlyingTm);
-        synchronizationRegistry = new TransactionSynchronizationRegistryImpl(underlyingTm);
-        tx = new RestrictedTransactionImpl(userTransaction, synchronizationRegistry);
+        synchronizationRegistry = new LaTransactionSynchronizationRegistry(underlyingTm);
+        tx = new RestrictedTransaction(userTransaction, synchronizationRegistry);
     }
 
     /**

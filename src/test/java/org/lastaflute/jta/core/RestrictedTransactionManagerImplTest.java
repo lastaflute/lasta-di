@@ -20,9 +20,9 @@ import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 
-import org.lastaflute.jta.core.RestrictedTransactionManagerImpl;
+import org.lastaflute.jta.core.RestrictedTransactionManager;
 import org.lastaflute.jta.core.LaTransactionManager;
-import org.lastaflute.jta.core.TransactionSynchronizationRegistryImpl;
+import org.lastaflute.jta.core.LaTransactionSynchronizationRegistry;
 import org.lastaflute.jta.core.LaUserTransaction;
 import org.lastaflute.jta.unit.UnitLastaJtaTest;
 
@@ -37,14 +37,14 @@ public class RestrictedTransactionManagerImplTest extends UnitLastaJtaTest {
 
     TransactionSynchronizationRegistry synchronizationRegistry;
 
-    RestrictedTransactionManagerImpl tm;
+    RestrictedTransactionManager tm;
 
     protected void setUp() throws Exception {
         super.setUp();
         underlyingTm = new LaTransactionManager();
         userTransaction = new LaUserTransaction(underlyingTm);
-        synchronizationRegistry = new TransactionSynchronizationRegistryImpl(underlyingTm);
-        tm = new RestrictedTransactionManagerImpl(userTransaction, synchronizationRegistry);
+        synchronizationRegistry = new LaTransactionSynchronizationRegistry(underlyingTm);
+        tm = new RestrictedTransactionManager(userTransaction, synchronizationRegistry);
     }
 
     /**

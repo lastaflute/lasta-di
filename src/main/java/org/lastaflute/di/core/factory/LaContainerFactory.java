@@ -15,8 +15,6 @@
  */
 package org.lastaflute.di.core.factory;
 
-import java.util.Set;
-
 import org.lastaflute.di.Disposable;
 import org.lastaflute.di.DisposableUtil;
 import org.lastaflute.di.core.ExternalContext;
@@ -59,7 +57,6 @@ public class LaContainerFactory {
     protected static LaContainer configurationContainer;
     protected static LaContainerProvider provider;
     protected static LaContainerBuilder defaultBuilder;
-    protected static final ThreadLocal<Set<String>> processingPaths = new ThreadLocal<Set<String>>();
 
     static {
         configure();
@@ -140,7 +137,7 @@ public class LaContainerFactory {
     }
 
     protected static void doConfigure(String configFile) {
-        show("...Reading {}", configFile);
+        show("...Reading {}", configFile); // first configuration so no indent (see LaContainerDefaultProvider)
         final LaContainerBuilder builder = newConfigurationContainerBuilder();
         configurationContainer = builder.build(configFile);
         configurationContainer.init();
@@ -162,7 +159,9 @@ public class LaContainerFactory {
     }
 
     protected static DiXmlLaContainerBuilder newConfigurationContainerBuilder() {
-        return new DiXmlLaContainerBuilder(); // TODO jflute lastaflute: [F] improvement: ConfigurationContainer, redefine here?
+        // cannot be redefiner, maybe redefiner uses configuration?
+        // and unneeded because creator, customizer uses component priority pattern 
+        return new DiXmlLaContainerBuilder();
     }
 
     protected static DefaultConfigurator newDefaultConfigurator() {

@@ -30,12 +30,12 @@ import javax.transaction.UserTransaction;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class RestrictedTransactionManagerImpl implements TransactionManager {
+public class RestrictedTransactionManager implements TransactionManager {
 
     protected final UserTransaction userTransaction;
     protected final TransactionSynchronizationRegistry synchronizationRegistry;
 
-    public RestrictedTransactionManagerImpl(UserTransaction userTransaction, TransactionSynchronizationRegistry synchronizationRegistry) {
+    public RestrictedTransactionManager(UserTransaction userTransaction, TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
         this.synchronizationRegistry = synchronizationRegistry;
     }
@@ -58,9 +58,9 @@ public class RestrictedTransactionManagerImpl implements TransactionManager {
         if (status == Status.STATUS_NO_TRANSACTION || status == Status.STATUS_UNKNOWN) {
             return null;
         }
-        RestrictedTransactionImpl tx = (RestrictedTransactionImpl) synchronizationRegistry.getResource(this);
+        RestrictedTransaction tx = (RestrictedTransaction) synchronizationRegistry.getResource(this);
         if (tx == null) {
-            tx = new RestrictedTransactionImpl(userTransaction, synchronizationRegistry);
+            tx = new RestrictedTransaction(userTransaction, synchronizationRegistry);
             synchronizationRegistry.putResource(this, tx);
         }
         return tx;
