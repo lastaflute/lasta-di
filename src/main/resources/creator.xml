@@ -4,6 +4,11 @@
 <components>
 	<include path="convention.xml"/>
 	<include path="customizer.xml"/>
+
+	<!-- priority component pattern's attention:
+	 o plural instances are created
+	 o don't use DI in the same file, cannot be swtiched
+	 -->
 	<include condition="#exists('#path')" path="my_creator.xml"/>
 	<include condition="#exists('#path')" path="lastafw_creator.xml"/>
 	<include path="embedded_creator.xml"/>

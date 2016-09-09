@@ -107,9 +107,10 @@ public class BeanDescImpl implements BeanDesc {
     }
 
     public PropertyDesc getPropertyDesc(String propertyName) throws BeanPropertyNotFoundException {
-        PropertyDesc pd = (PropertyDesc) propertyDescCache.get(propertyName);
+        final PropertyDesc pd = (PropertyDesc) propertyDescCache.get(propertyName);
         if (pd == null) {
-            throw new BeanPropertyNotFoundException(beanClass, propertyName);
+            String msg = "Not found the bean property: " + beanClass.getName() + "@" + propertyName;
+            throw new BeanPropertyNotFoundException(msg, beanClass, propertyName);
         }
         return pd;
     }

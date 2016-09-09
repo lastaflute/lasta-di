@@ -29,13 +29,13 @@ import javax.transaction.xa.XAResource;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class RestrictedTransactionImpl implements Transaction {
+public class RestrictedTransaction implements Transaction {
 
     protected UserTransaction userTransaction;
 
     protected TransactionSynchronizationRegistry synchronizationRegistry;
 
-    public RestrictedTransactionImpl(final UserTransaction userTransaction,
+    public RestrictedTransaction(final UserTransaction userTransaction,
             final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
         this.synchronizationRegistry = synchronizationRegistry;

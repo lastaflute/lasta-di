@@ -13,18 +13,22 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.jta.core;
-
-import javax.transaction.Synchronization;
+package org.lastaflute.di.mockcomp.dockside;
 
 /**
- * @author modified by jflute (originated in Seasar)
+ * @author jflute
  */
-public interface SynchronizationRegister {
+public class MockTableIsWaiting {
 
-    void registerInterposedSynchronization(Synchronization sync) throws IllegalStateException;
+    private boolean createdByFactoryMethod;
 
-    void putResource(Object key, Object value) throws IllegalStateException;
+    public static MockTableIsWaiting create() { // for expression test
+        MockTableIsWaiting waiting = new MockTableIsWaiting();
+        waiting.createdByFactoryMethod = true;
+        return waiting;
+    }
 
-    Object getResource(Object key) throws IllegalStateException;
+    public boolean isCreatedByFactoryMethod() {
+        return createdByFactoryMethod;
+    }
 }

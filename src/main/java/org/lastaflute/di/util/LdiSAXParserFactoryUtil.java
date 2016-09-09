@@ -37,20 +37,10 @@ public class LdiSAXParserFactoryUtil {
         return SAXParserFactory.newInstance();
     }
 
-    /**
-     * @return 
-     * @throws SAXRuntimeException
-     */
     public static SAXParser newSAXParser() {
         return newSAXParser(newInstance());
     }
 
-    /**
-     * @param factory
-     *            {@link SAXParserFactory}
-     * @return 
-     * @throws SAXRuntimeException
-     */
     public static SAXParser newSAXParser(SAXParserFactory factory) {
         try {
             return factory.newSAXParser();
@@ -61,12 +51,6 @@ public class LdiSAXParserFactoryUtil {
         }
     }
 
-    /**
-     * @param spf
-     *            {@link SAXParserFactory}
-     * @param state
-     * @return 
-     */
     public static boolean setXIncludeAware(final SAXParserFactory spf, final boolean state) {
         try {
             final Method method = spf.getClass().getMethod("setXIncludeAware", new Class[] { boolean.class });

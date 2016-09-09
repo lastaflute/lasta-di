@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class TransactionImpl implements ExtendedTransaction, SynchronizationRegister {
+public class LaTransaction implements ExtendedTransaction, SynchronizationRegister {
 
-    private static Logger logger = LoggerFactory.getLogger(TransactionImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(LaTransaction.class);
 
     private static final int VOTE_READONLY = 0;
     private static final int VOTE_COMMIT = 1;
@@ -52,14 +52,14 @@ public class TransactionImpl implements ExtendedTransaction, SynchronizationRegi
 
     private Xid xid;
     private int status = Status.STATUS_NO_TRANSACTION;
-    private List<XAResourceWrapper> xaResourceWrappers = new ArrayList<XAResourceWrapper>();
-    private List<Synchronization> synchronizations = new ArrayList<Synchronization>();
-    private List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
-    private Map<Object, Object> resourceMap = new HashMap<Object, Object>();
+    private final List<XAResourceWrapper> xaResourceWrappers = new ArrayList<XAResourceWrapper>();
+    private final List<Synchronization> synchronizations = new ArrayList<Synchronization>();
+    private final List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
+    private final Map<Object, Object> resourceMap = new HashMap<Object, Object>();
     private boolean suspended = false;
     private int branchId = 0;
 
-    public TransactionImpl() {
+    public LaTransaction() {
     }
 
     public void begin() throws NotSupportedException, SystemException {

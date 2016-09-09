@@ -13,29 +13,17 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.helper.beans.exception;
+package org.lastaflute.jta.core;
 
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class BeanPropertyNotFoundException extends RuntimeException {
+public class LaTransactionManager extends AbstractTransactionManager {
 
-    private static final long serialVersionUID = 1L;
-
-    protected final Class<?> targetClass;
-    protected final String propertyName;
-
-    public BeanPropertyNotFoundException(String msg, Class<?> componentClass, String propertyName) {
-        super(msg);
-        this.targetClass = componentClass;
-        this.propertyName = propertyName;
+    public LaTransactionManager() {
     }
 
-    public Class<?> getTargetClass() {
-        return targetClass;
-    }
-
-    public String getPropertyName() {
-        return propertyName;
+    protected ExtendedTransaction createTransaction() {
+        return new LaTransaction();
     }
 }

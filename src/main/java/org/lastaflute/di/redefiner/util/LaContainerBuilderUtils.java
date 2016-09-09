@@ -91,6 +91,7 @@ public class LaContainerBuilderUtils {
             container.addMetaDef(metaDef);
         }
 
+        // cannot override, always add
         size = merged.getComponentDefSize();
         for (int i = 0; i < size; i++) {
             ComponentDef componentDef = merged.getComponentDef(i);

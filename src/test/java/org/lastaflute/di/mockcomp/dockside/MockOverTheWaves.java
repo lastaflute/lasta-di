@@ -13,17 +13,22 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.jta.core;
+package org.lastaflute.di.mockcomp.dockside;
 
 /**
- * @author modified by jflute (originated in Seasar)
+ * @author jflute
  */
-public class TransactionManagerImpl extends AbstractTransactionManagerImpl {
+public class MockOverTheWaves {
 
-    public TransactionManagerImpl() {
+    private boolean createdByFactoryMethod;
+
+    public static MockOverTheWaves create() { // for expression test
+        MockOverTheWaves waves = new MockOverTheWaves();
+        waves.createdByFactoryMethod = true;
+        return waves;
     }
 
-    protected ExtendedTransaction createTransaction() {
-        return new TransactionImpl();
+    public boolean isCreatedByFactoryMethod() {
+        return createdByFactoryMethod;
     }
 }

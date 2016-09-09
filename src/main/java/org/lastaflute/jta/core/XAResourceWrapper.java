@@ -19,6 +19,9 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
+/**
+ * @author modified by jflute (originated in Seasar)
+ */
 class XAResourceWrapper {
 
     private XAResource xaResource_;
@@ -30,7 +33,6 @@ class XAResourceWrapper {
     private boolean voteOk_ = true;
 
     XAResourceWrapper(XAResource xaResource, Xid xid, boolean commitTarget) {
-
         xaResource_ = xaResource;
         xid_ = xid;
         commitTarget_ = commitTarget;

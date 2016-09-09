@@ -13,29 +13,23 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.helper.beans.exception;
+package org.lastaflute.di.core.exception;
 
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class BeanPropertyNotFoundException extends RuntimeException {
+public class DiXmlExtensionNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    protected final Class<?> targetClass;
-    protected final String propertyName;
+    protected final String specifiedPath;
 
-    public BeanPropertyNotFoundException(String msg, Class<?> componentClass, String propertyName) {
+    public DiXmlExtensionNotFoundException(String msg, String specifiedPath) {
         super(msg);
-        this.targetClass = componentClass;
-        this.propertyName = propertyName;
+        this.specifiedPath = specifiedPath;
     }
 
-    public Class<?> getTargetClass() {
-        return targetClass;
-    }
-
-    public String getPropertyName() {
-        return propertyName;
+    public String getSpecifiedPath() {
+        return specifiedPath;
     }
 }

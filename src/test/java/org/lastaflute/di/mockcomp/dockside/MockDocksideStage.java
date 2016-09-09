@@ -13,18 +13,25 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.jta.core;
+package org.lastaflute.di.mockcomp.dockside;
 
-import javax.transaction.Synchronization;
+import javax.annotation.Resource;
 
 /**
- * @author modified by jflute (originated in Seasar)
+ * @author jflute
  */
-public interface SynchronizationRegister {
+public class MockDocksideStage {
 
-    void registerInterposedSynchronization(Synchronization sync) throws IllegalStateException;
+    @Resource
+    private MockOverTheWaves overTheWaves;
 
-    void putResource(Object key, Object value) throws IllegalStateException;
+    public MockTableIsWaiting tableIsWaiting; // as property
 
-    Object getResource(Object key) throws IllegalStateException;
+    public MockOverTheWaves takeOverTheWaves() {
+        return overTheWaves;
+    }
+
+    public MockTableIsWaiting takeTableIsWaiting() {
+        return tableIsWaiting;
+    }
 }

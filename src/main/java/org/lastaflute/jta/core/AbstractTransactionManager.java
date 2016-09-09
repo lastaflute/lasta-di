@@ -32,11 +32,11 @@ import org.lastaflute.jta.util.LjtTransactionUtil;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public abstract class AbstractTransactionManagerImpl implements TransactionManager {
+public abstract class AbstractTransactionManager implements TransactionManager {
 
     protected final ThreadLocal<ExtendedTransaction> threadAttachTx = new ThreadLocal<ExtendedTransaction>();
 
-    public AbstractTransactionManagerImpl() {
+    public AbstractTransactionManager() {
     }
 
     public void begin() throws NotSupportedException, SystemException {

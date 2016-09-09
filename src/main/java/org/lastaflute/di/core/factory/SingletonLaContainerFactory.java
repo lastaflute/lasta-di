@@ -86,8 +86,7 @@ public class SingletonLaContainerFactory {
     protected static void setupSmartDeployMode() {
         final String smartDeployMode = LastaDiProperties.getInstance().getSmartDeployMode();
         if (smartDeployMode != null) {
-            logger.info("...Setting smart deploy mode: {}", smartDeployMode);
-            SmartDeployMode.setValue(SmartDeployMode.codeOf(smartDeployMode));
+            SmartDeployMode.setValue(SmartDeployMode.codeOf(smartDeployMode)); // with logging
         } else {
             logger.info("*Not found smart deploy mode property so use default mode: {}", SmartDeployMode.getValue());
         }

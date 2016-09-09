@@ -15,30 +15,27 @@
  */
 package org.lastaflute.di.core.exception;
 
-import org.lastaflute.di.exception.SRuntimeException;
-
 /**
- * @author modified by jflute (originated in Seasar)
- * @author belltree
+ * @author jflute
  */
-public class ExtensionNotFoundRuntimeException extends SRuntimeException {
+public class ComponentPropertyNotFoundException extends RuntimeException {
 
-    private static final long serialVersionUID = 4105296013672747434L;
+    private static final long serialVersionUID = 1L;
 
-    private String path_;
+    protected final Class<?> targetClass;
+    protected final String propertyName;
 
-    /**
-     * @param path
-     */
-    public ExtensionNotFoundRuntimeException(String path) {
-        super("ESSR0074", new Object[] { path });
-        path_ = path;
+    public ComponentPropertyNotFoundException(String msg, Class<?> componentClass, String propertyName) {
+        super(msg);
+        this.targetClass = componentClass;
+        this.propertyName = propertyName;
     }
 
-    /**
-     * @return 
-     */
-    public String getPath() {
-        return path_;
+    public Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
     }
 }

@@ -15,6 +15,9 @@
  */
 package org.lastaflute.di.core.smart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author jflute
  */
@@ -22,6 +25,7 @@ public enum SmartDeployMode {
 
     COOL("cool"), HOT("hot"), WARM("warm");
 
+    private static final Logger logger = LoggerFactory.getLogger(SmartDeployMode.class);
     private static SmartDeployMode value;
 
     private final String code;
@@ -54,7 +58,8 @@ public enum SmartDeployMode {
         return value != null ? value : SmartDeployMode.COOL;
     }
 
-    public static void setValue(SmartDeployMode newValue) {
+    public static void setValue(SmartDeployMode newValue) { // called by e.g. container factory, unit test
+        logger.info("...Setting smart deploy mode: {}", newValue);
         value = newValue;
     }
 
