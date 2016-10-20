@@ -93,43 +93,43 @@ public class MessageResourceBundleFactory {
     //                                                              ======================
     protected static String[] calculateBundleNames(String baseName, Locale locale) {
         int length = 1;
-        boolean l = locale.getLanguage().length() > 0;
-        if (l) {
+        boolean hasLanguage = locale.getLanguage().length() > 0;
+        if (hasLanguage) {
             length++;
         }
-        boolean c = locale.getCountry().length() > 0;
-        if (c) {
+        boolean hasCountry = locale.getCountry().length() > 0;
+        if (hasCountry) {
             length++;
         }
-        boolean v = locale.getVariant().length() > 0;
-        if (v) {
+        boolean hasVariant = locale.getVariant().length() > 0;
+        if (hasVariant) {
             length++;
         }
         String[] result = new String[length];
         int index = 0;
         result[index++] = baseName;
 
-        if (!(l || c || v)) {
+        if (!(hasLanguage || hasCountry || hasVariant)) {
             return result;
         }
 
         StringBuffer buffer = new StringBuffer(baseName);
         buffer.append('_');
         buffer.append(locale.getLanguage());
-        if (l) {
+        if (hasLanguage) {
             result[index++] = new String(buffer);
         }
 
-        if (!(c || v)) {
+        if (!(hasCountry || hasVariant)) {
             return result;
         }
         buffer.append('_');
         buffer.append(locale.getCountry());
-        if (c) {
+        if (hasCountry) {
             result[index++] = new String(buffer);
         }
 
-        if (!v) {
+        if (!hasVariant) {
             return result;
         }
         buffer.append('_');

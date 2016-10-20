@@ -17,6 +17,7 @@ package org.lastaflute.di.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Properties;
 
 import org.lastaflute.di.exception.IORuntimeException;
@@ -29,9 +30,17 @@ public class LdiPropertiesUtil {
     protected LdiPropertiesUtil() {
     }
 
-    public static void load(Properties props, InputStream in) throws IORuntimeException {
+    public static void load(Properties props, InputStream ins) throws IORuntimeException {
         try {
-            props.load(in);
+            props.load(ins);
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
+    }
+
+    public static void load(Properties props, Reader reader) throws IORuntimeException {
+        try {
+            props.load(reader);
         } catch (IOException e) {
             throw new IORuntimeException(e);
         }

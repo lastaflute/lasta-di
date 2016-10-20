@@ -16,8 +16,11 @@
 package org.lastaflute.di.helper.message;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -104,17 +107,33 @@ public class MessageResourceBundleFacade {
         return createProperties(LdiURLUtil.openStream(url));
     }
 
-    protected Properties createProperties(InputStream is) {
-        LdiAssertionUtil.assertNotNull("is", is);
-        if (!(is instanceof BufferedInputStream)) {
-            is = new BufferedInputStream(is);
+    protected Properties createProperties(InputStream ins) {
+        LdiAssertionUtil.assertNotNull("ins", ins);
+        if (!(ins instanceof BufferedInputStream)) {
+            ins = new BufferedInputStream(ins);
         }
         try {
-            Properties properties = new Properties();
-            LdiPropertiesUtil.load(properties, is);
-            return properties;
+            Properties prop = createProperties();
+            loadProperties(prop, ins, getPropertiesEncoding());
+            return prop;
         } finally {
-            LdiInputStreamUtil.close(is);
+            LdiInputStreamUtil.close(ins);
+        }
+    }
+
+    protected Properties createProperties() {
+        return new Properties();
+    }
+
+    protected String getPropertiesEncoding() {
+        return "UTF-8"; // as default
+    }
+
+    protected void loadProperties(Properties properties, InputStream ins, String encoding) {
+        try {
+            LdiPropertiesUtil.load(properties, new BufferedReader(new InputStreamReader(ins, encoding)));
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Unsupported encoding: " + encoding);
         }
     }
 
