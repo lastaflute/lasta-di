@@ -29,12 +29,6 @@ public class LdiFileInputStreamUtil {
     protected LdiFileInputStreamUtil() {
     }
 
-    /**
-     * @param file
-     * @return {@link FileInputStream}
-     * @throws IORuntimeException
-     * @see FileInputStream#FileInputStream(File)
-     */
     public static FileInputStream create(File file) throws IORuntimeException {
         try {
             return new FileInputStream(file);
