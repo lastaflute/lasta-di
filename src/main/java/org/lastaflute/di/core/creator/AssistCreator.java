@@ -30,11 +30,11 @@ public class AssistCreator extends ComponentCreatorImpl {
         setInstanceDef(InstanceDefFactory.PROTOTYPE);
     }
 
-    public ComponentCustomizer getHelperCustomizer() {
+    public ComponentCustomizer getAssistCustomizer() {
         return getCustomizer();
     }
 
-    public void setHelperCustomizer(ComponentCustomizer customizer) {
+    public void setAssistCustomizer(ComponentCustomizer customizer) {
         setCustomizer(customizer);
     }
 }
