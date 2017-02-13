@@ -64,7 +64,8 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     protected String viewExtension = ".html";
 
     protected String[] rootPackageNames = new String[0];
-    protected String subApplicationRootPackageName = "web";
+    protected String webRootPackageName = "web";
+    protected String jobRootPackageName = "job"; // #since_lasta_di for LastaJob (and JobAssist)
     protected String[] ignorePackageNames = new String[0];
 
     protected final Set<String> hotdeployRootPackageNames = new HashSet<String>(4);
@@ -127,7 +128,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     //                                                          Root Package Determination
     //                                                          ==========================
     @Override
-    public boolean isTargetClassName(final String className, final String suffix) {
+    public boolean isTargetClassName(final String className, final String suffix) { // *important
         if (isIgnoreClassName(className)) {
             return false;
         }
@@ -136,14 +137,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         }
         final String shortClassName = LdiClassUtil.getShortClassName(className);
         if (className.endsWith(implementationSuffix) && !className.endsWith("." + getImplementationPackageName() + "." + shortClassName)) {
-            return false;
+            return false; // e.g. SeaImpl, but not 'impl' package
         }
-        final String middlePkgName = fromSuffixToPackageName(suffix);
+        final String middlePackageName = fromSuffixToPackageName(suffix); // e.g. (Logic to) logic, (Job to) job
         for (int i = 0; i < rootPackageNames.length; ++i) {
-            if (className.startsWith(rootPackageNames[i] + "." + middlePkgName + ".")) {
+            if (className.startsWith(rootPackageNames[i] + "." + middlePackageName + ".")) { // e.g. app.logic.
                 return true;
             }
-            if (className.startsWith(rootPackageNames[i] + "." + subApplicationRootPackageName + ".")) {
+            if (className.startsWith(buildRootAndWebPackagePrefix(i))) { // e.g. app.web.
+                return true;
+            }
+            if (className.startsWith(buildRootAndJobPackagePrefix(i))) { // e.g. app.job. #since_lasta_di
                 return true;
             }
         }
@@ -189,6 +193,9 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     // ===================================================================================
     //                                                                        Convert from
     //                                                                        ============
+    // -----------------------------------------------------
+    //                                 Suffix to PackageName
+    //                                 ---------------------
     @Override
     public String fromSuffixToPackageName(final String suffix) {
         if (LdiStringUtil.isEmpty(suffix)) {
@@ -197,6 +204,9 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return suffix.toLowerCase();
     }
 
+    // -----------------------------------------------------
+    //                       ClassName to ShortComponentName
+    //                       -------------------------------
     @Override
     public String fromClassNameToShortComponentName(final String className) {
         if (LdiStringUtil.isEmpty(className)) {
@@ -209,61 +219,78 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return s;
     }
 
+    // -----------------------------------------------------
+    //                            ClassName to ComponentName
+    //                            --------------------------
     @Override
-    public String fromClassNameToComponentName(final String className) {
+    public String fromClassNameToComponentName(final String className) { // *important
         if (LdiStringUtil.isEmpty(className)) {
             throw new EmptyRuntimeException("className");
         }
-        String cname = toInterfaceClassName(className);
-        String suffix = fromClassNameToSuffix(cname);
-        String middlePackageName = fromSuffixToPackageName(suffix);
+        final String interfaceClassName = toInterfaceClassName(className);
+        final String suffix = fromClassNameToSuffix(interfaceClassName);
+        final String middlePackageName = fromSuffixToPackageName(suffix);
         String name = null;
         for (int i = 0; i < rootPackageNames.length; ++i) {
             String prefix = rootPackageNames[i] + "." + middlePackageName + ".";
-            if (cname.startsWith(prefix)) {
-                name = cname.substring(prefix.length());
+            if (interfaceClassName.startsWith(prefix)) {
+                name = interfaceClassName.substring(prefix.length());
             }
         }
         if (LdiStringUtil.isEmpty(name)) {
             for (int i = 0; i < rootPackageNames.length; ++i) {
-                String prefix = rootPackageNames[i] + "." + subApplicationRootPackageName + ".";
-                if (cname.startsWith(prefix)) {
-                    name = cname.substring(prefix.length());
+                final String webPackagePrefix = buildRootAndWebPackagePrefix(i);
+                if (interfaceClassName.startsWith(webPackagePrefix)) {
+                    name = interfaceClassName.substring(webPackagePrefix.length());
+                } else {
+                    final String jobPackagePrefix = buildRootAndJobPackagePrefix(i); // #since_lasta_di for LastaJob
+                    if (interfaceClassName.startsWith(jobPackagePrefix)) {
+                        name = interfaceClassName.substring(jobPackagePrefix.length());
+                    }
                 }
             }
             if (LdiStringUtil.isEmpty(name)) {
                 return fromClassNameToShortComponentName(className);
             }
         }
-        String[] array = LdiStringUtil.split(name, ".");
-        StringBuffer buf = new StringBuffer();
+        final String[] array = LdiStringUtil.split(name, ".");
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < array.length; ++i) {
             if (i == array.length - 1) {
-                buf.append(LdiStringUtil.decapitalize(array[i]));
+                sb.append(LdiStringUtil.decapitalize(array[i]));
             } else {
-                buf.append(array[i]);
-                buf.append('_');
+                sb.append(array[i]).append('_');
             }
         }
-        return buf.toString();
+        return sb.toString();
     }
 
+    // -----------------------------------------------------
+    //                                ComponentName to Class
+    //                                ----------------------
     @Override
-    public Class<?> fromComponentNameToClass(final String componentName) {
+    public Class<?> fromComponentNameToClass(final String componentName) { // *important
         if (LdiStringUtil.isEmpty(componentName)) {
             throw new EmptyRuntimeException("componentName");
         }
-        String suffix = fromComponentNameToSuffix(componentName);
+        final String suffix = fromComponentNameToSuffix(componentName);
         if (suffix == null) {
             return null;
         }
-        String middlePackageName = fromSuffixToPackageName(suffix);
-        String partOfClassName = fromComponentNameToPartOfClassName(componentName);
-        boolean subAppSuffix = isSubApplicationSuffix(suffix);
+        final String middlePackageName = fromSuffixToPackageName(suffix);
+        final String partOfClassName = fromComponentNameToPartOfClassName(componentName);
+        final boolean subAppSuffix = isSubAppSuffix(suffix);
+        final boolean webAppSufix = isWebAppSuffix(suffix);
+        final boolean jobAppSufix = isJobAppSuffix(suffix);
         for (int i = 0; i < rootPackageNames.length; ++i) {
-            String rootPackageName = rootPackageNames[i];
-            if (subAppSuffix) {
-                Class<?> clazz = findClass(rootPackageName, subApplicationRootPackageName, partOfClassName);
+            final String rootPackageName = rootPackageNames[i];
+            if (subAppSuffix) { // first search sub application package
+                Class<?> clazz = null;
+                if (webAppSufix) {
+                    clazz = findWebClass(rootPackageName, partOfClassName);
+                } else if (jobAppSufix) {
+                    clazz = findJobClass(rootPackageName, partOfClassName);
+                }
                 if (clazz != null) {
                     return clazz;
                 }
@@ -276,7 +303,11 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
                 if (clazz != null) {
                     return clazz;
                 }
-                clazz = findClass(rootPackageName, subApplicationRootPackageName, partOfClassName);
+                if (webAppSufix) {
+                    clazz = findWebClass(rootPackageName, partOfClassName);
+                } else if (jobAppSufix) {
+                    clazz = findJobClass(rootPackageName, partOfClassName);
+                }
                 if (clazz != null) {
                     return clazz;
                 }
@@ -285,44 +316,61 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return null;
     }
 
-    protected boolean isSubApplicationSuffix(final String suffix) {
-        if (actionSuffix.equals(suffix)) {
-            return true;
-        }
-        if (serviceSuffix.equals(suffix)) {
-            return true;
-        }
-        return false;
+    protected boolean isSubAppSuffix(String suffix) {
+        return isWebAppSuffix(suffix) || isJobAppSuffix(suffix);
+    }
+
+    protected boolean isWebAppSuffix(String suffix) {
+        // service is unnneeded for Lasta Di but for compatible
+        return actionSuffix.equals(suffix) || serviceSuffix.equals(suffix);
+    }
+
+    protected boolean isJobAppSuffix(String suffix) {
+        return jobSuffix.equals(suffix); // #since_lasta_di for LastaJob
     }
 
     protected Class<?> findClass(final String rootPackageName, final String middlePackageName, final String partOfClassName) {
         initialize();
-
         final String backPartOfClassName = LdiClassUtil.concatName(middlePackageName, partOfClassName);
         final String className = LdiClassUtil.concatName(rootPackageName, backPartOfClassName);
         final String backPartOfImplClassName = toImplementationClassName(backPartOfClassName);
         final String implClassName = LdiClassUtil.concatName(rootPackageName, backPartOfImplClassName);
-
         if (!isIgnoreClassName(implClassName) && isExist(rootPackageName, backPartOfImplClassName)) {
             return LdiClassUtil.forName(implClassName);
         }
-
         if (!isIgnoreClassName(className) && isExist(rootPackageName, backPartOfClassName)) {
             return LdiClassUtil.forName(className);
         }
         return null;
     }
 
+    protected Class<?> findWebClass(String rootPackageName, String partOfClassName) {
+        return findClass(rootPackageName, webRootPackageName, partOfClassName);
+    }
+
+    protected Class<?> findJobClass(String rootPackageName, String partOfClassName) { // #since_lasta_di for LastaJob
+        return findClass(rootPackageName, jobRootPackageName, partOfClassName);
+    }
+
+    // -----------------------------------------------------
+    //                               ComponentName to Suffix
+    //                               -----------------------
     @Override
     public String fromComponentNameToSuffix(final String componentName) {
         return fromNameToSuffix(componentName);
     }
 
+    // -----------------------------------------------------
+    //                                   ClassName to Suffix
+    //                                   -------------------
     @Override
     public String fromClassNameToSuffix(final String componentName) {
         return fromNameToSuffix(componentName);
     }
 
+    // -----------------------------------------------------
+    //                      ComponentName to PartOfClassName
+    //                      --------------------------------
     @Override
     public String fromComponentNameToPartOfClassName(final String componentName) {
         if (componentName == null) {
@@ -365,11 +413,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return componentName.substring(0, pos + 1) + LdiStringUtil.decapitalize(componentName.substring(pos + 1));
     }
 
+    // -----------------------------------------------------
+    //                                    Path to ActionName
+    //                                    ------------------
     @Override
     public String fromPathToActionName(final String path) {
         return fromPathToComponentName(path, actionSuffix);
     }
 
+    // -----------------------------------------------------
+    //                                    ActionName to Path
+    //                                    ------------------
     @Override
     public String fromActionNameToPath(final String actionName) {
         if (!actionName.endsWith(actionSuffix)) {
@@ -461,6 +515,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     protected void addExistChecker(final String rootPackageName) {
         final Resources[] checkerArray = LdiResourcesUtil.getResourcesTypes(rootPackageName);
         existCheckerArrays.put(rootPackageName, checkerArray);
+    }
+
+    // ===================================================================================
+    //                                                              Sub Application Assist
+    //                                                              ======================
+    protected String buildRootAndWebPackagePrefix(int rootIndex) {
+        return rootPackageNames[rootIndex] + "." + webRootPackageName + ".";
+    }
+
+    protected String buildRootAndJobPackagePrefix(int rootIndex) {
+        return rootPackageNames[rootIndex] + "." + jobRootPackageName + ".";
     }
 
     // ===================================================================================
@@ -660,11 +725,29 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     @Override
-    public String getSubApplicationRootPackageName() {
-        return subApplicationRootPackageName;
+    public String getSubApplicationRootPackageName() { // for compatible
+        return webRootPackageName; // for compatible
     }
 
     public void setSubApplicationRootPackageName(final String subApplicationRootPackageName) {
-        this.subApplicationRootPackageName = subApplicationRootPackageName;
+        this.webRootPackageName = subApplicationRootPackageName;
+    }
+
+    @Override
+    public String getWebRootPackageName() {
+        return webRootPackageName;
+    }
+
+    public void setWebRootPackageName(String webRootPackageName) {
+        this.webRootPackageName = webRootPackageName;
+    }
+
+    @Override
+    public String getJobRootPackageName() {
+        return jobRootPackageName;
+    }
+
+    public void setJobRootPackageName(String jobRootPackageName) {
+        this.jobRootPackageName = jobRootPackageName;
     }
 }

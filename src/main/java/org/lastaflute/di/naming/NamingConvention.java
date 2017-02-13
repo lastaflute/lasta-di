@@ -124,5 +124,9 @@ public interface NamingConvention {
 
     String[] getIgnorePackageNames(); // not null
 
-    String getSubApplicationRootPackageName(); // not null basically 'web'
+    String getSubApplicationRootPackageName(); // not null basically 'web' for compatible
+
+    String getWebRootPackageName(); // not null basically 'web'
+
+    String getJobRootPackageName(); // not null basically 'job'
 }
