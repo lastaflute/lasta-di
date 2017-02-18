@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * @author modified by jflute (originated in Seasar)
+ * @author jflute
  */
 public class JobCreator extends ComponentCreatorImpl {
 
@@ -30,11 +30,11 @@ public class JobCreator extends ComponentCreatorImpl {
         setInstanceDef(InstanceDefFactory.PROTOTYPE);
     }
 
-    public ComponentCustomizer getHelperCustomizer() {
+    public ComponentCustomizer getJobCustomizer() {
         return getCustomizer();
     }
 
-    public void setHelperCustomizer(ComponentCustomizer customizer) {
+    public void setJobCustomizer(ComponentCustomizer customizer) {
         setCustomizer(customizer);
     }
 }

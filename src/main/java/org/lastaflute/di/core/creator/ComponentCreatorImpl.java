@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import org.lastaflute.di.naming.NamingConvention;
  */
 public class ComponentCreatorImpl implements ComponentCreator {
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     private final NamingConvention namingConvention;
 
     public static final String instanceDef_BINDING = "bindingType=may";
@@ -51,6 +54,9 @@ public class ComponentCreatorImpl implements ComponentCreator {
     private String nameSuffix;
     private ComponentCustomizer customizer;
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public ComponentCreatorImpl(NamingConvention namingConvention) {
         if (namingConvention == null) {
             throw new EmptyRuntimeException("namingConvetion");
@@ -58,6 +64,65 @@ public class ComponentCreatorImpl implements ComponentCreator {
         this.namingConvention = namingConvention;
     }
 
+    // ===================================================================================
+    //                                                                       Component Def
+    //                                                                       =============
+    public ComponentDef createComponentDef(Class<?> componentClass) {
+        if (!namingConvention.isTargetClassName(componentClass.getName(), nameSuffix)) {
+            return null;
+        }
+        final Class<?> targetClass = namingConvention.toCompleteClass(componentClass);
+        if (targetClass.isInterface()) {
+            if (!isEnableInterface()) {
+                return null;
+            }
+        } else if (Modifier.isAbstract(targetClass.getModifiers())) {
+            if (!isEnableAbstract()) {
+                return null;
+            }
+        }
+        final AnnotationHandler handler = AnnotationHandlerFactory.getAnnotationHandler();
+        final ComponentDef cd = handler.createComponentDef(targetClass, instanceDef, autoBindingDef, externalBinding);
+        if (cd.getComponentName() == null) {
+            cd.setComponentName(namingConvention.fromClassNameToComponentName(targetClass.getName()));
+        }
+        setupCompleteComponent(handler, cd);
+        return cd;
+    }
+
+    public ComponentDef createComponentDef(String componentName) {
+        if (!isTargetComponentName(componentName)) {
+            return null;
+        }
+        final Class<?> componentClass = namingConvention.fromComponentNameToClass(componentName);
+        if (componentClass == null) {
+            return null;
+        }
+        return createComponentDef(componentClass);
+    }
+
+    public boolean isTargetComponentName(String componentName) {
+        return componentName.endsWith(nameSuffix);
+    }
+
+    protected void setupCompleteComponent(AnnotationHandler handler, ComponentDef cd) {
+        handler.appendDI(cd);
+        customize(cd);
+        handler.appendInitMethod(cd);
+        handler.appendDestroyMethod(cd);
+        handler.appendAspect(cd);
+        handler.appendInterType(cd);
+    }
+
+    protected void customize(ComponentDef componentDef) {
+        if (customizer != null) {
+            customizer.customize(componentDef);
+        }
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
     public NamingConvention getNamingConvention() {
         return namingConvention;
     }
@@ -116,54 +181,5 @@ public class ComponentCreatorImpl implements ComponentCreator {
 
     protected void setCustomizer(ComponentCustomizer customizer) {
         this.customizer = customizer;
-    }
-
-    public ComponentDef createComponentDef(Class<?> componentClass) {
-        if (!namingConvention.isTargetClassName(componentClass.getName(), nameSuffix)) {
-            return null;
-        }
-        final Class<?> targetClass = namingConvention.toCompleteClass(componentClass);
-        if (targetClass.isInterface()) {
-            if (!isEnableInterface()) {
-                return null;
-            }
-        } else if (Modifier.isAbstract(targetClass.getModifiers())) {
-            if (!isEnableAbstract()) {
-                return null;
-            }
-        }
-        final AnnotationHandler handler = AnnotationHandlerFactory.getAnnotationHandler();
-        final ComponentDef cd = handler.createComponentDef(targetClass, instanceDef, autoBindingDef, externalBinding);
-        if (cd.getComponentName() == null) {
-            cd.setComponentName(namingConvention.fromClassNameToComponentName(targetClass.getName()));
-        }
-        handler.appendDI(cd);
-        customize(cd);
-        handler.appendInitMethod(cd);
-        handler.appendDestroyMethod(cd);
-        handler.appendAspect(cd);
-        handler.appendInterType(cd);
-        return cd;
-    }
-
-    public ComponentDef createComponentDef(String componentName) {
-        if (!isTargetComponentName(componentName)) {
-            return null;
-        }
-        final Class<?> componentClass = namingConvention.fromComponentNameToClass(componentName);
-        if (componentClass == null) {
-            return null;
-        }
-        return createComponentDef(componentClass);
-    }
-
-    public boolean isTargetComponentName(String componentName) {
-        return componentName.endsWith(nameSuffix);
-    }
-
-    protected void customize(ComponentDef componentDef) {
-        if (customizer != null) {
-            customizer.customize(componentDef);
-        }
     }
 }
