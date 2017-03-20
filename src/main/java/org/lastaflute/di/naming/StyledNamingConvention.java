@@ -307,6 +307,11 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
                     clazz = findWebClass(rootPackageName, partOfClassName);
                 } else if (jobAppSufix) {
                     clazz = findJobClass(rootPackageName, partOfClassName);
+                } else { // e.g. base_login_harborLoginAssist (by "pickup" method)
+                    clazz = findWebClass(rootPackageName, partOfClassName); // find as web at first
+                    if (clazz == null) {
+                        clazz = findJobClass(rootPackageName, partOfClassName); // and job as next
+                    }
                 }
                 if (clazz != null) {
                     return clazz;
