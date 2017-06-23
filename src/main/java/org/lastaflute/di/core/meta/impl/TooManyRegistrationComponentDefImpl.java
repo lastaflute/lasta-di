@@ -52,9 +52,20 @@ public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef impl
         br.addItem("Registered Components");
         for (ComponentDef def : getComponentDefs()) {
             final String componentName = def.getComponentName();
-            final String typeName = def.getComponentClass().getName();
-            final String definedPath = def.getContainer().getPath();
-            br.addElement("name=" + componentName + ", type=" + typeName + ", path=" + definedPath);
+            final String componentType = def.getComponentClass().getName();
+            Object componentInstance = null;
+            try {
+                componentInstance = def.getComponent();
+            } catch (RuntimeException ignored) { // nested too many...no way but just in case
+            }
+            final String definedDiXml = def.getContainer().getPath();
+            br.addElement("componentName: " + componentName);
+            br.addElement("  componentType: " + componentType);
+            if (componentInstance != null) { // just in case
+                br.addElement("  componentInstance: " + componentInstance);
+                br.addElement("  classLoader: " + componentInstance.getClass().getClassLoader());
+            }
+            br.addElement("  definedDiXml: " + definedDiXml);
         }
         final String msg = br.buildExceptionMessage();
         throw new TooManyRegistrationComponentException(msg, key, componentDefs);

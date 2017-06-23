@@ -50,7 +50,7 @@ public class HarborBoot {
 <dependency>
     <groupId>org.lastaflute</groupId>
     <artifactId>lasta-di</artifactId>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
 </dependency>
 ```
 
