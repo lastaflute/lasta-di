@@ -119,30 +119,45 @@ public class LastaDiProperties {
             final String locKey = SMART_DEPLOY_MODE_LOCATION_KEY;
             final String location = getProperty(locKey);
             if (location != null && !location.isEmpty()) {
-                final String delimiter = ":";
-                final int delimiterIndex = location.indexOf(":");
-                if (delimiterIndex < 0) {
-                    String msg = "The location should have delimiter colon ':' in " + LASTA_DI_PROPERTIES + " but: " + location;
-                    throw new IllegalStateException(msg);
-                }
-                final String propName = resolveLastaEnvPath(location.substring(0, delimiterIndex).trim());
-                final String modeKey = location.substring(delimiterIndex + delimiter.length()).trim();
-                logger.info("...Loading specified properties and get by the key: {}, {}", propName, modeKey);
-                final Properties read = loadProperties(propName);
-                if (read == null) {
-                    throwSmartDeployPropertiesFileNotFoundException(location, propName, modeKey);
-                }
-                final String realMode = read.getProperty(modeKey);
-                if (realMode == null) {
-                    throwSmartDeployPropertiesModeKeyNotFoundException(location, propName, modeKey);
-                }
-                smartDeployMode = realMode;
+                smartDeployMode = deriveSmartDeployModeFromLocation(location);
             } else {
                 logger.info("*Not found the smart-deploy mode location: {} in {}", locKey, LASTA_DI_PROPERTIES);
             }
             smartDeployLocationDone = true;
             return smartDeployMode;
         }
+    }
+
+    protected String deriveSmartDeployModeFromLocation(String location) {
+        final String delimiter = ":";
+        final int delimiterIndex = location.indexOf(":");
+        if (delimiterIndex < 0) {
+            String msg = "The location should have delimiter colon ':' in " + LASTA_DI_PROPERTIES + " but: " + location;
+            throw new IllegalStateException(msg);
+        }
+        // e.g.
+        //  maihana_env.properties: lasta_di.smart.deploy.mode
+        //  orleans_env.properties extends maihana_env.properties: lasta_di.smart.deploy.mode
+        final String modeKey = location.substring(delimiterIndex + delimiter.length()).trim(); // e.g. lasta_di.smart.deploy.mode
+        final String propExp = location.substring(0, delimiterIndex).trim(); // e.g. maihana_env.properties
+        final List<String> propList = LdiSrl.splitListTrimmed(propExp, " extends ");
+        String realMode = null;
+        for (String propName : propList) { // e.g. [orleans_env.properties, maihana_env.properties]
+            final String resolvedName = resolveLastaEnvPath(propName); // e.g. maihana_env_production.properties
+            logger.info("...Loading specified properties and get by the key: {}, {}", resolvedName, modeKey);
+            final Properties read = loadProperties(resolvedName);
+            if (read == null) {
+                throwSmartDeployPropertiesFileNotFoundException(location, resolvedName, modeKey);
+            }
+            realMode = read.getProperty(modeKey);
+            if (realMode != null) {
+                break;
+            }
+        }
+        if (realMode == null) {
+            throwSmartDeployPropertiesModeKeyNotFoundException(location, propExp, modeKey);
+        }
+        return realMode;
     }
 
     protected void throwSmartDeployPropertiesFileNotFoundException(String location, String propName, String modeKey) {
