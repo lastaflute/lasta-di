@@ -64,7 +64,6 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
     private AutoBindingDef autoBindingDef = AutoBindingDefFactory.AUTO;
     private ComponentDeployer componentDeployer;
     private boolean externalBinding = false;
-    private final String creatorThreadCode; // for too-many handling of hot-deploy
 
     // ===================================================================================
     //                                                                         Constructor
@@ -76,11 +75,8 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
     public ComponentDefImpl(Class<?> componentClass, String componentName) {
         this.componentClass = componentClass;
         setComponentName(componentName);
-        creatorThreadCode = prepareCreatorThreadCode();
-    }
-
-    protected String prepareCreatorThreadCode() {
-        return ComponentCreatorAgent.prepareCreatorThreadCode();
+        // *no needed because of HotdeployBehavior synchronization by jflute (2017/06/25)
+        //creatorThreadCode = prepareCreatorThreadCode();
     }
 
     @Override
@@ -94,7 +90,7 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
     //                                                                           =========
     @Override
     public Object getComponent() {
-        return getComponentDeployer().deploy();
+        return getComponentDeployer().deploy(); // new-created if prototype, same instance if singleton
     }
 
     @Override
@@ -336,9 +332,5 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
 
     public void setExternalBinding(boolean externalBinding) {
         this.externalBinding = externalBinding;
-    }
-
-    public String getCreatorThreadCode() {
-        return creatorThreadCode;
     }
 }

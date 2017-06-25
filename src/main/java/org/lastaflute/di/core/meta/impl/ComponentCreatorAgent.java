@@ -15,41 +15,37 @@
  */
 package org.lastaflute.di.core.meta.impl;
 
-import java.util.List;
-
-import org.lastaflute.di.core.ComponentDef;
-import org.lastaflute.di.core.smart.hot.HotdeployUtil;
-
 /**
  * @author jflute
  * @since 0.7.5 (2017/06/25 Sunday at bay maihama)
  */
 public class ComponentCreatorAgent {
 
-    public static String prepareCreatorThreadCode() { // static for performance
-        return isUseCreatorThreadCode() ? generateCurrentCode() : null;
-    }
-
-    public static Object findComponentByCreatorThreadCode(List<ComponentDef> componentDefs) {
-        if (isUseCreatorThreadCode()) {
-            final String currentCode = generateCurrentCode();
-            for (ComponentDef componentDef : componentDefs) {
-                final String creatorThreadCode = componentDef.getCreatorThreadCode(); // null allowed
-                if (currentCode.equals(creatorThreadCode)) {
-                    return componentDef.getComponent(); // first found
-                }
-            }
-        }
-        return null;
-    }
-
-    protected static boolean isUseCreatorThreadCode() {
-        return HotdeployUtil.isThreadContextHotdeploy(); // only for hot-deploy (too-many registration) for now
-    }
-
-    protected static String generateCurrentCode() { // static for performance
-        final Thread thread = Thread.currentThread();
-        final String name = thread.getName(); // to identify even if thread recycle
-        return name + "_" + Integer.toHexString(thread.hashCode());
-    }
+    // *no needed because of HotdeployBehavior synchronization by jflute (2017/06/25)
+    //public static String prepareCreatorThreadCode() { // static for performance
+    //    return isUseCreatorThreadCode() ? generateCurrentCode() : null;
+    //}
+    //
+    //public static Object findComponentByCreatorThreadCode(List<ComponentDef> componentDefs) {
+    //    if (isUseCreatorThreadCode()) {
+    //        final String currentCode = generateCurrentCode();
+    //        for (ComponentDef componentDef : componentDefs) {
+    //            final String creatorThreadCode = componentDef.getCreatorThreadCode(); // null allowed
+    //            if (currentCode.equals(creatorThreadCode)) {
+    //                return componentDef.getComponent(); // first found
+    //            }
+    //        }
+    //    }
+    //    return null;
+    //}
+    //
+    //protected static boolean isUseCreatorThreadCode() {
+    //    return HotdeployUtil.isThreadContextHotdeploy(); // only for hot-deploy (too-many registration) for now
+    //}
+    //
+    //protected static String generateCurrentCode() { // static for performance
+    //    final Thread thread = Thread.currentThread();
+    //    final String name = thread.getName(); // to identify even if thread recycle
+    //    return name + "_" + Integer.toHexString(thread.hashCode());
+    //}
 }

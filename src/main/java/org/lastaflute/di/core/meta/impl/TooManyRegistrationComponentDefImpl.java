@@ -40,16 +40,13 @@ public class TooManyRegistrationComponentDefImpl extends SimpleComponentDef impl
     }
 
     public Object getComponent() throws TooManyRegistrationComponentException {
-        final Object foundByCreator = findComponentByCreatorThreadCode();
-        if (foundByCreator != null) {
-            return foundByCreator;
-        }
+        // *no needed because of HotdeployBehavior synchronization by jflute (2017/06/25)
+        //final Object foundByCreator = findComponentByCreatorThreadCode();
+        //if (foundByCreator != null) {
+        //    return foundByCreator;
+        //}
         throwTooManyRegistrationComponentException();
         return null; // unreachacle
-    }
-
-    protected Object findComponentByCreatorThreadCode() {
-        return ComponentCreatorAgent.findComponentByCreatorThreadCode(componentDefs);
     }
 
     protected void throwTooManyRegistrationComponentException() {
