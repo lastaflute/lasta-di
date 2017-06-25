@@ -246,4 +246,9 @@ public class SimpleComponentDef implements ComponentDef {
 
     public void destroy() {
     }
+
+    @Override
+    public String getCreatorThreadCode() {
+        return null;
+    }
 }

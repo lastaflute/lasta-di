@@ -83,4 +83,6 @@ public interface ComponentDef
     boolean isExternalBinding();
 
     void setExternalBinding(boolean externalBinding);
+
+    String getCreatorThreadCode(); // null allowed if e.g. simple component, cool deploy
 }
