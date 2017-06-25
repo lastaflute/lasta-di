@@ -36,7 +36,7 @@ public class ComponentCreatorAgent {
             for (ComponentDef componentDef : componentDefs) {
                 final String creatorThreadCode = componentDef.getCreatorThreadCode(); // null allowed
                 if (currentCode.equals(creatorThreadCode)) {
-                    return componentDef; // first found
+                    return componentDef.getComponent(); // first found
                 }
             }
         }
