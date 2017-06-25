@@ -233,7 +233,7 @@ public class LastaDiProperties {
                 if (diXmlScriptExpressionEngineType == null) {
                     final String engineName = getDiXmlScriptExpressionEngine();
                     if (engineName != null) {
-                        // TODO jflute lastaflute: [E] fitting: DI :: expression engine creation error handling
+                        // #hope jflute lastaflute: [E] fitting: DI :: expression engine creation error handling
                         diXmlScriptExpressionEngineType = LdiClassUtil.forName(engineName);
                     }
                     diXmlScriptExpressionEngineTypeDone = true;
@@ -303,7 +303,21 @@ public class LastaDiProperties {
                 ins.close();
             } catch (IOException ignored) {}
         }
+        mergePropIfExists(fileName, props);
         return props;
+    }
+
+    protected void mergePropIfExists(String originalFileName, Properties props) {
+        final String ext = ".properties";
+        if (originalFileName.endsWith(ext)) {
+            final int extIndex = originalFileName.lastIndexOf(ext);
+            final String noExtName = originalFileName.substring(0, extIndex);
+            final String mergeFileName = noExtName + "+m" + ext; // e.g. lasta_di+m.properties
+            final Properties mergeProp = loadProperties(mergeFileName);
+            if (mergeProp != null) {
+                props.putAll(mergeProp);
+            }
+        }
     }
 
     protected void handleLoadingFailureException(String fileName, Exception e) {
