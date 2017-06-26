@@ -83,4 +83,7 @@ public interface ComponentDef
     boolean isExternalBinding();
 
     void setExternalBinding(boolean externalBinding);
+
+    // *no needed because of HotdeployBehavior synchronization by jflute (2017/06/25)
+    //String getCreatorThreadCode(); // null allowed if e.g. simple component, cool deploy
 }

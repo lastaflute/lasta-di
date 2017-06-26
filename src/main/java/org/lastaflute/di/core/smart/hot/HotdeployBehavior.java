@@ -106,6 +106,12 @@ public class HotdeployBehavior extends DefaultProvider {
     //                                                                       =============
     @Override
     protected ComponentDef getComponentDef(LaContainer container, Object key) {
+        synchronized (this) { // to avoid too-many registration of async hot-deploy (basically job)
+            return doGetComponentDef(container, key);
+        }
+    }
+
+    protected ComponentDef doGetComponentDef(LaContainer container, Object key) {
         ComponentDef cd = super.getComponentDef(container, key);
         if (cd != null) {
             return cd;
@@ -126,7 +132,7 @@ public class HotdeployBehavior extends DefaultProvider {
                 cd = null;
             }
         } else {
-            throw new IllegalArgumentException("key");
+            throw new IllegalArgumentException("Illegal component key: " + key);
         }
         if (cd != null) {
             register(cd);

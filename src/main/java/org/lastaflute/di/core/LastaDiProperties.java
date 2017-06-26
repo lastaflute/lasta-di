@@ -119,30 +119,45 @@ public class LastaDiProperties {
             final String locKey = SMART_DEPLOY_MODE_LOCATION_KEY;
             final String location = getProperty(locKey);
             if (location != null && !location.isEmpty()) {
-                final String delimiter = ":";
-                final int delimiterIndex = location.indexOf(":");
-                if (delimiterIndex < 0) {
-                    String msg = "The location should have delimiter colon ':' in " + LASTA_DI_PROPERTIES + " but: " + location;
-                    throw new IllegalStateException(msg);
-                }
-                final String propName = resolveLastaEnvPath(location.substring(0, delimiterIndex).trim());
-                final String modeKey = location.substring(delimiterIndex + delimiter.length()).trim();
-                logger.info("...Loading specified properties and get by the key: {}, {}", propName, modeKey);
-                final Properties read = loadProperties(propName);
-                if (read == null) {
-                    throwSmartDeployPropertiesFileNotFoundException(location, propName, modeKey);
-                }
-                final String realMode = read.getProperty(modeKey);
-                if (realMode == null) {
-                    throwSmartDeployPropertiesModeKeyNotFoundException(location, propName, modeKey);
-                }
-                smartDeployMode = realMode;
+                smartDeployMode = deriveSmartDeployModeFromLocation(location);
             } else {
                 logger.info("*Not found the smart-deploy mode location: {} in {}", locKey, LASTA_DI_PROPERTIES);
             }
             smartDeployLocationDone = true;
             return smartDeployMode;
         }
+    }
+
+    protected String deriveSmartDeployModeFromLocation(String location) {
+        final String delimiter = ":";
+        final int delimiterIndex = location.indexOf(":");
+        if (delimiterIndex < 0) {
+            String msg = "The location should have delimiter colon ':' in " + LASTA_DI_PROPERTIES + " but: " + location;
+            throw new IllegalStateException(msg);
+        }
+        // e.g.
+        //  maihana_env.properties: lasta_di.smart.deploy.mode
+        //  orleans_env.properties extends maihana_env.properties: lasta_di.smart.deploy.mode
+        final String modeKey = location.substring(delimiterIndex + delimiter.length()).trim(); // e.g. lasta_di.smart.deploy.mode
+        final String propExp = location.substring(0, delimiterIndex).trim(); // e.g. maihana_env.properties
+        final List<String> propList = LdiSrl.splitListTrimmed(propExp, " extends ");
+        String realMode = null;
+        for (String propName : propList) { // e.g. [orleans_env.properties, maihana_env.properties]
+            final String resolvedName = resolveLastaEnvPath(propName); // e.g. maihana_env_production.properties
+            logger.info("...Loading specified properties and get by the key: {}, {}", resolvedName, modeKey);
+            final Properties read = loadProperties(resolvedName);
+            if (read == null) {
+                throwSmartDeployPropertiesFileNotFoundException(location, resolvedName, modeKey);
+            }
+            realMode = read.getProperty(modeKey);
+            if (realMode != null) {
+                break;
+            }
+        }
+        if (realMode == null) {
+            throwSmartDeployPropertiesModeKeyNotFoundException(location, propExp, modeKey);
+        }
+        return realMode;
     }
 
     protected void throwSmartDeployPropertiesFileNotFoundException(String location, String propName, String modeKey) {
@@ -233,7 +248,7 @@ public class LastaDiProperties {
                 if (diXmlScriptExpressionEngineType == null) {
                     final String engineName = getDiXmlScriptExpressionEngine();
                     if (engineName != null) {
-                        // TODO jflute lastaflute: [E] fitting: DI :: expression engine creation error handling
+                        // #hope jflute lastaflute: [E] fitting: DI :: expression engine creation error handling
                         diXmlScriptExpressionEngineType = LdiClassUtil.forName(engineName);
                     }
                     diXmlScriptExpressionEngineTypeDone = true;
@@ -303,7 +318,21 @@ public class LastaDiProperties {
                 ins.close();
             } catch (IOException ignored) {}
         }
+        mergePropIfExists(fileName, props);
         return props;
+    }
+
+    protected void mergePropIfExists(String originalFileName, Properties props) {
+        final String ext = ".properties";
+        if (originalFileName.endsWith(ext)) {
+            final int extIndex = originalFileName.lastIndexOf(ext);
+            final String noExtName = originalFileName.substring(0, extIndex);
+            final String mergeFileName = noExtName + "+m" + ext; // e.g. lasta_di+m.properties
+            final Properties mergeProp = loadProperties(mergeFileName);
+            if (mergeProp != null) {
+                props.putAll(mergeProp);
+            }
+        }
     }
 
     protected void handleLoadingFailureException(String fileName, Exception e) {

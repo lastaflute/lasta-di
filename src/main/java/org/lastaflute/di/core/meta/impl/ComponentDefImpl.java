@@ -75,6 +75,8 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
     public ComponentDefImpl(Class<?> componentClass, String componentName) {
         this.componentClass = componentClass;
         setComponentName(componentName);
+        // *no needed because of HotdeployBehavior synchronization by jflute (2017/06/25)
+        //creatorThreadCode = prepareCreatorThreadCode();
     }
 
     @Override
@@ -88,7 +90,7 @@ public class ComponentDefImpl implements ComponentDef, ContainerConstants {
     //                                                                           =========
     @Override
     public Object getComponent() {
-        return getComponentDeployer().deploy();
+        return getComponentDeployer().deploy(); // new-created if prototype, same instance if singleton
     }
 
     @Override
