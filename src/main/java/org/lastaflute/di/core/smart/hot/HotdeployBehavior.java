@@ -77,10 +77,8 @@ public class HotdeployBehavior extends DefaultProvider {
     //                                                                      ==============
     public void start() {
         originalClassLoader = Thread.currentThread().getContextClassLoader();
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@ start: " + hotdeployClassLoader);
         if (!keep || hotdeployClassLoader == null) {
             hotdeployClassLoader = new HotdeployClassLoader(originalClassLoader, namingConvention);
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@ new loader: " + hotdeployClassLoader);
         }
         Thread.currentThread().setContextClassLoader(hotdeployClassLoader);
         LaContainer container = SingletonLaContainerFactory.getContainer();
