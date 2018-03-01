@@ -72,7 +72,7 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
         final InputStream is = findDiXmlInputStream(parent, path);
         try {
             return (LaContainer) parser.parse(is, path);
-        } catch (Throwable cause) { // contains NoSuchMethodError
+        } catch (Throwable cause) { // contains e.g. NoSuchMethodError
             if (cause instanceof DiXmlParseFailureException) {
                 throw (DiXmlParseFailureException) cause;
             }

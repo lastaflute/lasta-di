@@ -35,6 +35,7 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.annotation.ParameterName;
+import org.lastaflute.di.helper.beans.exception.BeanClassStateError;
 import org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException;
 import org.lastaflute.di.helper.beans.exception.BeanFieldNotFoundException;
 import org.lastaflute.di.helper.beans.exception.BeanIllegalDiiguException;
@@ -69,12 +70,18 @@ import javassist.bytecode.annotation.StringMemberValue;
  */
 public class BeanDescImpl implements BeanDesc {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final LaLogger logger = LaLogger.getLogger(BeanDescImpl.class);
     private static final Object[] EMPTY_ARGS = new Object[0];
     private static final Class<?>[] EMPTY_PARAM_TYPES = new Class[0];
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final String PARAMETER_NAME_ANNOTATION = ParameterName.class.getName();
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     private Class<?> beanClass;
     private Constructor<?>[] constructors;
     private Map<TypeVariable<?>, Type> typeVariables;
@@ -86,22 +93,35 @@ public class BeanDescImpl implements BeanDesc {
     private Map<Constructor<?>, String[]> constructorParameterNamesCache;
     private Map<Method, String[]> methodParameterNamesCache;
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public BeanDescImpl(Class<?> beanClass) throws EmptyRuntimeException {
         if (beanClass == null) {
             throw new EmptyRuntimeException("beanClass");
         }
-        this.beanClass = beanClass;
-        constructors = beanClass.getConstructors();
-        typeVariables = ParameterizedClassDescFactory.getTypeVariables(beanClass);
-        setupPropertyDescs();
-        setupMethods();
-        setupFields();
+        try {
+            this.beanClass = beanClass;
+            constructors = beanClass.getConstructors();
+            typeVariables = ParameterizedClassDescFactory.getTypeVariables(beanClass);
+            setupPropertyDescs();
+            setupMethods();
+            setupFields();
+        } catch (NoClassDefFoundError | NoSuchMethodError | NoSuchFieldError e) { // for e.g. nested class error
+            throw new BeanClassStateError("Failed to analyze the bean class: " + beanClass.getName(), e);
+        }
     }
 
+    // ===================================================================================
+    //                                                                                Bean
+    //                                                                                ====
     public Class<?> getBeanClass() {
         return beanClass;
     }
 
+    // ===================================================================================
+    //                                                                   Property Handling
+    //                                                                   =================
     public boolean hasPropertyDesc(String propertyName) {
         return propertyDescCache.get(propertyName) != null;
     }
@@ -127,18 +147,34 @@ public class BeanDescImpl implements BeanDesc {
         return propertyDescCache.size();
     }
 
+    // ===================================================================================
+    //                                                                      Field Handling
+    //                                                                      ==============
     public boolean hasField(String fieldName) {
         return fieldCache.get(fieldName) != null;
     }
 
+    @Override
+    public Field getField(String fieldName) {
+        final Field field = fieldCache.get(fieldName);
+        if (field == null) {
+            throw new BeanFieldNotFoundException(beanClass, fieldName);
+        }
+        return field;
+    }
+
+    @Override
+    public int getFieldSize() {
+        return fieldCache.size();
+    }
+
+    // ===================================================================================
+    //                                                                Constructor Handling
+    //                                                                ====================
+    @Override
     public Object newInstance(Object[] args) throws BeanConstructorNotFoundException {
         Constructor<?> constructor = getSuitableConstructor(args);
         return LdiConstructorUtil.newInstance(constructor, args);
-    }
-
-    public Object invoke(Object target, String methodName, Object[] args) {
-        Method method = getSuitableMethod(methodName, args);
-        return LdiMethodUtil.invoke(method, target, args);
     }
 
     public Constructor<?> getSuitableConstructor(Object[] args) throws BeanConstructorNotFoundException {
@@ -156,6 +192,41 @@ public class BeanDescImpl implements BeanDesc {
         throw new BeanConstructorNotFoundException(beanClass, args);
     }
 
+    private Constructor<?> findSuitableConstructor(Object[] args) {
+        outerLoop: for (int i = 0; i < constructors.length; ++i) {
+            Class<?>[] paramTypes = constructors[i].getParameterTypes();
+            if (paramTypes.length != args.length) {
+                continue;
+            }
+            for (int j = 0; j < args.length; ++j) {
+                if (args[j] == null || LdiClassUtil.isAssignableFrom(paramTypes[j], args[j].getClass())) {
+                    continue;
+                }
+                continue outerLoop;
+            }
+            return constructors[i];
+        }
+        return null;
+    }
+
+    private Constructor<?> findSuitableConstructorAdjustNumber(Object[] args) {
+        outerLoop: for (int i = 0; i < constructors.length; ++i) {
+            Class<?>[] paramTypes = constructors[i].getParameterTypes();
+            if (paramTypes.length != args.length) {
+                continue;
+            }
+            for (int j = 0; j < args.length; ++j) {
+                if (args[j] == null || LdiClassUtil.isAssignableFrom(paramTypes[j], args[j].getClass())
+                        || adjustNumber(paramTypes, args, j)) {
+                    continue;
+                }
+                continue outerLoop;
+            }
+            return constructors[i];
+        }
+        return null;
+    }
+
     public Constructor<?> getConstructor(final Class<?>[] paramTypes) {
         for (int i = 0; i < constructors.length; ++i) {
             if (Arrays.equals(paramTypes, constructors[i].getParameterTypes())) {
@@ -163,6 +234,49 @@ public class BeanDescImpl implements BeanDesc {
             }
         }
         throw new BeanConstructorNotFoundException(beanClass, paramTypes);
+    }
+
+    public String[] getConstructorParameterNames(final Class<?>[] parameterTypes) {
+        return getConstructorParameterNames(getConstructor(parameterTypes));
+    }
+
+    public String[] getConstructorParameterNames(final Constructor<?> constructor) {
+        if (constructorParameterNamesCache == null) {
+            constructorParameterNamesCache = createConstructorParameterNamesCache();
+        }
+        if (!constructorParameterNamesCache.containsKey(constructor)) {
+            throw new BeanConstructorNotFoundException(beanClass, constructor.getParameterTypes());
+        }
+        return (String[]) constructorParameterNamesCache.get(constructor);
+    }
+
+    private Map<Constructor<?>, String[]> createConstructorParameterNamesCache() {
+        final Map<Constructor<?>, String[]> map = new HashMap<Constructor<?>, String[]>();
+        final ClassPool pool = ClassPoolUtil.getClassPool(beanClass);
+        for (int i = 0; i < constructors.length; ++i) {
+            final Constructor<?> constructor = constructors[i];
+            if (constructor.getParameterTypes().length == 0) {
+                map.put(constructor, EMPTY_STRING_ARRAY);
+                continue;
+            }
+            final CtClass clazz = ClassPoolUtil.toCtClass(pool, constructor.getDeclaringClass());
+            final CtClass[] parameterTypes = ClassPoolUtil.toCtClassArray(pool, constructor.getParameterTypes());
+            try {
+                final String[] names = getParameterNames(clazz.getDeclaredConstructor(parameterTypes));
+                map.put(constructor, names);
+            } catch (final NotFoundException e) {
+                logger.log("WSSR0084", new Object[] { beanClass.getName(), constructor });
+            }
+        }
+        return map;
+    }
+
+    // ===================================================================================
+    //                                                                     Method Handling
+    //                                                                     ===============
+    public Object invoke(Object target, String methodName, Object[] args) {
+        Method method = getSuitableMethod(methodName, args);
+        return LdiMethodUtil.invoke(method, target, args);
     }
 
     public Method getMethod(final String methodName) {
@@ -210,21 +324,6 @@ public class BeanDescImpl implements BeanDesc {
         return (String[]) methodsCache.keySet().toArray(new String[methodsCache.size()]);
     }
 
-    public String[] getConstructorParameterNames(final Class<?>[] parameterTypes) {
-        return getConstructorParameterNames(getConstructor(parameterTypes));
-    }
-
-    public String[] getConstructorParameterNames(final Constructor<?> constructor) {
-        if (constructorParameterNamesCache == null) {
-            constructorParameterNamesCache = createConstructorParameterNamesCache();
-        }
-        if (!constructorParameterNamesCache.containsKey(constructor)) {
-            throw new BeanConstructorNotFoundException(beanClass, constructor.getParameterTypes());
-        }
-        return (String[]) constructorParameterNamesCache.get(constructor);
-
-    }
-
     public String[] getMethodParameterNamesNoException(final String methodName, final Class<?>[] parameterTypes) {
         return getMethodParameterNamesNoException(getMethod(methodName, parameterTypes));
     }
@@ -245,32 +344,10 @@ public class BeanDescImpl implements BeanDesc {
         if (methodParameterNamesCache == null) {
             methodParameterNamesCache = createMethodParameterNamesCache();
         }
-
         if (!methodParameterNamesCache.containsKey(method)) {
             throw new BeanMethodNotFoundException(beanClass, method.getName(), method.getParameterTypes());
         }
         return (String[]) methodParameterNamesCache.get(method);
-    }
-
-    private Map<Constructor<?>, String[]> createConstructorParameterNamesCache() {
-        final Map<Constructor<?>, String[]> map = new HashMap<Constructor<?>, String[]>();
-        final ClassPool pool = ClassPoolUtil.getClassPool(beanClass);
-        for (int i = 0; i < constructors.length; ++i) {
-            final Constructor<?> constructor = constructors[i];
-            if (constructor.getParameterTypes().length == 0) {
-                map.put(constructor, EMPTY_STRING_ARRAY);
-                continue;
-            }
-            final CtClass clazz = ClassPoolUtil.toCtClass(pool, constructor.getDeclaringClass());
-            final CtClass[] parameterTypes = ClassPoolUtil.toCtClassArray(pool, constructor.getParameterTypes());
-            try {
-                final String[] names = getParameterNames(clazz.getDeclaredConstructor(parameterTypes));
-                map.put(constructor, names);
-            } catch (final NotFoundException e) {
-                logger.log("WSSR0084", new Object[] { beanClass.getName(), constructor });
-            }
-        }
-        return map;
     }
 
     private Map<Method, String[]> createMethodParameterNamesCache() {
@@ -335,80 +412,9 @@ public class BeanDescImpl implements BeanDesc {
         return ((StringMemberValue) nameAnnotation.getMemberValue("value")).getValue();
     }
 
-    private Constructor<?> findSuitableConstructor(Object[] args) {
-        outerLoop: for (int i = 0; i < constructors.length; ++i) {
-            Class<?>[] paramTypes = constructors[i].getParameterTypes();
-            if (paramTypes.length != args.length) {
-                continue;
-            }
-            for (int j = 0; j < args.length; ++j) {
-                if (args[j] == null || LdiClassUtil.isAssignableFrom(paramTypes[j], args[j].getClass())) {
-                    continue;
-                }
-                continue outerLoop;
-            }
-            return constructors[i];
-        }
-        return null;
-    }
-
-    private Constructor<?> findSuitableConstructorAdjustNumber(Object[] args) {
-        outerLoop: for (int i = 0; i < constructors.length; ++i) {
-            Class<?>[] paramTypes = constructors[i].getParameterTypes();
-            if (paramTypes.length != args.length) {
-                continue;
-            }
-            for (int j = 0; j < args.length; ++j) {
-                if (args[j] == null || LdiClassUtil.isAssignableFrom(paramTypes[j], args[j].getClass())
-                        || adjustNumber(paramTypes, args, j)) {
-                    continue;
-                }
-                continue outerLoop;
-            }
-            return constructors[i];
-        }
-        return null;
-    }
-
-    private static boolean adjustNumber(Class<?>[] paramTypes, Object[] args, int index) {
-        if (paramTypes[index].isPrimitive()) {
-            if (paramTypes[index] == int.class) {
-                args[index] = LdiIntegerConversionUtil.toInteger(args[index]);
-                return true;
-            } else if (paramTypes[index] == double.class) {
-                args[index] = LdiDoubleConversionUtil.toDouble(args[index]);
-                return true;
-            } else if (paramTypes[index] == long.class) {
-                args[index] = LdiLongConversionUtil.toLong(args[index]);
-                return true;
-            } else if (paramTypes[index] == short.class) {
-                args[index] = LdiShortConversionUtil.toShort(args[index]);
-                return true;
-            } else if (paramTypes[index] == float.class) {
-                args[index] = LdiFloatConversionUtil.toFloat(args[index]);
-                return true;
-            }
-        } else {
-            if (paramTypes[index] == Integer.class) {
-                args[index] = LdiIntegerConversionUtil.toInteger(args[index]);
-                return true;
-            } else if (paramTypes[index] == Double.class) {
-                args[index] = LdiDoubleConversionUtil.toDouble(args[index]);
-                return true;
-            } else if (paramTypes[index] == Long.class) {
-                args[index] = LdiLongConversionUtil.toLong(args[index]);
-                return true;
-            } else if (paramTypes[index] == Short.class) {
-                args[index] = LdiShortConversionUtil.toShort(args[index]);
-                return true;
-            } else if (paramTypes[index] == Float.class) {
-                args[index] = LdiFloatConversionUtil.toFloat(args[index]);
-                return true;
-            }
-        }
-        return false;
-    }
-
+    // ===================================================================================
+    //                                                                     Set up Property
+    //                                                                     ===============
     private void setupPropertyDescs() {
         final Method[] methods = beanClass.getMethods();
         for (int i = 0; i < methods.length; i++) {
@@ -643,25 +649,10 @@ public class BeanDescImpl implements BeanDesc {
     }
 
     @Override
-    public Field getField(String fieldName) {
-        final Field field = fieldCache.get(fieldName);
-        if (field == null) {
-            throw new BeanFieldNotFoundException(beanClass, fieldName);
-        }
-        return field;
-    }
-
-    @Override
     public Field getField(int index) {
         return fieldCache.get(index);
     }
 
-    @Override
-    public int getFieldSize() {
-        return fieldCache.size();
-    }
-
-    @Override
     public List<Field> getHiddenFieldList(String fieldName) {
         if (hiddenFieldCache != null) {
             final List<Field> fieldList = hiddenFieldCache.get(fieldName);
@@ -670,6 +661,48 @@ public class BeanDescImpl implements BeanDesc {
             }
         }
         return Collections.emptyList();
+    }
+
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
+    private static boolean adjustNumber(Class<?>[] paramTypes, Object[] args, int index) {
+        if (paramTypes[index].isPrimitive()) {
+            if (paramTypes[index] == int.class) {
+                args[index] = LdiIntegerConversionUtil.toInteger(args[index]);
+                return true;
+            } else if (paramTypes[index] == double.class) {
+                args[index] = LdiDoubleConversionUtil.toDouble(args[index]);
+                return true;
+            } else if (paramTypes[index] == long.class) {
+                args[index] = LdiLongConversionUtil.toLong(args[index]);
+                return true;
+            } else if (paramTypes[index] == short.class) {
+                args[index] = LdiShortConversionUtil.toShort(args[index]);
+                return true;
+            } else if (paramTypes[index] == float.class) {
+                args[index] = LdiFloatConversionUtil.toFloat(args[index]);
+                return true;
+            }
+        } else {
+            if (paramTypes[index] == Integer.class) {
+                args[index] = LdiIntegerConversionUtil.toInteger(args[index]);
+                return true;
+            } else if (paramTypes[index] == Double.class) {
+                args[index] = LdiDoubleConversionUtil.toDouble(args[index]);
+                return true;
+            } else if (paramTypes[index] == Long.class) {
+                args[index] = LdiLongConversionUtil.toLong(args[index]);
+                return true;
+            } else if (paramTypes[index] == Short.class) {
+                args[index] = LdiShortConversionUtil.toShort(args[index]);
+                return true;
+            } else if (paramTypes[index] == Float.class) {
+                args[index] = LdiFloatConversionUtil.toFloat(args[index]);
+                return true;
+            }
+        }
+        return false;
     }
 
     // ===================================================================================
