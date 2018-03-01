@@ -415,7 +415,7 @@ public class BeanDescImpl implements BeanDesc {
     // ===================================================================================
     //                                                                     Set up Property
     //                                                                     ===============
-    private void setupPropertyDescs() {
+    protected void setupPropertyDescs() {
         final Method[] methods = beanClass.getMethods();
         for (int i = 0; i < methods.length; i++) {
             final Method method = methods[i];
@@ -551,7 +551,7 @@ public class BeanDescImpl implements BeanDesc {
     // ===================================================================================
     //                                                                      Set up Methods
     //                                                                      ==============
-    private void setupMethods() {
+    protected void setupMethods() {
         ArrayMap<String, List<Method>> methodListMap = new ArrayMap<String, List<Method>>();
         Method[] methods = beanClass.getMethods();
         for (int i = 0; i < methods.length; i++) {
@@ -576,7 +576,7 @@ public class BeanDescImpl implements BeanDesc {
     // ===================================================================================
     //                                                                       Set up Fields
     //                                                                       =============
-    private void setupFields() {
+    protected void setupFields() {
         setupFields(beanClass);
     }
 
