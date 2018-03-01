@@ -53,7 +53,7 @@ public class ComponentTagHandler extends AbstractTagHandler {
             } catch (Throwable cause) { // contains e.g. NoSuchMethodError
                 // file name of Di xml is displayed at exception handling of upper layer
                 // (after all, cannot get it here?)
-                String msg = "Failed to create component defined at component tag: component=" + componentClass.getName();
+                String msg = "Failed to create component defined at component tag: " + componentClass.getName();
                 throw new TagComponentCreationFailureException(msg, cause);
             }
             if (name != null) {
