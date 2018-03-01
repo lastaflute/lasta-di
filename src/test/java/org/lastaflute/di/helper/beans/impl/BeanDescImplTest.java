@@ -15,7 +15,7 @@
  */
 package org.lastaflute.di.helper.beans.impl;
 
-import org.lastaflute.di.helper.beans.exception.BeanClassStateError;
+import org.lastaflute.di.helper.beans.exception.BeanNoClassDefFoundError;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
 /**
@@ -39,7 +39,7 @@ public class BeanDescImplTest extends UnitLastaDiTestCase {
             };
             // ## Assert ##
             fail();
-        } catch (BeanClassStateError e) {
+        } catch (BeanNoClassDefFoundError e) {
             log(e);
         }
     }

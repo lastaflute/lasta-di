@@ -21,6 +21,7 @@ import org.lastaflute.di.core.assembler.AutoBindingDefFactory;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandlerFactory;
 import org.lastaflute.di.core.factory.dixml.exception.TagAttributeNotDefinedRuntimeException;
+import org.lastaflute.di.core.factory.dixml.exception.TagComponentCreationFailureException;
 import org.lastaflute.di.core.meta.ArgDef;
 import org.lastaflute.di.core.meta.impl.ComponentDefImpl;
 import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
@@ -47,7 +48,14 @@ public class ComponentTagHandler extends AbstractTagHandler {
         String name = attributes.getValue("name");
         ComponentDef componentDef = null;
         if (componentClass != null) {
-            componentDef = annoHandler.createComponentDef(componentClass, null);
+            try {
+                componentDef = annoHandler.createComponentDef(componentClass, null);
+            } catch (Throwable cause) { // contains e.g. NoSuchMethodError
+                // file name of Di xml is displayed at exception handling of upper layer
+                // (after all, cannot get it here?)
+                String msg = "Failed to create component defined at component tag: component=" + componentClass.getName();
+                throw new TagComponentCreationFailureException(msg, cause);
+            }
             if (name != null) {
                 componentDef.setComponentName(name);
             }

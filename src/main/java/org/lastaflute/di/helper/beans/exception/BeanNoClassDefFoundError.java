@@ -19,11 +19,12 @@ package org.lastaflute.di.helper.beans.exception;
  * @author jflute
  * @since 0.7.6 (2018/03/01 Thursday)
  */
-public class BeanClassStateError extends Error {
+public class BeanNoClassDefFoundError extends NoClassDefFoundError {
 
     private static final long serialVersionUID = 1L;
 
-    public BeanClassStateError(String msg, Error error) {
-        super(msg, error);
+    public BeanNoClassDefFoundError(String msg, NoClassDefFoundError error) {
+        super(msg);
+        initCause(error);
     }
 }

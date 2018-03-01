@@ -35,11 +35,13 @@ import org.lastaflute.di.exception.EmptyRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.annotation.ParameterName;
-import org.lastaflute.di.helper.beans.exception.BeanClassStateError;
 import org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException;
 import org.lastaflute.di.helper.beans.exception.BeanFieldNotFoundException;
 import org.lastaflute.di.helper.beans.exception.BeanIllegalDiiguException;
 import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanNoClassDefFoundError;
+import org.lastaflute.di.helper.beans.exception.BeanNoSuchFieldError;
+import org.lastaflute.di.helper.beans.exception.BeanNoSuchMethodError;
 import org.lastaflute.di.helper.beans.exception.BeanPropertyNotFoundException;
 import org.lastaflute.di.helper.beans.factory.ParameterizedClassDescFactory;
 import org.lastaflute.di.helper.log.LaLogger;
@@ -107,8 +109,12 @@ public class BeanDescImpl implements BeanDesc {
             setupPropertyDescs();
             setupMethods();
             setupFields();
-        } catch (NoClassDefFoundError | NoSuchMethodError | NoSuchFieldError e) { // for e.g. nested class error
-            throw new BeanClassStateError("Failed to analyze the bean class: " + beanClass.getName(), e);
+        } catch (NoClassDefFoundError e) { // these catches are for e.g. nested class error
+            throw new BeanNoClassDefFoundError("Failed to analyze the bean class: " + beanClass.getName(), e);
+        } catch (NoSuchMethodError e) {
+            throw new BeanNoSuchMethodError("Failed to analyze the bean class: " + beanClass.getName(), e);
+        } catch (NoSuchFieldError e) {
+            throw new BeanNoSuchFieldError("Failed to analyze the bean class: " + beanClass.getName(), e);
         }
     }
 
