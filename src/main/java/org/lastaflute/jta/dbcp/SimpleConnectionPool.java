@@ -179,14 +179,35 @@ public class SimpleConnectionPool implements ConnectionPool {
         return wrapper;
     }
 
+    // -----------------------------------------------------
+    //                                           Transaction
+    //                                           -----------
     protected Transaction getTransaction() {
         return LjtTransactionManagerUtil.getTransaction(transactionManager);
     }
 
+    protected SynchronizationImpl createSynchronizationImpl(Transaction tx) {
+        return new SynchronizationImpl(tx);
+    }
+
+    // -----------------------------------------------------
+    //                                           Active Pool
+    //                                           -----------
     protected ConnectionWrapper getConnectionTxActivePool(Transaction tx) {
         return (ConnectionWrapper) txActivePool.get(tx);
     }
 
+    protected void setConnectionActivePool(ConnectionWrapper connection) {
+        activePool.add(connection);
+    }
+
+    protected void setConnectionTxActivePool(Transaction tx, ConnectionWrapper wrapper) {
+        txActivePool.put(tx, wrapper);
+    }
+
+    // -----------------------------------------------------
+    //                                             Free Pool
+    //                                             ---------
     protected ConnectionWrapper checkOutFreePool(Transaction tx) {
         if (freePool.isEmpty()) {
             return null;
@@ -204,35 +225,50 @@ public class SimpleConnectionPool implements ConnectionPool {
         return null;
     }
 
-    protected boolean validateConnection(ConnectionWrapper wrapper, final long pooledTime) {
+    protected boolean validateConnection(ConnectionWrapper wrapper, long pooledTime) {
         final long currentTime = System.currentTimeMillis();
         if (currentTime - pooledTime < validationInterval) {
             return true;
         }
         try {
-            final PreparedStatement ps = wrapper.prepareStatement(validationQuery);
-            try {
-                ps.executeQuery();
-            } finally {
-                ps.close();
+            if (isInternalDebug() && logger.isDebugEnabled()) {
+                logger.debug("#internal_debug ...Executing validation query: conn={}, current={}, pooled={}, interval={}", wrapper,
+                        currentTime, pooledTime, validationInterval);
             }
-        } catch (Exception e) {
+            executeValidationQuery(wrapper);
+        } catch (Exception continued) { // database may close the connection
             try {
-                wrapper.close();
-            } catch (final Exception ignore) {}
-            for (LjtLinkedList.Entry entry = freePool.getFirstEntry(); entry != null; entry = entry.getNext()) {
-                final FreeItem item = (FreeItem) entry.getElement();
-                try {
-                    item.getConnection().closeReally();
-                } catch (final Exception ignore) {}
-            }
-            freePool.clear();
-            logger.info("*Destroyed the pooled connections because validation error: " + pooledTime, e);
+                wrapper.close(); // contains check-in process (the connection moves to free pool here)
+            } catch (Exception ignored) {}
+            destroyFreePoolConnection(); // others also are broken (of course, don't close active)
+            logger.info("*Destroyed the all free connections because of one validation error: " + pooledTime, continued);
             return false;
         }
         return true;
     }
 
+    protected void executeValidationQuery(ConnectionWrapper wrapper) throws SQLException {
+        final PreparedStatement ps = wrapper.prepareStatement(validationQuery);
+        try {
+            ps.executeQuery();
+        } finally {
+            ps.close();
+        }
+    }
+
+    protected void destroyFreePoolConnection() {
+        for (LjtLinkedList.Entry entry = freePool.getFirstEntry(); entry != null; entry = entry.getNext()) {
+            final FreeItem item = (FreeItem) entry.getElement();
+            try {
+                item.getConnection().closeReally();
+            } catch (Exception ignored) {}
+        }
+        freePool.clear();
+    }
+
+    // -----------------------------------------------------
+    //                                     Create Connection
+    //                                     -----------------
     protected ConnectionWrapper createConnection(Transaction tx) throws SQLException {
         final XAConnection xaConn = xaDataSource.getXAConnection();
         final Connection conn = xaConn.getConnection();
@@ -248,18 +284,6 @@ public class SimpleConnectionPool implements ConnectionPool {
         return createConnectionWrapper(xaConnection, conn, this, tx);
     }
 
-    protected void setConnectionActivePool(ConnectionWrapper connection) {
-        activePool.add(connection);
-    }
-
-    protected SynchronizationImpl createSynchronizationImpl(Transaction tx) {
-        return new SynchronizationImpl(tx);
-    }
-
-    protected void setConnectionTxActivePool(Transaction tx, ConnectionWrapper wrapper) {
-        txActivePool.put(tx, wrapper);
-    }
-
     // ===================================================================================
     //                                                                            Check In
     //                                                                            ========
@@ -269,14 +293,14 @@ public class SimpleConnectionPool implements ConnectionPool {
     }
 
     public synchronized void checkInTx(Transaction tx) {
-        if (tx == null) {
+        if (tx == null) { // other threads might clean up!? just in case
             return;
         }
-        if (getTransaction() != null) {
+        if (getTransaction() != null) { // something wrong but just in case
             return;
         }
-        final ConnectionWrapper wrapper = (ConnectionWrapper) txActivePool.remove(tx);
-        if (wrapper == null) {
+        final ConnectionWrapper wrapper = txActivePool.remove(tx);
+        if (wrapper == null) { // basically no way, just in case
             return;
         }
         checkInFreePool(wrapper);
@@ -343,6 +367,9 @@ public class SimpleConnectionPool implements ConnectionPool {
         timeoutTask.cancel();
     }
 
+    // ===================================================================================
+    //                                                                      Internal Class
+    //                                                                      ==============
     protected class FreeItem implements LjtTimeoutTarget {
 
         protected ConnectionWrapper connectionWrapper_;

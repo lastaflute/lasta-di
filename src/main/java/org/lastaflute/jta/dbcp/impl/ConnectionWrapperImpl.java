@@ -299,8 +299,8 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
         if (closed) {
             return;
         }
-        if (LastaDiProperties.getInstance().isInternalDebug()) {
-            logger.debug("Closed the logical connection: {}", xaConnection);
+        if (LastaDiProperties.getInstance().isInternalDebug() && logger.isDebugEnabled()) {
+            logger.debug("#internal_debug Closed the logical connection: {}", xaConnection);
         }
         if (tx == null) {
             connectionPool.checkIn(this);
