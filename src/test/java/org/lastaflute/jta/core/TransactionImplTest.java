@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 the original author or authors.
+ * Copyright 2015-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,13 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
-import junit.framework.TestCase;
-
-import org.lastaflute.jta.core.LaTransaction;
 import org.lastaflute.jta.core.xa.DefaultXAResource;
 import org.lastaflute.jta.util.LjtTransactionUtil;
 
+import junit.framework.TestCase;
+
 /**
- * @author higa
- * 
+ * @author modified by jflute (originated in Seasar)
  */
 public class TransactionImplTest extends TestCase {
 
@@ -48,7 +46,6 @@ public class TransactionImplTest extends TestCase {
         assertEquals("1", tx_, tx_);
         assertTrue("2", !tx_.equals(null));
         assertTrue("3", !tx_.equals(new LaTransaction()));
-        assertTrue("4", !tx_.equals("test"));
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 the original author or authors.
+ * Copyright 2015-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,23 +24,49 @@ import javax.transaction.Transaction;
  */
 public interface ConnectionPool {
 
+    // ===================================================================================
+    //                                                                  Connection Process
+    //                                                                  ==================
+    /**
+     * Check out connection, may be on transaction.
+     * @return The wrapped connection to database, may be new-created or recycled. (NotNull)
+     * @throws SQLException
+     */
     ConnectionWrapper checkOut() throws SQLException;
 
+    /**
+     * Check in checked-out connection without transaction.
+     * @param connectionWrapper The wrapped connection to database, should be checked-out before. (NotNull)
+     */
     void checkIn(ConnectionWrapper connectionWrapper);
 
+    /**
+     * Check in checked-out connection via specified transaction.
+     * @param tx The transaction related to this connection pool. (NullAllowed: then do nothing just in case)
+     */
     void checkInTx(Transaction tx);
 
+    /**
+     * Release connection from this connection pool.
+     * @param connectionWrapper The released connection. (NotNull)
+     */
     void release(ConnectionWrapper connectionWrapper);
 
-    void close();
+    // ===================================================================================
+    //                                                                          Management
+    //                                                                          ==========
+    void close(); // destroy connection pool
 
-    int getActivePoolSize();
+    // ===================================================================================
+    //                                                                          Pool State
+    //                                                                          ==========
+    int getActivePoolSize(); // active (checked-out) connection without transaction
 
-    int getTxActivePoolSize();
+    int getTxActivePoolSize(); // active (checked-out) connection with transaction
 
-    int getFreePoolSize();
+    int getFreePoolSize(); // non-active (non-checked-out) connection
 
-    int getMaxPoolSize();
+    int getMaxPoolSize(); // limit size of pooled connections as maximum
 
-    int getMinPoolSize();
+    int getMinPoolSize(); // limit size of pooled connections as minimum
 }

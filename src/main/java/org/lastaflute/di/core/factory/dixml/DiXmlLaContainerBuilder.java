@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 the original author or authors.
+ * Copyright 2015-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
         final InputStream is = findDiXmlInputStream(parent, path);
         try {
             return (LaContainer) parser.parse(is, path);
-        } catch (Throwable cause) { // contains NoSuchMethodError
+        } catch (Throwable cause) { // contains e.g. NoSuchMethodError
             if (cause instanceof DiXmlParseFailureException) {
                 throw (DiXmlParseFailureException) cause;
             }

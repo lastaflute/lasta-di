@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 the original author or authors.
+ * Copyright 2015-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -299,8 +299,8 @@ public class ConnectionWrapperImpl implements ConnectionWrapper, ConnectionEvent
         if (closed) {
             return;
         }
-        if (LastaDiProperties.getInstance().isInternalDebug()) {
-            logger.debug("Closed the logical connection: {}", xaConnection);
+        if (LastaDiProperties.getInstance().isInternalDebug() && logger.isDebugEnabled()) {
+            logger.debug("#internal_debug Closed the logical connection: {}", xaConnection);
         }
         if (tx == null) {
             connectionPool.checkIn(this);
