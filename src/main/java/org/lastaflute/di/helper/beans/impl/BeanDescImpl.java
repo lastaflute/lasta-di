@@ -36,6 +36,7 @@ import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.annotation.ParameterName;
 import org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanFieldSetAccessibleFailureException;
 import org.lastaflute.di.helper.beans.exception.BeanFieldNotFoundException;
 import org.lastaflute.di.helper.beans.exception.BeanIllegalDiiguException;
 import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
@@ -620,7 +621,7 @@ public class BeanDescImpl implements BeanDesc {
             final Field field = fields[i];
             final String fname = field.getName();
             if (!fieldCache.containsKey(fname)) {
-                field.setAccessible(true);
+                beAccessible(field);
                 fieldCache.put(fname, field);
                 if (LdiFieldUtil.isInstanceField(field)) {
                     if (hasPropertyDesc(fname)) {
@@ -632,7 +633,7 @@ public class BeanDescImpl implements BeanDesc {
                     }
                 }
             } else { // hidden field (to inject them)
-                field.setAccessible(true);
+                beAccessible(field);
                 if (hiddenFieldCache == null) {
                     hiddenFieldCache = new ArrayMap<String, List<Field>>();
                 }
@@ -643,6 +644,15 @@ public class BeanDescImpl implements BeanDesc {
                 }
                 hiddenFieldList.add(field);
             }
+        }
+    }
+
+    private void beAccessible(Field field) {
+        try {
+            field.setAccessible(true);
+        } catch (RuntimeException e) { // for Java9 headache
+            String msg = "Failed to set accessible to the field: " + field;
+            throw new BeanFieldSetAccessibleFailureException(msg, beanClass, field, e);
         }
     }
 

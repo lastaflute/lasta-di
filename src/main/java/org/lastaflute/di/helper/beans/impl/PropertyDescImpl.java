@@ -31,6 +31,7 @@ import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.ParameterizedClassDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.exception.BeanIllegalPropertyException;
+import org.lastaflute.di.helper.beans.exception.BeanMethodSetAccessibleFailureException;
 import org.lastaflute.di.helper.beans.factory.ParameterizedClassDescFactory;
 import org.lastaflute.di.util.LdiBooleanConversionUtil;
 import org.lastaflute.di.util.LdiCalendarConversionUtil;
@@ -49,20 +50,29 @@ import org.lastaflute.di.util.LdiTimestampConversionUtil;
  */
 public class PropertyDescImpl implements PropertyDesc {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final Object[] EMPTY_ARGS = new Object[0];
 
-    private String propertyName;
-    private Class<?> propertyType;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private final BeanDesc beanDesc; // not null
+    private final String propertyName; // not null
+    private final Class<?> propertyType; // not null
     private Method readMethod;
     private Method writeMethod;
     private Field field;
-    private BeanDesc beanDesc;
     private Constructor<?> stringConstructor;
     private Method valueOfMethod;
     private boolean readable = false;
     private boolean writable = false;
     private ParameterizedClassDesc parameterizedClassDesc;
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public PropertyDescImpl(String propertyName, Class<?> propertyType, Method readMethod, Method writeMethod, BeanDesc beanDesc) {
         this(propertyName, propertyType, readMethod, writeMethod, null, beanDesc);
     }
@@ -75,12 +85,12 @@ public class PropertyDescImpl implements PropertyDesc {
         if (propertyType == null) {
             throw new EmptyRuntimeException("propertyType");
         }
+        this.beanDesc = beanDesc;
         this.propertyName = propertyName;
         this.propertyType = propertyType;
         setReadMethod(readMethod);
         setWriteMethod(writeMethod);
         setField(field);
-        this.beanDesc = beanDesc;
         setupStringConstructor();
         setupValueOfMethod();
         setUpParameterizedClassDesc();
@@ -123,6 +133,9 @@ public class PropertyDescImpl implements PropertyDesc {
         }
     }
 
+    // ===================================================================================
+    //                                                                            Property
+    //                                                                            ========
     public final String getPropertyName() {
         return propertyName;
     }
@@ -131,6 +144,9 @@ public class PropertyDescImpl implements PropertyDesc {
         return propertyType;
     }
 
+    // ===================================================================================
+    //                                                                              Method
+    //                                                                              ======
     public final Method getReadMethod() {
         return readMethod;
     }
@@ -139,7 +155,7 @@ public class PropertyDescImpl implements PropertyDesc {
         this.readMethod = readMethod;
         if (readMethod != null) {
             readable = true;
-            readMethod.setAccessible(true);
+            beAccessible(readMethod);
         }
     }
 
@@ -155,7 +171,7 @@ public class PropertyDescImpl implements PropertyDesc {
         this.writeMethod = writeMethod;
         if (writeMethod != null) {
             writable = true;
-            writeMethod.setAccessible(true);
+            beAccessible(writeMethod);
         }
     }
 
@@ -163,6 +179,9 @@ public class PropertyDescImpl implements PropertyDesc {
         return writeMethod != null;
     }
 
+    // ===================================================================================
+    //                                                                               Field
+    //                                                                               =====
     public Field getField() {
         return field;
     }
@@ -225,22 +244,16 @@ public class PropertyDescImpl implements PropertyDesc {
         }
     }
 
+    // ===================================================================================
+    //                                                                           Bean Desc
+    //                                                                           =========
     public BeanDesc getBeanDesc() {
         return beanDesc;
     }
 
-    @Override
-    public final String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("property:{");
-        sb.append(propertyName);
-        sb.append(", ").append(propertyType.getName());
-        sb.append(", reader=").append(readMethod != null ? readMethod.getName() : null);
-        sb.append(", writer=").append(writeMethod != null ? writeMethod.getName() : null);
-        sb.append("}@").append(Integer.toHexString(hashCode()));
-        return sb.toString();
-    }
-
+    // ===================================================================================
+    //                                                                           Converter
+    //                                                                           =========
     public Object convertIfNeed(Object arg) { // #date_parade
         if (propertyType.isPrimitive()) {
             return convertPrimitiveWrapper(arg);
@@ -298,6 +311,9 @@ public class PropertyDescImpl implements PropertyDesc {
         return arg;
     }
 
+    // ===================================================================================
+    //                                                                       Parameterized
+    //                                                                       =============
     public boolean isParameterized() {
         return parameterizedClassDesc != null && parameterizedClassDesc.isParameterizedClass();
     }
@@ -337,5 +353,32 @@ public class PropertyDescImpl implements PropertyDesc {
             return null;
         }
         return pcd.getRawClass();
+    }
+
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
+    private void beAccessible(Method method) {
+        try {
+            method.setAccessible(true);
+        } catch (RuntimeException e) { // for Java9 headache
+            String msg = "Failed to set accessible to the field: " + method;
+            throw new BeanMethodSetAccessibleFailureException(msg, beanDesc.getBeanClass(), method, e);
+        }
+    }
+
+    // ===================================================================================
+    //                                                                      Basic Override
+    //                                                                      ==============
+    @Override
+    public final String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("property:{");
+        sb.append(propertyName);
+        sb.append(", ").append(propertyType.getName());
+        sb.append(", reader=").append(readMethod != null ? readMethod.getName() : null);
+        sb.append(", writer=").append(writeMethod != null ? writeMethod.getName() : null);
+        sb.append("}@").append(Integer.toHexString(hashCode()));
+        return sb.toString();
     }
 }
