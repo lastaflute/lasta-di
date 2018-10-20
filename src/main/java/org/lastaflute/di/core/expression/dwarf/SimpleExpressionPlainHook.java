@@ -109,9 +109,9 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     protected Object resolveSimpleNumber(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
         if (LdiStringUtil.isNumber(exp)) {
             if (exp.length() > 9) {
-                return Integer.valueOf(exp);
-            } else {
                 return Long.valueOf(exp);
+            } else {
+                return Integer.valueOf(exp);
             }
         }
         return null;
