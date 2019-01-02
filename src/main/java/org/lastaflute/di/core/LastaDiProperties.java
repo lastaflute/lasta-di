@@ -37,6 +37,8 @@ public class LastaDiProperties {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    private static final Logger logger = LoggerFactory.getLogger(LastaDiProperties.class);
+
     public static final String LASTA_DI_PROPERTIES = "lasta_di.properties";
     public static final String SMART_DEPLOY_MODE_LOCATION_KEY = "smart.deploy.mode.location";
     public static final String SMART_PACKAGE1_KEY = "smart.package1";
@@ -46,9 +48,10 @@ public class LastaDiProperties {
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
     public static final String INTERNAL_DEBUG_KEY = "internal.debug";
     public static final String SUPPRESS_LASTA_ENV_KEY = "suppress.lasta.env";
+    public static final String USE_NODOT_LASTA_ENV_KEY = "use.nodot.lasta.env";
     public static final String LASTA_ENV = "lasta.env"; // system property
+    public static final String NODOT_LASTA_ENV = "lastaenv"; // system property
 
-    private static final Logger logger = LoggerFactory.getLogger(LastaDiProperties.class);
     private static LastaDiProperties instance; // lazy loaded
 
     public static LastaDiProperties getInstance() {
@@ -67,7 +70,8 @@ public class LastaDiProperties {
     //                                                                           =========
     protected final Properties props;
     protected final boolean internalDebug;
-    protected final boolean suppressLastaEnv;
+    protected final boolean suppressLastaEnv; // ignoring lasta.env forcedly for e.g. emergency debug
+    protected final boolean useNodotLastaEnv; // uses 'lastaenv' (no dot) for e.g. GCP
     protected String smartDeployMode; // load loaded
     protected boolean smartDeployLocationDone;
     protected List<String> smartPackageList; // load loaded
@@ -86,15 +90,18 @@ public class LastaDiProperties {
             logger.info("*Not found the {} in your classpath.", propName);
             props = new Properties();
         }
-        final String debugProp = getProperty(INTERNAL_DEBUG_KEY);
-        internalDebug = debugProp != null && debugProp.equalsIgnoreCase("true");
+        internalDebug = isProperty(INTERNAL_DEBUG_KEY);
         if (internalDebug) {
             logger.info("Lasta Di as Internal Debug by {}", INTERNAL_DEBUG_KEY);
         }
-        final String suppressLastaEnvProp = getProperty(SUPPRESS_LASTA_ENV_KEY);
-        suppressLastaEnv = suppressLastaEnvProp != null && suppressLastaEnvProp.equalsIgnoreCase("true");
+        suppressLastaEnv = isProperty(SUPPRESS_LASTA_ENV_KEY);
         if (suppressLastaEnv) {
             logger.info("Lasta Di suppresses lasta.env by {}", SUPPRESS_LASTA_ENV_KEY);
+        }
+        useNodotLastaEnv = isProperty(USE_NODOT_LASTA_ENV_KEY);
+        if (useNodotLastaEnv) {
+            logger.info("Lasta Di uses no-dot 'lastaenv' (not lasta.env) by {}", USE_NODOT_LASTA_ENV_KEY);
+            logger.info(" -> *also change lasta.env to lastaenv in e.g. boot option, logback.xml");
         }
     }
 
@@ -103,6 +110,14 @@ public class LastaDiProperties {
     //                                                                            ========
     public String getProperty(String propertyKey) {
         return props.getProperty(propertyKey);
+    }
+
+    public String getProperty(String propertyKey, String defaultValue) {
+        return props.getProperty(propertyKey, defaultValue);
+    }
+
+    public boolean isProperty(String propertyKey) {
+        return getProperty(propertyKey, "false").equalsIgnoreCase("true");
     }
 
     // -----------------------------------------------------
@@ -289,15 +304,42 @@ public class LastaDiProperties {
         }
     }
 
-    public boolean isSuppressLastaEnv() {
-        return suppressLastaEnv;
-    }
-
     public String getLastaEnv() { // null allowed
         if (isSuppressLastaEnv()) {
             return null;
         }
-        return System.getProperty(LASTA_ENV);
+        if (isUseNodotLastaEnv()) {
+            checkNoNoDotLastaEnv(); // to avoid mistake
+        }
+        return System.getProperty(getUsedLastaEnvKey());
+    }
+
+    protected void checkNoNoDotLastaEnv() { // called when it uses no-dot 'lastaenv'
+        final String hasdot = LASTA_ENV;
+        final String specified = System.getProperty(hasdot);
+        if (specified != null) {
+            final String nodot = NODOT_LASTA_ENV;
+            throw new IllegalStateException("Should use no-dot '" + nodot + "' (not " + hasdot + "): " + specified);
+        }
+    }
+
+    public String getUsedLastaEnvKey() {
+        if (isUseNodotLastaEnv()) { // for e.g. GCP (cannot use dot as system property key)
+            return NODOT_LASTA_ENV;
+        } else { // normally here
+            return LASTA_ENV;
+        }
+    }
+
+    // -----------------------------------------------------
+    //                                       LastaEnv Option
+    //                                       ---------------
+    public boolean isSuppressLastaEnv() {
+        return suppressLastaEnv;
+    }
+
+    public boolean isUseNodotLastaEnv() {
+        return useNodotLastaEnv;
     }
 
     // ===================================================================================
