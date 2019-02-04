@@ -136,7 +136,7 @@ public class SimpleConnectionPool implements ConnectionPool {
         ConnectionWrapper wrapper = getConnectionTxActivePool(tx);
         if (wrapper != null) {
             if (isInternalDebug()) {
-                logger.debug("...Checking out logical connection from pool: {}", tx);
+                logger.debug("#fw_debug ...Checking out logical connection from pool: {}", tx);
             }
             wrapper.saveCheckOutHistory();
             return wrapper;
@@ -173,7 +173,7 @@ public class SimpleConnectionPool implements ConnectionPool {
             wrapper.setTransactionIsolation(transactionIsolationLevel);
         }
         if (isInternalDebug()) {
-            logger.debug("...Checking out logical connection from pool: {}", tx);
+            logger.debug("#fw_debug ...Checking out logical connection from pool: {}", tx);
         }
         wrapper.saveCheckOutHistory();
         return wrapper;
@@ -231,9 +231,9 @@ public class SimpleConnectionPool implements ConnectionPool {
             return true;
         }
         try {
-            if (isInternalDebug() && logger.isDebugEnabled()) {
-                logger.debug("#internal_debug ...Executing validation query: conn={}, current={}, pooled={}, interval={}", wrapper,
-                        currentTime, pooledTime, validationInterval);
+            if (isInternalDebug()) {
+                logger.debug("#fw_debug ...Executing validation query: conn={}, current={}, pooled={}, interval={}", wrapper, currentTime,
+                        pooledTime, validationInterval);
             }
             executeValidationQuery(wrapper);
         } catch (Exception continued) { // database may close the connection

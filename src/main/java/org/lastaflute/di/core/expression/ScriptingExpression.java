@@ -25,6 +25,8 @@ import org.lastaflute.di.core.expression.dwarf.SimpleExpressionPlainHook;
 import org.lastaflute.di.core.expression.engine.ExpressionEngine;
 import org.lastaflute.di.core.expression.engine.JavaScriptExpressionEngine;
 import org.lastaflute.di.util.LdiClassUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -34,7 +36,9 @@ public class ScriptingExpression implements Expression {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    private static final Logger logger = LoggerFactory.getLogger(ScriptingExpression.class);
     protected static final SimpleExpressionPlainHook defaultPlainHook = new SimpleExpressionPlainHook();
+    protected static Boolean internalDebug; // cached
 
     // ===================================================================================
     //                                                                           Attribute
@@ -79,8 +83,14 @@ public class ScriptingExpression implements Expression {
         if (parsed instanceof String) {
             final Object hooked = hookPlainly((String) parsed, contextMap, container, resultType);
             if (hooked != null) {
+                if (isInternalDebug()) {
+                    logger.debug("#fw_debug Parsed as simple expression by plain hook: {} => {}", parsed, hooked);
+                }
                 return hooked;
             }
+        }
+        if (isInternalDebug()) {
+            logger.debug("#fw_debug ...Evaluating the script by expression engine: script={}", parsed);
         }
         return engine.evaluate(parsed, contextMap, container, resultType);
     }
@@ -99,5 +109,20 @@ public class ScriptingExpression implements Expression {
     //                                                                       =============
     public String resolveStaticMethodReference(Class<?> refType, String methodName) {
         return engine.resolveStaticMethodReference(refType, methodName);
+    }
+
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
+    protected boolean isInternalDebug() {
+        if (internalDebug == null) {
+            synchronized (ScriptingExpression.class) {
+                if (internalDebug == null) {
+                    // almost no cost but cache just in case 
+                    internalDebug = LastaDiProperties.getInstance().isInternalDebug();
+                }
+            }
+        }
+        return internalDebug;
     }
 }
