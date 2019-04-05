@@ -258,14 +258,28 @@ public class LastaDiProperties {
                 if (diXmlScriptExpressionEngineType == null) {
                     final String engineName = getDiXmlScriptExpressionEngine();
                     if (engineName != null) {
-                        // #hope jflute lastaflute: [E] fitting: DI :: expression engine creation error handling
-                        diXmlScriptExpressionEngineType = LdiClassUtil.forName(engineName);
+                        diXmlScriptExpressionEngineType = forNameScriptExpressionEngineType(engineName);
                     }
                     diXmlScriptExpressionEngineTypeDone = true;
                 }
             }
         }
         return diXmlScriptExpressionEngineType;
+    }
+
+    protected Class<?> forNameScriptExpressionEngineType(String engineName) {
+        try {
+            return LdiClassUtil.forName(engineName);
+        } catch (RuntimeException e) {
+            LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Failed to find the type of script expression engine.");
+            br.addItem("Advice");
+            br.addElement("Confirm your engine type in " + LASTA_DI_PROPERTIES + ".");
+            br.addItem("Specifyed Engine");
+            br.addElement(engineName);
+            final String msg = br.buildExceptionMessage();
+            throw new IllegalStateException(msg, e);
+        }
     }
 
     public String getDiXmlScriptManagedEngineName() {
