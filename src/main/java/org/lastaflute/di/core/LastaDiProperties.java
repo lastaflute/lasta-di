@@ -46,6 +46,7 @@ public class LastaDiProperties {
     public static final String SMART_PACKAGE3_KEY = "smart.package3";
     public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
+    public static final String DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY = "dixml.script.managed.engine.name";
     public static final String INTERNAL_DEBUG_KEY = "internal.debug";
     public static final String SUPPRESS_LASTA_ENV_KEY = "suppress.lasta.env";
     public static final String LASTA_ENV = "lasta.env"; // system property
@@ -265,6 +266,10 @@ public class LastaDiProperties {
             }
         }
         return diXmlScriptExpressionEngineType;
+    }
+
+    public String getDiXmlScriptManagedEngineName() {
+        return getProperty(DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY);
     }
 
     // -----------------------------------------------------

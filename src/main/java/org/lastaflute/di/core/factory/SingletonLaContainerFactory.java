@@ -75,7 +75,8 @@ public class SingletonLaContainerFactory {
             /* first getEngineByName() costs about 0.5 seconds so initialize it background */
             final Class<?> engineType = LastaDiProperties.getInstance().getDiXmlScriptExpressionEngineType();
             if (engineType == null) { /* use default */
-                new ScriptEngineManager().getEngineByName("javascript"); /* initialize static resources */
+                final String engineName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
+                new ScriptEngineManager().getEngineByName(engineName != null ? engineName : "javascript"); /* initialize static resources */
             }
         }).start();
     }

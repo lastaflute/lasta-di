@@ -26,6 +26,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.lastaflute.di.core.LaContainer;
+import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.di.core.exception.ExpressionClassCreateFailureException;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
@@ -142,7 +143,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                   =================
     protected Object actuallyEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container, String firstName,
             Object firstComponent) {
-        final ScriptEngine engine = prepareScriptEngineManager().getEngineByName("javascript");
+        final ScriptEngine engine = comeOnScriptEngine();
         if (firstName != null) {
             engine.put(firstName, firstComponent);
         }
@@ -152,6 +153,16 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             throwJavaScriptExpressionException(exp, contextMap, container, e);
             return null; // unreachable
         }
+    }
+
+    protected ScriptEngine comeOnScriptEngine() {
+        final String engineName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
+        final String engineShortName = engineName != null ? engineName : getDefaultEngineName();
+        return prepareScriptEngineManager().getEngineByName(engineShortName);
+    }
+
+    protected String getDefaultEngineName() {
+        return "javascript"; // as default (means nashorn)
     }
 
     protected ScriptEngineManager prepareScriptEngineManager() {
