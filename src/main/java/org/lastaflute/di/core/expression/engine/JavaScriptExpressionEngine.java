@@ -150,7 +150,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         try {
             return engine.eval(exp);
         } catch (ScriptException | RuntimeException e) {
-            throwScriptExpressionFailureException(exp, contextMap, container, e);
+            throwJavaScriptExpressionException(exp, contextMap, container, e);
             return null; // unreachable
         }
     }
@@ -185,7 +185,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         return defaultManager; // as default
     }
 
-    protected void throwScriptExpressionFailureException(Object exp, Map<String, ? extends Object> contextMap, LaContainer container,
+    protected void throwJavaScriptExpressionException(Object exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Exception e) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Failed to evaluate the JavaScript expression.");
