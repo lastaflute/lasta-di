@@ -150,15 +150,31 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         try {
             return engine.eval(exp);
         } catch (ScriptException | RuntimeException e) {
-            throwJavaScriptExpressionException(exp, contextMap, container, e);
+            throwScriptExpressionFailureException(exp, contextMap, container, e);
             return null; // unreachable
         }
     }
 
     protected ScriptEngine comeOnScriptEngine() {
-        final String engineName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
-        final String engineShortName = engineName != null ? engineName : getDefaultEngineName();
-        return prepareScriptEngineManager().getEngineByName(engineShortName);
+        final String specifyedName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
+        final String engineName = specifyedName != null ? specifyedName : getDefaultEngineName();
+        final ScriptEngine engine = prepareScriptEngineManager().getEngineByName(engineName);
+        if (engine == null) { // e.g. wrong name specified in lasta_di.properties
+            throwScriptEngineNotFoundException(engineName);
+        }
+        return engine;
+    }
+
+    protected void throwScriptEngineNotFoundException(String engineName) {
+        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+        br.addNotice("Not found the script engine by the name.");
+        br.addItem("Advice");
+        br.addElement("Confirm that the engine exists in your JavaVM.");
+        br.addElement("(also your lasta_di.properties settings)");
+        br.addItem("Engine Name");
+        br.addElement(engineName);
+        final String msg = br.buildExceptionMessage();
+        throw new IllegalStateException(msg);
     }
 
     protected String getDefaultEngineName() {
@@ -169,7 +185,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         return defaultManager; // as default
     }
 
-    protected void throwJavaScriptExpressionException(Object exp, Map<String, ? extends Object> contextMap, LaContainer container,
+    protected void throwScriptExpressionFailureException(Object exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Exception e) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Failed to evaluate the JavaScript expression.");
