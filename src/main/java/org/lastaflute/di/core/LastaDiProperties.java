@@ -275,6 +275,7 @@ public class LastaDiProperties {
             br.addNotice("Failed to find the type of script expression engine.");
             br.addItem("Advice");
             br.addElement("Confirm your engine type in " + LASTA_DI_PROPERTIES + ".");
+            br.addElement("The property key of engine type is " + DIXML_SCRIPT_EXPRESSION_ENGINE_KEY + ".");
             br.addItem("Specifyed Engine");
             br.addElement(engineName);
             final String msg = br.buildExceptionMessage();
