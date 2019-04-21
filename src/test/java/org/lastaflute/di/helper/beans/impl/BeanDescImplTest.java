@@ -15,6 +15,10 @@
  */
 package org.lastaflute.di.helper.beans.impl;
 
+import java.lang.reflect.Field;
+import java.util.Properties;
+
+import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.exception.BeanNoClassDefFoundError;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
@@ -41,6 +45,48 @@ public class BeanDescImplTest extends UnitLastaDiTestCase {
             fail();
         } catch (BeanNoClassDefFoundError e) {
             log(e);
+        }
+    }
+
+    // ===================================================================================
+    //                                                                    Field Accessible
+    //                                                                    ================
+    public void test_beAccessible_basic() {
+        // ## Arrange ##
+        // ## Act ##
+        BeanDesc desc = new BeanDescImpl(MaihamaBean.class);
+        // ## Assert ##
+        int fieldSize = desc.getFieldSize();
+        assertNotSame(0, fieldSize);
+        for (int i = 0; i < fieldSize; i++) {
+            Field field = desc.getField(i);
+            log(field);
+            assertTrue(field.isAccessible());
+        }
+    }
+
+    public void test_beAccessible_JDKinternal_basic() {
+        // ## Arrange ##
+        // ## Act ##
+        BeanDesc desc = new BeanDescImpl(Properties.class);
+        // ## Assert ##
+        int fieldSize = desc.getFieldSize();
+        assertNotSame(0, fieldSize);
+        for (int i = 0; i < fieldSize; i++) {
+            Field field = desc.getField(i);
+            log(field);
+            assertFalse(field.isAccessible());
+        }
+    }
+
+    public static class MaihamaBean {
+
+        private String sea;
+        private Integer land;
+
+        @Override
+        public String toString() {
+            return "{" + sea + ", " + land + "}";
         }
     }
 }

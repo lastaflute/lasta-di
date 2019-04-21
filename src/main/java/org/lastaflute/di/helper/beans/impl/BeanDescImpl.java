@@ -36,8 +36,8 @@ import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.annotation.ParameterName;
 import org.lastaflute.di.helper.beans.exception.BeanConstructorNotFoundException;
-import org.lastaflute.di.helper.beans.exception.BeanFieldSetAccessibleFailureException;
 import org.lastaflute.di.helper.beans.exception.BeanFieldNotFoundException;
+import org.lastaflute.di.helper.beans.exception.BeanFieldSetAccessibleFailureException;
 import org.lastaflute.di.helper.beans.exception.BeanIllegalDiiguException;
 import org.lastaflute.di.helper.beans.exception.BeanMethodNotFoundException;
 import org.lastaflute.di.helper.beans.exception.BeanNoClassDefFoundError;
@@ -648,12 +648,22 @@ public class BeanDescImpl implements BeanDesc {
     }
 
     private void beAccessible(Field field) {
+        if (isExceptPrivateAccessible(field)) {
+            return;
+        }
         try {
             field.setAccessible(true);
         } catch (RuntimeException e) { // for Java9 headache
             String msg = "Failed to set accessible to the field: " + field;
             throw new BeanFieldSetAccessibleFailureException(msg, beanClass, field, e);
         }
+    }
+
+    private boolean isExceptPrivateAccessible(Field field) {
+        // to avoid warning of JDK-internal access at Java11
+        // Lasta Di does not need private access to the classes
+        final String fqcn = field.getDeclaringClass().getName();
+        return fqcn.startsWith("java.") || fqcn.startsWith("jdk.") || fqcn.startsWith("com.sun.") || fqcn.startsWith("sun.");
     }
 
     // ===================================================================================
