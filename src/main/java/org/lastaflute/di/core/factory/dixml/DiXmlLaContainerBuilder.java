@@ -96,7 +96,9 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
         final SAXParserFactory factory = LdiSAXParserFactoryUtil.newInstance();
         factory.setValidating(true);
         factory.setNamespaceAware(true);
-        LdiSAXParserFactoryUtil.setXIncludeAware(factory, true);
+        // to avoid warning of JDK-internal access at Java11 by jflute (2019/04/21)
+        // Lasta Di does not need xinclude because of Di xml redefiner
+        //LdiSAXParserFactoryUtil.setXIncludeAware(factory, true);
 
         final SAXParser saxParser = LdiSAXParserFactoryUtil.newSAXParser(factory);
 

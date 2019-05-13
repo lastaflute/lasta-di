@@ -29,33 +29,45 @@ import org.lastaflute.di.exception.IORuntimeException;
  */
 public abstract class LdiClassLoaderUtil {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final Method findLoadedClassMethod = getFindLoadedClassMethod();
     private static final Method defineClassMethod = getDefineClassMethod();
     private static final Method definePackageMethod = getDefinePackageMethod();
 
-    protected LdiClassLoaderUtil() {
-    }
-
     private static Method getFindLoadedClassMethod() {
         final Method method = LdiClassUtil.getDeclaredMethod(ClassLoader.class, "findLoadedClass", new Class[] { String.class });
-        method.setAccessible(true);
+        // lazy to avoid Java11 warning in cool deploy
+        //method.setAccessible(true);
         return method;
     }
 
     private static Method getDefineClassMethod() {
         final Method method = LdiClassUtil.getDeclaredMethod(ClassLoader.class, "defineClass",
                 new Class[] { String.class, byte[].class, int.class, int.class });
-        method.setAccessible(true);
+        // lazy to avoid Java11 warning in cool deploy
+        //method.setAccessible(true);
         return method;
     }
 
     private static Method getDefinePackageMethod() {
         final Method method = LdiClassUtil.getDeclaredMethod(ClassLoader.class, "definePackage", new Class[] { String.class, String.class,
                 String.class, String.class, String.class, String.class, String.class, URL.class });
-        method.setAccessible(true);
+        // lazy to avoid Java11 warning in cool deploy
+        //method.setAccessible(true);
         return method;
     }
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    protected LdiClassLoaderUtil() {
+    }
+
+    // ===================================================================================
+    //                                                                       Loader Search
+    //                                                                       =============
     public static ClassLoader getClassLoader(final Class<?> targetClass) {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         if (contextClassLoader != null) {
@@ -85,6 +97,9 @@ public abstract class LdiClassLoaderUtil {
         throw new IllegalStateException("Not found the class loader: " + targetClass);
     }
 
+    // ===================================================================================
+    //                                                                     Resource Search
+    //                                                                     ===============
     public static Iterator<URL> getResources(final String name) {
         return getResources(Thread.currentThread().getContextClassLoader(), name);
     }
@@ -112,9 +127,14 @@ public abstract class LdiClassLoaderUtil {
         return false;
     }
 
+    // ===================================================================================
+    //                                                                       Loader Deeply
+    //                                                                       =============
     public static Class<?> findLoadedClass(final ClassLoader classLoader, final String className) {
+        final Method targetMethod = findLoadedClassMethod;
+        adjustAccessibleIfNeeds(targetMethod);
         for (ClassLoader loader = classLoader; loader != null; loader = loader.getParent()) {
-            final Class<?> clazz = (Class<?>) LdiMethodUtil.invoke(findLoadedClassMethod, loader, new Object[] { className });
+            final Class<?> clazz = (Class<?>) LdiMethodUtil.invoke(targetMethod, loader, new Object[] { className });
             if (clazz != null) {
                 return clazz;
             }
@@ -124,16 +144,33 @@ public abstract class LdiClassLoaderUtil {
 
     public static Class<?> defineClass(final ClassLoader classLoader, final String className, final byte[] bytes, final int offset,
             final int length) {
-        return (Class<?>) LdiMethodUtil.invoke(defineClassMethod, classLoader,
+        final Method targetMethod = defineClassMethod;
+        adjustAccessibleIfNeeds(targetMethod);
+        return (Class<?>) LdiMethodUtil.invoke(targetMethod, classLoader,
                 new Object[] { className, bytes, new Integer(offset), new Integer(length) });
     }
 
     public static Package definePackage(final ClassLoader classLoader, final String name, final String specTitle, final String specVersion,
             final String specVendor, final String implTitle, final String implVersion, final String implVendor, final URL sealBase) {
-        return (Package) LdiMethodUtil.invoke(definePackageMethod, classLoader,
+        final Method targetMethod = definePackageMethod;
+        adjustAccessibleIfNeeds(targetMethod);
+        return (Package) LdiMethodUtil.invoke(targetMethod, classLoader,
                 new Object[] { name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase });
     }
 
+    private static void adjustAccessibleIfNeeds(Method targetMethod) {
+        if (!targetMethod.isAccessible()) {
+            synchronized (targetMethod) {
+                if (!targetMethod.isAccessible()) {
+                    targetMethod.setAccessible(true);
+                }
+            }
+        }
+    }
+
+    // ===================================================================================
+    //                                                                     Simple Delegate
+    //                                                                     ===============
     public static Class<?> loadClass(final ClassLoader loader, final String className) {
         try {
             return loader.loadClass(className);

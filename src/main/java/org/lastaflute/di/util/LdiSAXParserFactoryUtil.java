@@ -15,8 +15,6 @@
  */
 package org.lastaflute.di.util;
 
-import java.lang.reflect.Method;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -51,14 +49,15 @@ public class LdiSAXParserFactoryUtil {
         }
     }
 
-    public static boolean setXIncludeAware(final SAXParserFactory spf, final boolean state) {
-        try {
-            final Method method = spf.getClass().getMethod("setXIncludeAware", new Class[] { boolean.class });
-            method.invoke(spf, new Object[] { Boolean.valueOf(state) });
-            return true;
-        } catch (final Exception ignore) {
-            return false;
-        }
-    }
-
+    // to avoid warning of JDK-internal access at Java11 by jflute (2019/04/21)
+    // Lasta Di does not need xinclude because of Di xml redefiner
+    //public static boolean setXIncludeAware(final SAXParserFactory spf, final boolean state) {
+    //    try {
+    //        final Method method = spf.getClass().getMethod("setXIncludeAware", new Class[] { boolean.class });
+    //        method.invoke(spf, new Object[] { Boolean.valueOf(state) });
+    //        return true;
+    //    } catch (final Exception ignore) {
+    //        return false;
+    //    }
+    //}
 }

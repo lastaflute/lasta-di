@@ -26,6 +26,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.lastaflute.di.core.LaContainer;
+import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.di.core.exception.ExpressionClassCreateFailureException;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
@@ -142,7 +143,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                   =================
     protected Object actuallyEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container, String firstName,
             Object firstComponent) {
-        final ScriptEngine engine = prepareScriptEngineManager().getEngineByName("javascript");
+        final ScriptEngine engine = comeOnScriptEngine();
         if (firstName != null) {
             engine.put(firstName, firstComponent);
         }
@@ -152,6 +153,32 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             throwJavaScriptExpressionException(exp, contextMap, container, e);
             return null; // unreachable
         }
+    }
+
+    protected ScriptEngine comeOnScriptEngine() {
+        final String specifyedName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
+        final String engineName = specifyedName != null ? specifyedName : getDefaultEngineName();
+        final ScriptEngine engine = prepareScriptEngineManager().getEngineByName(engineName);
+        if (engine == null) { // e.g. wrong name specified in lasta_di.properties
+            throwScriptEngineNotFoundException(engineName);
+        }
+        return engine;
+    }
+
+    protected void throwScriptEngineNotFoundException(String engineName) {
+        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+        br.addNotice("Not found the script engine by the name.");
+        br.addItem("Advice");
+        br.addElement("Confirm that the engine exists in your JavaVM.");
+        br.addElement("(also your lasta_di.properties settings)");
+        br.addItem("Engine Name");
+        br.addElement(engineName);
+        final String msg = br.buildExceptionMessage();
+        throw new IllegalStateException(msg);
+    }
+
+    protected String getDefaultEngineName() {
+        return "javascript"; // as default (means nashorn)
     }
 
     protected ScriptEngineManager prepareScriptEngineManager() {

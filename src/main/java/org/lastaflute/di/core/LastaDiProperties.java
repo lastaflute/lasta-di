@@ -46,6 +46,7 @@ public class LastaDiProperties {
     public static final String SMART_PACKAGE3_KEY = "smart.package3";
     public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
+    public static final String DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY = "dixml.script.managed.engine.name";
     public static final String INTERNAL_DEBUG_KEY = "internal.debug";
     public static final String SUPPRESS_LASTA_ENV_KEY = "suppress.lasta.env";
     public static final String LASTA_ENV = "lasta.env"; // system property
@@ -257,14 +258,33 @@ public class LastaDiProperties {
                 if (diXmlScriptExpressionEngineType == null) {
                     final String engineName = getDiXmlScriptExpressionEngine();
                     if (engineName != null) {
-                        // #hope jflute lastaflute: [E] fitting: DI :: expression engine creation error handling
-                        diXmlScriptExpressionEngineType = LdiClassUtil.forName(engineName);
+                        diXmlScriptExpressionEngineType = forNameScriptExpressionEngineType(engineName);
                     }
                     diXmlScriptExpressionEngineTypeDone = true;
                 }
             }
         }
         return diXmlScriptExpressionEngineType;
+    }
+
+    protected Class<?> forNameScriptExpressionEngineType(String engineName) {
+        try {
+            return LdiClassUtil.forName(engineName);
+        } catch (RuntimeException e) {
+            LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Failed to find the type of script expression engine.");
+            br.addItem("Advice");
+            br.addElement("Confirm your engine type in " + LASTA_DI_PROPERTIES + ".");
+            br.addElement("The property key of engine type is " + DIXML_SCRIPT_EXPRESSION_ENGINE_KEY + ".");
+            br.addItem("Specifyed Engine");
+            br.addElement(engineName);
+            final String msg = br.buildExceptionMessage();
+            throw new IllegalStateException(msg, e);
+        }
+    }
+
+    public String getDiXmlScriptManagedEngineName() {
+        return getProperty(DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY);
     }
 
     // -----------------------------------------------------
