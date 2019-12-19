@@ -16,6 +16,7 @@
 package org.lastaflute.jta.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.lastaflute.jta.exception.LjtIllegalStateException;
 import org.lastaflute.jta.exception.LjtRollbackException;
 import org.lastaflute.jta.exception.LjtSystemException;
 import org.lastaflute.jta.helper.LjtLinkedList;
+import org.lastaflute.jta.helper.misc.LjtExceptionMessageBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,24 +46,36 @@ import org.slf4j.LoggerFactory;
  */
 public class LaTransaction implements ExtendedTransaction, SynchronizationRegister {
 
-    private static Logger logger = LoggerFactory.getLogger(LaTransaction.class);
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    private static final Logger logger = LoggerFactory.getLogger(LaTransaction.class);
 
     private static final int VOTE_READONLY = 0;
     private static final int VOTE_COMMIT = 1;
     private static final int VOTE_ROLLBACK = 2;
 
-    private Xid xid;
-    private int status = Status.STATUS_NO_TRANSACTION;
-    private final List<XAResourceWrapper> xaResourceWrappers = new ArrayList<XAResourceWrapper>();
-    private final List<Synchronization> synchronizations = new ArrayList<Synchronization>();
-    private final List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
-    private final Map<Object, Object> resourceMap = new HashMap<Object, Object>();
-    private boolean suspended = false;
-    private int branchId = 0;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected Xid xid;
+    protected int status = Status.STATUS_NO_TRANSACTION;
+    protected final List<XAResourceWrapper> xaResourceWrappers = new ArrayList<XAResourceWrapper>();
+    protected final List<Synchronization> synchronizations = new ArrayList<Synchronization>();
+    protected final List<Synchronization> interposedSynchronizations = new ArrayList<Synchronization>();
+    protected final Map<Object, Object> resourceMap = new HashMap<Object, Object>();
+    protected boolean suspended = false;
+    protected int branchId = 0;
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public LaTransaction() {
     }
 
+    // ===================================================================================
+    //                                                                               Begin
+    //                                                                               =====
     public void begin() throws NotSupportedException, SystemException {
         status = Status.STATUS_ACTIVE;
         init();
@@ -70,6 +84,13 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
+    protected void init() {
+        xid = new XidImpl();
+    }
+
+    // ===================================================================================
+    //                                                                             Suspend
+    //                                                                             =======
     public void suspend() throws SystemException {
         assertNotSuspended();
         assertActiveOrMarkedRollback();
@@ -84,13 +105,13 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         suspended = true;
     }
 
-    private void assertNotSuspended() throws IllegalStateException {
+    protected void assertNotSuspended() throws IllegalStateException {
         if (suspended) {
             throw new LjtIllegalStateException("Already suspended the transaction: xid=" + xid);
         }
     }
 
-    private void assertActive() throws IllegalStateException {
+    protected void assertActive() throws IllegalStateException {
         switch (status) {
         case Status.STATUS_ACTIVE:
             break;
@@ -99,7 +120,7 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    private void throwIllegalStateException() throws IllegalStateException {
+    protected void throwIllegalStateException() throws IllegalStateException {
         switch (status) {
         case Status.STATUS_PREPARING:
             throw new LjtIllegalStateException("Already begun preparing the transaction: xid=" + xid);
@@ -124,14 +145,17 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    private int getXAResourceWrapperSize() {
+    protected int getXAResourceWrapperSize() {
         return xaResourceWrappers.size();
     }
 
-    private XAResourceWrapper getXAResourceWrapper(int index) {
+    protected XAResourceWrapper getXAResourceWrapper(int index) {
         return (XAResourceWrapper) xaResourceWrappers.get(index);
     }
 
+    // ===================================================================================
+    //                                                                              Resume
+    //                                                                              ======
     public void resume() throws SystemException {
         assertSuspended();
         assertActiveOrMarkedRollback();
@@ -146,34 +170,39 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         suspended = false;
     }
 
-    private void assertSuspended() throws IllegalStateException {
+    protected void assertSuspended() throws IllegalStateException {
         if (!suspended) {
             throw new LjtIllegalStateException("Not suspended for resume(): xid=" + xid);
         }
     }
 
+    // ===================================================================================
+    //                                                                              Commit
+    //                                                                              ======
     public void commit() throws RollbackException, HeuristicMixedException, HeuristicRollbackException, SecurityException,
             IllegalStateException, SystemException {
         try {
             assertNotSuspended();
             assertActive();
-            beforeCompletion();
+            final DetachedSubResult subResult = new DetachedSubResult();
+            beforeCompletion(subResult);
             if (status == Status.STATUS_ACTIVE) {
-                endResources(XAResource.TMSUCCESS);
+                endResources(XAResource.TMSUCCESS, subResult);
                 if (getXAResourceWrapperSize() == 0) {
                     status = Status.STATUS_COMMITTED;
                 } else if (getXAResourceWrapperSize() == 1) {
-                    commitOnePhase();
+                    commitOnePhase(subResult);
                 } else {
-                    switch (prepareResources()) {
+                    final int vote = prepareResources(subResult);
+                    switch (vote) {
                     case VOTE_READONLY:
                         status = Status.STATUS_COMMITTED;
                         break;
                     case VOTE_COMMIT:
-                        commitTwoPhase();
+                        commitTwoPhase(subResult);
                         break;
                     case VOTE_ROLLBACK:
-                        rollbackForVoteOK();
+                        rollbackForVoteOK(subResult);
                     }
                 }
                 if (status == Status.STATUS_COMMITTED) {
@@ -183,71 +212,76 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
                 }
             }
             final boolean rolledBack = status != Status.STATUS_COMMITTED;
-            afterCompletion();
+            afterCompletion(subResult);
             if (rolledBack) {
-                throw new LjtRollbackException("Cannot commit the transaction: xid=" + xid);
+                throwCommitRollbackException(subResult);
             }
         } finally {
             destroy();
         }
     }
 
-    private void beforeCompletion() {
+    protected DetachedSubResult beforeCompletion(DetachedSubResult subResult) {
+        final DetachedSubResult result = new DetachedSubResult();
         for (int i = 0; i < getSynchronizationSize() && status == Status.STATUS_ACTIVE; ++i) {
-            beforeCompletion(getSynchronization(i));
+            beforeCompletion(getSynchronization(i), subResult);
         }
         for (int i = 0; i < getInterposedSynchronizationSize() && status == Status.STATUS_ACTIVE; ++i) {
-            beforeCompletion(getInterposedSynchronization(i));
+            beforeCompletion(getInterposedSynchronization(i), subResult);
         }
+        return result;
     }
 
-    private void beforeCompletion(Synchronization sync) {
+    protected void beforeCompletion(Synchronization sync, DetachedSubResult subResult) {
         try {
             sync.beforeCompletion();
-        } catch (Throwable t) {
-            logger.debug("Failed to process the before completion: " + sync, t);
+        } catch (Throwable cause) {
+            logger.warn("Failed to process the before completion: " + toCauseHash(cause) + " " + sync, cause);
             status = Status.STATUS_MARKED_ROLLBACK;
-            endResources(XAResource.TMFAIL);
-            rollbackResources();
+            subResult.addDetachedCause(cause);
+            endResources(XAResource.TMFAIL, subResult);
+            rollbackResources(subResult);
         }
     }
 
-    private void endResources(int flag) {
+    protected void endResources(int flag, DetachedSubResult subResult) {
         for (int i = 0; i < getXAResourceWrapperSize(); ++i) {
-            XAResourceWrapper xarw = getXAResourceWrapper(i);
+            final XAResourceWrapper xarw = getXAResourceWrapper(i);
             try {
                 xarw.end(flag);
-            } catch (Throwable t) {
-                logger.debug("Failed to end the XA resource: " + xarw + " " + flag, t);
+            } catch (Throwable cause) {
+                logger.warn("Failed to end the XA resource: " + toCauseHash(cause) + " " + xarw + " " + flag, cause);
                 status = Status.STATUS_MARKED_ROLLBACK;
+                subResult.addDetachedCause(cause);
             }
         }
     }
 
-    private void commitOnePhase() {
+    protected void commitOnePhase(DetachedSubResult subResult) {
         status = Status.STATUS_COMMITTING;
-        XAResourceWrapper xari = getXAResourceWrapper(0);
+        final XAResourceWrapper xari = getXAResourceWrapper(0);
         try {
             xari.commit(true);
             status = Status.STATUS_COMMITTED;
-        } catch (Throwable t) {
-            logger.debug("Failed to commit the XA resource: " + xari, t);
+        } catch (Throwable cause) {
+            logger.warn("Failed to commit the XA resource: " + toCauseHash(cause) + " " + xari, cause);
             status = Status.STATUS_UNKNOWN;
+            subResult.addDetachedCause(cause);
         }
     }
 
-    private int prepareResources() {
+    protected int prepareResources(DetachedSubResult subResult) {
         status = Status.STATUS_PREPARING;
         int vote = VOTE_READONLY;
-        LjtLinkedList xarwList = new LjtLinkedList();
+        final LjtLinkedList xarwList = new LjtLinkedList();
         for (int i = 0; i < getXAResourceWrapperSize(); ++i) {
-            XAResourceWrapper xarw = getXAResourceWrapper(i);
+            final XAResourceWrapper xarw = getXAResourceWrapper(i);
             if (xarw.isCommitTarget()) {
                 xarwList.addFirst(xarw);
             }
         }
         for (int i = 0; i < xarwList.size(); ++i) {
-            XAResourceWrapper xarw = (XAResourceWrapper) xarwList.get(i);
+            final XAResourceWrapper xarw = (XAResourceWrapper) xarwList.get(i);
             try {
                 if (i == xarwList.size() - 1) {
                     // last resource commit optimization
@@ -259,10 +293,11 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
                 } else {
                     xarw.setVoteOk(false);
                 }
-            } catch (Throwable t) {
-                logger.debug("Failed to vote the XA resource: " + xarw, t);
+            } catch (Throwable cause) {
+                logger.warn("Failed to vote the XA resource: " + toCauseHash(cause) + " " + xarw, cause);
                 xarw.setVoteOk(false);
                 status = Status.STATUS_MARKED_ROLLBACK;
+                subResult.addDetachedCause(cause);
                 return VOTE_ROLLBACK;
             }
         }
@@ -272,16 +307,17 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         return vote;
     }
 
-    private void commitTwoPhase() {
+    protected void commitTwoPhase(DetachedSubResult subResult) {
         status = Status.STATUS_COMMITTING;
         for (int i = 0; i < getXAResourceWrapperSize(); ++i) {
-            XAResourceWrapper xarw = getXAResourceWrapper(i);
+            final XAResourceWrapper xarw = getXAResourceWrapper(i);
             if (xarw.isCommitTarget() && xarw.isVoteOk()) {
                 try {
                     xarw.commit(false);
-                } catch (Throwable t) {
-                    logger.debug("Failed to commit the XA resource: " + xarw, t);
+                } catch (Throwable cause) {
+                    logger.warn("Failed to commit the XA resource: " + toCauseHash(cause) + " " + xarw, cause);
                     status = Status.STATUS_UNKNOWN;
+                    subResult.addDetachedCause(cause);
                 }
             }
         }
@@ -290,16 +326,17 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    private void rollbackForVoteOK() {
+    protected void rollbackForVoteOK(DetachedSubResult subResult) {
         status = Status.STATUS_ROLLING_BACK;
         for (int i = 0; i < getXAResourceWrapperSize(); ++i) {
-            XAResourceWrapper xarw = getXAResourceWrapper(i);
+            final XAResourceWrapper xarw = getXAResourceWrapper(i);
             if (xarw.isVoteOk()) {
                 try {
                     xarw.rollback();
-                } catch (Throwable t) {
-                    logger.debug("Failed to rollback the XA resource: " + xarw, t);
+                } catch (Throwable cause) {
+                    logger.warn("Failed to rollback the XA resource: " + toCauseHash(cause) + " " + xarw, cause);
                     status = Status.STATUS_UNKNOWN;
+                    subResult.addDetachedCause(cause);
                 }
             }
         }
@@ -308,57 +345,80 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    private void afterCompletion() {
+    protected void afterCompletion(DetachedSubResult subResult) {
         final int status = this.status;
         this.status = Status.STATUS_NO_TRANSACTION;
         for (int i = 0; i < getInterposedSynchronizationSize(); ++i) {
-            afterCompletion(status, getInterposedSynchronization(i));
+            afterCompletion(status, getInterposedSynchronization(i), subResult);
         }
         for (int i = 0; i < getSynchronizationSize(); ++i) {
-            afterCompletion(status, getSynchronization(i));
+            afterCompletion(status, getSynchronization(i), subResult);
         }
     }
 
-    private void afterCompletion(final int status, final Synchronization sync) {
+    protected void afterCompletion(final int status, final Synchronization sync, DetachedSubResult subResult) {
         try {
             sync.afterCompletion(status);
-        } catch (Throwable t) {
-            logger.debug("Failed to process the after completion: " + sync + " " + status, t);
+        } catch (Throwable cause) {
+            logger.warn("Failed to process the after completion: " + toCauseHash(cause) + " " + sync + " " + status, cause);
+            subResult.addDetachedCause(cause);
         }
     }
 
-    private int getSynchronizationSize() {
+    protected int getSynchronizationSize() {
         return synchronizations.size();
     }
 
-    private Synchronization getSynchronization(int index) {
+    protected Synchronization getSynchronization(int index) {
         return (Synchronization) synchronizations.get(index);
     }
 
-    private int getInterposedSynchronizationSize() {
+    protected int getInterposedSynchronizationSize() {
         return interposedSynchronizations.size();
     }
 
-    private Synchronization getInterposedSynchronization(int index) {
+    protected Synchronization getInterposedSynchronization(int index) {
         return (Synchronization) interposedSynchronizations.get(index);
     }
 
+    protected void throwCommitRollbackException(DetachedSubResult subResult) throws LjtRollbackException {
+        final LjtExceptionMessageBuilder br = new LjtExceptionMessageBuilder();
+        br.addNotice("Cannot commit the transaction so roll-back.");
+        setupDetachedCausePart(br, subResult.getDetachedCauseList());
+        br.addItem("javax.transaction.Status");
+        br.addElement(status);
+        br.addItem("Transaction XID");
+        br.addElement(xid);
+        final String msg = br.buildExceptionMessage();
+        final LjtRollbackException rollbackException = new LjtRollbackException(msg);
+        final Throwable detachedCause = subResult.getFirstDetachedCause();
+        if (detachedCause != null) {
+            rollbackException.initCause(detachedCause); // because of no-cause constructor of JTA
+        }
+        throw rollbackException;
+    }
+
+    // ===================================================================================
+    //                                                                           Roll-back
+    //                                                                           =========
     public void rollback() throws IllegalStateException, SecurityException, SystemException {
         try {
             assertNotSuspended();
             assertActiveOrMarkedRollback();
-            endResources(XAResource.TMFAIL);
-            rollbackResources();
+            final DetachedSubResult subResult = new DetachedSubResult();
+            endResources(XAResource.TMFAIL, subResult);
+            rollbackResources(subResult);
             if (logger.isDebugEnabled()) {
                 logger.debug("Rollback transaction: {}", this);
             }
-            afterCompletion();
+            afterCompletion(subResult);
+            handleRollbackFailure(subResult);
         } finally {
             destroy();
         }
     }
 
-    private void assertActiveOrMarkedRollback() throws IllegalStateException {
+    protected void assertActiveOrMarkedRollback() throws IllegalStateException {
         switch (status) {
         case Status.STATUS_ACTIVE:
         case Status.STATUS_MARKED_ROLLBACK:
@@ -368,17 +428,18 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    private void rollbackResources() {
+    protected void rollbackResources(DetachedSubResult subResult) {
         status = Status.STATUS_ROLLING_BACK;
         for (int i = 0; i < getXAResourceWrapperSize(); ++i) {
-            XAResourceWrapper xarw = getXAResourceWrapper(i);
+            final XAResourceWrapper xarw = getXAResourceWrapper(i);
             try {
                 if (xarw.isCommitTarget()) {
                     xarw.rollback();
                 }
-            } catch (Throwable t) {
-                logger.debug("Failed to rollback the XA resource: " + xarw, t);
+            } catch (Throwable cause) {
+                logger.warn("Failed to rollback the XA resource: " + toCauseHash(cause) + " " + xarw, cause);
                 status = Status.STATUS_UNKNOWN;
+                subResult.addDetachedCause(cause);
             }
         }
         if (status == Status.STATUS_ROLLING_BACK) {
@@ -386,14 +447,28 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    public void setRollbackOnly() throws IllegalStateException, SystemException {
+    protected void handleRollbackFailure(DetachedSubResult subResult) {
+        final Throwable firstDetachedCause = subResult.getFirstDetachedCause();
+        if (firstDetachedCause == null) {
+            return; // completely success
+        }
+        final LjtExceptionMessageBuilder br = new LjtExceptionMessageBuilder();
+        br.addNotice("Failed to execute several roll-back processes.");
+        setupDetachedCausePart(br, subResult.getDetachedCauseList());
+        final String msg = br.buildExceptionMessage();
+        logger.warn(msg, firstDetachedCause); // logging only because of roll-back (and keep compatible)
+    }
 
+    // ===================================================================================
+    //                                                                      Roll-back Only
+    //                                                                      ==============
+    public void setRollbackOnly() throws IllegalStateException, SystemException {
         assertNotSuspended();
         assertActiveOrPreparingOrPrepared();
         status = Status.STATUS_MARKED_ROLLBACK;
     }
 
-    private void assertActiveOrPreparingOrPrepared() throws IllegalStateException {
+    protected void assertActiveOrPreparingOrPrepared() throws IllegalStateException {
         switch (status) {
         case Status.STATUS_ACTIVE:
         case Status.STATUS_PREPARING:
@@ -404,6 +479,9 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
+    // ===================================================================================
+    //                                                                     Enlist Resource
+    //                                                                     ===============
     public boolean enlistResource(XAResource xaResource) throws RollbackException, IllegalStateException, SystemException {
         boolean oracled = xaResource.getClass().getName().startsWith("oracle");
         assertNotSuspended();
@@ -442,10 +520,13 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         }
     }
 
-    private Xid createXidBranch() {
+    protected Xid createXidBranch() {
         return new XidImpl(xid, ++branchId);
     }
 
+    // ===================================================================================
+    //                                                                     Delist Resource
+    //                                                                     ===============
     public boolean delistResource(XAResource xaResource, int flag) throws IllegalStateException, SystemException {
         assertNotSuspended();
         assertActiveOrMarkedRollback();
@@ -455,8 +536,8 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
                 try {
                     xarw.end(flag);
                     return true;
-                } catch (XAException ex) {
-                    logger.debug("Failed to end the XA resource: " + xarw + " " + flag, ex);
+                } catch (XAException cause) {
+                    logger.warn("Failed to end the XA resource: " + xarw + " " + flag, cause);
                     status = Status.STATUS_MARKED_ROLLBACK;
                     return false;
                 }
@@ -465,10 +546,16 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         throw new LjtIllegalStateException("Unregistered XA resource: " + xaResource);
     }
 
+    // ===================================================================================
+    //                                                                  Transaction Status
+    //                                                                  ==================
     public int getStatus() {
         return status;
     }
 
+    // ===================================================================================
+    //                                                                     Synchronization
+    //                                                                     ===============
     public void registerSynchronization(Synchronization sync) throws RollbackException, IllegalStateException, SystemException {
         assertNotSuspended();
         assertActive();
@@ -481,6 +568,9 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         interposedSynchronizations.add(sync);
     }
 
+    // ===================================================================================
+    //                                                                   Resource Handling
+    //                                                                   =================
     public void putResource(Object key, Object value) throws IllegalStateException {
         assertNotSuspended();
         resourceMap.put(key, value);
@@ -491,19 +581,10 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         return resourceMap.get(key);
     }
 
-    public Xid getXid() {
-        return xid;
-    }
-
-    public boolean isSuspended() {
-        return suspended;
-    }
-
-    private void init() {
-        xid = new XidImpl();
-    }
-
-    private void destroy() {
+    // ===================================================================================
+    //                                                                             Destroy
+    //                                                                             =======
+    protected void destroy() {
         status = Status.STATUS_NO_TRANSACTION;
         xaResourceWrappers.clear();
         synchronizations.clear();
@@ -512,8 +593,64 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
         suspended = false;
     }
 
+    // ===================================================================================
+    //                                                                            Detached
+    //                                                                            ========
+    protected static class DetachedSubResult {
+
+        private List<Throwable> detachedCauseList; // lazy-loaded
+
+        public List<Throwable> getDetachedCauseList() { // treated as read-only
+            return detachedCauseList != null ? detachedCauseList : Collections.emptyList();
+        }
+
+        public Throwable getFirstDetachedCause() { // null alllowed
+            return detachedCauseList != null && !detachedCauseList.isEmpty() ? detachedCauseList.get(0) : null;
+        }
+
+        public void addDetachedCause(Throwable cause) {
+            if (detachedCauseList == null) {
+                detachedCauseList = new ArrayList<Throwable>();
+            }
+            detachedCauseList.add(cause);
+        }
+    }
+
+    protected void setupDetachedCausePart(LjtExceptionMessageBuilder br, List<Throwable> detachedCauseList) {
+        if (detachedCauseList.isEmpty()) {
+            return;
+        }
+        br.addItem("Detached Cause");
+        for (Throwable detachedCause : detachedCauseList) {
+            final String className = detachedCause.getClass().getSimpleName();
+            final String causeHash = toCauseHash(detachedCause);
+            final String causeMessage = detachedCause.getMessage();
+            br.addElement(className + ": " + causeHash + " " + causeMessage);
+        }
+        br.addElement("(You can search the details in WARN log by the hash codes)");
+    }
+
+    protected String toCauseHash(Throwable cause) {
+        return "#" + Integer.toHexString(cause.hashCode());
+    }
+
+    // ===================================================================================
+    //                                                                      Basic Override
+    //                                                                      ==============
+    @Override
     public String toString() {
         return xid.toString();
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Xid getXid() {
+        return xid;
+    }
+
+    public boolean isSuspended() {
+        return suspended;
     }
 
     public List<Synchronization> getSynchronizations() {
