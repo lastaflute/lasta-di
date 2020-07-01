@@ -79,6 +79,8 @@ public interface NamingConvention {
 
     String getLogicSuffix();
 
+    String getRepositorySuffix();
+
     String getHelperSuffix();
 
     String getInterceptorSuffix();

@@ -53,6 +53,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     protected String formSuffix = "Form";
     protected String serviceSuffix = "Service";
     protected String logicSuffix = "Logic";
+    protected String repositorySuffix = "Repository";
     protected String assistSuffix = "Assist";
     protected String helperSuffix = "Helper";
     protected String interceptorSuffix = "Interceptor";
@@ -614,6 +615,15 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
 
     public void setServiceSuffix(final String serviceSuffix) {
         this.serviceSuffix = serviceSuffix;
+    }
+
+    @Override
+    public String getRepositorySuffix() {
+        return repositorySuffix;
+    }
+
+    public void setRepositorySuffix(final String repositorySuffix) {
+        this.repositorySuffix = repositorySuffix;
     }
 
     @Override
