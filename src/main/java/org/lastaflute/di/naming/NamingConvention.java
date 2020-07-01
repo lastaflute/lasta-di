@@ -75,9 +75,9 @@ public interface NamingConvention {
 
     String getAssistSuffix();
 
-    String getServiceSuffix();
-
     String getLogicSuffix();
+
+    String getServiceSuffix();
 
     String getRepositorySuffix();
 
@@ -100,13 +100,15 @@ public interface NamingConvention {
 
     String getServicePackageName();
 
+    String getRepositoryPackageName();
+
+    String getHelperPackageName();
+
     String getInterceptorPackageName();
 
     String getValidatorPackageName();
 
     String getConverterPackageName();
-
-    String getHelperPackageName();
 
     String getImplementationPackageName();
 

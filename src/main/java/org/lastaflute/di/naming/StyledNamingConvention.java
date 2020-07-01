@@ -582,24 +582,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     @Override
-    public String getHelperSuffix() {
-        return helperSuffix;
-    }
-
-    public void setHelperSuffix(final String helperSuffix) {
-        this.helperSuffix = helperSuffix;
-    }
-
-    @Override
-    public String getInterceptorSuffix() {
-        return interceptorSuffix;
-    }
-
-    public void setInterceptorSuffix(final String interceptorSuffix) {
-        this.interceptorSuffix = interceptorSuffix;
-    }
-
-    @Override
     public String getLogicSuffix() {
         return logicSuffix;
     }
@@ -624,6 +606,24 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
 
     public void setRepositorySuffix(final String repositorySuffix) {
         this.repositorySuffix = repositorySuffix;
+    }
+
+    @Override
+    public String getHelperSuffix() {
+        return helperSuffix;
+    }
+
+    public void setHelperSuffix(final String helperSuffix) {
+        this.helperSuffix = helperSuffix;
+    }
+
+    @Override
+    public String getInterceptorSuffix() {
+        return interceptorSuffix;
+    }
+
+    public void setInterceptorSuffix(final String interceptorSuffix) {
+        this.interceptorSuffix = interceptorSuffix;
     }
 
     @Override
@@ -671,6 +671,16 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     @Override
+    public String getServicePackageName() {
+        return fromSuffixToPackageName(serviceSuffix);
+    }
+
+    @Override
+    public String getRepositoryPackageName() {
+        return fromSuffixToPackageName(repositorySuffix);
+    }
+
+    @Override
     public String getHelperPackageName() {
         return fromSuffixToPackageName(helperSuffix);
     }
@@ -678,11 +688,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     @Override
     public String getInterceptorPackageName() {
         return fromSuffixToPackageName(interceptorSuffix);
-    }
-
-    @Override
-    public String getServicePackageName() {
-        return fromSuffixToPackageName(serviceSuffix);
     }
 
     @Override
