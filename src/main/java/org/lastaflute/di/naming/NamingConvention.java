@@ -96,6 +96,7 @@ public interface NamingConvention {
     // -----------------------------------------------------
     //                                          Package Name
     //                                          ------------
+    // fromSuffixToPackageName() is used instead of these methods, needed? 
     String getLogicPackageName();
 
     String getServicePackageName();
@@ -110,6 +111,7 @@ public interface NamingConvention {
 
     String getConverterPackageName();
 
+    // only used
     String getImplementationPackageName();
 
     // -----------------------------------------------------
