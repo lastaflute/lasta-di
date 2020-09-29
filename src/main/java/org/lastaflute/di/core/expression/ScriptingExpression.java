@@ -63,8 +63,11 @@ public class ScriptingExpression implements Expression {
         final Class<?> engineType = LastaDiProperties.getInstance().getDiXmlScriptExpressionEngineType();
         final ExpressionEngine engine;
         if (engineType != null) {
-            // TODO jflute lastaflute: [E] fitting: DI :: expression engine property error handling
-            engine = (ExpressionEngine) LdiClassUtil.newInstance(engineType);
+            try {
+                engine = (ExpressionEngine) LdiClassUtil.newInstance(engineType);
+            } catch (RuntimeException e) {
+                throw new IllegalStateException("Failed to create instance of the engine: " + engineType, e);
+            }
         } else { // mainly here
             engine = createDefaultEngine();
         }

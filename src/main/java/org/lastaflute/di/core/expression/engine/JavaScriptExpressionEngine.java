@@ -42,6 +42,8 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    protected static final String DEFAULT_ENGINE_NAME = "javascript"; // as default (means nashorn)
+
     protected static final String SQ = "'";
     protected static final String DQ = "\"";
 
@@ -156,8 +158,8 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     }
 
     protected ScriptEngine comeOnScriptEngine() {
-        final String specifyedName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
-        final String engineName = specifyedName != null ? specifyedName : getDefaultEngineName();
+        // script engine is not thread safe so it should be prepared per execution 
+        final String engineName = prepareManagedEngineName();
         final ScriptEngine engine = prepareScriptEngineManager().getEngineByName(engineName);
         if (engine == null) { // e.g. wrong name specified in lasta_di.properties
             throwScriptEngineNotFoundException(engineName);
@@ -175,10 +177,6 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         br.addElement(engineName);
         final String msg = br.buildExceptionMessage();
         throw new IllegalStateException(msg);
-    }
-
-    protected String getDefaultEngineName() {
-        return "javascript"; // as default (means nashorn)
     }
 
     protected ScriptEngineManager prepareScriptEngineManager() {
@@ -274,5 +272,17 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     @Override
     public String resolveStaticMethodReference(Class<?> refType, String methodName) {
         return refType.getName() + "." + methodName; // e.g. org.lastaflute.di.util.LdiResourceUtil.exists
+    }
+
+    // ===================================================================================
+    //                                                                      Managed Engine
+    //                                                                      ==============
+    public String prepareManagedEngineName() { // not null, public for prior initialization
+        final String specifyedName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
+        return specifyedName != null ? specifyedName : getDefaultEngineName();
+    }
+
+    protected String getDefaultEngineName() { // not null
+        return DEFAULT_ENGINE_NAME;
     }
 }
