@@ -145,7 +145,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     //                                                                   =================
     protected Object actuallyEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container, String firstName,
             Object firstComponent) {
-        final ScriptEngine engine = comeOnScriptEngine();
+        final ScriptEngine engine = comeOnScriptEngine(exp);
         if (firstName != null) {
             engine.put(firstName, firstComponent);
         }
@@ -157,17 +157,17 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         }
     }
 
-    protected ScriptEngine comeOnScriptEngine() {
+    protected ScriptEngine comeOnScriptEngine(String exp) {
         // script engine is not thread safe so it should be prepared per execution 
         final String engineName = prepareManagedEngineName();
         final ScriptEngine engine = prepareScriptEngineManager().getEngineByName(engineName);
         if (engine == null) { // e.g. wrong name specified in lasta_di.properties
-            throwScriptEngineNotFoundException(engineName);
+            throwScriptEngineNotFoundException(engineName, exp);
         }
         return engine;
     }
 
-    protected void throwScriptEngineNotFoundException(String engineName) {
+    protected void throwScriptEngineNotFoundException(String engineName, String exp) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Not found the script engine by the name.");
         br.addItem("Advice");
@@ -175,6 +175,8 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         br.addElement("(also your lasta_di.properties settings)");
         br.addItem("Engine Name");
         br.addElement(engineName);
+        br.addItem("Script Expression");
+        br.addElement(exp);
         final String msg = br.buildExceptionMessage();
         throw new IllegalStateException(msg);
     }
