@@ -91,8 +91,7 @@ public class ExpressionCastResolver {
     // ===================================================================================
     //                                                                        Convert List
     //                                                                        ============
-    public Object convertListTo(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType,
-            List<Object> challengeList) { // not null
+    public Object convertListTo(String exp, LaContainer container, Class<?> resultType, List<Object> challengeList) { // not null
         if (int[].class.isAssignableFrom(resultType)) { // e.g. (int[])[1,2]
             final int[] intAry = new int[challengeList.size()];
             int index = 0;
@@ -105,7 +104,7 @@ public class ExpressionCastResolver {
                     ++index;
                 }
             } catch (RuntimeException e) {
-                throwExpressionCannotConvertException(exp, contextMap, container, resultType, index, e);
+                throwExpressionCannotConvertException(exp, container, resultType, index, e);
             }
             return intAry;
         } else if (String[].class.isAssignableFrom(resultType)) { // e.g. (String[])["sea","land"]
@@ -123,7 +122,7 @@ public class ExpressionCastResolver {
                     ++index;
                 }
             } catch (RuntimeException e) {
-                throwExpressionCannotConvertException(exp, contextMap, container, resultType, index, e);
+                throwExpressionCannotConvertException(exp, container, resultType, index, e);
             }
             return strAry;
         } else if (Set.class.isAssignableFrom(resultType)) { // e.g. (Set)["sea","land"]
@@ -137,16 +136,14 @@ public class ExpressionCastResolver {
         }
     }
 
-    protected void throwExpressionCannotConvertException(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> conversionType, Integer index, RuntimeException cause) {
+    protected void throwExpressionCannotConvertException(String exp, LaContainer container, Class<?> conversionType, Integer index,
+            RuntimeException cause) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Failed to convert the value to the type in the expression.");
         br.addItem("Di XML");
         br.addElement(container.getPath());
         br.addItem("Expression");
         br.addElement(exp);
-        br.addItem("Context Map");
-        br.addElement(contextMap);
         br.addItem("Conversion Type");
         br.addElement(conversionType);
         if (index != null) {

@@ -18,7 +18,6 @@ package org.lastaflute.di.core.expression.engine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.script.ScriptEngine;
@@ -71,15 +70,16 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
 
     protected Object viaVariableResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> resultType) {
-        String filteredExp = exp;
-        for (Entry<String, ? extends Object> entry : contextMap.entrySet()) { // e.g. #SMART => 'cool'
-            filteredExp = LdiStringUtil.replace(filteredExp, "#" + entry.getKey(), SQ + entry.getValue() + SQ);
-        }
-        return viaCastResolvedEvaluate(filteredExp, contextMap, container, resultType);
+        final String resolvedExp = resolveExpressionVariable(exp, contextMap);
+        System.out.println("@@@: " + resolvedExp);
+        return viaCastResolvedEvaluate(resolvedExp, container, resultType);
     }
 
-    protected Object viaCastResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected String resolveExpressionVariable(String exp, Map<String, ? extends Object> contextMap) {
+        return ExpressionEngine.resolveExpressionVariableSimply(exp, contextMap);
+    }
+
+    protected Object viaCastResolvedEvaluate(String exp, LaContainer container, Class<?> resultType) {
         final CastResolved resolved = castResolver.resolveCast(exp, resultType);
         final String realExp;
         final Class<?> realType;
@@ -90,11 +90,10 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             realExp = exp.trim();
             realType = resultType;
         }
-        return viaFirstNameResolvedEvaluate(realExp, contextMap, container, realType);
+        return viaFirstNameResolvedEvaluate(realExp, container, realType);
     }
 
-    protected Object viaFirstNameResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object viaFirstNameResolvedEvaluate(String exp, LaContainer container, Class<?> resultType) {
         final String filteredExp;
         String firstName = null;
         Object firstComponent = null;
@@ -133,8 +132,8 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         } else {
             filteredExp = exp;
         }
-        final Object evaluated = actuallyEvaluate(filteredExp, contextMap, container, firstName, firstComponent);
-        final Object filtered = filterEvaluated(filteredExp, contextMap, container, evaluated, resultType);
+        final Object evaluated = actuallyEvaluate(filteredExp, container, firstName, firstComponent);
+        final Object filtered = filterEvaluated(filteredExp, container, evaluated, resultType);
         // needs deep thinking time for e.g. primitive, Object.class
         //checkResultTypeMatched(filtered, contextMap, container, resultType);
         return filtered;
@@ -143,31 +142,30 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     // ===================================================================================
     //                                                                   Actually Evaluate
     //                                                                   =================
-    protected Object actuallyEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container, String firstName,
-            Object firstComponent) {
-        final ScriptEngine engine = comeOnScriptEngine(exp);
+    protected Object actuallyEvaluate(String exp, LaContainer container, String firstName, Object firstComponent) {
+        final ScriptEngine engine = comeOnScriptEngine(exp, container);
         if (firstName != null) {
             engine.put(firstName, firstComponent);
         }
         try {
             return engine.eval(exp);
         } catch (ScriptException | RuntimeException e) {
-            throwJavaScriptExpressionException(exp, contextMap, container, e);
+            throwJavaScriptExpressionException(exp, container, e);
             return null; // unreachable
         }
     }
 
-    protected ScriptEngine comeOnScriptEngine(String exp) {
+    protected ScriptEngine comeOnScriptEngine(String exp, LaContainer container) {
         // script engine is not thread safe so it should be prepared per execution 
         final String engineName = prepareManagedEngineName();
         final ScriptEngine engine = prepareScriptEngineManager().getEngineByName(engineName);
         if (engine == null) { // e.g. wrong name specified in lasta_di.properties
-            throwScriptEngineNotFoundException(engineName, exp);
+            throwScriptEngineNotFoundException(engineName, exp, container);
         }
         return engine;
     }
 
-    protected void throwScriptEngineNotFoundException(String engineName, String exp) {
+    protected void throwScriptEngineNotFoundException(String engineName, String exp, LaContainer container) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Not found the script engine by the name.");
         br.addItem("Advice");
@@ -175,8 +173,10 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         br.addElement("(also your lasta_di.properties settings)");
         br.addItem("Engine Name");
         br.addElement(engineName);
-        br.addItem("Script Expression");
+        br.addItem("Expression");
         br.addElement(exp);
+        br.addItem("Di XML");
+        br.addElement(container.getPath());
         final String msg = br.buildExceptionMessage();
         throw new IllegalStateException(msg);
     }
@@ -185,16 +185,13 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         return defaultManager; // as default
     }
 
-    protected void throwJavaScriptExpressionException(Object exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Exception e) {
+    protected void throwJavaScriptExpressionException(String exp, LaContainer container, Exception e) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Failed to evaluate the JavaScript expression.");
-        br.addItem("Di XML");
-        br.addElement(container.getPath());
         br.addItem("Expression");
         br.addElement(exp);
-        br.addItem("Context Map");
-        br.addElement(contextMap);
+        br.addItem("Di XML");
+        br.addElement(container.getPath());
         final String msg = br.buildExceptionMessage();
         throw new IllegalStateException(msg, e);
     }
@@ -202,8 +199,7 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     // ===================================================================================
     //                                                                           Filtering
     //                                                                           =========
-    protected Object filterEvaluated(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Object evaluated,
-            Class<?> resultType) {
+    protected Object filterEvaluated(String exp, LaContainer container, Object evaluated, Class<?> resultType) {
         if (evaluated instanceof String) {
             // e.g. jp. cannot create the instance with this error,
             // ReferenceError: "jp" is not defined in <eval> at line number 1
@@ -217,39 +213,35 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
                 try {
                     return LdiClassUtil.newInstance(className);
                 } catch (RuntimeException e) {
-                    throwExpressionClassCreateFailureException(exp, contextMap, container, className, e);
+                    throwExpressionClassCreateFailureException(exp, container, className, e);
                 }
             }
         }
         if (evaluated instanceof Map) {
             @SuppressWarnings("unchecked")
             final Map<String, Object> map = (Map<String, Object>) evaluated;
-            return handleMap(exp, contextMap, container, map, resultType);
+            return handleMap(exp, container, map, resultType);
         }
         return evaluated;
     }
 
-    protected void throwExpressionClassCreateFailureException(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            String className, RuntimeException cause) {
+    protected void throwExpressionClassCreateFailureException(String exp, LaContainer container, String className, RuntimeException cause) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Failed to create the class in the expression.");
         br.addItem("Di XML");
         br.addElement(container.getPath());
         br.addItem("Expression");
         br.addElement(exp);
-        br.addItem("Context Map");
-        br.addElement(contextMap);
         br.addItem("Class Name");
         br.addElement(className);
         final String msg = br.buildExceptionMessage();
         throw new ExpressionClassCreateFailureException(msg, cause);
     }
 
-    protected Object handleMap(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Map<String, Object> map,
-            Class<?> resultType) {
+    protected Object handleMap(String exp, LaContainer container, Map<String, Object> map, Class<?> resultType) {
         final List<Object> challengeList = challengeList(map);
         if (challengeList != null) { // e.g. [1,2] or ...
-            return castResolver.convertListTo(exp, contextMap, container, resultType, challengeList);
+            return castResolver.convertListTo(exp, container, resultType, challengeList);
         } else {
             return map;
         }

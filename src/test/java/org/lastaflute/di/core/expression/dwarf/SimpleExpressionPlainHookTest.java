@@ -15,9 +15,6 @@
  */
 package org.lastaflute.di.core.expression.dwarf;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.impl.LaContainerImpl;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
@@ -30,18 +27,17 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
     public void test_resolveSimpleNumber_basic() {
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
-        Map<String, ? extends Object> contextMap = new HashMap<>();
 
         // ## Act ##
         // ## Assert ##
-        assertEquals(1, hook.resolveSimpleNumber("1", contextMap, createContainer(), Object.class));
-        assertEquals(123, hook.resolveSimpleNumber("123", contextMap, createContainer(), Object.class));
-        assertEquals(12345678, hook.resolveSimpleNumber("12345678", contextMap, createContainer(), Object.class));
-        assertEquals(123456789, hook.resolveSimpleNumber("123456789", contextMap, createContainer(), Object.class));
-        assertEquals(1234567890L, hook.resolveSimpleNumber("1234567890", contextMap, createContainer(), Object.class));
-        assertEquals(2222222222L, hook.resolveSimpleNumber("2222222222", contextMap, createContainer(), Object.class));
-        assertEquals(12345678901L, hook.resolveSimpleNumber("12345678901", contextMap, createContainer(), Object.class));
-        assertEquals(99999999999L, hook.resolveSimpleNumber("99999999999", contextMap, createContainer(), Object.class));
+        assertEquals(1, hook.resolveSimpleNumber("1", createContainer(), Object.class));
+        assertEquals(123, hook.resolveSimpleNumber("123", createContainer(), Object.class));
+        assertEquals(12345678, hook.resolveSimpleNumber("12345678", createContainer(), Object.class));
+        assertEquals(123456789, hook.resolveSimpleNumber("123456789", createContainer(), Object.class));
+        assertEquals(1234567890L, hook.resolveSimpleNumber("1234567890", createContainer(), Object.class));
+        assertEquals(2222222222L, hook.resolveSimpleNumber("2222222222", createContainer(), Object.class));
+        assertEquals(12345678901L, hook.resolveSimpleNumber("12345678901", createContainer(), Object.class));
+        assertEquals(99999999999L, hook.resolveSimpleNumber("99999999999", createContainer(), Object.class));
     }
 
     private LaContainer createContainer() {

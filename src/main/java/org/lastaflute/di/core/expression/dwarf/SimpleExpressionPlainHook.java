@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
+import org.lastaflute.di.core.expression.engine.ExpressionEngine;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
@@ -44,6 +45,13 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                                        ============
     @Override
     public Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+        // same filter in JavaScript engine however cannot commonize easily because of OGNL-embedded
+        // no fix as small cost for now by jflute (2020/09/30)
+        final String resolvedExp = ExpressionEngine.resolveExpressionVariableSimply(exp, contextMap);
+        return doHookPlainly(resolvedExp, contextMap, container, resultType);
+    }
+
+    protected Object doHookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
         final CastResolved resolved = castResolver.resolveCast(exp, resultType);
         final String realExp;
         final Class<?> realType;
@@ -54,39 +62,39 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             realExp = exp.trim();
             realType = resultType;
         }
-        return doHookPlainly(realExp, contextMap, container, realType);
+        return actuallyHookPlainly(realExp, container, realType);
     }
 
-    protected Object doHookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
-        Object resovled = resolveSimpleString(exp, contextMap, container, resultType); // "sea"
+    protected Object actuallyHookPlainly(String exp, LaContainer container, Class<?> resultType) {
+        Object resovled = resolveSimpleString(exp, container, resultType); // "sea"
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleNumber(exp, contextMap, container, resultType); // e.g. 7
+        resovled = resolveSimpleNumber(exp, container, resultType); // e.g. 7
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleEqualEqual(exp, contextMap, container, resultType); // e.g. 'hot' == 'cool'
+        resovled = resolveSimpleEqualEqual(exp, container, resultType); // e.g. 'hot' == 'cool'
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleTypeExp(exp, contextMap, container, resultType); // e.g. @org.docksidestage.Sea@class
+        resovled = resolveSimpleTypeExp(exp, container, resultType); // e.g. @org.docksidestage.Sea@class
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveSimpleComponent(exp, contextMap, container, resultType); // e.g. sea
+        resovled = resolveSimpleComponent(exp, container, resultType); // e.g. sea
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveExistsResource(exp, contextMap, container, resultType); // e.g. .exists()
+        resovled = resolveExistsResource(exp, container, resultType); // e.g. .exists()
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveProviderConfig(exp, contextMap, container, resultType); // e.g. provider.config...
+        resovled = resolveProviderConfig(exp, container, resultType); // e.g. provider.config...
         if (resovled != null) {
             return resovled;
         }
-        resovled = resolveComponentList(exp, contextMap, container, resultType); // e.g. [sea, land]
+        resovled = resolveComponentList(exp, container, resultType); // e.g. [sea, land]
         if (resovled != null) {
             return resovled;
         }
@@ -96,7 +104,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                                      Basic Handling
     //                                                                      ==============
-    protected Object resolveSimpleString(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+    protected Object resolveSimpleString(String exp, LaContainer container, Class<?> resultType) {
         if (exp.startsWith(DQ) && exp.endsWith(DQ) && exp.length() > DQ.length()) {
             final String unquoted = exp.substring(DQ.length(), exp.length() - DQ.length());
             if (!unquoted.contains(DQ)) { // simple string e.g. "sea"
@@ -106,7 +114,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         return null;
     }
 
-    protected Object resolveSimpleNumber(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+    protected Object resolveSimpleNumber(String exp, LaContainer container, Class<?> resultType) {
         if (LdiStringUtil.isNumber(exp)) {
             if (exp.length() > 9) {
                 return Long.valueOf(exp);
@@ -117,8 +125,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         return null;
     }
 
-    protected Object resolveSimpleEqualEqual(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object resolveSimpleEqualEqual(String exp, LaContainer container, Class<?> resultType) {
         if (exp.contains("==")) {
             final String[] split = exp.split("==");
             if (split.length == 2) { // may be e.g. 'hot' == 'cool'
@@ -140,8 +147,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                              Simple Type Expression
     //                                                              ======================
-    protected Object resolveSimpleTypeExp(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object resolveSimpleTypeExp(String exp, LaContainer container, Class<?> resultType) {
         if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END_CLASS)) { // @org.docksidestage.Sea@class
             // mainly for OGNL compatibility
             final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END_CLASS));
@@ -167,8 +173,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                                    Simple Component
     //                                                                    ================
-    protected Object resolveSimpleComponent(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object resolveSimpleComponent(String exp, LaContainer container, Class<?> resultType) {
         if (!LdiSrl.containsAny(exp, ".", ",", SQ, DQ, "@", "#")) { // main except, just in case
             if (container.hasComponentDef(exp)) {
                 return container.getComponent(exp);
@@ -217,8 +222,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                                     Exists Resource
     //                                                                     ===============
-    protected Object resolveExistsResource(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object resolveExistsResource(String exp, LaContainer container, Class<?> resultType) {
         if (exp.startsWith(EXISTS_BEGIN) && exp.endsWith(EXISTS_END)) {
             final String path = exp.substring(EXISTS_BEGIN.length(), exp.lastIndexOf(EXISTS_END));
             if (!path.contains(SQ)) {
@@ -231,8 +235,8 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                              Provider Configuration
     //                                                              ======================
-    protected Object resolveProviderConfig(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object resolveProviderConfig(String exp, LaContainer container, Class<?> resultType) {
+        // cannot support provider.config().getOrDefault("jdbc.connection.pooling.min.size", null) for now
         if (exp.startsWith(PROVIDER_GET) && exp.endsWith(METHOD_MARK) && exp.contains(".") && !exp.contains("\"")) {
             final String[] tokens = exp.split("\\.");
             if (tokens.length > 1) {
@@ -276,8 +280,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     // ===================================================================================
     //                                                                      Component List
     //                                                                      ==============
-    protected Object resolveComponentList(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
-            Class<?> resultType) {
+    protected Object resolveComponentList(String exp, LaContainer container, Class<?> resultType) {
         if (!exp.contains(DQ) && !exp.contains(SQ) && exp.startsWith("[") && exp.endsWith("]")) {
             final String listContents = exp.substring(1, exp.length() - 1);
             final String[] elements = LdiStringUtil.split(listContents, ",");
@@ -294,7 +297,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
                     final Object component = container.getComponent(comp.trim()); // in same or child container
                     resultList.add(component);
                 }
-                return castResolver.convertListTo(exp, contextMap, container, resultType, resultList);
+                return castResolver.convertListTo(exp, container, resultType, resultList);
             }
         }
         return null;
