@@ -86,10 +86,11 @@ public class ScriptingExpression implements Expression {
         if (parsed instanceof String) {
             final Object hooked = hookPlainly((String) parsed, contextMap, container, resultType);
             if (hooked != null) {
+                final Object result = ExpressionPlainHook.resolveHookedReturn(hooked); // needed for null return
                 if (isInternalDebug()) {
-                    logger.debug("#fw_debug Parsed as simple expression by plain hook: {} => {}", parsed, hooked);
+                    logger.debug("#fw_debug Parsed as simple expression by plain hook: {} => {}", parsed, result);
                 }
-                return hooked;
+                return result;
             }
         }
         if (isInternalDebug()) {

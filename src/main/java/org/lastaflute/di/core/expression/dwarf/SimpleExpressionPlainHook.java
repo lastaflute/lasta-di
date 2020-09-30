@@ -67,38 +67,42 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
 
     protected Object actuallyHookPlainly(String exp, LaContainer container, Class<?> resultType) {
         Object resovled = resolveSimpleString(exp, container, resultType); // "sea"
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveSimpleNumber(exp, container, resultType); // e.g. 7
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveSimpleEqualEqual(exp, container, resultType); // e.g. 'hot' == 'cool'
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveSimpleTypeExp(exp, container, resultType); // e.g. @org.docksidestage.Sea@class
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveSimpleComponent(exp, container, resultType); // e.g. sea
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveExistsResource(exp, container, resultType); // e.g. .exists()
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveProviderConfig(exp, container, resultType); // e.g. provider.config...
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         resovled = resolveComponentList(exp, container, resultType); // e.g. [sea, land]
-        if (resovled != null) {
+        if (isReallyResolved(resovled)) {
             return resovled;
         }
         return null;
+    }
+
+    protected boolean isReallyResolved(Object resovled) {
+        return resovled != null; // includes null return object
     }
 
     // ===================================================================================
@@ -236,19 +240,41 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                              Provider Configuration
     //                                                              ======================
     protected Object resolveProviderConfig(String exp, LaContainer container, Class<?> resultType) {
-        // cannot support provider.config().getOrDefault("jdbc.connection.pooling.min.size", null) for now
-        if (exp.startsWith(PROVIDER_GET) && exp.endsWith(METHOD_MARK) && exp.contains(".") && !exp.contains("\"")) {
+        final boolean noArgMethod = isProviderConfigNoArgMethod(exp);
+        final boolean orDefaultMethod = isProviderConfigOrDefaultMethod(exp);
+        if (noArgMethod || orDefaultMethod) {
+            if (orDefaultMethod && LdiSrl.count(exp, "\"") == 2) {
+                final List<String> splitList = LdiSrl.splitList(exp, "\""); // always three elements
+                final String savedDotKey = LdiSrl.replace(splitList.get(1), ".", "$$dot$$");
+                exp = splitList.get(0) + "\"" + savedDotKey + "\"" + splitList.get(2);
+            }
             final String[] tokens = exp.split("\\.");
             if (tokens.length > 1) {
                 Object component = null;
                 BeanDesc beanDesc = null;
                 for (String prop : tokens) {
-                    if (prop.endsWith(METHOD_MARK)) { // method
-                        if (component == null) { // e.g. getJdbcUrl() only
+                    if (prop.endsWith(METHOD_MARK)) { // no-argument method e.g. config(), getJdbcUrl()
+                        if (component == null) { // no way? no-component method call
                             break;
                         }
                         final String methodName = prop.substring(0, prop.length() - METHOD_MARK.length());
                         component = beanDesc.invoke(component, methodName, (Object[]) null);
+                        if (component == null) { // empty property value, sometimes possible
+                            component = NULL_RETURN;
+                            break;
+                        }
+                        beanDesc = BeanDescFactory.getBeanDesc(component.getClass());
+                    } else if (prop.startsWith(ORDEFAULT_BEGIN) && prop.endsWith(ORDEFAULT_END)) { // getOrDefault(...)
+                        if (component == null) { // no way? no-component method call
+                            break;
+                        }
+                        final String key = LdiSrl.extractScopeFirst(prop, ORDEFAULT_BEGIN, ORDEFAULT_END).getContent();
+                        final String plainDotKey = LdiSrl.replace(key, "$$dot$$", ".");
+                        component = beanDesc.invoke(component, ORDEFAULT_METHOD_NAME, new Object[] { plainDotKey, null });
+                        if (component == null) { // not found (default null), enough possible
+                            component = NULL_RETURN;
+                            break;
+                        }
                         beanDesc = BeanDescFactory.getBeanDesc(component.getClass());
                     } else { // component or property
                         if (beanDesc == null) { // first element
@@ -275,6 +301,16 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             }
         }
         return null;
+    }
+
+    protected boolean isProviderConfigNoArgMethod(String exp) { // LastaFlute uses
+        // e.g. provider.config().getJdbcUrl()
+        return exp.startsWith(PROVIDER_GET) && exp.endsWith(METHOD_MARK) && !exp.contains("\"");
+    }
+
+    protected boolean isProviderConfigOrDefaultMethod(String exp) { // LastaFlute uses
+        // e.g. provider.config().getOrDefault("jdbc.connection.pooling.min.size", null)
+        return exp.startsWith(ORDEFAULT_PROVIDER_GET) && exp.endsWith(ORDEFAULT_END);
     }
 
     // ===================================================================================
