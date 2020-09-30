@@ -71,7 +71,6 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     protected Object viaVariableResolvedEvaluate(String exp, Map<String, ? extends Object> contextMap, LaContainer container,
             Class<?> resultType) {
         final String resolvedExp = resolveExpressionVariable(exp, contextMap);
-        System.out.println("@@@: " + resolvedExp);
         return viaCastResolvedEvaluate(resolvedExp, container, resultType);
     }
 
