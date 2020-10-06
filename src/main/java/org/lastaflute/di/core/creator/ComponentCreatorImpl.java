@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,8 @@ public class ComponentCreatorImpl implements ComponentCreator {
     public static final String enableAbstract_BINDING = "bindingType=may";
     private boolean enableAbstract = false;
 
-    private String nameSuffix;
-    private ComponentCustomizer customizer;
+    private String nameSuffix; // initialized by setter, so basically not null
+    private ComponentCustomizer customizer; // me too
 
     // ===================================================================================
     //                                                                         Constructor
@@ -67,11 +67,14 @@ public class ComponentCreatorImpl implements ComponentCreator {
     // ===================================================================================
     //                                                                       Component Def
     //                                                                       =============
+    // -----------------------------------------------------
+    //                                               by Type
+    //                                               -------
     public ComponentDef createComponentDef(Class<?> componentClass) {
-        if (!namingConvention.isTargetClassName(componentClass.getName(), nameSuffix)) {
+        if (!isTargetClassName(componentClass)) {
             return null;
         }
-        final Class<?> targetClass = namingConvention.toCompleteClass(componentClass);
+        final Class<?> targetClass = toCompleteClass(componentClass);
         if (targetClass.isInterface()) {
             if (!isEnableInterface()) {
                 return null;
@@ -81,6 +84,43 @@ public class ComponentCreatorImpl implements ComponentCreator {
                 return null;
             }
         }
+        return doCreateComponentDef(targetClass);
+    }
+
+    protected boolean isTargetClassName(Class<?> componentClass) {
+        return namingConvention.isTargetClassName(componentClass.getName(), nameSuffix);
+    }
+
+    protected Class<?> toCompleteClass(Class<?> componentClass) {
+        return namingConvention.toCompleteClass(componentClass);
+    }
+
+    // -----------------------------------------------------
+    //                                               by Name
+    //                                               -------
+    public ComponentDef createComponentDef(String componentName) {
+        if (!isTargetComponentName(componentName)) {
+            return null;
+        }
+        final Class<?> componentClass = fromComponentNameToClass(componentName);
+        if (componentClass == null) {
+            return null;
+        }
+        return createComponentDef(componentClass);
+    }
+
+    protected boolean isTargetComponentName(String componentName) {
+        return componentName.endsWith(nameSuffix);
+    }
+
+    protected Class<?> fromComponentNameToClass(String componentName) {
+        return namingConvention.fromComponentNameToClass(componentName);
+    }
+
+    // -----------------------------------------------------
+    //                                          Assist Logic
+    //                                          ------------
+    protected ComponentDef doCreateComponentDef(Class<?> targetClass) {
         final AnnotationHandler handler = AnnotationHandlerFactory.getAnnotationHandler();
         final ComponentDef cd = handler.createComponentDef(targetClass, instanceDef, autoBindingDef, externalBinding);
         if (cd.getComponentName() == null) {
@@ -88,21 +128,6 @@ public class ComponentCreatorImpl implements ComponentCreator {
         }
         setupCompleteComponent(handler, cd);
         return cd;
-    }
-
-    public ComponentDef createComponentDef(String componentName) {
-        if (!isTargetComponentName(componentName)) {
-            return null;
-        }
-        final Class<?> componentClass = namingConvention.fromComponentNameToClass(componentName);
-        if (componentClass == null) {
-            return null;
-        }
-        return createComponentDef(componentClass);
-    }
-
-    public boolean isTargetComponentName(String componentName) {
-        return componentName.endsWith(nameSuffix);
     }
 
     protected void setupCompleteComponent(AnnotationHandler handler, ComponentDef cd) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,11 @@ import org.lastaflute.di.core.meta.impl.InstanceDefFactory;
 import org.lastaflute.di.naming.NamingConvention;
 
 /**
- * @author modified by jflute (originated in Seasar)
  * @author vestige
- *  
+ * @author modified by jflute (originated in Seasar)
  */
 public class ServiceCreator extends ComponentCreatorImpl {
 
-    /**
-     * @param namingConvention
-     */
     public ServiceCreator(NamingConvention namingConvention) {
         super(namingConvention);
         setNameSuffix(namingConvention.getServiceSuffix());
@@ -37,16 +33,10 @@ public class ServiceCreator extends ComponentCreatorImpl {
         setEnableAbstract(true);
     }
 
-    /**
-     * @return 
-     */
     public ComponentCustomizer getServiceCustomizer() {
         return getCustomizer();
     }
 
-    /**
-     * @param customizer 
-     */
     public void setServiceCustomizer(ComponentCustomizer customizer) {
         setCustomizer(customizer);
     }

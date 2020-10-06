@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,11 @@ public class ScriptingExpression implements Expression {
         final Class<?> engineType = LastaDiProperties.getInstance().getDiXmlScriptExpressionEngineType();
         final ExpressionEngine engine;
         if (engineType != null) {
-            // TODO jflute lastaflute: [E] fitting: DI :: expression engine property error handling
-            engine = (ExpressionEngine) LdiClassUtil.newInstance(engineType);
+            try {
+                engine = (ExpressionEngine) LdiClassUtil.newInstance(engineType);
+            } catch (RuntimeException e) {
+                throw new IllegalStateException("Failed to create instance of the engine: " + engineType, e);
+            }
         } else { // mainly here
             engine = createDefaultEngine();
         }
@@ -83,10 +86,11 @@ public class ScriptingExpression implements Expression {
         if (parsed instanceof String) {
             final Object hooked = hookPlainly((String) parsed, contextMap, container, resultType);
             if (hooked != null) {
+                final Object result = ExpressionPlainHook.resolveHookedReturn(hooked); // needed for null return
                 if (isInternalDebug()) {
-                    logger.debug("#fw_debug Parsed as simple expression by plain hook: {} => {}", parsed, hooked);
+                    logger.debug("#fw_debug Parsed as simple expression by plain hook: {} => {}", parsed, result);
                 }
-                return hooked;
+                return result;
             }
         }
         if (isInternalDebug()) {

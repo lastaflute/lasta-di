@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     protected String formSuffix = "Form";
     protected String serviceSuffix = "Service";
     protected String logicSuffix = "Logic";
+    protected String repositorySuffix = "Repository";
     protected String assistSuffix = "Assist";
     protected String helperSuffix = "Helper";
     protected String interceptorSuffix = "Interceptor";
@@ -581,24 +582,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     @Override
-    public String getHelperSuffix() {
-        return helperSuffix;
-    }
-
-    public void setHelperSuffix(final String helperSuffix) {
-        this.helperSuffix = helperSuffix;
-    }
-
-    @Override
-    public String getInterceptorSuffix() {
-        return interceptorSuffix;
-    }
-
-    public void setInterceptorSuffix(final String interceptorSuffix) {
-        this.interceptorSuffix = interceptorSuffix;
-    }
-
-    @Override
     public String getLogicSuffix() {
         return logicSuffix;
     }
@@ -614,6 +597,33 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
 
     public void setServiceSuffix(final String serviceSuffix) {
         this.serviceSuffix = serviceSuffix;
+    }
+
+    @Override
+    public String getRepositorySuffix() {
+        return repositorySuffix;
+    }
+
+    public void setRepositorySuffix(final String repositorySuffix) {
+        this.repositorySuffix = repositorySuffix;
+    }
+
+    @Override
+    public String getHelperSuffix() {
+        return helperSuffix;
+    }
+
+    public void setHelperSuffix(final String helperSuffix) {
+        this.helperSuffix = helperSuffix;
+    }
+
+    @Override
+    public String getInterceptorSuffix() {
+        return interceptorSuffix;
+    }
+
+    public void setInterceptorSuffix(final String interceptorSuffix) {
+        this.interceptorSuffix = interceptorSuffix;
     }
 
     @Override
@@ -661,6 +671,16 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     @Override
+    public String getServicePackageName() {
+        return fromSuffixToPackageName(serviceSuffix);
+    }
+
+    @Override
+    public String getRepositoryPackageName() {
+        return fromSuffixToPackageName(repositorySuffix);
+    }
+
+    @Override
     public String getHelperPackageName() {
         return fromSuffixToPackageName(helperSuffix);
     }
@@ -668,11 +688,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     @Override
     public String getInterceptorPackageName() {
         return fromSuffixToPackageName(interceptorSuffix);
-    }
-
-    @Override
-    public String getServicePackageName() {
-        return fromSuffixToPackageName(serviceSuffix);
     }
 
     @Override

@@ -10,6 +10,7 @@
 	<component name="validatorCreator" class="org.lastaflute.di.core.creator.ValidatorCreator"/>
 	<component name="logicCreator" class="org.lastaflute.di.core.creator.LogicCreator"/>
 	<component name="serviceCreator" class="org.lastaflute.di.core.creator.ServiceCreator"/>
+	<component name="repositoryCreator" class="org.lastaflute.di.core.creator.RepositoryCreator"/>
 	<component name="helperCreator" class="org.lastaflute.di.core.creator.HelperCreator"/>
 	<component name="jobCreator" class="org.lastaflute.di.core.creator.JobCreator"/>
 </components>

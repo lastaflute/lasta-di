@@ -24,6 +24,13 @@
 			</arg>
 	  	</postConstruct>
 	</component>
+	<component name="repositoryCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
+	  	<postConstruct name="addCustomizer">
+			<arg>
+				<component class="org.lastaflute.di.core.customizer.ext.ExplicitTxAttributeCustomizer"/>
+			</arg>
+	  	</postConstruct>
+	</component>
 	<component name="helperCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">
 	</component>
 	<component name="jobCustomizer" class="org.lastaflute.di.core.customizer.ext.ConcreteDrivenCustomizerChain">

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,22 @@ public interface ExpressionPlainHook {
     String TYPE_END = "@"; // me too
     String TYPE_END_CLASS = TYPE_END + "class"; // me too
     String METHOD_MARK = "()";
-    String PROVIDER_GET = "provider.config().get";
+
+    // e.g. provider.config().getJdbcUrl()
+    String PROVIDER_CONFIG = "provider.config()";
+    String PROVIDER_GET = PROVIDER_CONFIG + ".get";
+
+    // e.g. provider.config().getOrDefault("jdbc.connection.pooling.min.size", null)
+    String ORDEFAULT_METHOD_NAME = "getOrDefault";
+    String ORDEFAULT_PROVIDER_GET = PROVIDER_CONFIG + "." + ORDEFAULT_METHOD_NAME;
+    String ORDEFAULT_BEGIN = ORDEFAULT_METHOD_NAME + "(\"";
+    String ORDEFAULT_END = "\", null)"; // unsupported if valid default value and no space e.g. ",null" for now
+
+    Object NULL_RETURN = new Object();
 
     Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType);
+
+    static Object resolveHookedReturn(Object hooked) {
+        return NULL_RETURN.equals(hooked) ? null : hooked;
+    }
 }

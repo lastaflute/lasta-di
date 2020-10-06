@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,9 +75,11 @@ public interface NamingConvention {
 
     String getAssistSuffix();
 
+    String getLogicSuffix();
+
     String getServiceSuffix();
 
-    String getLogicSuffix();
+    String getRepositorySuffix();
 
     String getHelperSuffix();
 
@@ -94,9 +96,14 @@ public interface NamingConvention {
     // -----------------------------------------------------
     //                                          Package Name
     //                                          ------------
+    // fromSuffixToPackageName() is used instead of these methods, needed? 
     String getLogicPackageName();
 
     String getServicePackageName();
+
+    String getRepositoryPackageName();
+
+    String getHelperPackageName();
 
     String getInterceptorPackageName();
 
@@ -104,8 +111,7 @@ public interface NamingConvention {
 
     String getConverterPackageName();
 
-    String getHelperPackageName();
-
+    // only used
     String getImplementationPackageName();
 
     // -----------------------------------------------------

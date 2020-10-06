@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.lastaflute.di.DisposableUtil;
 import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.LastaDiProperties;
+import org.lastaflute.di.core.expression.engine.JavaScriptExpressionEngine;
 import org.lastaflute.di.core.external.ExternalContextComponentDefRegister;
 import org.lastaflute.di.core.smart.SmartDeployMode;
 import org.lastaflute.di.core.util.SmartDeployUtil;
@@ -75,8 +76,9 @@ public class SingletonLaContainerFactory {
             /* first getEngineByName() costs about 0.5 seconds so initialize it background */
             final Class<?> engineType = LastaDiProperties.getInstance().getDiXmlScriptExpressionEngineType();
             if (engineType == null) { /* use default */
-                final String engineName = LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
-                new ScriptEngineManager().getEngineByName(engineName != null ? engineName : "javascript"); /* initialize static resources */
+                /* initialize static resources */
+                final String engineName = new JavaScriptExpressionEngine().prepareManagedEngineName();
+                new ScriptEngineManager().getEngineByName(engineName); // only returning null if unsupported name
             }
         }).start();
     }

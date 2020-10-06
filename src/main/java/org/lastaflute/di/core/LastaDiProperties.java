@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,11 +103,11 @@ public class LastaDiProperties {
     // ===================================================================================
     //                                                                            Property
     //                                                                            ========
-    public String getProperty(String propertyKey) {
+    public String getProperty(String propertyKey) { // null allowed
         return props.getProperty(propertyKey);
     }
 
-    public String getProperty(String propertyKey, String defaultValue) {
+    public String getProperty(String propertyKey, String defaultValue) { // null allowed if default is null
         return props.getProperty(propertyKey, defaultValue);
     }
 
@@ -216,7 +216,7 @@ public class LastaDiProperties {
     // -----------------------------------------------------
     //                                         Smart Package
     //                                         -------------
-    public List<String> getSmartPackageList() {
+    public List<String> getSmartPackageList() { // not null, empty allowed
         if (smartPackageList != null) {
             return smartPackageList;
         }
@@ -233,22 +233,22 @@ public class LastaDiProperties {
         }
     }
 
-    public String getSmartPackage1() {
+    public String getSmartPackage1() { // null allowed
         return getProperty(SMART_PACKAGE1_KEY);
     }
 
-    public String getSmartPackage2() {
+    public String getSmartPackage2() { // null allowed
         return getProperty(SMART_PACKAGE2_KEY);
     }
 
-    public String getSmartPackage3() {
+    public String getSmartPackage3() { // null allowed
         return getProperty(SMART_PACKAGE3_KEY);
     }
 
     // -----------------------------------------------------
     //                                         Di XML Script
     //                                         -------------
-    public String getDiXmlScriptExpressionEngine() {
+    public String getDiXmlScriptExpressionEngine() { // null allowed
         return getProperty(DIXML_SCRIPT_EXPRESSION_ENGINE_KEY);
     }
 
@@ -283,14 +283,14 @@ public class LastaDiProperties {
         }
     }
 
-    public String getDiXmlScriptManagedEngineName() {
+    public String getDiXmlScriptManagedEngineName() { // null allowed
         return getProperty(DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY);
     }
 
     // -----------------------------------------------------
     //                              Plain Property Injection
     //                              ------------------------
-    public String getPlainPropertyInjectionPackage1() { // e.g. for S2Robot's DBFlute
+    public String getPlainPropertyInjectionPackage1() { // null allowed, e.g. for S2Robot's DBFlute
         return getProperty(PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY);
     }
 
