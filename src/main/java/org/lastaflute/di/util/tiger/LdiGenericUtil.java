@@ -37,6 +37,9 @@ public abstract class LdiGenericUtil {
     protected LdiGenericUtil() {
     }
 
+    // ===================================================================================
+    //                                                                 Basic Determination
+    //                                                                 ===================
     public static boolean isTypeOf(final Type type, final Class<?> clazz) {
         if (Class.class.isInstance(type)) {
             return clazz.isAssignableFrom(Class.class.cast(type));
@@ -48,23 +51,30 @@ public abstract class LdiGenericUtil {
         return false;
     }
 
+    // ===================================================================================
+    //                                                                       Generic Class
+    //                                                                       =============
+    // e.g. Sea<Dockside> harbor()
+    //  LdiGenericUtil.getGenericFirstClass(declaredMethod.getGenericReturnType()) // Dockside
     /**
      * @param type The type that has the generic type. (NotNull)
      * @return The first generic type for the specified type. (NullAllowed: e.g. not found)
      */
-    public static Class<?> getGenericFirstClass(Type type) {
+    public static Class<?> getGenericFirstClass(Type type) { // facade method
         return findGenericClass(type, 0);
     }
 
+    // e.g. Sea<Dockside, Mystic> harbor()
+    //  LdiGenericUtil.getGenericSecondClass(declaredMethod.getGenericReturnType()) // Mystic
     /**
      * @param type The type that has the generic type. (NotNull)
      * @return The second generic type for the specified type. (NullAllowed: e.g. not found)
      */
-    public static Class<?> getGenericSecondClass(Type type) {
+    public static Class<?> getGenericSecondClass(Type type) { // facade method
         return findGenericClass(type, 1);
     }
 
-    protected static Class<?> findGenericClass(Type type, int index) {
+    public static Class<?> findGenericClass(Type type, int index) {
         return getRawClass(getGenericParameterType(type, index));
     }
 
@@ -94,8 +104,8 @@ public abstract class LdiGenericUtil {
             return null;
         }
         final Type[] genericParameter = getGenericParameterTypes(type);
-        if (genericParameter.length == 0 || genericParameter.length < index) {
-            return null;
+        if (genericParameter.length == 0 || genericParameter.length < (index + 1)) {
+            return null; // not found (e.g. out of range)
         }
         return genericParameter[index];
     }
@@ -110,6 +120,9 @@ public abstract class LdiGenericUtil {
         return EMPTY_TYPES;
     }
 
+    // ===================================================================================
+    //                                                                        Element Type
+    //                                                                        ============
     public static Type getElementTypeOfArray(final Type type) {
         if (!GenericArrayType.class.isInstance(type)) {
             return null;
@@ -152,6 +165,9 @@ public abstract class LdiGenericUtil {
         return getGenericParameterType(type, 1);
     }
 
+    // ===================================================================================
+    //                                                                       Type Variable
+    //                                                                       =============
     public static Map<TypeVariable<?>, Type> getTypeVariableMap(final Class<?> clazz) {
         final Map<TypeVariable<?>, Type> map = LdiCollectionsUtil.newLinkedHashMap();
 
@@ -205,6 +221,9 @@ public abstract class LdiGenericUtil {
         }
     }
 
+    // ===================================================================================
+    //                                                                         Actual Type
+    //                                                                         ===========
     public static Class<?> getActualClass(final Type type, final Map<TypeVariable<?>, Type> map) {
         if (Class.class.isInstance(type)) {
             return Class.class.cast(type);
