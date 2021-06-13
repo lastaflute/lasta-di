@@ -54,9 +54,14 @@ public abstract class LdiGenericUtil {
     // ===================================================================================
     //                                                                       Generic Class
     //                                                                       =============
-    // e.g. Sea<Dockside> harbor()
-    //  LdiGenericUtil.getGenericFirstClass(declaredMethod.getGenericReturnType()) // Dockside
     /**
+     * Get class object of (outer) first type on generic definition from from parameterized type. <br>
+     * <pre>
+     * e.g. declaredMethod.getGenericReturnType() is specifed
+     *  Sea[Dockside] harbor() :: Dockside.class
+     *  Sea[Dockside[Over]] harbor() :: Dockside.class
+     *  Sea[Dockside[Over], Hangar] harbor() :: Dockside.class
+     * </pre>
      * @param type The type that has the generic type. (NotNull)
      * @return The first generic type for the specified type. (NullAllowed: e.g. not found)
      */
@@ -64,9 +69,14 @@ public abstract class LdiGenericUtil {
         return findGenericClass(type, 0);
     }
 
-    // e.g. Sea<Dockside, Mystic> harbor()
-    //  LdiGenericUtil.getGenericSecondClass(declaredMethod.getGenericReturnType()) // Mystic
     /**
+     * Get class object of (outer) second type on generic definition from from parameterized type. <br>
+     * <pre>
+     * e.g. declaredMethod.getGenericReturnType() is specifed
+     *  Sea[Dockside] harbor() :: null
+     *  Sea[Dockside[Over]] harbor() :: null
+     *  Sea[Dockside[Over], Hangar] harbor() :: Hangar.class
+     * </pre>
      * @param type The type that has the generic type. (NotNull)
      * @return The second generic type for the specified type. (NullAllowed: e.g. not found)
      */

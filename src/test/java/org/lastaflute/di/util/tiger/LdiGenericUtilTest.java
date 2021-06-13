@@ -17,6 +17,7 @@ package org.lastaflute.di.util.tiger;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 
 import org.dbflute.utflute.core.PlainTestCase;
@@ -48,9 +49,33 @@ public class LdiGenericUtilTest extends PlainTestCase {
         assertEquals(0, nestedTypes.length);
     }
 
-    public void test_getGenericFirstClass_returnType_nested() throws Exception {
+    public void test_getGenericFirstClass_returnType_nestedList() throws Exception {
         // ## Arrange ##
-        Method declaredMethod = Sea.class.getDeclaredMethod("hangar", (Class<?>[]) null);
+        Method declaredMethod = Sea.class.getDeclaredMethod("hangarList", (Class<?>[]) null);
+        Type genericReturnType = declaredMethod.getGenericReturnType();
+
+        // ## Act ##
+        // ## Assert ##
+        log("return: exp={}", genericReturnType);
+        assertEquals(List.class, LdiGenericUtil.getGenericFirstClass(genericReturnType));
+        assertNull(LdiGenericUtil.getGenericSecondClass(genericReturnType));
+
+        Type[] genericParameterTypes = LdiGenericUtil.getGenericParameterTypes(genericReturnType);
+        assertEquals(1, genericParameterTypes.length);
+        Type firstParameterType = genericParameterTypes[0];
+        log("firstParameterType: type={}", firstParameterType.getClass());
+        log("firstParameterType: exp={}", firstParameterType.toString());
+        assertEquals("java.util.List<java.lang.String>", firstParameterType.toString());
+        assertEquals(String.class, LdiGenericUtil.getGenericFirstClass(firstParameterType));
+        assertNull(LdiGenericUtil.getGenericSecondClass(firstParameterType));
+
+        Type[] nestedTypes = LdiGenericUtil.getGenericParameterTypes(firstParameterType);
+        assertEquals(1, nestedTypes.length);
+    }
+
+    public void test_getGenericFirstClass_returnType_nestedMap() throws Exception {
+        // ## Arrange ##
+        Method declaredMethod = Sea.class.getDeclaredMethod("hangarMap", (Class<?>[]) null);
         Type genericReturnType = declaredMethod.getGenericReturnType();
 
         // ## Act ##
@@ -77,7 +102,11 @@ public class LdiGenericUtilTest extends PlainTestCase {
             return null;
         }
 
-        public Hangar<Map<String, Integer>> hangar() {
+        public Hangar<List<String>> hangarList() {
+            return null;
+        }
+
+        public Hangar<Map<String, Integer>> hangarMap() {
             return null;
         }
     }
