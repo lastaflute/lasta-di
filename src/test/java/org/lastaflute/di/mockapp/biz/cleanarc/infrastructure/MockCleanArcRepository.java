@@ -13,19 +13,12 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package org.lastaflute.di.mockapp.biz.cleanarc.infrastructure;
 
 /**
  * @author jflute
  */
-public class MockAmphiLogic {
+public interface MockCleanArcRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockAmphiLogic.class);
-
-    public void theater() {
-        logger.debug("theater");
-    }
+    void save();
 }

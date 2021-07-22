@@ -13,10 +13,11 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic;
+package org.lastaflute.di.mockapp.web;
 
 import javax.annotation.Resource;
 
+import org.lastaflute.di.mockapp.logic.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.nearstation.MockAmphiLogic;
 import org.lastaflute.di.mockapp.logic.nearstation.MockPiariLogic;
 import org.slf4j.Logger;
@@ -25,9 +26,9 @@ import org.slf4j.LoggerFactory;
 /**
  * @author jflute
  */
-public class MockSeaLogic {
+public class MockSeaAction {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockSeaLogic.class);
+    private static final Logger logger = LoggerFactory.getLogger(MockSeaAction.class);
 
     @Resource
     protected MockLandLogic landLogic;

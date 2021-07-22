@@ -17,7 +17,7 @@ package org.lastaflute.di.core.injection;
 
 import org.lastaflute.di.mockapp.logic.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
-import org.lastaflute.di.mockapp.logic.pattern.MockConcreteLogic;
+import org.lastaflute.di.mockapp.logic.objoriented.MockConcreteLogic;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
 /**

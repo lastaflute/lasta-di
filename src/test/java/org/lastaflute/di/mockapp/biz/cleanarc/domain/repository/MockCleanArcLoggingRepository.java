@@ -13,21 +13,20 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic.pattern;
+package org.lastaflute.di.mockapp.biz.cleanarc.domain.repository;
 
-import javax.annotation.Resource;
-
-import org.lastaflute.di.mockapp.logic.MockLandLogic;
+import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockConcreteLogic extends MockAbstractLogic {
+public class MockCleanArcLoggingRepository implements MockCleanArcRepository {
 
-    @Resource
-    private MockLandLogic mockLandLogic; // same name
+    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcLoggingRepository.class);
 
-    public MockLandLogic getSubClassLogic() {
-        return mockLandLogic;
+    public void save() {
+        logger.debug("save() here!");
     }
 }

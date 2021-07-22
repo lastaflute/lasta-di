@@ -21,22 +21,22 @@ package org.lastaflute.di.naming;
 public interface NamingConvention {
 
     // ===================================================================================
-    //                                                          Root Package Determination
-    //                                                          ==========================
-    boolean isTargetClassName(String className, String suffix);
+    //                                                                 Class Determination
+    //                                                                 ===================
+    boolean isTargetClassName(String className, String suffix); // can be injected?
 
-    boolean isTargetClassName(String className);
+    boolean isTargetClassName(String className); // (actually) under root packages?
 
     boolean isHotdeployTargetClassName(String className);
 
     boolean isIgnoreClassName(String className);
 
     // ===================================================================================
-    //                                                                        Convert from
-    //                                                                        ============
-    String fromSuffixToPackageName(String suffix);
+    //                                                                     Convert from-to
+    //                                                                     ===============
+    String fromSuffixToPackageName(String suffix); // e.g. Logic to logic
 
-    String fromClassNameToShortComponentName(String className);
+    String fromClassNameToShortComponentName(String className); // e.g. ...app.logic.maihama.SeaLogic to seaLogic
 
     String fromClassNameToComponentName(String className);
 
@@ -59,8 +59,11 @@ public interface NamingConvention {
 
     String toInterfaceClassName(String className);
 
-    boolean isSkipClass(Class<?> clazz);
+    boolean isSkipClass(Class<?> clazz); // meaning manual mapping implementation class
 
+    // ===================================================================================
+    //                                                                      Complete Class
+    //                                                                      ==============
     Class<?> toCompleteClass(Class<?> clazz);
 
     // ===================================================================================

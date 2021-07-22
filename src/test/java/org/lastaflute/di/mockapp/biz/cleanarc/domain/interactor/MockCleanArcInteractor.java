@@ -13,19 +13,27 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic;
+package org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor;
 
+import javax.annotation.Resource;
+
+import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcRepository;
+import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockIkspiaryLogic {
+public class MockCleanArcInteractor implements MockCleanArcUseCase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MockIkspiaryLogic.class);
+    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcInteractor.class);
 
-    public void sayjo() {
-        LOG.debug("sayjo");
+    @Resource
+    private MockCleanArcRepository cleanArcRepository;
+
+    public void clean() {
+        logger.debug("clean() here!");
+        cleanArcRepository.save();
     }
 }

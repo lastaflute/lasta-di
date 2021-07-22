@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic.pattern;
+package org.lastaflute.di.mockapp.logic.objoriented;
 
 import javax.annotation.Resource;
 
@@ -22,12 +22,12 @@ import org.lastaflute.di.mockapp.logic.MockLandLogic;
 /**
  * @author jflute
  */
-public abstract class MockAbstractLogic {
+public class MockConcreteLogic extends MockAbstractLogic {
 
     @Resource
-    private MockLandLogic mockLandLogic;
+    private MockLandLogic mockLandLogic; // same name
 
-    public MockLandLogic getSuperLogic() {
+    public MockLandLogic getSubClassLogic() {
         return mockLandLogic;
     }
 }
