@@ -17,8 +17,9 @@ package org.lastaflute.di.mockapp.logic;
 
 import javax.annotation.Resource;
 
-import org.lastaflute.di.mockapp.logic.nearstation.MockAmphiLogic;
+import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.nearstation.MockPiariLogic;
+import org.lastaflute.di.mockapp.logic.nearstation.butfar.MockAmphiLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

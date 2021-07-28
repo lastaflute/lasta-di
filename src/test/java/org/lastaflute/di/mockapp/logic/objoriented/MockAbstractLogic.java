@@ -17,7 +17,7 @@ package org.lastaflute.di.mockapp.logic.objoriented;
 
 import javax.annotation.Resource;
 
-import org.lastaflute.di.mockapp.logic.MockLandLogic;
+import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 
 /**
  * @author jflute

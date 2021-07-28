@@ -18,7 +18,7 @@ package org.lastaflute.di.mockapp.biz.cleanarc.adapter;
 import javax.annotation.Resource;
 
 import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcPresenter;
-import org.lastaflute.di.mockapp.logic.MockLandLogic;
+import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

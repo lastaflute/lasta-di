@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic.nearstation;
+package org.lastaflute.di.mockapp.logic.nearstation.butfar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
