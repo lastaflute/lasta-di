@@ -13,9 +13,9 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.domain.repository;
+package org.lastaflute.di.mockapp.biz.cleanarc.infrastructure;
 
-import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcRepository;
+import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

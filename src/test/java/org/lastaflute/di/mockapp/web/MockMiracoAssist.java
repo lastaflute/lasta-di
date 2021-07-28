@@ -13,10 +13,19 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.web.mock.land;
+package org.lastaflute.di.mockapp.web;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockLandAction {
+public class MockMiracoAssist {
+
+    private static final Logger logger = LoggerFactory.getLogger(MockMiracoAssist.class);
+
+    public void sta() {
+        logger.debug("here");
+    }
 }

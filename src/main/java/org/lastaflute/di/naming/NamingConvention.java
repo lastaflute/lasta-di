@@ -32,32 +32,36 @@ public interface NamingConvention {
     boolean isIgnoreClassName(String className);
 
     // ===================================================================================
-    //                                                                     Convert from-to
-    //                                                                     ===============
-    String fromSuffixToPackageName(String suffix); // e.g. Logic to logic
+    //                                                                    Component Naming
+    //                                                                    ================
+    String fromSuffixToPackageName(String suffix); // e.g. Logic to logic, not null
 
-    String fromClassNameToShortComponentName(String className); // e.g. ...app.logic.maihama.SeaLogic to seaLogic
+    String fromClassNameToShortComponentName(String className); // e.g. ...app.logic.maihama.SeaLogic to seaLogic, not null
 
-    String fromClassNameToComponentName(String className);
+    String fromClassNameToComponentName(String className); // e.g. SeaAction.class to sea_seaAction, not null
 
-    Class<?> fromComponentNameToClass(String componentName);
+    Class<?> fromComponentNameToClass(String componentName); // e.g. sea_seaAction to SeaAction.class, null allowed when non DI
 
-    String fromComponentNameToPartOfClassName(String componentName);
+    String fromComponentNameToSuffix(String componentName); // e.g. seaAction to Action, null allowed when no upper case
 
-    String fromComponentNameToSuffix(String componentName); // e.g. seaAction to action
+    String fromClassNameToSuffix(String className); // e.g. ...SeaAction to Action, null allowed when no upper case
 
-    String fromClassNameToSuffix(String className);
+    String fromComponentNameToPartOfClassName(String componentName); // e.g. sea_seaAction to sea.SeaAction, not null
 
-    String fromPathToActionName(String path);
+    // ===================================================================================
+    //                                                                    View Path Action
+    //                                                                    ================
+    // for e.g. Thymeleaf
+    String fromPathToActionName(String path); // e.g. /view/sea/land_piari.html to sea_land_piariAction, not null
 
-    String fromActionNameToPath(String actionName);
+    String fromActionNameToPath(String actionName); // e.g. sea_land_piariAction to /view/sea/land/piari.html, not null
 
     // ===================================================================================
     //                                                            Interface Implementation
     //                                                            ========================
-    String toImplementationClassName(String className);
+    String toImplementationClassName(String className); // e.g. ...SeaImpl for ...Sea, not null
 
-    String toInterfaceClassName(String className);
+    String toInterfaceClassName(String className); // e.g. ...Sea for ...SeaImpl, not null
 
     boolean isSkipClass(Class<?> clazz); // meaning manual mapping implementation class
 

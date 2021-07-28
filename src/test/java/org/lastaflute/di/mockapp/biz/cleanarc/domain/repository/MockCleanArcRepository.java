@@ -13,10 +13,12 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.web.mock.land;
+package org.lastaflute.di.mockapp.biz.cleanarc.domain.repository;
 
 /**
  * @author jflute
  */
-public class MockLandAction {
+public interface MockCleanArcRepository {
+
+    void save();
 }

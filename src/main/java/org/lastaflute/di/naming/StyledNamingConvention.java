@@ -212,8 +212,8 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // ===================================================================================
-    //                                                                     Convert from-to
-    //                                                                     ===============
+    //                                                                    Component Naming
+    //                                                                    ================
     // -----------------------------------------------------
     //                                 Suffix to PackageName
     //                                 ---------------------
@@ -379,19 +379,28 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // -----------------------------------------------------
-    //                               ComponentName to Suffix
-    //                               -----------------------
+    //                         Component/ClassName to Suffix
+    //                         -----------------------------
     @Override
     public String fromComponentNameToSuffix(final String componentName) {
         return fromNameToSuffix(componentName);
     }
 
-    // -----------------------------------------------------
-    //                                   ClassName to Suffix
-    //                                   -------------------
     @Override
     public String fromClassNameToSuffix(final String componentName) {
         return fromNameToSuffix(componentName);
+    }
+
+    protected String fromNameToSuffix(final String name) {
+        if (LdiStringUtil.isEmpty(name)) {
+            throw new EmptyRuntimeException("name");
+        }
+        for (int i = name.length() - 1; i >= 0; --i) {
+            if (Character.isUpperCase(name.charAt(i))) {
+                return name.substring(i);
+            }
+        }
+        return null;
     }
 
     // -----------------------------------------------------
@@ -414,37 +423,34 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return buf.toString();
     }
 
-    protected String fromNameToSuffix(final String name) {
-        if (LdiStringUtil.isEmpty(name)) {
-            throw new EmptyRuntimeException("name");
-        }
-        for (int i = name.length() - 1; i >= 0; --i) {
-            if (Character.isUpperCase(name.charAt(i))) {
-                return name.substring(i);
-            }
-        }
-        return null;
-    }
-
-    protected String fromPathToComponentName(final String path, final String nameSuffix) {
-        if (!path.startsWith(viewRootPath) || !path.endsWith(viewExtension)) {
-            throw new IllegalArgumentException(path);
-        }
-        String componentName =
-                (path.substring(adjustViewRootPath().length() + 1, path.length() - viewExtension.length()) + nameSuffix).replace('/', '_');
-        int pos = componentName.lastIndexOf('_');
-        if (pos == -1) {
-            return LdiStringUtil.decapitalize(componentName);
-        }
-        return componentName.substring(0, pos + 1) + LdiStringUtil.decapitalize(componentName.substring(pos + 1));
-    }
-
+    // ===================================================================================
+    //                                                                    View Path Action
+    //                                                                    ================
     // -----------------------------------------------------
     //                                    Path to ActionName
     //                                    ------------------
     @Override
     public String fromPathToActionName(final String path) {
         return fromPathToComponentName(path, actionSuffix);
+    }
+
+    protected String fromPathToComponentName(final String path, final String nameSuffix) {
+        if (!path.startsWith(viewRootPath) || !path.endsWith(viewExtension)) {
+            throw new IllegalArgumentException(path);
+        }
+        // e.g. /view/sea/land_piari.html
+        //  removedView: sea/land_piari
+        //  componentName: sea_land_piariAction
+        final String removedView = path.substring(adjustViewRootPath().length() + 1, path.length() - viewExtension.length());
+        final String componentName = (removedView + nameSuffix).replace('/', '_');
+        final int lastDelimiterIndex = componentName.lastIndexOf('_');
+        if (lastDelimiterIndex == -1) { // e.g. /view/sea.html
+            return LdiStringUtil.decapitalize(componentName); // e.g. seaAction
+        }
+        // #thinking jflute same as componentName? Does it need to decapitalize? (2021/07/29)
+        final String componentPath = componentName.substring(0, lastDelimiterIndex + 1); // e.g. sea_land_
+        final String pureName = LdiStringUtil.decapitalize(componentName.substring(lastDelimiterIndex + 1)); // e.g. piariAction
+        return componentPath + pureName; // e.g. sea_land_piariAction
     }
 
     // -----------------------------------------------------

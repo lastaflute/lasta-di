@@ -17,7 +17,7 @@ package org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor;
 
 import javax.annotation.Resource;
 
-import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcRepository;
+import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
 import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

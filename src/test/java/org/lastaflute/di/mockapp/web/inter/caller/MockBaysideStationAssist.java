@@ -13,10 +13,21 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.web.mock.land;
+package org.lastaflute.di.mockapp.web.inter.caller;
+
+import javax.annotation.Resource;
+
+import org.lastaflute.di.mockapp.web.inter.MockDohotelAssist;
 
 /**
  * @author jflute
  */
-public class MockLandAction {
+public class MockBaysideStationAssist {
+
+    @Resource
+    private MockDohotelAssist mockDohotelAssist;
+
+    public void dohotel() {
+        mockDohotelAssist.lan();
+    }
 }

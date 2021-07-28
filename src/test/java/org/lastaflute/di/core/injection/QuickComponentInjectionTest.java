@@ -15,9 +15,19 @@
  */
 package org.lastaflute.di.core.injection;
 
+import org.lastaflute.di.core.exception.AutoBindingFailureException;
+import org.lastaflute.di.core.exception.ComponentNotFoundException;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
 import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
+import org.lastaflute.di.mockapp.logic.nearstation.MockBonvoLogic;
+import org.lastaflute.di.mockapp.logic.nearstation.impl.MockBonvoLogicImpl;
+import org.lastaflute.di.mockapp.logic.objoriented.MockAbstractLogic;
 import org.lastaflute.di.mockapp.logic.objoriented.MockConcreteLogic;
+import org.lastaflute.di.mockapp.web.MockMiracoAssist;
+import org.lastaflute.di.mockapp.web.inter.MockDohotelAssist;
+import org.lastaflute.di.mockapp.web.inter.caller.MockBaysideStationAssist;
+import org.lastaflute.di.mockapp.web.inter.caller.MockLandoStationAssist;
+import org.lastaflute.di.mockapp.web.mock.land.assist.MockLandoAssist;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
 /**
@@ -25,6 +35,9 @@ import org.lastaflute.di.unit.UnitLastaDiTestCase;
  */
 public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
 
+    // ===================================================================================
+    //                                                                       Injection way
+    //                                                                       =============
     public void test_injection_by_resource_annotation() throws Exception {
         // ## Arrange ##
         MockSeaLogic logic = getComponent(MockSeaLogic.class);
@@ -69,6 +82,9 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
         logic.mermaid(); // under org.dbflute so injected
     }
 
+    // ===================================================================================
+    //                                                                        Hidden Super
+    //                                                                        ============
     public void test_injection_hiddenSuper() throws Exception {
         // ## Arrange ##
         MockConcreteLogic logic = getComponent(MockConcreteLogic.class);
@@ -82,5 +98,24 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
         // ## Assert ##
         assertNotNull(superLogic);
         assertNotNull(subClassLogic);
+    }
+
+    // ===================================================================================
+    //                                                                     Quick Interface
+    //                                                                     ===============
+    public void test_injection_quickInterface_basic() throws Exception {
+        getComponent(MockMiracoAssist.class).sta();
+        assertException(AutoBindingFailureException.class, () -> getComponent(MockBaysideStationAssist.class)); // before
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockDohotelAssist.class)); // before
+        getComponent(MockLandoStationAssist.class).lando();
+        getComponent(MockBaysideStationAssist.class); // because of implementation already initialized
+        getComponent(MockDohotelAssist.class).lan(); // me too
+        getComponent(MockLandoAssist.class).lan();
+
+        getComponent(MockBonvoLogic.class).welcome();
+        getComponent(MockBonvoLogicImpl.class).welcome();
+
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockAbstractLogic.class));
+        getComponent(MockConcreteLogic.class).getSuperLogic();
     }
 }
