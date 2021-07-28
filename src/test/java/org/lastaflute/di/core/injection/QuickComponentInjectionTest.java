@@ -103,8 +103,10 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
     // ===================================================================================
     //                                                                     Quick Interface
     //                                                                     ===============
-    public void test_injection_quickInterface_basic() throws Exception {
+    public void test_injection_quickInterface_basic() throws Exception { // for warm deploy
         getComponent(MockMiracoAssist.class).sta();
+
+        // #thinking jflute how to inject by interface before implementation initialization even if warm/hot deploy (2021/07/29)
         assertException(AutoBindingFailureException.class, () -> getComponent(MockBaysideStationAssist.class)); // before
         assertException(ComponentNotFoundException.class, () -> getComponent(MockDohotelAssist.class)); // before
         getComponent(MockLandoStationAssist.class).lando();
