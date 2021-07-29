@@ -19,10 +19,11 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import junit.framework.TestCase;
-
+import org.lastaflute.di.util.LdiSrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import junit.framework.TestCase;
 
 /**
  * @author jflute
@@ -45,7 +46,7 @@ public abstract class UnitLastaJtaTest extends TestCase {
      * Member member = ...;
      * <span style="color: #FD4747">log</span>(member.getMemberName(), member.getBirthdate());
      * <span style="color: #3F7E5E">// -&gt; Stojkovic, 1965/03/03</span>
-     * 
+     *
      * Exception e = ...;
      * <span style="color: #FD4747">log</span>(member.getMemberName(), member.getBirthdate(), e);
      * <span style="color: #3F7E5E">// -&gt; Stojkovic, 1965/03/03</span>
@@ -93,7 +94,13 @@ public abstract class UnitLastaJtaTest extends TestCase {
                         break;
                     }
                     final Object nextObj = msgs[nextIndex];
-                    final String replacement = nextObj != null ? nextObj.toString() : "null";
+                    final String replacement;
+                    if (nextObj != null) {
+                        // escape two special characters of replaceFirst() to avoid illegal group reference
+                        replacement = LdiSrl.replace(LdiSrl.replace(nextObj.toString(), "\\", "\\\\"), "$", "\\$");
+                    } else {
+                        replacement = "null";
+                    }
                     strMsg = strMsg.replaceFirst("\\{\\}", replacement);
                     ++skipCount;
                     ++nextIndex;
