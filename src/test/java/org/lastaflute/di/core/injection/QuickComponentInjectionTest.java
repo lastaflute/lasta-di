@@ -17,6 +17,13 @@ package org.lastaflute.di.core.injection;
 
 import org.lastaflute.di.core.exception.AutoBindingFailureException;
 import org.lastaflute.di.core.exception.ComponentNotFoundException;
+import org.lastaflute.di.mockapp.biz.cleanarc.adapter.MockCleanArcController;
+import org.lastaflute.di.mockapp.biz.cleanarc.adapter.MockCleanArcLoggingPresenter;
+import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcInteractor;
+import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcPresenter;
+import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
+import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcLoggingRepository;
+import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
 import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.nearstation.MockBonvoLogic;
@@ -119,5 +126,25 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
 
         assertException(ComponentNotFoundException.class, () -> getComponent(MockAbstractLogic.class));
         getComponent(MockConcreteLogic.class).getSuperLogic();
+    }
+
+    // simple execution for code trace
+    public void test_injection_quickInterface_freedomInterface() throws Exception { // for warm deploy
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockDohotelAssist.class)).handle(cause -> {
+            log(cause);
+        });
+    }
+
+    // ===================================================================================
+    //                                                                         biz Package
+    //                                                                         ===========
+    public void test_injection_bizPackage_basic() throws Exception {
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcController.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcUseCase.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcInteractor.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcRepository.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcPresenter.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcLoggingRepository.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcLoggingPresenter.class));
     }
 }

@@ -23,52 +23,65 @@ public interface NamingConvention {
     // ===================================================================================
     //                                                                 Class Determination
     //                                                                 ===================
-    boolean isTargetClassName(String className, String suffix); // can be injected?
+    // can it be injected?
+    boolean isTargetClassName(String className, String suffix); // used by creator's byType
 
-    boolean isTargetClassName(String className); // (actually) under root packages?
+    // (actually) under root packages?
+    boolean isTargetClassName(String className); // used by cool deploy
 
-    boolean isHotdeployTargetClassName(String className);
+    // to separate injection from hotdeploy
+    boolean isHotdeployTargetClassName(String className); // used by hot deploy
 
-    boolean isIgnoreClassName(String className);
+    // completely out of convention style?
+    boolean isIgnoreClassName(String className); // used by this
 
     // ===================================================================================
     //                                                                    Component Naming
     //                                                                    ================
-    String fromSuffixToPackageName(String suffix); // e.g. Logic to logic, not null
+    // e.g. Logic to logic, not null
+    String fromSuffixToPackageName(String suffix); // used by this
 
-    String fromClassNameToShortComponentName(String className); // e.g. ...app.logic.maihama.SeaLogic to seaLogic, not null
+    // e.g. SeaAction.class to sea_seaAction, BonvoLogic(Impl) to nearstation_bonvoLogic, not null
+    String fromClassNameToComponentName(String className); // used by creator's component name
 
-    String fromClassNameToComponentName(String className); // e.g. SeaAction.class to sea_seaAction, not null
+    // e.g. ...app.logic.maihama.SeaLogic to seaLogic, not null
+    String fromClassNameToShortComponentName(String className); // used by this
 
-    Class<?> fromComponentNameToClass(String componentName); // e.g. sea_seaAction to SeaAction.class, null allowed when non DI
+    // e.g. SeaAction.class to SeaAction.class, BonvoLogic.class to BonvoLogicImpl.class
+    Class<?> toCompleteClass(Class<?> clazz); // fromClassToComponentClass(), used by creator's byType
 
-    String fromComponentNameToSuffix(String componentName); // e.g. seaAction to Action, null allowed when no upper case
+    // e.g. sea_seaAction to SeaAction.class, null allowed when non DI
+    Class<?> fromComponentNameToClass(String componentName); // used by creator's byName
 
-    String fromClassNameToSuffix(String className); // e.g. ...SeaAction to Action, null allowed when no upper case
+    // e.g. seaAction to Action, null allowed when no upper case
+    String fromComponentNameToSuffix(String componentName); // used by this
 
-    String fromComponentNameToPartOfClassName(String componentName); // e.g. sea_seaAction to sea.SeaAction, not null
+    // e.g. ...SeaAction to Action, null allowed when no upper case
+    String fromClassNameToSuffix(String className); // used by this
+
+    // e.g. sea_seaAction to sea.SeaAction, not null
+    String fromComponentNameToPartOfClassName(String componentName); // used by this
 
     // ===================================================================================
     //                                                                    View Path Action
     //                                                                    ================
-    // for e.g. Thymeleaf
-    String fromPathToActionName(String path); // e.g. /view/sea/land_piari.html to sea_land_piariAction, not null
+    // e.g. /view/sea/land_piari.html to sea_land_piariAction, not null
+    String fromPathToActionName(String path); // for e.g. Thymeleaf
 
-    String fromActionNameToPath(String actionName); // e.g. sea_land_piariAction to /view/sea/land/piari.html, not null
+    // e.g. sea_land_piariAction to /view/sea/land/piari.html, not null
+    String fromActionNameToPath(String actionName); // me too
 
     // ===================================================================================
     //                                                            Interface Implementation
     //                                                            ========================
-    String toImplementationClassName(String className); // e.g. ...SeaImpl for ...Sea, not null
+    // e.g. ...SeaImpl for ...Sea, not null
+    String toImplementationClassName(String className); // used by this
 
-    String toInterfaceClassName(String className); // e.g. ...Sea for ...SeaImpl, not null
+    // e.g. ...Sea for ...SeaImpl, not null
+    String toInterfaceClassName(String className); // used by this
 
-    boolean isSkipClass(Class<?> clazz); // meaning manual mapping implementation class
-
-    // ===================================================================================
-    //                                                                      Complete Class
-    //                                                                      ==============
-    Class<?> toCompleteClass(Class<?> clazz);
+    // meaning manual mapping implementation class
+    boolean isSkipClass(Class<?> clazz); // used by cool deploy
 
     // ===================================================================================
     //                                                                            Accessor

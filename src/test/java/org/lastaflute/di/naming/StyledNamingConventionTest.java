@@ -104,36 +104,6 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
     }
 
     // -----------------------------------------------------
-    //                       ClassName to ShortComponentName
-    //                       -------------------------------
-    public void test_fromClassNameToShortComponentName_basic() throws Exception {
-        StyledNamingConvention convention = createConvention();
-        assertEquals("mockSeaAction", convention.fromClassNameToShortComponentName(MockSeaAction.class.getName()));
-        assertEquals("mockLandAction", convention.fromClassNameToShortComponentName(MockLandAction.class.getName()));
-        assertEquals("mockMiracoAssist", convention.fromClassNameToShortComponentName(MockMiracoAssist.class.getName()));
-        assertEquals("mockDohotelAssist", convention.fromClassNameToShortComponentName(MockDohotelAssist.class.getName()));
-        assertEquals("mockLandoAssist", convention.fromClassNameToShortComponentName(MockLandoAssist.class.getName()));
-        assertEquals("mockSeaJob", convention.fromClassNameToShortComponentName(MockSeaJob.class.getName()));
-        assertEquals("mockLandJob", convention.fromClassNameToShortComponentName(MockLandJob.class.getName()));
-        assertEquals("mockSeaLogic", convention.fromClassNameToShortComponentName(MockSeaLogic.class.getName()));
-        assertEquals("mockLandLogic", convention.fromClassNameToShortComponentName(MockLandLogic.class.getName()));
-        assertEquals("mockPiariLogic", convention.fromClassNameToShortComponentName(MockPiariLogic.class.getName()));
-        assertEquals("mockBonvoLogic", convention.fromClassNameToShortComponentName(MockBonvoLogic.class.getName()));
-        assertEquals("mockBonvoLogic", convention.fromClassNameToShortComponentName(MockBonvoLogicImpl.class.getName()));
-        assertEquals("mockAmphiLogic", convention.fromClassNameToShortComponentName(MockAmphiLogic.class.getName()));
-        assertEquals("mockAbstractLogic", convention.fromClassNameToShortComponentName(MockAbstractLogic.class.getName()));
-        assertEquals("mockConcreteLogic", convention.fromClassNameToShortComponentName(MockConcreteLogic.class.getName()));
-        assertEquals("mockNondiSeaLogic", convention.fromClassNameToShortComponentName(MockNondiSeaLogic.class.getName()));
-        assertEquals(Srl.initUncap(getClass().getSimpleName()), convention.fromClassNameToShortComponentName(getClass().getName()));
-        assertEquals("mockBizRootLogic", convention.fromClassNameToShortComponentName(MockBizRootLogic.class.getName()));
-        assertEquals("mockCleanArcUseCase", convention.fromClassNameToShortComponentName(MockCleanArcUseCase.class.getName()));
-        assertEquals("mockCleanArcInteractor", convention.fromClassNameToShortComponentName(MockCleanArcInteractor.class.getName()));
-        assertEquals("mockCleanArcRepository", convention.fromClassNameToShortComponentName(MockCleanArcRepository.class.getName()));
-        assertEquals("mockCleanArcLoggingRepository",
-                convention.fromClassNameToShortComponentName(MockCleanArcLoggingRepository.class.getName()));
-    }
-
-    // -----------------------------------------------------
     //                            ClassName to ComponentName
     //                            --------------------------
     public void test_fromClassNameToComponentName_basic() throws Exception { // *important
@@ -166,6 +136,56 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("mockCleanArcRepository", convention.fromClassNameToComponentName(MockCleanArcRepository.class.getName()));
         assertEquals("mockCleanArcLoggingRepository",
                 convention.fromClassNameToComponentName(MockCleanArcLoggingRepository.class.getName()));
+    }
+
+    // -----------------------------------------------------
+    //                       ClassName to ShortComponentName
+    //                       -------------------------------
+    public void test_fromClassNameToShortComponentName_basic() throws Exception {
+        StyledNamingConvention convention = createConvention();
+        assertEquals("mockSeaAction", convention.fromClassNameToShortComponentName(MockSeaAction.class.getName()));
+        assertEquals("mockLandAction", convention.fromClassNameToShortComponentName(MockLandAction.class.getName()));
+        assertEquals("mockMiracoAssist", convention.fromClassNameToShortComponentName(MockMiracoAssist.class.getName()));
+        assertEquals("mockDohotelAssist", convention.fromClassNameToShortComponentName(MockDohotelAssist.class.getName()));
+        assertEquals("mockLandoAssist", convention.fromClassNameToShortComponentName(MockLandoAssist.class.getName()));
+        assertEquals("mockSeaJob", convention.fromClassNameToShortComponentName(MockSeaJob.class.getName()));
+        assertEquals("mockLandJob", convention.fromClassNameToShortComponentName(MockLandJob.class.getName()));
+        assertEquals("mockSeaLogic", convention.fromClassNameToShortComponentName(MockSeaLogic.class.getName()));
+        assertEquals("mockLandLogic", convention.fromClassNameToShortComponentName(MockLandLogic.class.getName()));
+        assertEquals("mockPiariLogic", convention.fromClassNameToShortComponentName(MockPiariLogic.class.getName()));
+        assertEquals("mockBonvoLogic", convention.fromClassNameToShortComponentName(MockBonvoLogic.class.getName()));
+        assertEquals("mockBonvoLogic", convention.fromClassNameToShortComponentName(MockBonvoLogicImpl.class.getName()));
+        assertEquals("mockAmphiLogic", convention.fromClassNameToShortComponentName(MockAmphiLogic.class.getName()));
+        assertEquals("mockAbstractLogic", convention.fromClassNameToShortComponentName(MockAbstractLogic.class.getName()));
+        assertEquals("mockConcreteLogic", convention.fromClassNameToShortComponentName(MockConcreteLogic.class.getName()));
+        assertEquals("mockNondiSeaLogic", convention.fromClassNameToShortComponentName(MockNondiSeaLogic.class.getName()));
+        assertEquals(Srl.initUncap(getClass().getSimpleName()), convention.fromClassNameToShortComponentName(getClass().getName()));
+        assertEquals("mockBizRootLogic", convention.fromClassNameToShortComponentName(MockBizRootLogic.class.getName()));
+        assertEquals("mockCleanArcUseCase", convention.fromClassNameToShortComponentName(MockCleanArcUseCase.class.getName()));
+        assertEquals("mockCleanArcInteractor", convention.fromClassNameToShortComponentName(MockCleanArcInteractor.class.getName()));
+        assertEquals("mockCleanArcRepository", convention.fromClassNameToShortComponentName(MockCleanArcRepository.class.getName()));
+        assertEquals("mockCleanArcLoggingRepository",
+                convention.fromClassNameToShortComponentName(MockCleanArcLoggingRepository.class.getName()));
+    }
+
+    // -----------------------------------------------------
+    //                   Class to Complete (Component) Class
+    //                   -----------------------------------
+    public void test_toCompleteClass_basic() throws Exception {
+        {
+            StyledNamingConvention convention = createConvention();
+            assertEquals(MockSeaAction.class, convention.toCompleteClass(MockSeaAction.class));
+            assertEquals(MockDohotelAssist.class, convention.toCompleteClass(MockDohotelAssist.class));
+            assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockLandoAssist.class));
+            assertEquals(MockBonvoLogicImpl.class, convention.toCompleteClass(MockBonvoLogic.class)); // here
+            assertEquals(MockBonvoLogicImpl.class, convention.toCompleteClass(MockBonvoLogicImpl.class));
+        }
+        {
+            StyledNamingConvention convention = createConventionUsingInterface(MockDohotelAssist.class, MockLandoAssist.class);
+            assertEquals(MockSeaAction.class, convention.toCompleteClass(MockSeaAction.class));
+            assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockDohotelAssist.class));
+            assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockLandoAssist.class));
+        }
     }
 
     // -----------------------------------------------------
@@ -362,26 +382,6 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
             assertFalse(convention.isSkipClass(MockBonvoLogicImpl.class));
             assertFalse(convention.isSkipClass(MockAbstractLogic.class));
             assertFalse(convention.isSkipClass(MockConcreteLogic.class));
-        }
-    }
-
-    // ===================================================================================
-    //                                                                      Complete Class
-    //                                                                      ==============
-    public void test_toCompleteClass_basic() throws Exception {
-        {
-            StyledNamingConvention convention = createConvention();
-            assertEquals(MockSeaAction.class, convention.toCompleteClass(MockSeaAction.class));
-            assertEquals(MockDohotelAssist.class, convention.toCompleteClass(MockDohotelAssist.class));
-            assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockLandoAssist.class));
-            assertEquals(MockBonvoLogicImpl.class, convention.toCompleteClass(MockBonvoLogic.class)); // here
-            assertEquals(MockBonvoLogicImpl.class, convention.toCompleteClass(MockBonvoLogicImpl.class));
-        }
-        {
-            StyledNamingConvention convention = createConventionUsingInterface(MockDohotelAssist.class, MockLandoAssist.class);
-            assertEquals(MockSeaAction.class, convention.toCompleteClass(MockSeaAction.class));
-            assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockDohotelAssist.class));
-            assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockLandoAssist.class));
         }
     }
 

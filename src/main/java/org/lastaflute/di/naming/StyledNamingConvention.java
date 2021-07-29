@@ -226,21 +226,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // -----------------------------------------------------
-    //                       ClassName to ShortComponentName
-    //                       -------------------------------
-    @Override
-    public String fromClassNameToShortComponentName(final String className) {
-        if (LdiStringUtil.isEmpty(className)) {
-            throw new EmptyRuntimeException("className");
-        }
-        String s = LdiStringUtil.decapitalize(LdiClassUtil.getShortClassName(className));
-        if (s.endsWith(implementationSuffix)) {
-            return s.substring(0, s.length() - implementationSuffix.length());
-        }
-        return s;
-    }
-
-    // -----------------------------------------------------
     //                            ClassName to ComponentName
     //                            --------------------------
     @Override
@@ -284,6 +269,36 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             }
         }
         return sb.toString();
+    }
+
+    // -----------------------------------------------------
+    //                       ClassName to ShortComponentName
+    //                       -------------------------------
+    @Override
+    public String fromClassNameToShortComponentName(final String className) {
+        if (LdiStringUtil.isEmpty(className)) {
+            throw new EmptyRuntimeException("className");
+        }
+        String s = LdiStringUtil.decapitalize(LdiClassUtil.getShortClassName(className));
+        if (s.endsWith(implementationSuffix)) {
+            return s.substring(0, s.length() - implementationSuffix.length());
+        }
+        return s;
+    }
+
+    // -----------------------------------------------------
+    //                   Class to Complete (Component) Class
+    //                   -----------------------------------
+    @Override
+    public Class<?> toCompleteClass(final Class<?> clazz) { // actually fromClassToComponentClass()
+        if (!clazz.isInterface()) {
+            return clazz;
+        }
+        final String className = toImplementationClassName(clazz.getName()); // interface here
+        if (LdiResourceUtil.isExist(LdiClassUtil.getResourcePath(className))) {
+            return LdiClassUtil.forName(className);
+        }
+        return clazz; // the interface if implementation not found
     }
 
     // -----------------------------------------------------
@@ -520,21 +535,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             }
         }
         return false;
-    }
-
-    // ===================================================================================
-    //                                                                      Complete Class
-    //                                                                      ==============
-    @Override
-    public Class<?> toCompleteClass(final Class<?> clazz) {
-        if (!clazz.isInterface()) {
-            return clazz;
-        }
-        final String className = toImplementationClassName(clazz.getName()); // interface here
-        if (LdiResourceUtil.isExist(LdiClassUtil.getResourcePath(className))) {
-            return LdiClassUtil.forName(className);
-        }
-        return clazz; // the interface if implementation not found
     }
 
     // ===================================================================================

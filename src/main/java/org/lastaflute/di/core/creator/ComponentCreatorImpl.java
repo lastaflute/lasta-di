@@ -74,6 +74,7 @@ public class ComponentCreatorImpl implements ComponentCreator {
         if (!isTargetClassName(componentClass)) {
             return null;
         }
+        // may be conventional implementation class from its interface
         final Class<?> targetClass = toCompleteClass(componentClass);
         if (targetClass.isInterface()) {
             if (!isEnableInterface()) {
@@ -88,10 +89,12 @@ public class ComponentCreatorImpl implements ComponentCreator {
     }
 
     protected boolean isTargetClassName(Class<?> componentClass) {
+        // e.g. Action: true, Logic: true, Detarame: false
         return namingConvention.isTargetClassName(componentClass.getName(), nameSuffix);
     }
 
     protected Class<?> toCompleteClass(Class<?> componentClass) {
+        // e.g. SeaAction to SeaAction, BonvoLogic to BonvoLogicImpl
         return namingConvention.toCompleteClass(componentClass);
     }
 
@@ -106,7 +109,7 @@ public class ComponentCreatorImpl implements ComponentCreator {
         if (componentClass == null) {
             return null;
         }
-        return createComponentDef(componentClass);
+        return createComponentDef(componentClass); // by Type here
     }
 
     protected boolean isTargetComponentName(String componentName) {
@@ -114,6 +117,7 @@ public class ComponentCreatorImpl implements ComponentCreator {
     }
 
     protected Class<?> fromComponentNameToClass(String componentName) {
+        // e.g. sea_seaAction to SeaAction.class
         return namingConvention.fromComponentNameToClass(componentName);
     }
 
@@ -124,6 +128,7 @@ public class ComponentCreatorImpl implements ComponentCreator {
         final AnnotationHandler handler = AnnotationHandlerFactory.getAnnotationHandler();
         final ComponentDef cd = handler.createComponentDef(targetClass, instanceDef, autoBindingDef, externalBinding);
         if (cd.getComponentName() == null) {
+            // e.g. SeaAction.class to sea_seaAction, BonvoLogic(Impl) to nearstation_bonvoLogic
             cd.setComponentName(namingConvention.fromClassNameToComponentName(targetClass.getName()));
         }
         setupCompleteComponent(handler, cd);
