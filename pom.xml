@@ -16,7 +16,6 @@
 		<javassist.version>3.27.0-GA</javassist.version>
 		<jta.version>1.2</jta.version>
 		<slf4j.version>1.7.25</slf4j.version>
-		<utflute.version>0.9.2</utflute.version>
 	</properties>
 
 	<licenses>
@@ -210,12 +209,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version> <!-- is latest version without hamcrest -->
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.dbflute.utflute</groupId>
-			<artifactId>utflute-core</artifactId>
-			<version>${utflute.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- logging -->

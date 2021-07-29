@@ -20,12 +20,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-import org.dbflute.utflute.core.PlainTestCase;
+import org.lastaflute.di.unit.UnitLastaDiTestCase;
 
 /**
  * @author jflute
  */
-public class LdiGenericUtilTest extends PlainTestCase {
+public class LdiGenericUtilTest extends UnitLastaDiTestCase {
 
     public void test_getGenericFirstClass_returnType_basic() throws Exception {
         // ## Arrange ##

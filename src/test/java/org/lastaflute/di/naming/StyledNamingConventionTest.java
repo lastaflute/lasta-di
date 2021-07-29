@@ -1,6 +1,5 @@
 package org.lastaflute.di.naming;
 
-import org.dbflute.util.Srl;
 import org.lastaflute.di.mockapp.biz.MockBizRootLogic;
 import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcInteractor;
 import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
@@ -23,6 +22,7 @@ import org.lastaflute.di.mockapp.web.inter.MockDohotelAssist;
 import org.lastaflute.di.mockapp.web.mock.land.MockLandAction;
 import org.lastaflute.di.mockapp.web.mock.land.assist.MockLandoAssist;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
+import org.lastaflute.di.util.LdiSrl;
 
 /**
  * @author jflute
@@ -129,7 +129,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
 
         // non DI so simple name here
         assertEquals("mockNondiSeaLogic", convention.fromClassNameToComponentName(MockNondiSeaLogic.class.getName()));
-        assertEquals(Srl.initUncap(getClass().getSimpleName()), convention.fromClassNameToComponentName(getClass().getName()));
+        assertEquals(LdiSrl.initUncap(getClass().getSimpleName()), convention.fromClassNameToComponentName(getClass().getName()));
         assertEquals("mockBizRootLogic", convention.fromClassNameToComponentName(MockBizRootLogic.class.getName()));
         assertEquals("mockCleanArcUseCase", convention.fromClassNameToComponentName(MockCleanArcUseCase.class.getName()));
         assertEquals("mockCleanArcInteractor", convention.fromClassNameToComponentName(MockCleanArcInteractor.class.getName()));
@@ -159,7 +159,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("mockAbstractLogic", convention.fromClassNameToShortComponentName(MockAbstractLogic.class.getName()));
         assertEquals("mockConcreteLogic", convention.fromClassNameToShortComponentName(MockConcreteLogic.class.getName()));
         assertEquals("mockNondiSeaLogic", convention.fromClassNameToShortComponentName(MockNondiSeaLogic.class.getName()));
-        assertEquals(Srl.initUncap(getClass().getSimpleName()), convention.fromClassNameToShortComponentName(getClass().getName()));
+        assertEquals(LdiSrl.initUncap(getClass().getSimpleName()), convention.fromClassNameToShortComponentName(getClass().getName()));
         assertEquals("mockBizRootLogic", convention.fromClassNameToShortComponentName(MockBizRootLogic.class.getName()));
         assertEquals("mockCleanArcUseCase", convention.fromClassNameToShortComponentName(MockCleanArcUseCase.class.getName()));
         assertEquals("mockCleanArcInteractor", convention.fromClassNameToShortComponentName(MockCleanArcInteractor.class.getName()));
