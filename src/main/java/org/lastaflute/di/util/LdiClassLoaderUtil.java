@@ -130,6 +130,10 @@ public abstract class LdiClassLoaderUtil {
     // ===================================================================================
     //                                                                       Loader Deeply
     //                                                                       =============
+    // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+    // #for_now jflute illegal-access cannot be allowed in Java17, so deprecate them here (2021/07/30)
+    // _/_/_/_/_/_/_/_/_/_/
+    @Deprecated // unused in Lasta Di since 0.8.4
     public static Class<?> findLoadedClass(final ClassLoader classLoader, final String className) {
         final Method targetMethod = findLoadedClassMethod;
         adjustAccessibleIfNeeds(targetMethod);
@@ -142,6 +146,7 @@ public abstract class LdiClassLoaderUtil {
         return null;
     }
 
+    @Deprecated // unused in Lasta Di originally
     public static Class<?> defineClass(final ClassLoader classLoader, final String className, final byte[] bytes, final int offset,
             final int length) {
         final Method targetMethod = defineClassMethod;
@@ -150,6 +155,7 @@ public abstract class LdiClassLoaderUtil {
                 new Object[] { className, bytes, new Integer(offset), new Integer(length) });
     }
 
+    @Deprecated // unused in Lasta Di originally
     public static Package definePackage(final ClassLoader classLoader, final String name, final String specTitle, final String specVersion,
             final String specVendor, final String implTitle, final String implVersion, final String implVendor, final URL sealBase) {
         final Method targetMethod = definePackageMethod;

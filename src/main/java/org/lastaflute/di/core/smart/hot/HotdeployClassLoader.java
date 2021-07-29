@@ -19,7 +19,6 @@ import java.io.InputStream;
 
 import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
-import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiInputStreamUtil;
 import org.lastaflute.di.util.LdiResourceUtil;
@@ -49,20 +48,33 @@ public class HotdeployClassLoader extends ClassLoader {
         }
         if (isTargetClass(className)) {
             Class<?> clazz = findLoadedClass(className);
-            if (clazz != null) {
+            if (clazz != null) { // already in hotdeploy
                 return clazz;
             }
-            clazz = LdiClassLoaderUtil.findLoadedClass(getParent(), className);
-            if (clazz != null) {
+            clazz = findLoadedClassFromParentLoader(className);
+            if (clazz != null) { // non-hotdeploy reference
                 logger.log("WSSR0015", new Object[] { className });
                 return clazz;
             }
             clazz = defineClass(className, resolve);
-            if (clazz != null) {
+            if (clazz != null) { // new hotdeply here
                 return clazz;
             }
         }
         return super.loadClass(className, resolve);
+    }
+
+    protected Class<?> findLoadedClassFromParentLoader(String className) {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // #for_now jflute illegal-access cannot be allowed in Java17, so remove it here (2021/07/30)
+        // when non-hotdeploy component refers hotdeploy component...
+        //  before: stop hotdeploy but application works
+        //  after: may be linkage error (confliect between same classes in different loader)
+        // however LastaFlute provides explicit package structure and police story
+        // so judge unneeded (should fix tricky references if likage error)
+        // _/_/_/_/_/_/_/_/_/_/
+        //return LdiClassLoaderUtil.findLoadedClass(getParent(), className);
+        return null;
     }
 
     protected Class<?> defineClass(String className, boolean resolve) {
