@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,29 +49,47 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     //                                                                           Attribute
     //                                                                           =========
     protected boolean initialized;
+
+    // -----------------------------------------------------
+    //                                                Suffix
+    //                                                ------
     protected String actionSuffix = "Action";
     protected String formSuffix = "Form";
     protected String serviceSuffix = "Service";
     protected String logicSuffix = "Logic";
-    protected String repositorySuffix = "Repository";
-    protected String assistSuffix = "Assist";
+    protected String repositorySuffix = "Repository"; // #since_lasta_di
+    protected String assistSuffix = "Assist"; // #since_lasta_di
     protected String helperSuffix = "Helper";
     protected String interceptorSuffix = "Interceptor";
     protected String validatorSuffix = "Validator";
     protected String converterSuffix = "Converter";
-    protected String jobSuffix = "Job";
+    protected String jobSuffix = "Job"; // #since_lasta_di
     protected String implementationSuffix = "Impl";
-    protected String viewRootPath = "/view";
-    protected String viewExtension = ".html";
 
-    protected String[] rootPackageNames = new String[0];
-    protected String webRootPackageName = "web";
+    // -----------------------------------------------------
+    //                                                 View
+    //                                                ------
+    // #since_s2container also used by Lasta Thymeleaf
+    protected String viewRootPath = "/view"; // e.g. src/main/webapp/WEB-INF/view
+    protected String viewExtension = ".html"; // e.g. Thymeleaf template
+
+    // -----------------------------------------------------
+    //                                               Package
+    //                                               -------
+    protected String[] rootPackageNames = new String[0]; // smart packages, not null but substituted as array
+    protected String webRootPackageName = "web"; // #since_s2container also used by LastaFlute
     protected String jobRootPackageName = "job"; // #since_lasta_di for LastaJob (and JobAssist)
-    protected String[] ignorePackageNames = new String[0];
+    protected String[] ignorePackageNames = new String[0]; // not smart even if in root package, not null but substituted as array
+    protected final Set<String> hotdeployRootPackageNames = new HashSet<String>(4); // basically synchronized with root packages
+    protected final Map<String, Resources[]> existenceCheckerArrays = LdiMapUtil.createHashMap();
 
-    protected final Set<String> hotdeployRootPackageNames = new HashSet<String>(4);
-    protected final Map<String, Resources[]> existCheckerArrays = LdiMapUtil.createHashMap();
+    // -----------------------------------------------------
+    //                            Interface & Implementation
+    //                            --------------------------
+    // map:{ interface FQCN =  implementation FQCN }
     protected final Map<String, String> interfaceToImplementationMap = new HashMap<String, String>(4);
+
+    // map:{ implementation FQCN = interface  FQCN }
     protected final Map<String, String> implementationToInterfaceMap = new HashMap<String, String>(4);
 
     // ===================================================================================
@@ -88,13 +106,13 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         });
     }
 
-    // ===================================================================================
-    //                                                                          Initialize
-    //                                                                          ==========
-    public void initialize() {
+    // -----------------------------------------------------
+    //                                            Initialize
+    //                                            ----------
+    public void initialize() { // #for_now jflute can be procted? (2021/07/15)
         if (!initialized) {
             for (int i = 0; i < rootPackageNames.length; ++i) {
-                addExistChecker(rootPackageNames[i]);
+                addExistingChecker(rootPackageNames[i]);
             }
             DisposableUtil.add(this);
             initialized = true;
@@ -102,10 +120,11 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // ===================================================================================
-    //                                                           Root Package Registration
-    //                                                           =========================
+    //                                                               Resource Registration
+    //                                                               =====================
+    // basically for e.g. Di xml expression
     public void addRootPackageName(final String rootPackageName) {
-        addRootPackageName(rootPackageName, true);
+        addRootPackageName(rootPackageName, /*hotdeploy*/true);
     }
 
     public void addRootPackageName(final String rootPackageName, final boolean hotdeploy) {
@@ -113,7 +132,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         if (hotdeploy) {
             hotdeployRootPackageNames.add(rootPackageName);
         }
-        addExistChecker(rootPackageName);
+        addExistingChecker(rootPackageName);
     }
 
     public void addIgnorePackageName(final String ignorePackageName) {
@@ -126,10 +145,10 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // ===================================================================================
-    //                                                          Root Package Determination
-    //                                                          ==========================
+    //                                                                 Class Determination
+    //                                                                 ===================
     @Override
-    public boolean isTargetClassName(final String className, final String suffix) { // *important
+    public boolean isTargetClassName(final String className, final String suffix) { // can it be injected?
         if (isIgnoreClassName(className)) {
             return false;
         }
@@ -155,8 +174,9 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return false;
     }
 
+    // #for_now jflute meaning of this 'target' word is different from one of with-suffix method (2021/07/22)
     @Override
-    public boolean isTargetClassName(final String className) {
+    public boolean isTargetClassName(final String className) { // (actually) under root packages?
         if (isIgnoreClassName(className)) {
             return false;
         }
@@ -192,8 +212,8 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // ===================================================================================
-    //                                                                        Convert from
-    //                                                                        ============
+    //                                                                    Component Naming
+    //                                                                    ================
     // -----------------------------------------------------
     //                                 Suffix to PackageName
     //                                 ---------------------
@@ -203,21 +223,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             throw new EmptyRuntimeException("suffix");
         }
         return suffix.toLowerCase();
-    }
-
-    // -----------------------------------------------------
-    //                       ClassName to ShortComponentName
-    //                       -------------------------------
-    @Override
-    public String fromClassNameToShortComponentName(final String className) {
-        if (LdiStringUtil.isEmpty(className)) {
-            throw new EmptyRuntimeException("className");
-        }
-        String s = LdiStringUtil.decapitalize(LdiClassUtil.getShortClassName(className));
-        if (s.endsWith(implementationSuffix)) {
-            return s.substring(0, s.length() - implementationSuffix.length());
-        }
-        return s;
     }
 
     // -----------------------------------------------------
@@ -264,6 +269,36 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             }
         }
         return sb.toString();
+    }
+
+    // -----------------------------------------------------
+    //                       ClassName to ShortComponentName
+    //                       -------------------------------
+    @Override
+    public String fromClassNameToShortComponentName(final String className) {
+        if (LdiStringUtil.isEmpty(className)) {
+            throw new EmptyRuntimeException("className");
+        }
+        String s = LdiStringUtil.decapitalize(LdiClassUtil.getShortClassName(className));
+        if (s.endsWith(implementationSuffix)) {
+            return s.substring(0, s.length() - implementationSuffix.length());
+        }
+        return s;
+    }
+
+    // -----------------------------------------------------
+    //                   Class to Complete (Component) Class
+    //                   -----------------------------------
+    @Override
+    public Class<?> toCompleteClass(final Class<?> clazz) { // actually fromClassToComponentClass()
+        if (!clazz.isInterface()) {
+            return clazz;
+        }
+        final String className = toImplementationClassName(clazz.getName()); // interface here
+        if (LdiResourceUtil.isExist(LdiClassUtil.getResourcePath(className))) {
+            return LdiClassUtil.forName(className);
+        }
+        return clazz; // the interface if implementation not found
     }
 
     // -----------------------------------------------------
@@ -359,19 +394,28 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // -----------------------------------------------------
-    //                               ComponentName to Suffix
-    //                               -----------------------
+    //                         Component/ClassName to Suffix
+    //                         -----------------------------
     @Override
     public String fromComponentNameToSuffix(final String componentName) {
         return fromNameToSuffix(componentName);
     }
 
-    // -----------------------------------------------------
-    //                                   ClassName to Suffix
-    //                                   -------------------
     @Override
     public String fromClassNameToSuffix(final String componentName) {
         return fromNameToSuffix(componentName);
+    }
+
+    protected String fromNameToSuffix(final String name) {
+        if (LdiStringUtil.isEmpty(name)) {
+            throw new EmptyRuntimeException("name");
+        }
+        for (int i = name.length() - 1; i >= 0; --i) {
+            if (Character.isUpperCase(name.charAt(i))) {
+                return name.substring(i);
+            }
+        }
+        return null;
     }
 
     // -----------------------------------------------------
@@ -394,37 +438,34 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         return buf.toString();
     }
 
-    protected String fromNameToSuffix(final String name) {
-        if (LdiStringUtil.isEmpty(name)) {
-            throw new EmptyRuntimeException("name");
-        }
-        for (int i = name.length() - 1; i >= 0; --i) {
-            if (Character.isUpperCase(name.charAt(i))) {
-                return name.substring(i);
-            }
-        }
-        return null;
-    }
-
-    protected String fromPathToComponentName(final String path, final String nameSuffix) {
-        if (!path.startsWith(viewRootPath) || !path.endsWith(viewExtension)) {
-            throw new IllegalArgumentException(path);
-        }
-        String componentName =
-                (path.substring(adjustViewRootPath().length() + 1, path.length() - viewExtension.length()) + nameSuffix).replace('/', '_');
-        int pos = componentName.lastIndexOf('_');
-        if (pos == -1) {
-            return LdiStringUtil.decapitalize(componentName);
-        }
-        return componentName.substring(0, pos + 1) + LdiStringUtil.decapitalize(componentName.substring(pos + 1));
-    }
-
+    // ===================================================================================
+    //                                                                    View Path Action
+    //                                                                    ================
     // -----------------------------------------------------
     //                                    Path to ActionName
     //                                    ------------------
     @Override
     public String fromPathToActionName(final String path) {
         return fromPathToComponentName(path, actionSuffix);
+    }
+
+    protected String fromPathToComponentName(final String path, final String nameSuffix) {
+        if (!path.startsWith(viewRootPath) || !path.endsWith(viewExtension)) {
+            throw new IllegalArgumentException(path);
+        }
+        // e.g. /view/sea/land_piari.html
+        //  removedView: sea/land_piari
+        //  componentName: sea_land_piariAction
+        final String removedView = path.substring(adjustViewRootPath().length() + 1, path.length() - viewExtension.length());
+        final String componentName = (removedView + nameSuffix).replace('/', '_');
+        final int lastDelimiterIndex = componentName.lastIndexOf('_');
+        if (lastDelimiterIndex == -1) { // e.g. /view/sea.html
+            return LdiStringUtil.decapitalize(componentName); // e.g. seaAction
+        }
+        // #thinking jflute same as componentName? Does it need to decapitalize? (2021/07/29)
+        final String componentPath = componentName.substring(0, lastDelimiterIndex + 1); // e.g. sea_land_
+        final String pureName = LdiStringUtil.decapitalize(componentName.substring(lastDelimiterIndex + 1)); // e.g. piariAction
+        return componentPath + pureName; // e.g. sea_land_piariAction
     }
 
     // -----------------------------------------------------
@@ -443,37 +484,44 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     //                                                            Interface Implementation
     //                                                            ========================
     @Override
-    public String toImplementationClassName(final String className) {
-        final String implementationClassName = interfaceToImplementationMap.get(className);
-        if (implementationClassName != null) {
-            return implementationClassName;
+    public String toImplementationClassName(String className) { // e.g. ...SeaImpl for ...Sea, not null
+        // find manual mapping first
+        final String implementationMappedName = interfaceToImplementationMap.get(className);
+        if (implementationMappedName != null) {
+            return implementationMappedName;
         }
+        // build conventional naming
         final int index = className.lastIndexOf('.');
-        if (index < 0) {
+        if (index < 0) { // no package name
             return getImplementationPackageName() + "." + className + implementationSuffix;
         }
-        return className.substring(0, index) + "." + getImplementationPackageName() + "." + className.substring(index + 1)
-                + implementationSuffix;
+        final String basePackage = className.substring(0, index);
+        final String pureClassName = className.substring(index + 1);
+        return basePackage + "." + getImplementationPackageName() + "." + pureClassName + implementationSuffix;
     }
 
     @Override
-    public String toInterfaceClassName(final String className) {
-        String interfaceClassName = (String) implementationToInterfaceMap.get(className);
-        if (interfaceClassName != null) {
-            return interfaceClassName;
+    public String toInterfaceClassName(String className) { // e.g. ...Sea for ...SeaImpl, not null
+        // find manual mapping first
+        final String interfaceMappedName = (String) implementationToInterfaceMap.get(className);
+        if (interfaceMappedName != null) {
+            return interfaceMappedName;
         }
+        // build conventional naming
         if (!className.endsWith(implementationSuffix)) {
             return className;
         }
-        String key = "." + getImplementationPackageName() + ".";
+        final String key = "." + getImplementationPackageName() + ".";
         int index = className.lastIndexOf(key);
-        if (index < 0) {
+        if (index < 0) { // no package name
             throw new IllegalArgumentException(className);
         }
-        return className.substring(0, index) + "."
-                + className.substring(index + key.length(), className.length() - implementationSuffix.length());
+        final String basePackage = className.substring(0, index);
+        final String interfacePureName = className.substring(index + key.length(), className.length() - implementationSuffix.length());
+        return basePackage + "." + interfacePureName;
     }
 
+    // #thinking jflute meaning manual mapping implementation class? (2021/07/15)
     @Override
     public boolean isSkipClass(final Class<?> clazz) {
         if (clazz.isInterface()) {
@@ -482,28 +530,19 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         for (final Iterator<Entry<String, String>> it = interfaceToImplementationMap.entrySet().iterator(); it.hasNext();) {
             final Entry<String, String> entry = it.next();
             final Class<?> interfaceClass = LdiClassUtil.forName((String) entry.getKey());
-            if (interfaceClass.isAssignableFrom(clazz)) {
+            if (interfaceClass.isAssignableFrom(clazz)) { // e.g. SeaManualImpl
                 return true;
             }
         }
         return false;
     }
 
-    @Override
-    public Class<?> toCompleteClass(final Class<?> clazz) {
-        if (!clazz.isInterface()) {
-            return clazz;
-        }
-        String className = toImplementationClassName(clazz.getName());
-        if (LdiResourceUtil.isExist(LdiClassUtil.getResourcePath(className))) {
-            return LdiClassUtil.forName(className);
-        }
-        return clazz;
-    }
-
     // ===================================================================================
-    //                                                                   Existence Checker
-    //                                                                   =================
+    //                                                                        Assist Logic
+    //                                                                        ============
+    // -----------------------------------------------------
+    //                                     Existence Checker
+    //                                     -----------------
     protected boolean isExist(String rootPackageName, String lastClassName) {
         final Resources[] checkerArray = getExistCheckerArray(rootPackageName);
         for (int i = 0; i < checkerArray.length; ++i) {
@@ -515,17 +554,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     protected Resources[] getExistCheckerArray(final String rootPackageName) {
-        return (Resources[]) existCheckerArrays.get(rootPackageName);
+        return (Resources[]) existenceCheckerArrays.get(rootPackageName);
     }
 
-    protected void addExistChecker(final String rootPackageName) {
+    protected void addExistingChecker(final String rootPackageName) {
         final Resources[] checkerArray = LdiResourcesUtil.getResourcesTypes(rootPackageName);
-        existCheckerArrays.put(rootPackageName, checkerArray);
+        existenceCheckerArrays.put(rootPackageName, checkerArray);
     }
 
-    // ===================================================================================
-    //                                                              Sub Application Assist
-    //                                                              ======================
+    // -----------------------------------------------------
+    //                         SubApplication Package Prefix
+    //                         -----------------------------
     protected String buildRootAndWebPackagePrefix(int rootIndex) {
         return rootPackageNames[rootIndex] + "." + webRootPackageName + ".";
     }
@@ -538,13 +577,13 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     //                                                                             Dispose
     //                                                                             =======
     public void dispose() {
-        for (final Iterator<Resources[]> it = existCheckerArrays.values().iterator(); it.hasNext();) {
+        for (final Iterator<Resources[]> it = existenceCheckerArrays.values().iterator(); it.hasNext();) {
             final Resources[] array = it.next();
             for (int i = 0; i < array.length; ++i) {
                 array[i].close();
             }
         }
-        existCheckerArrays.clear();
+        existenceCheckerArrays.clear();
         initialized = false;
     }
 

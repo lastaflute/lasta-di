@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ import java.util.Date;
 
 import org.lastaflute.di.core.SingletonLaContainer;
 import org.lastaflute.di.core.factory.SingletonLaContainerFactory;
+import org.lastaflute.di.unit.flute.exception.ExceptionExaminer;
+import org.lastaflute.di.unit.flute.exception.ExceptionExpectationAfter;
+import org.lastaflute.di.util.LdiSrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +89,7 @@ public abstract class UnitLastaDiTestCase extends TestCase {
      * Member member = ...;
      * <span style="color: #FD4747">log</span>(member.getMemberName(), member.getBirthdate());
      * <span style="color: #3F7E5E">// -&gt; Stojkovic, 1965/03/03</span>
-     * 
+     *
      * Exception e = ...;
      * <span style="color: #FD4747">log</span>(member.getMemberName(), member.getBirthdate(), e);
      * <span style="color: #3F7E5E">// -&gt; Stojkovic, 1965/03/03</span>
@@ -134,7 +137,13 @@ public abstract class UnitLastaDiTestCase extends TestCase {
                         break;
                     }
                     final Object nextObj = msgs[nextIndex];
-                    final String replacement = nextObj != null ? nextObj.toString() : "null";
+                    final String replacement;
+                    if (nextObj != null) {
+                        // escape two special characters of replaceFirst() to avoid illegal group reference
+                        replacement = LdiSrl.replace(LdiSrl.replace(nextObj.toString(), "\\", "\\\\"), "$", "\\$");
+                    } else {
+                        replacement = "null";
+                    }
                     strMsg = strMsg.replaceFirst("\\{\\}", replacement);
                     ++skipCount;
                     ++nextIndex;
@@ -169,39 +178,66 @@ public abstract class UnitLastaDiTestCase extends TestCase {
     /**
      * Assert that the callback throws the exception.
      * <pre>
-     * String str = null;
-     * assertException(NullPointerException.class, () <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> str.toString());
+     * String <span style="color: #553000">str</span> = <span style="color: #70226C">null</span>;
+     * <span style="color: #CC4747">assertException</span>(NullPointerException.<span style="color: #70226C">class</span>, () <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> <span style="color: #553000">str</span>.toString());
+     * 
+     * <span style="color: #CC4747">assertException</span>(NullPointerException.<span style="color: #70226C">class</span>, () <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> <span style="color: #553000">str</span>.toString()).<span style="color: #994747">handle</span>(<span style="color: #553000">cause</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     assertContains(<span style="color: #553000">cause</span>.getMessage(), ...);
+     * });
      * </pre>
-     * @param exceptionType The expected exception type. (NotNull) 
+     * @param <CAUSE> The type of expected cause exception. 
+     * @param exceptionType The expected exception type. (NotNull)
      * @param noArgInLambda The callback for calling methods that should throw the exception. (NotNull)
+     * @return The after object that has handler of expected cause for chain call. (NotNull) 
      */
-    protected void assertException(Class<?> exceptionType, ExceptionExaminer noArgInLambda) {
+    protected <CAUSE extends Throwable> ExceptionExpectationAfter<CAUSE> assertException(Class<CAUSE> exceptionType,
+            ExceptionExaminer noArgInLambda) {
         assertNotNull(exceptionType);
-        boolean noThrow = false;
+        final String expected = exceptionType.getSimpleName();
+        Throwable cause = null;
         try {
             noArgInLambda.examine();
-            noThrow = true;
-        } catch (Throwable cause) {
+        } catch (Throwable e) {
+            cause = e;
             final Class<? extends Throwable> causeClass = cause.getClass();
-            final String msg = cause.getMessage();
-            final String exp = (msg != null && msg.contains(ln()) ? ln() : "") + msg;
+            final String exp = buildExceptionSimpleExp(cause);
             if (!exceptionType.isAssignableFrom(causeClass)) {
-                fail("expected: " + exceptionType.getSimpleName() + " but: " + causeClass.getSimpleName() + " => " + exp);
+                final String actual = causeClass.getSimpleName();
+                log("*Different exception, expected: {} but...", exceptionType.getName(), cause);
+                fail("*Different exception, expected: " + expected + " but: " + actual + " => " + exp);
+            } else {
+                log("expected: " + exp);
             }
-            log("expected: " + exp);
         }
-        if (noThrow) {
-            fail("expected: " + exceptionType.getSimpleName() + " but: no exception");
+        if (cause == null) {
+            fail("*No exception, expected: " + expected);
         }
+        @SuppressWarnings("unchecked")
+        final CAUSE castCause = (CAUSE) cause;
+        return new ExceptionExpectationAfter<CAUSE>(castCause);
     }
 
-    @FunctionalInterface
-    public interface ExceptionExaminer {
-
-        /**
-         * Examine the process, should throw the specified exception.
-         */
-        void examine();
+    private String buildExceptionSimpleExp(Throwable cause) {
+        final StringBuilder sb = new StringBuilder();
+        final String firstMsg = cause.getMessage();
+        boolean line = firstMsg != null && firstMsg.contains(ln());
+        sb.append("(").append(cause.getClass().getSimpleName()).append(")").append(firstMsg);
+        final Throwable secondCause = cause.getCause();
+        if (secondCause != null) {
+            final String secondMsg = secondCause.getMessage();
+            line = line || secondMsg != null && secondMsg.contains(ln());
+            sb.append(line ? ln() : " / ");
+            sb.append("(").append(secondCause.getClass().getSimpleName()).append(")").append(secondMsg);
+            final Throwable thirdCause = secondCause.getCause();
+            if (thirdCause != null) {
+                final String thirdMsg = thirdCause.getMessage();
+                line = line || thirdMsg != null && thirdMsg.contains(ln());
+                sb.append(line ? ln() : " / ");
+                sb.append("(").append(thirdCause.getClass().getSimpleName()).append(")").append(thirdMsg);
+            }
+        }
+        final String whole = sb.toString();
+        return (whole.contains(ln()) ? ln() : "") + whole;
     }
 
     // ===================================================================================

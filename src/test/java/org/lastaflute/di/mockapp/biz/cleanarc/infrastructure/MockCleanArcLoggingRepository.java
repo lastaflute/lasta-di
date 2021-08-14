@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,20 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic.pattern;
+package org.lastaflute.di.mockapp.biz.cleanarc.infrastructure;
 
-import javax.annotation.Resource;
-
-import org.lastaflute.di.mockapp.logic.MockLandLogic;
+import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public abstract class MockAbstractLogic {
+public class MockCleanArcLoggingRepository implements MockCleanArcRepository {
 
-    @Resource
-    private MockLandLogic mockLandLogic;
+    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcLoggingRepository.class);
 
-    public MockLandLogic getSuperLogic() {
-        return mockLandLogic;
+    public void save() {
+        logger.debug("save() here!");
     }
 }

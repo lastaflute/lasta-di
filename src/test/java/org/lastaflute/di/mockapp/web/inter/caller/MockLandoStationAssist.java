@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,21 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.logic;
+package org.lastaflute.di.mockapp.web.inter.caller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Resource;
+
+import org.lastaflute.di.mockapp.web.mock.land.assist.MockLandoAssist;
 
 /**
  * @author jflute
  */
-public class MockIkspiaryLogic {
+public class MockLandoStationAssist {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MockIkspiaryLogic.class);
+    @Resource
+    private MockLandoAssist mockLandoAssist;
 
-    public void sayjo() {
-        LOG.debug("sayjo");
+    public void lando() {
+        mockLandoAssist.lan();
     }
 }

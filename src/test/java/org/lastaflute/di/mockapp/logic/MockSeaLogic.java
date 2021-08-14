@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@ package org.lastaflute.di.mockapp.logic;
 
 import javax.annotation.Resource;
 
+import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
+import org.lastaflute.di.mockapp.logic.nearstation.MockPiariLogic;
+import org.lastaflute.di.mockapp.logic.nearstation.butfar.MockAmphiLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,41 +31,41 @@ public class MockSeaLogic {
     private static final Logger logger = LoggerFactory.getLogger(MockSeaLogic.class);
 
     @Resource
-    protected MockLandLogic mockLandLogic;
+    protected MockLandLogic landLogic;
 
     // unsupported
     //@Binding(bindingType = BindingType.MUST)
     @Resource
-    protected MockIkspiaryLogic mockIkspiaryLogic;
+    protected MockPiariLogic piariLogic;
 
-    protected MockAmphiLogic mockAmphiLogic; // under org.dbflute so injected
-    protected MockAmphiLogic anotherNameMockAmphiLogic; // under org.dbflute so injected
+    protected MockAmphiLogic amphiLogic; // under org.dbflute so injected
+    protected MockAmphiLogic anotherNameAmphiLogic; // under org.dbflute so injected
 
     public void dockside() {
         logger.debug("dockside");
-        mockLandLogic.showBase();
+        landLogic.showBase();
     }
 
     public void hanger() {
         logger.debug("hanger");
-        mockIkspiaryLogic.sayjo();
+        piariLogic.sayjo();
     }
 
     public void magic() {
         logger.debug("magic");
-        mockAmphiLogic.theater();
+        amphiLogic.theater();
     }
 
     public void mermaid() {
         logger.debug("mermaid");
-        anotherNameMockAmphiLogic.theater();
+        anotherNameAmphiLogic.theater();
     }
 
     public void setMockAmphiLogic(MockAmphiLogic mockAmphiLogic) {
-        this.mockAmphiLogic = mockAmphiLogic;
+        this.amphiLogic = mockAmphiLogic;
     }
 
     public void setAnotherNameMockAmphiLogic(MockAmphiLogic anotherNameMockAmphiLogic) {
-        this.anotherNameMockAmphiLogic = anotherNameMockAmphiLogic;
+        this.anotherNameAmphiLogic = anotherNameMockAmphiLogic;
     }
 }
