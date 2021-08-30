@@ -204,7 +204,9 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
             final ScriptEngineFound found = findEmbeddedScriptEngine(scriptEngineManager);
             if (isInternalDebug()) {
                 if (found != null) {
-                    logger.debug("#fw_debug Initialized the embedded script engine: {}", found);
+                    final String engineName = found.getEngineName();
+                    final ScriptEngine foundEngine = found.getFoundEngine();
+                    logger.debug("#fw_debug Initialized the embedded script engine: {}/{}", engineName, foundEngine);
                 } else {
                     logger.debug("#fw_debug Not found the embedded script engine.");
                 }
