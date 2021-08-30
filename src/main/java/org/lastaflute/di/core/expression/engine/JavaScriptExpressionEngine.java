@@ -32,6 +32,8 @@ import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolv
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiStringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
@@ -41,6 +43,8 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    private static final Logger logger = LoggerFactory.getLogger(JavaScriptExpressionEngine.class);
+
     protected static final String FIRST_ENGINE_NAME = "sai"; // forked from nashorn
     protected static final String SECOND_ENGINE_NAME = "javascript"; // means nashorn
 
@@ -147,6 +151,14 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         if (firstName != null) {
             engine.put(firstName, firstComponent);
         }
+        if (isInternalDebug()) {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("#fw_debug ...Evaluating the script: exp={}, Di xml={}");
+            if (firstName != null) {
+                sb.append(", component={}/{}");
+            }
+            logger.debug(sb.toString(), exp, container.getPath(), firstName, firstComponent);
+        }
         try {
             return engine.eval(exp);
         } catch (ScriptException | RuntimeException e) {
@@ -155,9 +167,54 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         }
     }
 
+    protected void throwJavaScriptExpressionException(String exp, LaContainer container, Exception e) {
+        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+        br.addNotice("Failed to evaluate the JavaScript expression.");
+        br.addItem("Expression");
+        br.addElement(exp);
+        br.addItem("Di XML");
+        br.addElement(container.getPath());
+        final String msg = br.buildExceptionMessage();
+        throw new IllegalStateException(msg, e);
+    }
+
+    // ===================================================================================
+    //                                                                       Script Engine
+    //                                                                       =============
     // -----------------------------------------------------
-    //                                         Script Engine
-    //                                         -------------
+    //                                            Initialize
+    //                                            ----------
+    // want to define this near comeOnScriptEngine() for visual check
+    public void initializeManagedEngine() {
+        // called by SingletonLaContainerFactory as sub thread
+        // want to initialize static resources in internal world of engine
+        logger.debug("#fw_debug ...Initializing framework-managed script engine for Di xml.");
+        final ScriptEngineManager scriptEngineManager = prepareScriptEngineManager();
+        final String specifiedName = getDiXmlScriptManagedEngineName();
+        if (specifiedName != null) {
+            final ScriptEngine specifiedEngine = scriptEngineManager.getEngineByName(specifiedName);
+            if (isInternalDebug()) {
+                if (specifiedEngine != null) {
+                    logger.debug("#fw_debug Initialized the specified script engine: {}, {}", specifiedName, specifiedEngine);
+                } else {
+                    logger.debug("#fw_debug Not found the specified script engine: {}", specifiedName);
+                }
+            }
+        } else {
+            final ScriptEngineFound found = findEmbeddedScriptEngine(scriptEngineManager);
+            if (isInternalDebug()) {
+                if (found != null) {
+                    logger.debug("#fw_debug Initialized the embedded script engine: {}", found);
+                } else {
+                    logger.debug("#fw_debug Not found the embedded script engine.");
+                }
+            }
+        }
+    }
+
+    // -----------------------------------------------------
+    //                                             Come on !
+    //                                             ---------
     protected ScriptEngine comeOnScriptEngine(String exp, LaContainer container) {
         // script engine is not thread safe so it should be prepared per execution 
         final ScriptEngineManager scriptEngineManager = prepareScriptEngineManager();
@@ -169,41 +226,72 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
                 throwScriptEngineSpecifiedNotFoundException(specifyedName, exp, container);
             }
         } else { // mainly here
-            engine = findEmbeddedScriptEngine(scriptEngineManager);
-            if (engine == null) { // both not found
+            final ScriptEngineFound found = findEmbeddedScriptEngine(scriptEngineManager);
+            if (found == null) { // both not found
                 throwScriptEngineEmbeddedNotFoundException(exp, container);
             }
+            engine = found.getFoundEngine();
         }
         return engine;
     }
 
-    // want to define this near comeOnScriptEngine() for visual check
-    public void initializeManagedEngine() { // called by SingletonLaContainerFactory
-        final ScriptEngineManager scriptEngineManager = prepareScriptEngineManager();
-        final String specifyedName = getDiXmlScriptManagedEngineName();
-        if (specifyedName != null) {
-            scriptEngineManager.getEngineByName(specifyedName); // initialize static resources
-        } else {
-            findEmbeddedScriptEngine(scriptEngineManager);
-        }
-    }
-
+    // -----------------------------------------------------
+    //                                        Engine Manager
+    //                                        --------------
     protected ScriptEngineManager prepareScriptEngineManager() {
         return defaultManager; // as default
     }
 
+    // -----------------------------------------------------
+    //                                      Specified Engine
+    //                                      ----------------
     protected String getDiXmlScriptManagedEngineName() {
         return LastaDiProperties.getInstance().getDiXmlScriptManagedEngineName();
     }
 
-    protected ScriptEngine findEmbeddedScriptEngine(ScriptEngineManager scriptEngineManager) {
-        ScriptEngine embeddedEngine = scriptEngineManager.getEngineByName(FIRST_ENGINE_NAME);
+    // -----------------------------------------------------
+    //                                       Embedded Engine
+    //                                       ---------------
+    protected ScriptEngineFound findEmbeddedScriptEngine(ScriptEngineManager scriptEngineManager) {
+        ScriptEngineFound embeddedEngine = getEngineByName(scriptEngineManager, FIRST_ENGINE_NAME);
         if (embeddedEngine == null) {
-            embeddedEngine = scriptEngineManager.getEngineByName(SECOND_ENGINE_NAME);
+            embeddedEngine = getEngineByName(scriptEngineManager, SECOND_ENGINE_NAME);
         }
         return embeddedEngine; // null allowed
     }
 
+    protected ScriptEngineFound getEngineByName(ScriptEngineManager scriptEngineManager, String engineName) {
+        final ScriptEngine embeddedEngine = scriptEngineManager.getEngineByName(engineName);
+        return embeddedEngine != null ? new ScriptEngineFound(engineName, embeddedEngine) : null;
+    }
+
+    public static class ScriptEngineFound { // to keep engine name for e.g. logging
+
+        protected final String engineName; // not null
+        protected final ScriptEngine foundEngine; // not null
+
+        public ScriptEngineFound(String engineName, ScriptEngine foundEngine) {
+            this.engineName = engineName;
+            this.foundEngine = foundEngine;
+        }
+
+        @Override
+        public String toString() {
+            return "{" + engineName + ", " + foundEngine + "}";
+        }
+
+        public String getEngineName() {
+            return engineName;
+        }
+
+        public ScriptEngine getFoundEngine() {
+            return foundEngine;
+        }
+    }
+
+    // -----------------------------------------------------
+    //                                    Exception Handling
+    //                                    ------------------
     protected void throwScriptEngineSpecifiedNotFoundException(String engineName, String exp, LaContainer container) {
         final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
         br.addNotice("Not found the script engine by the specified name.");
@@ -240,20 +328,6 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         br.addElement(container.getPath());
         final String msg = br.buildExceptionMessage();
         throw new IllegalStateException(msg);
-    }
-
-    // -----------------------------------------------------
-    //                                     Script Expression
-    //                                     -----------------
-    protected void throwJavaScriptExpressionException(String exp, LaContainer container, Exception e) {
-        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
-        br.addNotice("Failed to evaluate the JavaScript expression.");
-        br.addItem("Expression");
-        br.addElement(exp);
-        br.addItem("Di XML");
-        br.addElement(container.getPath());
-        final String msg = br.buildExceptionMessage();
-        throw new IllegalStateException(msg, e);
     }
 
     // ===================================================================================
@@ -326,5 +400,12 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     @Override
     public String resolveStaticMethodReference(Class<?> refType, String methodName) {
         return refType.getName() + "." + methodName; // e.g. org.lastaflute.di.util.LdiResourceUtil.exists
+    }
+
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
+    protected boolean isInternalDebug() {
+        return LastaDiProperties.getInstance().isInternalDebug();
     }
 }

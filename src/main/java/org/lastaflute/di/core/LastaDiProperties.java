@@ -70,13 +70,17 @@ public class LastaDiProperties {
     protected final Properties props;
     protected final boolean internalDebug;
     protected final boolean suppressLastaEnv; // ignoring lasta.env forcedly for e.g. emergency debug
+
     // memorable code (not needed, GCP can use lasta.env (has dot property key))
     //protected final boolean useNodotLastaEnv; // uses 'lastaenv' (no dot) for e.g. GCP
     protected String smartDeployMode; // load loaded
     protected boolean smartDeployLocationDone;
     protected List<String> smartPackageList; // load loaded
+
     protected Class<?> diXmlScriptExpressionEngineType; // load loaded
     protected boolean diXmlScriptExpressionEngineTypeDone;
+    protected String diXmlScriptManagedEngineNameKey; // load loaded
+    protected boolean diXmlScriptManagedEngineNameKeyDone;
 
     // ===================================================================================
     //                                                                         Constructor
@@ -284,7 +288,17 @@ public class LastaDiProperties {
     }
 
     public String getDiXmlScriptManagedEngineName() { // null allowed
-        return getProperty(DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY);
+        if (diXmlScriptManagedEngineNameKey != null) {
+            return diXmlScriptManagedEngineNameKey;
+        }
+        synchronized (this) {
+            if (diXmlScriptManagedEngineNameKey != null) {
+                return diXmlScriptManagedEngineNameKey;
+            }
+            diXmlScriptManagedEngineNameKey = getProperty(DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY);
+            diXmlScriptManagedEngineNameKeyDone = true;
+        }
+        return diXmlScriptManagedEngineNameKey;
     }
 
     // -----------------------------------------------------
@@ -333,8 +347,8 @@ public class LastaDiProperties {
     }
 
     // ===================================================================================
-    //                                                                        Small Helper
-    //                                                                        ============
+    //                                                                          Properties
+    //                                                                          ==========
     protected Properties loadProperties(String fileName) {
         final Properties props = new Properties();
         final InputStream ins = LastaDiProperties.class.getClassLoader().getResourceAsStream(fileName);
