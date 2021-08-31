@@ -22,6 +22,7 @@ import java.util.Set;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.exception.ExpressionClassCreateFailureException;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
+import org.lastaflute.di.util.LdiSrl;
 
 /**
  * @author jflute
@@ -96,7 +97,9 @@ public class ExpressionCastResolver {
                     if (element == null) {
                         throw new IllegalStateException("Cannot handle null element in array: index=" + index);
                     }
-                    intAry[index] = Integer.parseInt(element.toString());
+                    // if rhino, [1,2] then [1.0, 2] (why?), so remove it if exists
+                    final String numExp = LdiSrl.substringLastFront(element.toString(), ".0");
+                    intAry[index] = Integer.parseInt(numExp);
                     ++index;
                 }
             } catch (RuntimeException e) {
