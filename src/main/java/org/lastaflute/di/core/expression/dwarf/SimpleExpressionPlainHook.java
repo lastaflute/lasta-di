@@ -24,6 +24,7 @@ import java.util.Map;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
 import org.lastaflute.di.core.expression.engine.ExpressionEngine;
+import org.lastaflute.di.exception.ClassNotFoundRuntimeException;
 import org.lastaflute.di.helper.beans.BeanDesc;
 import org.lastaflute.di.helper.beans.PropertyDesc;
 import org.lastaflute.di.helper.beans.factory.BeanDescFactory;
@@ -169,6 +170,18 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             } else {
                 final Field field = LdiReflectionUtil.getField(clazz, rear);
                 return LdiReflectionUtil.getValue(field, null);
+            }
+        }
+        // added for rhino, which cannot resolve this expression by jflute (2021/08/31)
+        if (LdiSrl.count(exp, ".") >= 2 && exp.endsWith(".class")) { // org...Sea.class
+            final String pureFqcn = LdiSrl.substringLastFront(exp, ".class");
+            final String pureClassName = LdiSrl.substringLastRear(pureFqcn, ".");
+            if (LdiSrl.isInitLowerCase(pureFqcn) && LdiSrl.isInitUpperCase(pureClassName)) { // more strict
+                try {
+                    return LdiClassUtil.forName(pureFqcn);
+                } catch (ClassNotFoundRuntimeException ignored) {
+                    // because of best effort logic (may be non-class expression)
+                }
             }
         }
         return null;
