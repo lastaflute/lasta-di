@@ -225,7 +225,9 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     public void initializeManagedEngine() {
         // called by SingletonLaContainerFactory as sub thread
         // want to initialize static resources in internal world of engine
-        logger.debug("#fw_debug ...Initializing framework-managed script engine for Di xml.");
+        if (isInternalDebug()) {
+            logger.debug("#fw_debug ...Initializing framework-managed script engine for Di xml.");
+        }
         final ScriptEngineManager scriptEngineManager = prepareScriptEngineManager();
         final String specifiedName = getDiXmlScriptManagedEngineName();
         if (specifiedName != null) {
