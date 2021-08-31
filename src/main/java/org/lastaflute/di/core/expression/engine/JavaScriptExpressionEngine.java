@@ -16,6 +16,7 @@
 package org.lastaflute.di.core.expression.engine;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +32,7 @@ import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver;
 import org.lastaflute.di.core.expression.dwarf.ExpressionCastResolver.CastResolved;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiClassUtil;
+import org.lastaflute.di.util.LdiSrl;
 import org.lastaflute.di.util.LdiStringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,19 +153,50 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         if (firstName != null) {
             engine.put(firstName, firstComponent);
         }
+        showEvaluating(exp, container, firstName, firstComponent);
+        try {
+            final Object result;
+            if (isVarResultWayTarget(exp)) {
+                engine.eval("var result = " + exp); // returns null if nashorn, undefined if rhino
+                result = engine.get("result"); // by variable name
+            } else {
+                result = engine.eval(exp);
+            }
+            showEvaluatedR(result);
+            return result;
+        } catch (ScriptException | RuntimeException e) {
+            throwJavaScriptExpressionException(exp, container, e);
+            return null; // unreachable
+        }
+    }
+
+    protected boolean isVarResultWayTarget(String exp) {
+        // e.g. {"sea":"mystic", "land":"oneman"}, cannot evaluate so variable style
+        return LdiSrl.isQuotedAnything(exp, "{", "}");
+    }
+
+    protected void showEvaluating(String exp, LaContainer container, String firstName, Object firstComponent) {
         if (isInternalDebug()) {
             final StringBuilder sb = new StringBuilder();
-            sb.append("#fw_debug ...Evaluating the script: exp={}, Di xml={}");
+            sb.append("#fw_debug ...Evaluating: exp={}, Di xml={}");
             if (firstName != null) {
                 sb.append(", component={}/{}");
             }
             logger.debug(sb.toString(), exp, container.getPath(), firstName, firstComponent);
         }
-        try {
-            return engine.eval(exp);
-        } catch (ScriptException | RuntimeException e) {
-            throwJavaScriptExpressionException(exp, container, e);
-            return null; // unreachable
+    }
+
+    protected void showEvaluatedR(Object result) { // keep same length of method name as evaluating for display
+        if (isInternalDebug()) {
+            final Object disp;
+            if (result instanceof List<?>) {
+                disp = new ArrayList<>((List<?>) result).toString() + " (" + result.getClass().getName() + ")";
+            } else if (result instanceof Map<?, ?>) {
+                disp = new LinkedHashMap<>((Map<?, ?>) result).toString() + " (" + result.getClass().getName() + ")";
+            } else { // null allowed
+                disp = result;
+            }
+            logger.debug("#fw_debug Evaluated: {}", disp);
         }
     }
 
@@ -374,9 +407,12 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
         throw new ExpressionClassCreateFailureException(msg, cause);
     }
 
+    // -----------------------------------------------------
+    //                                          Map Handling
+    //                                          ------------
     protected Object handleMap(String exp, LaContainer container, Map<String, Object> map, Class<?> resultType) {
         final List<Object> challengeList = challengeList(map);
-        if (challengeList != null) { // e.g. [1,2] or ...
+        if (challengeList != null) { // e.g. [1,2] if nashorn
             return castResolver.convertListTo(exp, container, resultType, challengeList);
         } else {
             return map;
@@ -384,21 +420,30 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     }
 
     protected List<Object> challengeList(Map<String, Object> map) {
+        // e.g. nashorn if [1,2] then {0=1, 1=2} so unwrap the number-key map
+        if (isNumberKeyMap(map)) {
+            return new ArrayList<Object>(map.values()); // extracts value list of number-key map
+        } else {
+            return null;
+        }
+    }
+
+    protected boolean isNumberKeyMap(Map<String, Object> map) {
         int index = 0;
         final Set<String> keySet = map.keySet();
         for (String key : keySet) {
-            if (LdiStringUtil.isNumber(key) && Integer.parseInt(key) == index) {
+            if (LdiStringUtil.isNumber(key) && Integer.parseInt(key) == index) { // number key
                 ++index;
                 continue;
             }
-            return null;
+            return false; // non-number key
         }
-        return new ArrayList<Object>(map.values());
+        return true; // all number keys
     }
 
     // ===================================================================================
-    //                                                                       Static Method
-    //                                                                       =============
+    //                                                                    Static Reference
+    //                                                                    ================
     @Override
     public String resolveStaticMethodReference(Class<?> refType, String methodName) {
         return refType.getName() + "." + methodName; // e.g. org.lastaflute.di.util.LdiResourceUtil.exists
