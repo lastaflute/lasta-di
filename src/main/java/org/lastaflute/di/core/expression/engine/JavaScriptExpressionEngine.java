@@ -48,10 +48,10 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     private static final Logger logger = LoggerFactory.getLogger(JavaScriptExpressionEngine.class);
 
     // name "javascript" may be conflicted if two engines exist in same JavaVM by jflute (2021/08/31)
-    // sai/nashorn is prior to be compatible but rhino might be best at the future
+    // rhino might be best at the future but sai has the best compatibility
     protected static final String FIRST_ENGINE_NAME = "sai"; // forked from nashorn, since Java11
-    protected static final String SECOND_ENGINE_NAME = "nashorn"; // embedded until Java14
-    protected static final String THIRD_ENGINE_NAME = "rhino"; // can use Java8
+    protected static final String SECOND_ENGINE_NAME = "rhino"; // also can use Java8
+    protected static final String THIRD_ENGINE_NAME = "nashorn"; // embedded until Java14
     protected static final String LAST_ENGINE_NAME = "javascript"; // may be conflicted so last
 
     protected static final String SQ = "'";
