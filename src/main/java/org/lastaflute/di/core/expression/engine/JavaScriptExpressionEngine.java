@@ -386,7 +386,11 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
                 }
             }
         }
-        if (evaluated instanceof Map) {
+        if (evaluated instanceof List<?>) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) evaluated;
+            return handleList(exp, container, list, resultType);
+        } else if (evaluated instanceof Map<?, ?>) {
             @SuppressWarnings("unchecked")
             final Map<String, Object> map = (Map<String, Object>) evaluated;
             return handleMap(exp, container, map, resultType);
@@ -408,19 +412,27 @@ public class JavaScriptExpressionEngine implements ExpressionEngine {
     }
 
     // -----------------------------------------------------
+    //                                          List Handling
+    //                                          ------------
+    protected Object handleList(String exp, LaContainer container, List<Object> list, Class<?> resultType) {
+        return castResolver.convertListTo(exp, container, resultType, list); // resolve cast e.g. (int[])
+    }
+
+    // -----------------------------------------------------
     //                                          Map Handling
     //                                          ------------
     protected Object handleMap(String exp, LaContainer container, Map<String, Object> map, Class<?> resultType) {
         final List<Object> challengeList = challengeList(map);
         if (challengeList != null) { // e.g. [1,2] if nashorn
-            return castResolver.convertListTo(exp, container, resultType, challengeList);
+            return handleList(exp, container, challengeList, resultType);
         } else {
             return map;
         }
     }
 
     protected List<Object> challengeList(Map<String, Object> map) {
-        // e.g. nashorn if [1,2] then {0=1, 1=2} so unwrap the number-key map
+        // e.g. nashorn if [1,2] then {0=1, 1=2} (ScriptObjectMirror that is map)
+        // so unwrap the number-key map
         if (isNumberKeyMap(map)) {
             return new ArrayList<Object>(map.values()); // extracts value list of number-key map
         } else {
