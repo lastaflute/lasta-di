@@ -15,8 +15,6 @@
  */
 package org.lastaflute.di.core.factory;
 
-import javax.script.ScriptEngineManager;
-
 import org.lastaflute.di.DisposableUtil;
 import org.lastaflute.di.core.ExternalContext;
 import org.lastaflute.di.core.LaContainer;
@@ -76,9 +74,8 @@ public class SingletonLaContainerFactory {
             /* first getEngineByName() costs about 0.5 seconds so initialize it background */
             final Class<?> engineType = LastaDiProperties.getInstance().getDiXmlScriptExpressionEngineType();
             if (engineType == null) { /* use default */
-                /* initialize static resources */
-                final String engineName = new JavaScriptExpressionEngine().prepareManagedEngineName();
-                new ScriptEngineManager().getEngineByName(engineName); // only returning null if unsupported name
+                /* initialize e.g. static resources */
+                new JavaScriptExpressionEngine().initializeManagedEngine();
             }
         }).start();
     }

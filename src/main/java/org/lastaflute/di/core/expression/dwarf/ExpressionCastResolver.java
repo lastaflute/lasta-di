@@ -15,15 +15,14 @@
  */
 package org.lastaflute.di.core.expression.dwarf;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.exception.ExpressionClassCreateFailureException;
 import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
+import org.lastaflute.di.util.LdiSrl;
 
 /**
  * @author jflute
@@ -37,9 +36,6 @@ public class ExpressionCastResolver {
     public static final String CAST_INT_ARRAY = "(int[])";
     public static final String CAST_STRING_ARRAY = "(String[])";
     public static final String CAST_SET = "(Set)";
-
-    public static class MarkedMap { // marker class
-    }
 
     public static class CastResolved { // marker class
 
@@ -79,9 +75,10 @@ public class ExpressionCastResolver {
         } else if (exp.startsWith(CAST_SET)) {
             filteredExp = exp.substring(CAST_SET.length()).trim();
             resolvedType = Set.class;
-        } else if (exp.startsWith("{") && exp.endsWith("}")) {
-            filteredExp = "[" + exp + "]";
-            resolvedType = MarkedMap.class;
+            // migrated to "var result" way (DBFlute Engine uses) by jflute (2021/08/31)
+            //} else if (exp.startsWith("{") && exp.endsWith("}")) {
+            //    filteredExp = "[" + exp + "]";
+            //    resolvedType = MarkedMap.class;
         } else { // for a little performance, as no instance
             return null;
         }
@@ -100,7 +97,9 @@ public class ExpressionCastResolver {
                     if (element == null) {
                         throw new IllegalStateException("Cannot handle null element in array: index=" + index);
                     }
-                    intAry[index] = Integer.parseInt(element.toString());
+                    // if rhino, [1,2] then [1.0, 2] (why?), so remove it if exists
+                    final String numExp = LdiSrl.substringLastFront(element.toString(), ".0");
+                    intAry[index] = Integer.parseInt(numExp);
                     ++index;
                 }
             } catch (RuntimeException e) {
@@ -127,10 +126,11 @@ public class ExpressionCastResolver {
             return strAry;
         } else if (Set.class.isAssignableFrom(resultType)) { // e.g. (Set)["sea","land"]
             return new LinkedHashSet<Object>(challengeList);
-        } else if (MarkedMap.class.isAssignableFrom(resultType)) { // e.g. {"sea":"land"} as [{"sea":"land"}]
-            @SuppressWarnings("unchecked")
-            final Map<Object, Object> wrappedMap = (Map<Object, Object>) challengeList.get(0);
-            return new LinkedHashMap<Object, Object>(wrappedMap); // convert to normal map
+            // also here, migrated to "var result" way (DBFlute Engine uses) by jflute (2021/08/31)
+            //} else if (MarkedMap.class.isAssignableFrom(resultType)) { // e.g. {"sea":"land"} as [{"sea":"land"}]
+            //    @SuppressWarnings("unchecked")
+            //    final Map<Object, Object> wrappedMap = (Map<Object, Object>) challengeList.get(0);
+            //    return new LinkedHashMap<Object, Object>(wrappedMap); // convert to normal map
         } else { // e.g. [1,2]
             return challengeList;
         }

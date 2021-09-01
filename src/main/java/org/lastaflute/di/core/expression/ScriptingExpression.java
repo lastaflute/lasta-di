@@ -38,7 +38,6 @@ public class ScriptingExpression implements Expression {
     //                                                                          ==========
     private static final Logger logger = LoggerFactory.getLogger(ScriptingExpression.class);
     protected static final SimpleExpressionPlainHook defaultPlainHook = new SimpleExpressionPlainHook();
-    protected static Boolean internalDebug; // cached
 
     // ===================================================================================
     //                                                                           Attribute
@@ -93,9 +92,10 @@ public class ScriptingExpression implements Expression {
                 return result;
             }
         }
-        if (isInternalDebug()) {
-            logger.debug("#fw_debug ...Evaluating the script by expression engine: script={}", parsed);
-        }
+        // moved to engine internal process for more rich information
+        //if (isInternalDebug()) {
+        //    logger.debug("#fw_debug ...Evaluating the script by expression engine: script={}", parsed);
+        //}
         return engine.evaluate(parsed, contextMap, container, resultType);
     }
 
@@ -119,14 +119,6 @@ public class ScriptingExpression implements Expression {
     //                                                                        Assist Logic
     //                                                                        ============
     protected boolean isInternalDebug() {
-        if (internalDebug == null) {
-            synchronized (ScriptingExpression.class) {
-                if (internalDebug == null) {
-                    // almost no cost but cache just in case 
-                    internalDebug = LastaDiProperties.getInstance().isInternalDebug();
-                }
-            }
-        }
-        return internalDebug;
+        return LastaDiProperties.getInstance().isInternalDebug();
     }
 }
