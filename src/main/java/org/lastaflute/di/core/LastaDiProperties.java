@@ -113,15 +113,15 @@ public class LastaDiProperties {
     // ===================================================================================
     //                                                                            Property
     //                                                                            ========
-    public String getProperty(String propertyKey) { // null allowed
+    protected String getProperty(String propertyKey) { // null allowed
         return props.getProperty(propertyKey);
     }
 
-    public String getProperty(String propertyKey, String defaultValue) { // null allowed if default is null
+    protected String getProperty(String propertyKey, String defaultValue) { // null allowed if default is null
         return props.getProperty(propertyKey, defaultValue);
     }
 
-    public boolean isProperty(String propertyKey) {
+    protected boolean isProperty(String propertyKey) {
         return getProperty(propertyKey, "false").equalsIgnoreCase("true");
     }
 
