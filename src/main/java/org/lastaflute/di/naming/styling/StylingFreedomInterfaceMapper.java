@@ -13,19 +13,15 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.onionarc.domain;
-
-import javax.annotation.Resource;
+package org.lastaflute.di.naming.styling;
 
 /**
  * @author jflute
+ * @since 0.9.0 (2021/10/03 Sunday at roppongi japanese)
  */
-public class MockOnionArcDomainService {
+public interface StylingFreedomInterfaceMapper {
 
-    @Resource
-    private MockOnionArcRepository mockOnionRepository; // needs interface mapping or customization
+    String toImplementationClassName(String interfaceClassName); // null allowed: if unrelated name
 
-    public void saveDomainAnything() {
-        mockOnionRepository.saveRepoAnything();
-    }
+    String toInterfaceClassName(String implementationClassName); // null allowed: if unrelated name
 }

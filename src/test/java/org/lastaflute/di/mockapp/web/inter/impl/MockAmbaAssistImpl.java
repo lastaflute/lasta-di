@@ -13,19 +13,20 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.onionarc.domain;
+package org.lastaflute.di.mockapp.web.inter.impl;
 
-import javax.annotation.Resource;
+import org.lastaflute.di.mockapp.web.inter.MockAmbaAssist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockOnionArcDomainService {
+public class MockAmbaAssistImpl implements MockAmbaAssist {
 
-    @Resource
-    private MockOnionArcRepository mockOnionRepository; // needs interface mapping or customization
+    private static final Logger LOG = LoggerFactory.getLogger(MockAmbaAssistImpl.class);
 
-    public void saveDomainAnything() {
-        mockOnionRepository.saveRepoAnything();
+    public void welcome() {
+        LOG.debug("welcome");
     }
 }

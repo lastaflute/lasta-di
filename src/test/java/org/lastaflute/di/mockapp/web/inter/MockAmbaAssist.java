@@ -13,19 +13,12 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.onionarc.domain;
-
-import javax.annotation.Resource;
+package org.lastaflute.di.mockapp.web.inter;
 
 /**
  * @author jflute
  */
-public class MockOnionArcDomainService {
+public interface MockAmbaAssist {
 
-    @Resource
-    private MockOnionArcRepository mockOnionRepository; // needs interface mapping or customization
-
-    public void saveDomainAnything() {
-        mockOnionRepository.saveRepoAnything();
-    }
+    void welcome();
 }

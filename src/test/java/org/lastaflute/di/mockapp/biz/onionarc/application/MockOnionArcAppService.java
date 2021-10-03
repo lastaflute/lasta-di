@@ -25,9 +25,9 @@ import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcDomainService;
 public class MockOnionArcAppService {
 
     @Resource
-    private MockOnionArcDomainService mockOnionDomainService;
+    private MockOnionArcDomainService mockOnionArcDomainService;
 
     public void saveAppAnything() {
-        mockOnionDomainService.saveDomainAnything();
+        mockOnionArcDomainService.saveDomainAnything();
     }
 }

@@ -15,8 +15,12 @@
  */
 package org.lastaflute.di.core.injection;
 
+import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.exception.AutoBindingFailureException;
 import org.lastaflute.di.core.exception.ComponentNotFoundException;
+import org.lastaflute.di.core.exception.IllegalPropertyDefinitionException;
+import org.lastaflute.di.core.factory.LaContainerFactory;
+import org.lastaflute.di.exception.NoSuchConstructorRuntimeException;
 import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgController;
 import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgLoggingPresenter;
 import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgInteractor;
@@ -24,6 +28,10 @@ import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgPresen
 import org.lastaflute.di.mockapp.biz.cleaneg.domain.repository.MockCleanEgRepository;
 import org.lastaflute.di.mockapp.biz.cleaneg.infrastructure.MockCleanEgLoggingRepository;
 import org.lastaflute.di.mockapp.biz.cleaneg.usecase.MockCleanEgUseCase;
+import org.lastaflute.di.mockapp.biz.onionarc.application.MockOnionArcAppService;
+import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcDomainService;
+import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcRepository;
+import org.lastaflute.di.mockapp.biz.onionarc.infrastructure.MockOnionArcLoggingRepository;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
 import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.nearstation.MockBonvoLogic;
@@ -31,11 +39,16 @@ import org.lastaflute.di.mockapp.logic.nearstation.impl.MockBonvoLogicImpl;
 import org.lastaflute.di.mockapp.logic.objoriented.MockAbstractLogic;
 import org.lastaflute.di.mockapp.logic.objoriented.MockConcreteLogic;
 import org.lastaflute.di.mockapp.web.MockMiracoAssist;
+import org.lastaflute.di.mockapp.web.inter.MockAmbaAssist;
 import org.lastaflute.di.mockapp.web.inter.MockDohotelAssist;
 import org.lastaflute.di.mockapp.web.inter.caller.MockBaysideStationAssist;
 import org.lastaflute.di.mockapp.web.inter.caller.MockLandoStationAssist;
 import org.lastaflute.di.mockapp.web.mock.land.assist.MockLandoAssist;
+import org.lastaflute.di.naming.StyledNamingConvention;
+import org.lastaflute.di.naming.styling.StylingFreedomInterfaceMapper;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
+import org.lastaflute.di.util.LdiClassUtil;
+import org.lastaflute.di.util.LdiSrl;
 
 /**
  * @author jflute
@@ -120,6 +133,7 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
         getComponent(MockBaysideStationAssist.class); // because of implementation already initialized
         getComponent(MockDohotelAssist.class).lan(); // me too
         getComponent(MockLandoAssist.class).lan();
+        getComponent(MockAmbaAssist.class).welcome(); // has standard implementation
 
         getComponent(MockBonvoLogic.class).welcome();
         getComponent(MockBonvoLogicImpl.class).welcome();
@@ -128,23 +142,153 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
         getComponent(MockConcreteLogic.class).getSuperLogic();
     }
 
-    // simple execution for code trace
     public void test_injection_quickInterface_freedomInterface() throws Exception { // for warm deploy
         assertException(ComponentNotFoundException.class, () -> getComponent(MockDohotelAssist.class)).handle(cause -> {
             log(cause);
         });
+        mappingInterfaceToImplementation(MockDohotelAssist.class, MockLandoAssist.class);
+        getComponent(MockDohotelAssist.class).lan();
+
+        mappingInterfaceToImplementation(MockOnionArcRepository.class, MockOnionArcLoggingRepository.class);
+        getComponent(MockOnionArcRepository.class).saveRepoAnything();
     }
 
     // ===================================================================================
     //                                                                         biz Package
     //                                                                         ===========
     public void test_injection_bizPackage_basic() throws Exception {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // clean example in biz package
+        // _/_/_/_/_/_/_/_/_/_/
         assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgController.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgLoggingPresenter.class));
         assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgUseCase.class));
         assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgInteractor.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgRepository.class));
         assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgPresenter.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgLoggingRepository.class));
+
+        // #for_now jflute cannot resolve freedom interface as default (needs cool or customization) (2021/10/03)
+        assertException(NoSuchConstructorRuntimeException.class, () -> getComponent(MockCleanEgRepository.class));
+        getComponent(MockCleanEgLoggingRepository.class).save();
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // onion architecture in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        // also here
+        assertException(IllegalPropertyDefinitionException.class, () -> getComponent(MockOnionArcAppService.class));
+        assertException(IllegalPropertyDefinitionException.class, () -> getComponent(MockOnionArcDomainService.class));
+        assertException(NoSuchConstructorRuntimeException.class, () -> getComponent(MockOnionArcRepository.class));
+        getComponent(MockOnionArcLoggingRepository.class).saveRepoAnything();
+    }
+
+    public void test_injection_bizPackage_freedomInterfaceMapping() throws Exception {
+        // ## Arrange ##
+        freedomMappingInterfaceToImplementation();
+
+        // ## Act ##
+        // ## Assert ##
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // clean example in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgController.class));
         assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgLoggingPresenter.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgUseCase.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgInteractor.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgPresenter.class));
+
+        // #for_now jflute cannot resolve freedom interface as default (needs cool or customization) (2021/10/03)
+        getComponent(MockCleanEgRepository.class).save();
+        getComponent(MockCleanEgLoggingRepository.class).save();
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // onion architecture in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        getComponent(MockOnionArcAppService.class).saveAppAnything();
+        getComponent(MockOnionArcDomainService.class).saveDomainAnything(); // see logging repository
+        getComponent(MockOnionArcRepository.class).saveRepoAnything(); // can be executed after logging initialized
+        getComponent(MockOnionArcLoggingRepository.class).saveRepoAnything();
+    }
+
+    public void test_injection_bizPackage_manualInterfaceMapping() throws Exception {
+        // ## Arrange ##
+        mappingInterfaceToImplementation(MockCleanEgRepository.class, MockCleanEgLoggingRepository.class);
+        mappingInterfaceToImplementation(MockOnionArcRepository.class, MockOnionArcLoggingRepository.class);
+
+        // ## Act ##
+        // ## Assert ##
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // clean example in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgController.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgLoggingPresenter.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgUseCase.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgInteractor.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgPresenter.class));
+
+        // #for_now jflute cannot resolve freedom interface as default (needs cool or customization) (2021/10/03)
+        getComponent(MockCleanEgRepository.class).save();
+        getComponent(MockCleanEgLoggingRepository.class).save();
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // onion architecture in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        getComponent(MockOnionArcAppService.class).saveAppAnything();
+        getComponent(MockOnionArcDomainService.class).saveDomainAnything(); // see logging repository
+        getComponent(MockOnionArcRepository.class).saveRepoAnything(); // can be executed after logging initialized
+        getComponent(MockOnionArcLoggingRepository.class).saveRepoAnything();
+    }
+
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
+    // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+    // #thinking jflute duplicate convention instances between configuration and application (2021/10/03)
+    // _/_/_/_/_/_/_/_/_/_/
+    private void freedomMappingInterfaceToImplementation() {
+        LaContainer container = LaContainerFactory.getConfigurationContainer();
+        container.getComponent(StyledNamingConvention.class);
+        StyledNamingConvention convention = container.getComponent(StyledNamingConvention.class);
+        StylingFreedomInterfaceMapper freedomInterfaceMapper = new StylingFreedomInterfaceMapper() {
+            public String toImplementationClassName(String interfaceClassName) {
+                if (interfaceClassName.contains("biz.cleaneg.domain.repository.") && interfaceClassName.endsWith("Repository")) {
+                    String filtered = LdiSrl.replace(interfaceClassName, "biz.cleaneg.domain.repository.", "biz.cleaneg.infrastructure.");
+                    filtered = LdiSrl.replace(filtered, "Repository", "LoggingRepository");
+                    LdiClassUtil.forName(filtered); // assert
+                    return filtered;
+                }
+                if (interfaceClassName.contains("biz.onionarc.domain.") && interfaceClassName.endsWith("Repository")) {
+                    String filtered = LdiSrl.replace(interfaceClassName, "biz.onionarc.domain.", "biz.onionarc.infrastructure.");
+                    filtered = LdiSrl.replace(filtered, "Repository", "LoggingRepository");
+                    LdiClassUtil.forName(filtered); // assert
+                    return filtered;
+                }
+                return null;
+            }
+
+            public String toInterfaceClassName(String implementationClassName) {
+                if (implementationClassName.contains("biz.cleaneg.infrastructure.") && implementationClassName.endsWith("Repository")) {
+                    String filtered =
+                            LdiSrl.replace(implementationClassName, "biz.cleaneg.infrastructure.", "biz.cleaneg.domain.repository.");
+                    filtered = LdiSrl.replace(filtered, "LoggingRepository", "Repository");
+                    LdiClassUtil.forName(filtered); // assert
+                    return filtered;
+                }
+                if (implementationClassName.contains("biz.onionarc.infrastructure.") && implementationClassName.endsWith("Repository")) {
+                    String filtered = LdiSrl.replace(implementationClassName, "biz.onionarc.infrastructure.", "biz.onionarc.domain.");
+                    filtered = LdiSrl.replace(filtered, "LoggingRepository", "Repository");
+                    LdiClassUtil.forName(filtered); // assert
+                    return filtered;
+                }
+
+                return null;
+            }
+        };
+        convention.useFreedomInterfaceMapper(freedomInterfaceMapper);
+    }
+
+    private void mappingInterfaceToImplementation(Class<?> interfaceType, Class<?> implType) {
+        LaContainer container = LaContainerFactory.getConfigurationContainer();
+        container.getComponent(StyledNamingConvention.class);
+        StyledNamingConvention convention = container.getComponent(StyledNamingConvention.class);
+        convention.addInterfaceToImplementationClassName(interfaceType.getName(), implType.getName());
     }
 }

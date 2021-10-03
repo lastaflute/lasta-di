@@ -1,6 +1,7 @@
 package org.lastaflute.di.naming;
 
 import org.lastaflute.di.mockapp.biz.MockBizRootLogic;
+import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgController;
 import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgLoggingPresenter;
 import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgInteractor;
 import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgPresenter;
@@ -59,15 +60,17 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertTrue(convention.isTargetClassName(MockConcreteLogic.class.getName(), "Logic"));
         assertFalse(convention.isTargetClassName(MockNondiSeaLogic.class.getName(), "Logic"));
         assertFalse(convention.isTargetClassName(getClass().getName(), "Test"));
-        assertFalse(convention.isTargetClassName(MockBizRootLogic.class.getName(), "Logic"));
-        assertFalse(convention.isTargetClassName(MockCleanEgUseCase.class.getName(), "UseCase"));
-        assertFalse(convention.isTargetClassName(MockCleanEgInteractor.class.getName(), "Interactor"));
-        assertFalse(convention.isTargetClassName(MockCleanEgRepository.class.getName(), "Repository"));
-        assertFalse(convention.isTargetClassName(MockCleanEgLoggingRepository.class.getName(), "Repository"));
-        assertFalse(convention.isTargetClassName(MockOnionArcAppService.class.getName(), "Service"));
-        assertFalse(convention.isTargetClassName(MockOnionArcDomainService.class.getName(), "Service"));
-        assertFalse(convention.isTargetClassName(MockOnionArcRepository.class.getName(), "Repository"));
-        assertFalse(convention.isTargetClassName(MockOnionArcLoggingRepository.class.getName(), "Repository"));
+
+        // biz package supported since 0.9.0
+        assertTrue(convention.isTargetClassName(MockBizRootLogic.class.getName(), "Logic"));
+        assertTrue(convention.isTargetClassName(MockCleanEgUseCase.class.getName(), "UseCase"));
+        assertTrue(convention.isTargetClassName(MockCleanEgInteractor.class.getName(), "Interactor"));
+        assertTrue(convention.isTargetClassName(MockCleanEgRepository.class.getName(), "Repository"));
+        assertTrue(convention.isTargetClassName(MockCleanEgLoggingRepository.class.getName(), "Repository"));
+        assertTrue(convention.isTargetClassName(MockOnionArcAppService.class.getName(), "Service"));
+        assertTrue(convention.isTargetClassName(MockOnionArcDomainService.class.getName(), "Service"));
+        assertTrue(convention.isTargetClassName(MockOnionArcRepository.class.getName(), "Repository"));
+        assertTrue(convention.isTargetClassName(MockOnionArcLoggingRepository.class.getName(), "Repository"));
     }
 
     public void test_isTargetClassName_by_classNameOnly() throws Exception {
@@ -148,25 +151,37 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         // non DI so simple name here
         assertEquals("mockNondiSeaLogic", convention.fromClassNameToComponentName(MockNondiSeaLogic.class.getName()));
         assertEquals(LdiSrl.initUncap(getClass().getSimpleName()), convention.fromClassNameToComponentName(getClass().getName()));
+
+        // biz package supported since 0.9.0
         assertEquals("mockBizRootLogic", convention.fromClassNameToComponentName(MockBizRootLogic.class.getName()));
 
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // clean example in biz package
         // _/_/_/_/_/_/_/_/_/_/
-        assertEquals("mockCleanEgUseCase", convention.fromClassNameToComponentName(MockCleanEgUseCase.class.getName()));
-        assertEquals("mockCleanEgLoggingPresenter", convention.fromClassNameToComponentName(MockCleanEgLoggingPresenter.class.getName()));
-        assertEquals("mockCleanEgInteractor", convention.fromClassNameToComponentName(MockCleanEgInteractor.class.getName()));
-        assertEquals("mockCleanEgPresenter", convention.fromClassNameToComponentName(MockCleanEgPresenter.class.getName()));
-        assertEquals("mockCleanEgRepository", convention.fromClassNameToComponentName(MockCleanEgRepository.class.getName()));
-        assertEquals("mockCleanEgLoggingRepository", convention.fromClassNameToComponentName(MockCleanEgLoggingRepository.class.getName()));
+        assertEquals("cleaneg_adapter_mockCleanEgController",
+                convention.fromClassNameToComponentName(MockCleanEgController.class.getName()));
+        assertEquals("cleaneg_adapter_mockCleanEgLoggingPresenter",
+                convention.fromClassNameToComponentName(MockCleanEgLoggingPresenter.class.getName()));
+        assertEquals("cleaneg_usecase_mockCleanEgUseCase", convention.fromClassNameToComponentName(MockCleanEgUseCase.class.getName()));
+        assertEquals("cleaneg_domain_interactor_mockCleanEgInteractor",
+                convention.fromClassNameToComponentName(MockCleanEgInteractor.class.getName()));
+        assertEquals("cleaneg_domain_interactor_mockCleanEgPresenter",
+                convention.fromClassNameToComponentName(MockCleanEgPresenter.class.getName()));
+        assertEquals("cleaneg_domain_repository_mockCleanEgRepository",
+                convention.fromClassNameToComponentName(MockCleanEgRepository.class.getName()));
+        assertEquals("cleaneg_infrastructure_mockCleanEgLoggingRepository",
+                convention.fromClassNameToComponentName(MockCleanEgLoggingRepository.class.getName()));
 
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // onion architecture in biz package
         // _/_/_/_/_/_/_/_/_/_/
-        assertEquals("mockOnionArcAppService", convention.fromClassNameToComponentName(MockOnionArcAppService.class.getName()));
-        assertEquals("mockOnionArcDomainService", convention.fromClassNameToComponentName(MockOnionArcDomainService.class.getName()));
-        assertEquals("mockOnionArcRepository", convention.fromClassNameToComponentName(MockOnionArcRepository.class.getName()));
-        assertEquals("mockOnionArcLoggingRepository",
+        assertEquals("onionarc_application_mockOnionArcAppService",
+                convention.fromClassNameToComponentName(MockOnionArcAppService.class.getName()));
+        assertEquals("onionarc_domain_mockOnionArcDomainService",
+                convention.fromClassNameToComponentName(MockOnionArcDomainService.class.getName()));
+        assertEquals("onionarc_domain_mockOnionArcRepository",
+                convention.fromClassNameToComponentName(MockOnionArcRepository.class.getName()));
+        assertEquals("onionarc_infrastructure_mockOnionArcLoggingRepository",
                 convention.fromClassNameToComponentName(MockOnionArcLoggingRepository.class.getName()));
     }
 
@@ -217,6 +232,8 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
             assertEquals(MockLandoAssist.class, convention.toCompleteClass(MockLandoAssist.class));
             assertEquals(MockBonvoLogicImpl.class, convention.toCompleteClass(MockBonvoLogic.class)); // here
             assertEquals(MockBonvoLogicImpl.class, convention.toCompleteClass(MockBonvoLogicImpl.class));
+            assertEquals(MockCleanEgInteractor.class, convention.toCompleteClass(MockCleanEgInteractor.class));
+            assertEquals(MockOnionArcDomainService.class, convention.toCompleteClass(MockOnionArcDomainService.class));
         }
         {
             StyledNamingConvention convention = createConventionUsingInterface(MockDohotelAssist.class, MockLandoAssist.class);
@@ -254,20 +271,22 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertNull(convention.fromComponentNameToClass("mockNondiSeaLogic"));
         assertNull(convention.fromComponentNameToClass("nondi_mockNondiSeaLogic"));
 
+        // biz package supported since 0.9.0
         // logics in biz package
-        assertNull(convention.fromComponentNameToClass("mockBizRootLogic"));
+        assertEquals(MockBizRootLogic.class, convention.fromComponentNameToClass("mockBizRootLogic"));
         assertNull(convention.fromComponentNameToClass("biz_mockBizRootLogic"));
 
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // clean example in biz package
         // _/_/_/_/_/_/_/_/_/_/
-        assertNull(convention.fromComponentNameToClass("mockCleanEgController"));
-        assertNull(convention.fromComponentNameToClass("mockCleanEgLoggingPresenter"));
-        assertNull(convention.fromComponentNameToClass("mockCleanEgUseCase")); // interface
-        assertNull(convention.fromComponentNameToClass("mockCleanEgInteractor"));
-        assertNull(convention.fromComponentNameToClass("mockCleanEgPresenter")); // interface
-        assertNull(convention.fromComponentNameToClass("mockCleanEgRepository")); // interface
-        assertNull(convention.fromComponentNameToClass("mockCleanEgLoggingRepository"));
+        assertEquals(MockCleanEgController.class, convention.fromComponentNameToClass("cleaneg_adapter_mockCleanEgController"));
+        assertEquals(MockCleanEgLoggingPresenter.class, convention.fromComponentNameToClass("cleaneg_adapter_mockCleanEgLoggingPresenter"));
+        assertEquals(MockCleanEgUseCase.class, convention.fromComponentNameToClass("cleaneg_usecase_mockCleanEgUseCase")); // interface
+        assertEquals(MockCleanEgInteractor.class, convention.fromComponentNameToClass("cleaneg_domain_interactor_mockCleanEgInteractor"));
+        assertEquals(MockCleanEgPresenter.class, convention.fromComponentNameToClass("cleaneg_domain_interactor_mockCleanEgPresenter")); // interface
+        assertEquals(MockCleanEgRepository.class, convention.fromComponentNameToClass("cleaneg_domain_repository_mockCleanEgRepository")); // interface
+        assertEquals(MockCleanEgLoggingRepository.class,
+                convention.fromComponentNameToClass("cleaneg_infrastructure_mockCleanEgLoggingRepository"));
 
         assertNull(convention.fromComponentNameToClass("biz_cleaneg_adapter_mockCleanEgController"));
         assertNull(convention.fromComponentNameToClass("biz_cleaneg_adapter_mockCleanEgLoggingPresenter"));
@@ -280,10 +299,11 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // onion architecture in biz package
         // _/_/_/_/_/_/_/_/_/_/
-        assertNull(convention.fromComponentNameToClass("mockOnionArcAppService"));
-        assertNull(convention.fromComponentNameToClass("mockOnionArcDomainService"));
-        assertNull(convention.fromComponentNameToClass("mockOnionArcRepository")); // interface
-        assertNull(convention.fromComponentNameToClass("mockOnionArcLoggingRepository"));
+        assertEquals(MockOnionArcAppService.class, convention.fromComponentNameToClass("onionarc_application_mockOnionArcAppService"));
+        assertEquals(MockOnionArcDomainService.class, convention.fromComponentNameToClass("onionarc_domain_mockOnionArcDomainService"));
+        assertEquals(MockOnionArcRepository.class, convention.fromComponentNameToClass("onionarc_domain_mockOnionArcRepository")); // interface
+        assertEquals(MockOnionArcLoggingRepository.class,
+                convention.fromComponentNameToClass("onionarc_infrastructure_mockOnionArcLoggingRepository"));
 
         assertNull(convention.fromComponentNameToClass("biz_onionarc_application_mockOnionArcAppService"));
         assertNull(convention.fromComponentNameToClass("biz_onionarc_domain_mockOnionArcDomainService"));

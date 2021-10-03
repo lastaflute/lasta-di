@@ -26,6 +26,8 @@ import org.lastaflute.di.Disposable;
 import org.lastaflute.di.DisposableUtil;
 import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.di.exception.EmptyRuntimeException;
+import org.lastaflute.di.naming.styling.StylingFreedomInterfaceMapper;
+import org.lastaflute.di.naming.styling.StylingOptionFactory;
 import org.lastaflute.di.util.LdiArrayUtil;
 import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiMapUtil;
@@ -77,8 +79,12 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     //                                               Package
     //                                               -------
     protected String[] rootPackageNames = new String[0]; // smart packages, not null but substituted as array
+
+    // #subapp
     protected String webRootPackageName = "web"; // #since_s2container also used by LastaFlute
     protected String jobRootPackageName = "job"; // #since_lasta_di for LastaJob (and JobAssist)
+    protected String bizRootPackageName = "biz"; // #since_lasta_di for various architecture (@since 0.9.0)
+
     protected String[] ignorePackageNames = new String[0]; // not smart even if in root package, not null but substituted as array
     protected final Set<String> hotdeployRootPackageNames = new HashSet<String>(4); // basically synchronized with root packages
     protected final Map<String, Resources[]> existenceCheckerArrays = LdiMapUtil.createHashMap();
@@ -92,18 +98,21 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     // map:{ implementation FQCN = interface  FQCN }
     protected final Map<String, String> implementationToInterfaceMap = new HashMap<String, String>(4);
 
+    // #since_lasta_di for e.g. repository interface of various architecture
+    protected StylingFreedomInterfaceMapper freedomInterfaceMapper; // null allowed
+
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public StyledNamingConvention() {
         initialize();
-        setupPropertiesSmartPackage();
-    }
 
-    protected void setupPropertiesSmartPackage() {
-        LastaDiProperties.getInstance().getSmartPackageList().forEach(pkg -> {
-            addRootPackageName(pkg);
-        });
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // #for_now jflute duplicate convention instances so customization point by properties (2021/10/03)
+        // (duplicate between configuration container and application container, very difficult problem)
+        // _/_/_/_/_/_/_/_/_/_/
+        setupPropertiesSmartPackage();
+        setupFreedomInterfaceMapper();
     }
 
     // -----------------------------------------------------
@@ -116,6 +125,23 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             }
             DisposableUtil.add(this);
             initialized = true;
+        }
+    }
+
+    // -----------------------------------------------------
+    //                                          Setup Option
+    //                                          ------------
+    // #since_lasta_di
+    protected void setupPropertiesSmartPackage() {
+        LastaDiProperties.getInstance().getSmartPackageList().forEach(pkg -> {
+            addRootPackageName(pkg);
+        });
+    }
+
+    protected void setupFreedomInterfaceMapper() {
+        final StylingFreedomInterfaceMapper specified = new StylingOptionFactory().prepareFreedomInterfaceMapper();
+        if (specified != null) {
+            useFreedomInterfaceMapper(specified);
         }
     }
 
@@ -144,6 +170,14 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         implementationToInterfaceMap.put(implementationClassName, interfaceName);
     }
 
+    // #since_lasta_di
+    public void useFreedomInterfaceMapper(final StylingFreedomInterfaceMapper freedomInterfaceMapper) {
+        if (freedomInterfaceMapper == null) {
+            throw new IllegalArgumentException("The argument 'freedomInterfaceMapper' should not be null.");
+        }
+        this.freedomInterfaceMapper = freedomInterfaceMapper;
+    }
+
     // ===================================================================================
     //                                                                 Class Determination
     //                                                                 ===================
@@ -160,14 +194,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             return false; // e.g. SeaImpl, but not 'impl' package
         }
         final String middlePackageName = fromSuffixToPackageName(suffix); // e.g. (Logic to) logic, (Job to) job
-        for (int i = 0; i < rootPackageNames.length; ++i) {
+        for (int i = 0; i < rootPackageNames.length; ++i) { // #subapp
             if (className.startsWith(rootPackageNames[i] + "." + middlePackageName + ".")) { // e.g. app.logic.
                 return true;
             }
             if (className.startsWith(buildRootAndWebPackagePrefix(i))) { // e.g. app.web.
                 return true;
             }
-            if (className.startsWith(buildRootAndJobPackagePrefix(i))) { // e.g. app.job. #since_lasta_di
+            if (className.startsWith(buildRootAndJobPackagePrefix(i))) { // e.g. app.job.
+                return true;
+            }
+            if (className.startsWith(buildRootAndBizPackagePrefix(i))) { // e.g. app.biz.
                 return true;
             }
         }
@@ -244,14 +281,19 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             }
         }
         if (LdiStringUtil.isEmpty(name)) {
-            for (int i = 0; i < rootPackageNames.length; ++i) {
+            for (int i = 0; i < rootPackageNames.length; ++i) { // #subapp
                 final String webPackagePrefix = buildRootAndWebPackagePrefix(i);
                 if (interfaceClassName.startsWith(webPackagePrefix)) {
                     name = interfaceClassName.substring(webPackagePrefix.length());
                 } else {
-                    final String jobPackagePrefix = buildRootAndJobPackagePrefix(i); // #since_lasta_di for LastaJob
+                    final String jobPackagePrefix = buildRootAndJobPackagePrefix(i);
                     if (interfaceClassName.startsWith(jobPackagePrefix)) {
                         name = interfaceClassName.substring(jobPackagePrefix.length());
+                    } else {
+                        final String bizPackagePrefix = buildRootAndBizPackagePrefix(i);
+                        if (interfaceClassName.startsWith(bizPackagePrefix)) {
+                            name = interfaceClassName.substring(bizPackagePrefix.length());
+                        }
                     }
                 }
             }
@@ -315,7 +357,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         }
         final String middlePackageName = fromSuffixToPackageName(suffix);
         final String partOfClassName = fromComponentNameToPartOfClassName(componentName);
-        for (int i = 0; i < rootPackageNames.length; ++i) {
+        for (int i = 0; i < rootPackageNames.length; ++i) { // #subapp
             final String rootPackageName = rootPackageNames[i];
 
             // searching sub application package first for performance
@@ -328,12 +370,28 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             if (clazz != null) { // e.g. job in job, assist in job
                 return clazz;
             }
+            clazz = findBizClass(rootPackageName, partOfClassName); // biz next
+            if (clazz != null) { // e.g. logic in biz, service in biz
+                return clazz;
+            }
             clazz = findClass(rootPackageName, middlePackageName, partOfClassName);
             if (clazz != null) { // e.g. logic in logic
                 return clazz;
             }
         }
         return null;
+    }
+
+    protected Class<?> findWebClass(String rootPackageName, String partOfClassName) {
+        return findClass(rootPackageName, webRootPackageName, partOfClassName);
+    }
+
+    protected Class<?> findJobClass(String rootPackageName, String partOfClassName) {
+        return findClass(rootPackageName, jobRootPackageName, partOfClassName);
+    }
+
+    protected Class<?> findBizClass(String rootPackageName, String partOfClassName) {
+        return findClass(rootPackageName, bizRootPackageName, partOfClassName);
     }
 
     protected Class<?> findClass(final String rootPackageName, final String middlePackageName, final String partOfClassName) {
@@ -349,14 +407,6 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
             return LdiClassUtil.forName(className);
         }
         return null;
-    }
-
-    protected Class<?> findWebClass(String rootPackageName, String partOfClassName) {
-        return findClass(rootPackageName, webRootPackageName, partOfClassName);
-    }
-
-    protected Class<?> findJobClass(String rootPackageName, String partOfClassName) { // #since_lasta_di for LastaJob
-        return findClass(rootPackageName, jobRootPackageName, partOfClassName);
     }
 
     // -----------------------------------------------------
@@ -451,7 +501,14 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     //                                                            ========================
     @Override
     public String toImplementationClassName(String className) { // e.g. ...SeaImpl for ...Sea, not null
-        // find manual mapping first
+        // find freedom mapping first
+        if (freedomInterfaceMapper != null) {
+            final String freedomMapped = freedomInterfaceMapper.toImplementationClassName(className);
+            if (freedomMapped != null) {
+                return freedomMapped;
+            }
+        }
+        // find manual mapping second
         final String implementationMappedName = interfaceToImplementationMap.get(className);
         if (implementationMappedName != null) {
             return implementationMappedName;
@@ -468,7 +525,14 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
 
     @Override
     public String toInterfaceClassName(String className) { // e.g. ...Sea for ...SeaImpl, not null
-        // find manual mapping first
+        // find freedom mapping first
+        if (freedomInterfaceMapper != null) {
+            final String freedomMapped = freedomInterfaceMapper.toInterfaceClassName(className);
+            if (freedomMapped != null) {
+                return freedomMapped;
+            }
+        }
+        // find manual mapping second
         final String interfaceMappedName = (String) implementationToInterfaceMap.get(className);
         if (interfaceMappedName != null) {
             return interfaceMappedName;
@@ -488,10 +552,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     }
 
     // #thinking jflute meaning manual mapping implementation class? (2021/07/15)
+    // #thinking jflute add freedom interface logic just in case, but needed? (2021/07/15)
     @Override
     public boolean isSkipClass(final Class<?> clazz) {
         if (clazz.isInterface()) {
             return false;
+        }
+        if (freedomInterfaceMapper != null) {
+            final String interfaceClassName = freedomInterfaceMapper.toInterfaceClassName(clazz.getName());
+            if (interfaceClassName != null) { // treated as assignable
+                return true;
+            }
         }
         for (final Iterator<Entry<String, String>> it = interfaceToImplementationMap.entrySet().iterator(); it.hasNext();) {
             final Entry<String, String> entry = it.next();
@@ -532,12 +603,17 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     // -----------------------------------------------------
     //                         SubApplication Package Prefix
     //                         -----------------------------
+    // #subapp
     protected String buildRootAndWebPackagePrefix(int rootIndex) {
         return rootPackageNames[rootIndex] + "." + webRootPackageName + ".";
     }
 
     protected String buildRootAndJobPackagePrefix(int rootIndex) {
         return rootPackageNames[rootIndex] + "." + jobRootPackageName + ".";
+    }
+
+    protected String buildRootAndBizPackagePrefix(int rootIndex) {
+        return rootPackageNames[rootIndex] + "." + bizRootPackageName + ".";
     }
 
     // ===================================================================================
@@ -759,6 +835,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         this.webRootPackageName = subApplicationRootPackageName;
     }
 
+    // #subapp
     @Override
     public String getWebRootPackageName() {
         return webRootPackageName;
@@ -775,5 +852,14 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
 
     public void setJobRootPackageName(String jobRootPackageName) {
         this.jobRootPackageName = jobRootPackageName;
+    }
+
+    @Override
+    public String getBizRootPackageName() {
+        return bizRootPackageName;
+    }
+
+    public void setBizRootPackageName(String bizRootPackageName) {
+        this.bizRootPackageName = bizRootPackageName;
     }
 }
