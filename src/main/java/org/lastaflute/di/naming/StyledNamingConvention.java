@@ -315,59 +315,25 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
         }
         final String middlePackageName = fromSuffixToPackageName(suffix);
         final String partOfClassName = fromComponentNameToPartOfClassName(componentName);
-        final boolean subAppSuffix = isSubAppSuffix(suffix);
-        final boolean webAppSufix = isWebAppSuffix(suffix);
-        final boolean jobAppSufix = isJobAppSuffix(suffix);
         for (int i = 0; i < rootPackageNames.length; ++i) {
             final String rootPackageName = rootPackageNames[i];
-            if (subAppSuffix) { // first search sub application package
-                Class<?> clazz = null;
-                if (webAppSufix) {
-                    clazz = findWebClass(rootPackageName, partOfClassName);
-                } else if (jobAppSufix) {
-                    clazz = findJobClass(rootPackageName, partOfClassName);
-                }
-                if (clazz != null) {
-                    return clazz;
-                }
-                clazz = findClass(rootPackageName, middlePackageName, partOfClassName);
-                if (clazz != null) {
-                    return clazz;
-                }
-            } else {
-                Class<?> clazz = findClass(rootPackageName, middlePackageName, partOfClassName);
-                if (clazz != null) {
-                    return clazz;
-                }
-                if (webAppSufix) {
-                    clazz = findWebClass(rootPackageName, partOfClassName);
-                } else if (jobAppSufix) {
-                    clazz = findJobClass(rootPackageName, partOfClassName);
-                } else { // e.g. base_login_harborLoginAssist (by "pickup" method)
-                    clazz = findWebClass(rootPackageName, partOfClassName); // find as web at first
-                    if (clazz == null) {
-                        clazz = findJobClass(rootPackageName, partOfClassName); // and job as next
-                    }
-                }
-                if (clazz != null) {
-                    return clazz;
-                }
+
+            // searching sub application package first for performance
+            // because action/assist in web, job in job are frequently used
+            Class<?> clazz = findWebClass(rootPackageName, partOfClassName); // web first
+            if (clazz != null) { // e.g. action in web, assist in web
+                return clazz;
+            }
+            clazz = findJobClass(rootPackageName, partOfClassName); // job next
+            if (clazz != null) { // e.g. job in job, assist in job
+                return clazz;
+            }
+            clazz = findClass(rootPackageName, middlePackageName, partOfClassName);
+            if (clazz != null) { // e.g. logic in logic
+                return clazz;
             }
         }
         return null;
-    }
-
-    protected boolean isSubAppSuffix(String suffix) {
-        return isWebAppSuffix(suffix) || isJobAppSuffix(suffix);
-    }
-
-    protected boolean isWebAppSuffix(String suffix) {
-        // service is unnneeded for Lasta Di but for compatible
-        return actionSuffix.equals(suffix) || serviceSuffix.equals(suffix);
-    }
-
-    protected boolean isJobAppSuffix(String suffix) {
-        return jobSuffix.equals(suffix); // #since_lasta_di for LastaJob
     }
 
     protected Class<?> findClass(final String rootPackageName, final String middlePackageName, final String partOfClassName) {
@@ -543,6 +509,7 @@ public class StyledNamingConvention implements NamingConvention, Disposable {
     // -----------------------------------------------------
     //                                     Existence Checker
     //                                     -----------------
+    // #for_now jflute want to change it to e.g. existsClassInRoot() but keep compatible (2021/10/03)
     protected boolean isExist(String rootPackageName, String lastClassName) {
         final Resources[] checkerArray = getExistCheckerArray(rootPackageName);
         for (int i = 0; i < checkerArray.length; ++i) {
