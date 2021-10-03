@@ -13,12 +13,12 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.usecase;
+package org.lastaflute.di.mockapp.biz.onionarc.domain;
 
 /**
  * @author jflute
  */
-public interface MockCleanArcUseCase {
+public interface MockOnionArcRepository {
 
-    void clean();
+    void saveRepoAnything();
 }

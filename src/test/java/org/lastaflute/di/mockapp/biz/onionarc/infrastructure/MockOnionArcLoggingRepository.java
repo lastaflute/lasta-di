@@ -13,27 +13,20 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor;
+package org.lastaflute.di.mockapp.biz.onionarc.infrastructure;
 
-import javax.annotation.Resource;
-
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
-import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
+import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockCleanArcInteractor implements MockCleanArcUseCase {
+public class MockOnionArcLoggingRepository implements MockOnionArcRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcInteractor.class);
+    private static final Logger logger = LoggerFactory.getLogger(MockOnionArcLoggingRepository.class);
 
-    @Resource
-    private MockCleanArcRepository cleanArcRepository;
-
-    public void clean() {
-        logger.debug("clean() here!");
-        cleanArcRepository.save();
+    public void saveRepoAnything() {
+        logger.debug("save() here!");
     }
 }

@@ -40,13 +40,18 @@ public class LastaDiProperties {
     private static final Logger logger = LoggerFactory.getLogger(LastaDiProperties.class);
 
     public static final String LASTA_DI_PROPERTIES = "lasta_di.properties";
+
     public static final String SMART_DEPLOY_MODE_LOCATION_KEY = "smart.deploy.mode.location";
     public static final String SMART_PACKAGE1_KEY = "smart.package1";
     public static final String SMART_PACKAGE2_KEY = "smart.package2";
     public static final String SMART_PACKAGE3_KEY = "smart.package3";
-    public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
+
     public static final String DIXML_SCRIPT_EXPRESSION_ENGINE_KEY = "dixml.script.expression.engine";
     public static final String DIXML_SCRIPT_MANAGED_ENGINE_NAME_KEY = "dixml.script.managed.engine.name";
+
+    public static final String PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY = "plain.property.injection.package1";
+    public static final String NAMING_STYLING_FREEDOM_INTERFACE_MAPPER = "naming.styling.freedom.interface.mapper";
+
     public static final String INTERNAL_DEBUG_KEY = "internal.debug";
     public static final String SUPPRESS_LASTA_ENV_KEY = "suppress.lasta.env";
     public static final String LASTA_ENV = "lasta.env"; // system property
@@ -68,8 +73,6 @@ public class LastaDiProperties {
     //                                                                           Attribute
     //                                                                           =========
     protected final Properties props;
-    protected final boolean internalDebug;
-    protected final boolean suppressLastaEnv; // ignoring lasta.env forcedly for e.g. emergency debug
 
     // memorable code (not needed, GCP can use lasta.env (has dot property key))
     //protected final boolean useNodotLastaEnv; // uses 'lastaenv' (no dot) for e.g. GCP
@@ -81,6 +84,9 @@ public class LastaDiProperties {
     protected boolean diXmlScriptExpressionEngineTypeDone;
     protected String diXmlScriptManagedEngineNameKey; // load loaded
     protected boolean diXmlScriptManagedEngineNameKeyDone;
+
+    protected final boolean internalDebug;
+    protected final boolean suppressLastaEnv; // ignoring lasta.env forcedly for e.g. emergency debug
 
     // ===================================================================================
     //                                                                         Constructor
@@ -107,15 +113,15 @@ public class LastaDiProperties {
     // ===================================================================================
     //                                                                            Property
     //                                                                            ========
-    public String getProperty(String propertyKey) { // null allowed
+    protected String getProperty(String propertyKey) { // null allowed
         return props.getProperty(propertyKey);
     }
 
-    public String getProperty(String propertyKey, String defaultValue) { // null allowed if default is null
+    protected String getProperty(String propertyKey, String defaultValue) { // null allowed if default is null
         return props.getProperty(propertyKey, defaultValue);
     }
 
-    public boolean isProperty(String propertyKey) {
+    protected boolean isProperty(String propertyKey) {
         return getProperty(propertyKey, "false").equalsIgnoreCase("true");
     }
 
@@ -302,10 +308,17 @@ public class LastaDiProperties {
     }
 
     // -----------------------------------------------------
-    //                              Plain Property Injection
-    //                              ------------------------
+    //                                    Property Injection
+    //                                    ------------------
     public String getPlainPropertyInjectionPackage1() { // null allowed, e.g. for S2Robot's DBFlute
         return getProperty(PLAIN_PROPERTY_INJECTION_PACKAGE1_KEY);
+    }
+
+    // -----------------------------------------------------
+    //                                        Naming Styling
+    //                                        --------------
+    public String getNamingStylingFreedomInterfaceMapper() { // null allowed, e.g. for various architecture
+        return getProperty(NAMING_STYLING_FREEDOM_INTERFACE_MAPPER);
     }
 
     // -----------------------------------------------------

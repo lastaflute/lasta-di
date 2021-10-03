@@ -152,7 +152,10 @@ public interface NamingConvention {
 
     String getSubApplicationRootPackageName(); // not null basically 'web' for compatible
 
+    // #subapp
     String getWebRootPackageName(); // not null basically 'web'
 
     String getJobRootPackageName(); // not null basically 'job'
+
+    String getBizRootPackageName(); // not null basically 'biz'
 }
