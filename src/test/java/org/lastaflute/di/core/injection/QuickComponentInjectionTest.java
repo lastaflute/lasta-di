@@ -17,13 +17,13 @@ package org.lastaflute.di.core.injection;
 
 import org.lastaflute.di.core.exception.AutoBindingFailureException;
 import org.lastaflute.di.core.exception.ComponentNotFoundException;
-import org.lastaflute.di.mockapp.biz.cleanarc.adapter.MockCleanArcController;
-import org.lastaflute.di.mockapp.biz.cleanarc.adapter.MockCleanArcLoggingPresenter;
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcInteractor;
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcPresenter;
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
-import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcLoggingRepository;
-import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
+import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgController;
+import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgLoggingPresenter;
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgInteractor;
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgPresenter;
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.repository.MockCleanEgRepository;
+import org.lastaflute.di.mockapp.biz.cleaneg.infrastructure.MockCleanEgLoggingRepository;
+import org.lastaflute.di.mockapp.biz.cleaneg.usecase.MockCleanEgUseCase;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
 import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 import org.lastaflute.di.mockapp.logic.nearstation.MockBonvoLogic;
@@ -139,12 +139,12 @@ public class QuickComponentInjectionTest extends UnitLastaDiTestCase {
     //                                                                         biz Package
     //                                                                         ===========
     public void test_injection_bizPackage_basic() throws Exception {
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcController.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcUseCase.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcInteractor.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcRepository.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcPresenter.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcLoggingRepository.class));
-        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanArcLoggingPresenter.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgController.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgUseCase.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgInteractor.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgRepository.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgPresenter.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgLoggingRepository.class));
+        assertException(ComponentNotFoundException.class, () -> getComponent(MockCleanEgLoggingPresenter.class));
     }
 }

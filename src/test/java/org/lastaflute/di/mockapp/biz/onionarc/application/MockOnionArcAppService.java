@@ -13,28 +13,21 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.adapter;
+package org.lastaflute.di.mockapp.biz.onionarc.application;
 
 import javax.annotation.Resource;
 
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcPresenter;
-import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcDomainService;
 
 /**
  * @author jflute
  */
-public class MockCleanArcLoggingPresenter implements MockCleanArcPresenter {
-
-    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcLoggingPresenter.class);
+public class MockOnionArcAppService {
 
     @Resource
-    protected MockLandLogic landLogic;
+    private MockOnionArcDomainService mockOnionDomainService;
 
-    @Override
-    public void present() {
-        logger.debug("present() here");
-        landLogic.showBase();
+    public void saveAppAnything() {
+        mockOnionDomainService.saveDomainAnything();
     }
 }

@@ -13,12 +13,12 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor;
+package org.lastaflute.di.mockapp.biz.cleaneg.domain.repository;
 
 /**
  * @author jflute
  */
-public interface MockCleanArcPresenter {
+public interface MockCleanEgRepository {
 
-    void present();
+    void save();
 }

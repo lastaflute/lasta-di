@@ -1,10 +1,16 @@
 package org.lastaflute.di.naming;
 
 import org.lastaflute.di.mockapp.biz.MockBizRootLogic;
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.interactor.MockCleanArcInteractor;
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
-import org.lastaflute.di.mockapp.biz.cleanarc.infrastructure.MockCleanArcLoggingRepository;
-import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
+import org.lastaflute.di.mockapp.biz.cleaneg.adapter.MockCleanEgLoggingPresenter;
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgInteractor;
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgPresenter;
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.repository.MockCleanEgRepository;
+import org.lastaflute.di.mockapp.biz.cleaneg.infrastructure.MockCleanEgLoggingRepository;
+import org.lastaflute.di.mockapp.biz.cleaneg.usecase.MockCleanEgUseCase;
+import org.lastaflute.di.mockapp.biz.onionarc.application.MockOnionArcAppService;
+import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcDomainService;
+import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcRepository;
+import org.lastaflute.di.mockapp.biz.onionarc.infrastructure.MockOnionArcLoggingRepository;
 import org.lastaflute.di.mockapp.job.MockSeaJob;
 import org.lastaflute.di.mockapp.job.firstpark.MockLandJob;
 import org.lastaflute.di.mockapp.logic.MockSeaLogic;
@@ -16,6 +22,7 @@ import org.lastaflute.di.mockapp.logic.nearstation.impl.MockBonvoLogicImpl;
 import org.lastaflute.di.mockapp.logic.objoriented.MockAbstractLogic;
 import org.lastaflute.di.mockapp.logic.objoriented.MockConcreteLogic;
 import org.lastaflute.di.mockapp.nondi.MockNondiSeaLogic;
+import org.lastaflute.di.mockapp.service.MockSeaService;
 import org.lastaflute.di.mockapp.web.MockMiracoAssist;
 import org.lastaflute.di.mockapp.web.MockSeaAction;
 import org.lastaflute.di.mockapp.web.inter.MockDohotelAssist;
@@ -42,6 +49,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertTrue(convention.isTargetClassName(MockLandoAssist.class.getName(), "Assist"));
         assertTrue(convention.isTargetClassName(MockSeaJob.class.getName(), "Job"));
         assertTrue(convention.isTargetClassName(MockLandJob.class.getName(), "Job"));
+        assertTrue(convention.isTargetClassName(MockSeaService.class.getName(), "Service"));
         assertTrue(convention.isTargetClassName(MockSeaLogic.class.getName(), "Logic"));
         assertTrue(convention.isTargetClassName(MockPiariLogic.class.getName(), "Logic"));
         assertTrue(convention.isTargetClassName(MockBonvoLogic.class.getName(), "Logic"));
@@ -52,10 +60,14 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertFalse(convention.isTargetClassName(MockNondiSeaLogic.class.getName(), "Logic"));
         assertFalse(convention.isTargetClassName(getClass().getName(), "Test"));
         assertFalse(convention.isTargetClassName(MockBizRootLogic.class.getName(), "Logic"));
-        assertFalse(convention.isTargetClassName(MockCleanArcUseCase.class.getName(), "Case"));
-        assertFalse(convention.isTargetClassName(MockCleanArcInteractor.class.getName(), "Interactor"));
-        assertFalse(convention.isTargetClassName(MockCleanArcRepository.class.getName(), "Repository"));
-        assertFalse(convention.isTargetClassName(MockCleanArcLoggingRepository.class.getName(), "Repository"));
+        assertFalse(convention.isTargetClassName(MockCleanEgUseCase.class.getName(), "UseCase"));
+        assertFalse(convention.isTargetClassName(MockCleanEgInteractor.class.getName(), "Interactor"));
+        assertFalse(convention.isTargetClassName(MockCleanEgRepository.class.getName(), "Repository"));
+        assertFalse(convention.isTargetClassName(MockCleanEgLoggingRepository.class.getName(), "Repository"));
+        assertFalse(convention.isTargetClassName(MockOnionArcAppService.class.getName(), "Service"));
+        assertFalse(convention.isTargetClassName(MockOnionArcDomainService.class.getName(), "Service"));
+        assertFalse(convention.isTargetClassName(MockOnionArcRepository.class.getName(), "Repository"));
+        assertFalse(convention.isTargetClassName(MockOnionArcLoggingRepository.class.getName(), "Repository"));
     }
 
     public void test_isTargetClassName_by_classNameOnly() throws Exception {
@@ -67,6 +79,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertTrue(convention.isTargetClassName(MockLandoAssist.class.getName()));
         assertTrue(convention.isTargetClassName(MockSeaJob.class.getName()));
         assertTrue(convention.isTargetClassName(MockLandJob.class.getName()));
+        assertTrue(convention.isTargetClassName(MockSeaService.class.getName()));
         assertTrue(convention.isTargetClassName(MockSeaLogic.class.getName()));
         assertTrue(convention.isTargetClassName(MockPiariLogic.class.getName()));
         assertTrue(convention.isTargetClassName(MockBonvoLogic.class.getName()));
@@ -77,10 +90,14 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertTrue(convention.isTargetClassName(MockNondiSeaLogic.class.getName()));
         assertFalse(convention.isTargetClassName(getClass().getName()));
         assertTrue(convention.isTargetClassName(MockBizRootLogic.class.getName()));
-        assertTrue(convention.isTargetClassName(MockCleanArcUseCase.class.getName()));
-        assertTrue(convention.isTargetClassName(MockCleanArcInteractor.class.getName()));
-        assertTrue(convention.isTargetClassName(MockCleanArcRepository.class.getName()));
-        assertTrue(convention.isTargetClassName(MockCleanArcLoggingRepository.class.getName()));
+        assertTrue(convention.isTargetClassName(MockCleanEgUseCase.class.getName()));
+        assertTrue(convention.isTargetClassName(MockCleanEgInteractor.class.getName()));
+        assertTrue(convention.isTargetClassName(MockCleanEgRepository.class.getName()));
+        assertTrue(convention.isTargetClassName(MockCleanEgLoggingRepository.class.getName()));
+        assertTrue(convention.isTargetClassName(MockOnionArcAppService.class.getName()));
+        assertTrue(convention.isTargetClassName(MockOnionArcDomainService.class.getName()));
+        assertTrue(convention.isTargetClassName(MockOnionArcRepository.class.getName()));
+        assertTrue(convention.isTargetClassName(MockOnionArcLoggingRepository.class.getName()));
     }
 
     // ===================================================================================
@@ -118,6 +135,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
 
         assertEquals("mockSeaJob", convention.fromClassNameToComponentName(MockSeaJob.class.getName()));
         assertEquals("firstpark_mockLandJob", convention.fromClassNameToComponentName(MockLandJob.class.getName()));
+        assertEquals("mockSeaService", convention.fromClassNameToComponentName(MockSeaService.class.getName()));
         assertEquals("mockSeaLogic", convention.fromClassNameToComponentName(MockSeaLogic.class.getName()));
         assertEquals("firstpark_mockLandLogic", convention.fromClassNameToComponentName(MockLandLogic.class.getName()));
         assertEquals("nearstation_mockPiariLogic", convention.fromClassNameToComponentName(MockPiariLogic.class.getName()));
@@ -131,11 +149,25 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("mockNondiSeaLogic", convention.fromClassNameToComponentName(MockNondiSeaLogic.class.getName()));
         assertEquals(LdiSrl.initUncap(getClass().getSimpleName()), convention.fromClassNameToComponentName(getClass().getName()));
         assertEquals("mockBizRootLogic", convention.fromClassNameToComponentName(MockBizRootLogic.class.getName()));
-        assertEquals("mockCleanArcUseCase", convention.fromClassNameToComponentName(MockCleanArcUseCase.class.getName()));
-        assertEquals("mockCleanArcInteractor", convention.fromClassNameToComponentName(MockCleanArcInteractor.class.getName()));
-        assertEquals("mockCleanArcRepository", convention.fromClassNameToComponentName(MockCleanArcRepository.class.getName()));
-        assertEquals("mockCleanArcLoggingRepository",
-                convention.fromClassNameToComponentName(MockCleanArcLoggingRepository.class.getName()));
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // clean example in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        assertEquals("mockCleanEgUseCase", convention.fromClassNameToComponentName(MockCleanEgUseCase.class.getName()));
+        assertEquals("mockCleanEgLoggingPresenter", convention.fromClassNameToComponentName(MockCleanEgLoggingPresenter.class.getName()));
+        assertEquals("mockCleanEgInteractor", convention.fromClassNameToComponentName(MockCleanEgInteractor.class.getName()));
+        assertEquals("mockCleanEgPresenter", convention.fromClassNameToComponentName(MockCleanEgPresenter.class.getName()));
+        assertEquals("mockCleanEgRepository", convention.fromClassNameToComponentName(MockCleanEgRepository.class.getName()));
+        assertEquals("mockCleanEgLoggingRepository", convention.fromClassNameToComponentName(MockCleanEgLoggingRepository.class.getName()));
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // onion architecture in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        assertEquals("mockOnionArcAppService", convention.fromClassNameToComponentName(MockOnionArcAppService.class.getName()));
+        assertEquals("mockOnionArcDomainService", convention.fromClassNameToComponentName(MockOnionArcDomainService.class.getName()));
+        assertEquals("mockOnionArcRepository", convention.fromClassNameToComponentName(MockOnionArcRepository.class.getName()));
+        assertEquals("mockOnionArcLoggingRepository",
+                convention.fromClassNameToComponentName(MockOnionArcLoggingRepository.class.getName()));
     }
 
     // -----------------------------------------------------
@@ -150,6 +182,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("mockLandoAssist", convention.fromClassNameToShortComponentName(MockLandoAssist.class.getName()));
         assertEquals("mockSeaJob", convention.fromClassNameToShortComponentName(MockSeaJob.class.getName()));
         assertEquals("mockLandJob", convention.fromClassNameToShortComponentName(MockLandJob.class.getName()));
+        assertEquals("mockSeaService", convention.fromClassNameToShortComponentName(MockSeaService.class.getName()));
         assertEquals("mockSeaLogic", convention.fromClassNameToShortComponentName(MockSeaLogic.class.getName()));
         assertEquals("mockLandLogic", convention.fromClassNameToShortComponentName(MockLandLogic.class.getName()));
         assertEquals("mockPiariLogic", convention.fromClassNameToShortComponentName(MockPiariLogic.class.getName()));
@@ -161,11 +194,16 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("mockNondiSeaLogic", convention.fromClassNameToShortComponentName(MockNondiSeaLogic.class.getName()));
         assertEquals(LdiSrl.initUncap(getClass().getSimpleName()), convention.fromClassNameToShortComponentName(getClass().getName()));
         assertEquals("mockBizRootLogic", convention.fromClassNameToShortComponentName(MockBizRootLogic.class.getName()));
-        assertEquals("mockCleanArcUseCase", convention.fromClassNameToShortComponentName(MockCleanArcUseCase.class.getName()));
-        assertEquals("mockCleanArcInteractor", convention.fromClassNameToShortComponentName(MockCleanArcInteractor.class.getName()));
-        assertEquals("mockCleanArcRepository", convention.fromClassNameToShortComponentName(MockCleanArcRepository.class.getName()));
-        assertEquals("mockCleanArcLoggingRepository",
-                convention.fromClassNameToShortComponentName(MockCleanArcLoggingRepository.class.getName()));
+        assertEquals("mockCleanEgUseCase", convention.fromClassNameToShortComponentName(MockCleanEgUseCase.class.getName()));
+        assertEquals("mockCleanEgInteractor", convention.fromClassNameToShortComponentName(MockCleanEgInteractor.class.getName()));
+        assertEquals("mockCleanEgRepository", convention.fromClassNameToShortComponentName(MockCleanEgRepository.class.getName()));
+        assertEquals("mockCleanEgLoggingRepository",
+                convention.fromClassNameToShortComponentName(MockCleanEgLoggingRepository.class.getName()));
+        assertEquals("mockOnionArcAppService", convention.fromClassNameToShortComponentName(MockOnionArcAppService.class.getName()));
+        assertEquals("mockOnionArcDomainService", convention.fromClassNameToShortComponentName(MockOnionArcDomainService.class.getName()));
+        assertEquals("mockOnionArcRepository", convention.fromClassNameToShortComponentName(MockOnionArcRepository.class.getName()));
+        assertEquals("mockOnionArcLoggingRepository",
+                convention.fromClassNameToShortComponentName(MockOnionArcLoggingRepository.class.getName()));
     }
 
     // -----------------------------------------------------
@@ -203,6 +241,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
 
         assertEquals(MockSeaJob.class, convention.fromComponentNameToClass("mockSeaJob"));
         assertEquals(MockLandJob.class, convention.fromComponentNameToClass("firstpark_mockLandJob"));
+        assertEquals(MockSeaService.class, convention.fromComponentNameToClass("mockSeaService"));
         assertEquals(MockSeaLogic.class, convention.fromComponentNameToClass("mockSeaLogic"));
         assertEquals(MockLandLogic.class, convention.fromComponentNameToClass("firstpark_mockLandLogic"));
         assertEquals(MockPiariLogic.class, convention.fromComponentNameToClass("nearstation_mockPiariLogic"));
@@ -214,16 +253,42 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         // non DI so null here
         assertNull(convention.fromComponentNameToClass("mockNondiSeaLogic"));
         assertNull(convention.fromComponentNameToClass("nondi_mockNondiSeaLogic"));
+
+        // logics in biz package
         assertNull(convention.fromComponentNameToClass("mockBizRootLogic"));
         assertNull(convention.fromComponentNameToClass("biz_mockBizRootLogic"));
-        assertNull(convention.fromComponentNameToClass("mockCleanArcUseCase"));
-        assertNull(convention.fromComponentNameToClass("biz_cleanarc_usecase_mockCleanArcUseCase"));
-        assertNull(convention.fromComponentNameToClass("mockCleanArcInteractor"));
-        assertNull(convention.fromComponentNameToClass("biz_cleanarc_domain_interactor_mockCleanArcInteractor"));
-        assertNull(convention.fromComponentNameToClass("mockCleanArcRepository"));
-        assertNull(convention.fromComponentNameToClass("biz_cleanarc_domain_repository_mockCleanArcRepository"));
-        assertNull(convention.fromComponentNameToClass("mockCleanArcLoggingRepository"));
-        assertNull(convention.fromComponentNameToClass("biz_cleanarc_infrastructure_mockCleanArcLoggingRepository"));
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // clean example in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        assertNull(convention.fromComponentNameToClass("mockCleanEgController"));
+        assertNull(convention.fromComponentNameToClass("mockCleanEgLoggingPresenter"));
+        assertNull(convention.fromComponentNameToClass("mockCleanEgUseCase")); // interface
+        assertNull(convention.fromComponentNameToClass("mockCleanEgInteractor"));
+        assertNull(convention.fromComponentNameToClass("mockCleanEgPresenter")); // interface
+        assertNull(convention.fromComponentNameToClass("mockCleanEgRepository")); // interface
+        assertNull(convention.fromComponentNameToClass("mockCleanEgLoggingRepository"));
+
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_adapter_mockCleanEgController"));
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_adapter_mockCleanEgLoggingPresenter"));
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_usecase_mockCleanEgUseCase"));
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_domain_interactor_mockCleanEgInteractor"));
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_domain_interactor_mockCleanEgPresenter"));
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_domain_repository_mockCleanEgRepository"));
+        assertNull(convention.fromComponentNameToClass("biz_cleaneg_infrastructure_mockCleanEgLoggingRepository"));
+
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // onion architecture in biz package
+        // _/_/_/_/_/_/_/_/_/_/
+        assertNull(convention.fromComponentNameToClass("mockOnionArcAppService"));
+        assertNull(convention.fromComponentNameToClass("mockOnionArcDomainService"));
+        assertNull(convention.fromComponentNameToClass("mockOnionArcRepository")); // interface
+        assertNull(convention.fromComponentNameToClass("mockOnionArcLoggingRepository"));
+
+        assertNull(convention.fromComponentNameToClass("biz_onionarc_application_mockOnionArcAppService"));
+        assertNull(convention.fromComponentNameToClass("biz_onionarc_domain_mockOnionArcDomainService"));
+        assertNull(convention.fromComponentNameToClass("biz_onionarc_domain_mockOnionArcRepository"));
+        assertNull(convention.fromComponentNameToClass("biz_onionarc_infrastructure_mockOnionArcLoggingRepository"));
     }
 
     // -----------------------------------------------------
@@ -245,11 +310,14 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("Logic", convention.fromComponentNameToSuffix("objoriented_mockConcreteLogic"));
         assertEquals("Logic", convention.fromComponentNameToSuffix("mockNondiSeaLogic"));
         assertEquals("Logic", convention.fromComponentNameToSuffix("mockBizRootLogic"));
-        assertEquals("Case", convention.fromComponentNameToSuffix("mockCleanArcUseCase"));
-        assertEquals("Interactor", convention.fromComponentNameToSuffix("mockCleanArcInteractor"));
-        assertEquals("Interactor", convention.fromComponentNameToSuffix("biz_cleanarc_domain_interactor_mockCleanArcInteractor"));
-        assertEquals("Repository", convention.fromComponentNameToSuffix("mockCleanArcRepository"));
-        assertEquals("Repository", convention.fromComponentNameToSuffix("mockCleanArcLoggingRepository"));
+        assertEquals("Case", convention.fromComponentNameToSuffix("mockCleanEgUseCase"));
+        assertEquals("Interactor", convention.fromComponentNameToSuffix("mockCleanEgInteractor"));
+        assertEquals("Interactor", convention.fromComponentNameToSuffix("biz_cleaneg_domain_interactor_mockCleanEgInteractor"));
+        assertEquals("Repository", convention.fromComponentNameToSuffix("mockCleanEgRepository"));
+        assertEquals("Repository", convention.fromComponentNameToSuffix("mockCleanEgLoggingRepository"));
+        assertEquals("Service", convention.fromComponentNameToSuffix("mockOnionArcAppService"));
+        assertEquals("Service", convention.fromComponentNameToSuffix("mockOnionArcDomainService"));
+        assertEquals("Repository", convention.fromComponentNameToSuffix("mockOnionArcLoggingRepository"));
 
         assertEquals("Action", convention.fromComponentNameToSuffix("AAAction"));
         assertEquals("Detarame", convention.fromComponentNameToSuffix("SeaDetarame"));
@@ -272,10 +340,14 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("Logic", convention.fromClassNameToSuffix(MockConcreteLogic.class.getName()));
         assertEquals("Logic", convention.fromClassNameToSuffix(MockNondiSeaLogic.class.getName()));
         assertEquals("Logic", convention.fromClassNameToSuffix(MockBizRootLogic.class.getName()));
-        assertEquals("Case", convention.fromClassNameToSuffix(MockCleanArcUseCase.class.getName()));
-        assertEquals("Interactor", convention.fromClassNameToSuffix(MockCleanArcInteractor.class.getName()));
-        assertEquals("Repository", convention.fromClassNameToSuffix(MockCleanArcRepository.class.getName()));
-        assertEquals("Repository", convention.fromClassNameToSuffix(MockCleanArcLoggingRepository.class.getName()));
+        assertEquals("Case", convention.fromClassNameToSuffix(MockCleanEgUseCase.class.getName()));
+        assertEquals("Interactor", convention.fromClassNameToSuffix(MockCleanEgInteractor.class.getName()));
+        assertEquals("Repository", convention.fromClassNameToSuffix(MockCleanEgRepository.class.getName()));
+        assertEquals("Repository", convention.fromClassNameToSuffix(MockCleanEgLoggingRepository.class.getName()));
+        assertEquals("Service", convention.fromClassNameToSuffix(MockOnionArcAppService.class.getName()));
+        assertEquals("Service", convention.fromClassNameToSuffix(MockOnionArcDomainService.class.getName()));
+        assertEquals("Repository", convention.fromClassNameToSuffix(MockOnionArcRepository.class.getName()));
+        assertEquals("Repository", convention.fromClassNameToSuffix(MockOnionArcLoggingRepository.class.getName()));
         assertNull(convention.fromClassNameToSuffix("detarame"));
     }
 
@@ -288,8 +360,8 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals("mock.land.MockLandAction", convention.fromComponentNameToPartOfClassName("mock_land_mockLandAction"));
         assertEquals("MockSeaJob", convention.fromComponentNameToPartOfClassName("mockSeaJob"));
         assertEquals("firstpark.MockLandJob", convention.fromComponentNameToPartOfClassName("firstpark_mockLandJob"));
-        assertEquals("biz.cleanarc.domain.interactor.MockCleanArcInteractor",
-                convention.fromComponentNameToPartOfClassName("biz_cleanarc_domain_interactor_mockCleanArcInteractor"));
+        assertEquals("biz.cleaneg.domain.interactor.MockCleanEgInteractor",
+                convention.fromComponentNameToPartOfClassName("biz_cleaneg_domain_interactor_mockCleanEgInteractor"));
     }
 
     // ===================================================================================
@@ -338,8 +410,8 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
                 convention.toImplementationClassName(MockBonvoLogicImpl.class.getName()));
         assertEquals(deriveExpectedImpl(MockAbstractLogic.class), convention.toImplementationClassName(MockAbstractLogic.class.getName()));
         assertEquals(deriveExpectedImpl(MockConcreteLogic.class), convention.toImplementationClassName(MockConcreteLogic.class.getName()));
-        assertEquals(deriveExpectedImpl(MockCleanArcInteractor.class),
-                convention.toImplementationClassName(MockCleanArcInteractor.class.getName()));
+        assertEquals(deriveExpectedImpl(MockCleanEgInteractor.class),
+                convention.toImplementationClassName(MockCleanEgInteractor.class.getName()));
     }
 
     private String deriveExpectedImpl(Class<?> type) {
@@ -358,7 +430,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
         assertEquals(MockBonvoLogic.class.getName(), convention.toInterfaceClassName(MockBonvoLogicImpl.class.getName()));
         assertEquals(MockAbstractLogic.class.getName(), convention.toInterfaceClassName(MockAbstractLogic.class.getName()));
         assertEquals(MockConcreteLogic.class.getName(), convention.toInterfaceClassName(MockConcreteLogic.class.getName()));
-        assertEquals(MockCleanArcInteractor.class.getName(), convention.toInterfaceClassName(MockCleanArcInteractor.class.getName()));
+        assertEquals(MockCleanEgInteractor.class.getName(), convention.toInterfaceClassName(MockCleanEgInteractor.class.getName()));
     }
 
     public void test_isSkipClass_basic() throws Exception {
@@ -371,7 +443,7 @@ public class StyledNamingConventionTest extends UnitLastaDiTestCase {
             assertFalse(convention.isSkipClass(MockBonvoLogicImpl.class));
             assertFalse(convention.isSkipClass(MockAbstractLogic.class));
             assertFalse(convention.isSkipClass(MockConcreteLogic.class));
-            assertFalse(convention.isSkipClass(MockCleanArcInteractor.class));
+            assertFalse(convention.isSkipClass(MockCleanEgInteractor.class));
         }
         {
             StyledNamingConvention convention = createConventionUsingInterface(MockDohotelAssist.class, MockLandoAssist.class);

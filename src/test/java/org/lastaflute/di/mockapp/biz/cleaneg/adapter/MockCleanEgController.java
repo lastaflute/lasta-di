@@ -13,23 +13,23 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.adapter;
+package org.lastaflute.di.mockapp.biz.cleaneg.adapter;
 
 import javax.annotation.Resource;
 
-import org.lastaflute.di.mockapp.biz.cleanarc.usecase.MockCleanArcUseCase;
+import org.lastaflute.di.mockapp.biz.cleaneg.usecase.MockCleanEgUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockCleanArcController {
+public class MockCleanEgController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MockCleanEgController.class);
 
     @Resource
-    private MockCleanArcUseCase cleanArcUseCase;
+    private MockCleanEgUseCase cleanArcUseCase;
 
     public void control() {
         logger.debug("control() here");

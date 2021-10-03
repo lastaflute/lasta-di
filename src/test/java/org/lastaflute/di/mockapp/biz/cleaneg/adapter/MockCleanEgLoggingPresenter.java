@@ -13,20 +13,28 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.mockapp.biz.cleanarc.infrastructure;
+package org.lastaflute.di.mockapp.biz.cleaneg.adapter;
 
-import org.lastaflute.di.mockapp.biz.cleanarc.domain.repository.MockCleanArcRepository;
+import javax.annotation.Resource;
+
+import org.lastaflute.di.mockapp.biz.cleaneg.domain.interactor.MockCleanEgPresenter;
+import org.lastaflute.di.mockapp.logic.firstpark.MockLandLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
-public class MockCleanArcLoggingRepository implements MockCleanArcRepository {
+public class MockCleanEgLoggingPresenter implements MockCleanEgPresenter {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockCleanArcLoggingRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(MockCleanEgLoggingPresenter.class);
 
-    public void save() {
-        logger.debug("save() here!");
+    @Resource
+    protected MockLandLogic landLogic;
+
+    @Override
+    public void present() {
+        logger.debug("present() here");
+        landLogic.showBase();
     }
 }
