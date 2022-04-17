@@ -20,10 +20,6 @@ import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 
-import org.lastaflute.jta.core.RestrictedTransactionManager;
-import org.lastaflute.jta.core.LaTransactionManager;
-import org.lastaflute.jta.core.LaTransactionSynchronizationRegistry;
-import org.lastaflute.jta.core.LaUserTransaction;
 import org.lastaflute.jta.unit.UnitLastaJtaTest;
 
 /**

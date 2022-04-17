@@ -15,10 +15,6 @@
  */
 package org.lastaflute.jta.helper.timer;
 
-import org.lastaflute.jta.helper.timer.LjtTimeoutManager;
-import org.lastaflute.jta.helper.timer.LjtTimeoutTarget;
-import org.lastaflute.jta.helper.timer.LjtTimeoutTask;
-
 import junit.framework.TestCase;
 
 /**

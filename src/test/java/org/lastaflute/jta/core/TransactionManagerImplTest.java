@@ -19,8 +19,6 @@ import javax.transaction.Status;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
-import org.lastaflute.jta.core.LaTransactionManager;
-
 import junit.framework.TestCase;
 
 /**
