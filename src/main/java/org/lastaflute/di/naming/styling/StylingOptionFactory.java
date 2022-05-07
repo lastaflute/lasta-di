@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,10 +37,10 @@ public class StylingOptionFactory {
         } catch (RuntimeException e) {
             final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
             br.addNotice("Cannot instantiate the freedom interface mapper.");
-            br.addItem("[Advice]");
+            br.addItem("Advice");
             br.addElement("Confirm your mapper definition specified in lasta_di.properties.");
             br.addElement("For example, the mapper needs default constructor.");
-            br.addItem("[Mapper Name]");
+            br.addItem("Mapper Name");
             br.addElement(mapperName);
             final String msg = br.buildExceptionMessage();
             throw new IllegalStateException(msg, e);
@@ -51,10 +51,10 @@ public class StylingOptionFactory {
             final String interfaceName = StylingFreedomInterfaceMapper.class.getSimpleName();
             final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
             br.addNotice("Cannot cast the freedom interface mapper.");
-            br.addItem("[Advice]");
+            br.addItem("Advice");
             br.addElement("Confirm your mapper definition specified in lasta_di.properties.");
             br.addElement("For example, the mapper should implement " + interfaceName + " interface.");
-            br.addItem("[Mapper Name]");
+            br.addItem("Mapper Name");
             br.addElement(mapperName);
             final String msg = br.buildExceptionMessage();
             throw new IllegalStateException(msg, e);

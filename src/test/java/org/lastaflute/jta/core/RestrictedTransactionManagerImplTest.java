@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,6 @@ import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 
-import org.lastaflute.jta.core.RestrictedTransactionManager;
-import org.lastaflute.jta.core.LaTransactionManager;
-import org.lastaflute.jta.core.LaTransactionSynchronizationRegistry;
-import org.lastaflute.jta.core.LaUserTransaction;
 import org.lastaflute.jta.unit.UnitLastaJtaTest;
 
 /**
