@@ -15,18 +15,18 @@
  */
 package org.lastaflute.di.core.factory.defbuilder.impl;
 
-import javax.annotation.Resource;
-
 import org.lastaflute.di.core.j2ee.JndiResourceLocator;
 import org.lastaflute.di.core.meta.AccessTypeDef;
 import org.lastaflute.di.core.meta.PropertyDef;
 
+import jakarta.annotation.Resource;
+
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class ResourcePropertyDefBuilder extends AbstractPropertyDefBuilder<Resource> {
+public class JakartaResourcePropertyDefBuilder extends AbstractPropertyDefBuilder<Resource> {
 
-    public ResourcePropertyDefBuilder() {
+    public JakartaResourcePropertyDefBuilder() {
     }
 
     @Override

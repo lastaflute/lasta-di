@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.PreDestroy;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 import javax.transaction.Status;
@@ -50,6 +49,8 @@ import org.lastaflute.jta.util.LjtTransactionManagerUtil;
 import org.lastaflute.jta.util.LjtTransactionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.annotation.PreDestroy;
 
 /**
  * @author modified by jflute (originated in Seasar)
