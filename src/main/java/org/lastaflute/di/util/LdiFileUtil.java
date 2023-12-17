@@ -96,8 +96,6 @@ public class LdiFileUtil {
     /**
      * @param path
      * @param data
-     * @param offset
-     * @param length
      * @throws NullPointerException
      */
     public static void write(String path, byte[] data) {
