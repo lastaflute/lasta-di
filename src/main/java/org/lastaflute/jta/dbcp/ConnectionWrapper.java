@@ -19,8 +19,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.XAConnection;
-import javax.transaction.Transaction;
 import javax.transaction.xa.XAResource;
+
+import jakarta.transaction.Transaction;
 
 /**
  * @author modified by jflute (originated in Seasar)

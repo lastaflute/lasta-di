@@ -15,9 +15,9 @@
  */
 package org.lastaflute.jta.core;
 
-import javax.transaction.Status;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+import jakarta.transaction.Status;
+import jakarta.transaction.Transaction;
+import jakarta.transaction.TransactionManager;
 
 import junit.framework.TestCase;
 

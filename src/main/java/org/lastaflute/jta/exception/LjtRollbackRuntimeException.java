@@ -15,7 +15,7 @@
  */
 package org.lastaflute.jta.exception;
 
-import javax.transaction.RollbackException;
+import jakarta.transaction.RollbackException;
 
 /**
  * @author modified by jflute (originated in Seasar)

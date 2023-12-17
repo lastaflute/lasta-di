@@ -15,10 +15,10 @@
  */
 package org.lastaflute.jta.util;
 
-import javax.transaction.Status;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+import jakarta.transaction.Status;
+import jakarta.transaction.SystemException;
+import jakarta.transaction.Transaction;
+import jakarta.transaction.TransactionManager;
 
 import org.lastaflute.jta.exception.LjtSystemRuntimeException;
 

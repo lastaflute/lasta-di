@@ -29,10 +29,10 @@ import java.util.Set;
 
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
-import javax.transaction.Status;
-import javax.transaction.Synchronization;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+import jakarta.transaction.Status;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.Transaction;
+import jakarta.transaction.TransactionManager;
 
 import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.jta.dbcp.exception.ConnectionPoolShortFreeSQLException;

@@ -17,7 +17,7 @@ package org.lastaflute.jta.dbcp;
 
 import java.sql.SQLException;
 
-import javax.transaction.Transaction;
+import jakarta.transaction.Transaction;
 
 /**
  * @author modified by jflute (originated in Seasar)
