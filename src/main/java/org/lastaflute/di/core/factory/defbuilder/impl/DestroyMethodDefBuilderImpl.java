@@ -17,13 +17,13 @@ package org.lastaflute.di.core.factory.defbuilder.impl;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.PreDestroy;
-
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.exception.IllegalDestroyMethodAnnotationRuntimeException;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
 import org.lastaflute.di.core.factory.defbuilder.DestroyMethodDefBuilder;
 import org.lastaflute.di.core.meta.impl.DestroyMethodDefImpl;
+
+import jakarta.annotation.PreDestroy;
 
 /**
  * @author modified by jflute (originated in Seasar)

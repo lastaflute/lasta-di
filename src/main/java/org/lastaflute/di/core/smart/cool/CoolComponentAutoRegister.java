@@ -18,8 +18,6 @@ package org.lastaflute.di.core.smart.cool;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.creator.ComponentCreator;
@@ -30,6 +28,8 @@ import org.lastaflute.di.util.LdiClassUtil;
 import org.lastaflute.di.util.LdiModifierUtil;
 import org.lastaflute.di.util.LdiResourcesUtil;
 import org.lastaflute.di.util.LdiResourcesUtil.Resources;
+
+import jakarta.annotation.Resource;
 
 /**
  * @author modified by jflute (originated in Seasar)

@@ -15,9 +15,9 @@
  */
 package org.lastaflute.di.mockapp.web.inter.caller;
 
-import javax.annotation.Resource;
-
 import org.lastaflute.di.mockapp.web.mock.land.assist.MockLandoAssist;
+
+import jakarta.annotation.Resource;
 
 /**
  * @author jflute

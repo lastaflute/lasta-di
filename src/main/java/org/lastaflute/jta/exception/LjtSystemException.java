@@ -15,7 +15,7 @@
  */
 package org.lastaflute.jta.exception;
 
-import javax.transaction.SystemException;
+import jakarta.transaction.SystemException;
 
 /**
  * @author modified by jflute (originated in Seasar)

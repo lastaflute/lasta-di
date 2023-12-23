@@ -37,7 +37,6 @@ import java.util.concurrent.Executor;
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.XAConnection;
-import javax.transaction.Transaction;
 import javax.transaction.xa.XAResource;
 
 import org.lastaflute.di.core.LastaDiProperties;
@@ -46,6 +45,8 @@ import org.lastaflute.jta.dbcp.ConnectionWrapper;
 import org.lastaflute.jta.exception.LjtSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.transaction.Transaction;
 
 /**
  * @author modified by jflute (originated in Seasar)

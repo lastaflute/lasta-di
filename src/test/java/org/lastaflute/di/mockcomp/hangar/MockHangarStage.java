@@ -15,7 +15,7 @@
  */
 package org.lastaflute.di.mockcomp.hangar;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author jflute

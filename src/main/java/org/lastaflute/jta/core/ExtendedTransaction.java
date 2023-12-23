@@ -15,9 +15,9 @@
  */
 package org.lastaflute.jta.core;
 
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
+import jakarta.transaction.NotSupportedException;
+import jakarta.transaction.SystemException;
+import jakarta.transaction.Transaction;
 
 /**
  * @author modified by jflute (originated in Seasar)

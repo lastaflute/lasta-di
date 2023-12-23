@@ -15,7 +15,7 @@
  */
 package org.lastaflute.di.mockapp.biz.onionarc.domain;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author jflute

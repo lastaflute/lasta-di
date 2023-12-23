@@ -15,9 +15,9 @@
  */
 package org.lastaflute.di.mockapp.biz.onionarc.application;
 
-import javax.annotation.Resource;
-
 import org.lastaflute.di.mockapp.biz.onionarc.domain.MockOnionArcDomainService;
+
+import jakarta.annotation.Resource;
 
 /**
  * @author jflute

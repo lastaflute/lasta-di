@@ -15,11 +15,11 @@
  */
 package org.lastaflute.di.mockapp.biz.cleaneg.adapter;
 
-import javax.annotation.Resource;
-
 import org.lastaflute.di.mockapp.biz.cleaneg.usecase.MockCleanEgUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.annotation.Resource;
 
 /**
  * @author jflute

@@ -18,7 +18,7 @@ package org.lastaflute.di.core.customizer;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.factory.AspectDefFactory;

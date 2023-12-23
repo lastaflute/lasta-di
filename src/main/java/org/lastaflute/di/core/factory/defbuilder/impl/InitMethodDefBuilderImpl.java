@@ -17,13 +17,13 @@ package org.lastaflute.di.core.factory.defbuilder.impl;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.PostConstruct;
-
 import org.lastaflute.di.core.ComponentDef;
 import org.lastaflute.di.core.exception.IllegalInitMethodAnnotationRuntimeException;
 import org.lastaflute.di.core.factory.annohandler.AnnotationHandler;
 import org.lastaflute.di.core.factory.defbuilder.InitMethodDefBuilder;
 import org.lastaflute.di.core.meta.impl.InitMethodDefImpl;
+
+import jakarta.annotation.PostConstruct;
 
 /**
  * @author modified by jflute (originated in Seasar)

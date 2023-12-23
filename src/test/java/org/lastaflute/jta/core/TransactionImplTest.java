@@ -15,10 +15,6 @@
  */
 package org.lastaflute.jta.core;
 
-import javax.transaction.RollbackException;
-import javax.transaction.Status;
-import javax.transaction.Synchronization;
-import javax.transaction.Transaction;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
@@ -26,6 +22,10 @@ import javax.transaction.xa.Xid;
 import org.lastaflute.jta.core.xa.DefaultXAResource;
 import org.lastaflute.jta.util.LjtTransactionUtil;
 
+import jakarta.transaction.RollbackException;
+import jakarta.transaction.Status;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.Transaction;
 import junit.framework.TestCase;
 
 /**

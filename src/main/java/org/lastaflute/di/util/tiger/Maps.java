@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <pre>
- * Map<String, Integer> map = map("a", 1).$("b", 2).$("c", 3).$();
+ * Map&lt;String, Integer&gt; map = map("a", 1).$("b", 2).$("c", 3).$();
  * </pre>
  * @param <K> The type of key.
  * @param <V> The type of value.

@@ -15,7 +15,7 @@
  */
 package org.lastaflute.jta.core;
 
-import javax.transaction.Synchronization;
+import jakarta.transaction.Synchronization;
 
 /**
  * @author modified by jflute (originated in Seasar)
