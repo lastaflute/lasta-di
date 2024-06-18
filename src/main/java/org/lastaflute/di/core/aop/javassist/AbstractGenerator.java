@@ -16,6 +16,7 @@
 package org.lastaflute.di.core.aop.javassist;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,7 +24,10 @@ import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.ProtectionDomain;
+import java.util.Arrays;
 
+import org.lastaflute.di.core.aop.intertype.PropertyInterType;
+import org.lastaflute.di.core.exception.CannotDefineClassException;
 import org.lastaflute.di.core.util.ClassPoolUtil;
 import org.lastaflute.di.exception.CannotCompileRuntimeException;
 import org.lastaflute.di.exception.IORuntimeException;
@@ -31,7 +35,10 @@ import org.lastaflute.di.exception.IllegalAccessRuntimeException;
 import org.lastaflute.di.exception.InvocationTargetRuntimeException;
 import org.lastaflute.di.exception.NoSuchMethodRuntimeException;
 import org.lastaflute.di.exception.NotFoundRuntimeException;
+import org.lastaflute.di.helper.log.LaLogger;
+import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 import org.lastaflute.di.util.LdiClassUtil;
+import org.lastaflute.di.util.tiger.LdiReflectionUtil;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -50,21 +57,33 @@ public class AbstractGenerator {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    protected static final String DEFINE_CLASS_METHOD_NAME = "defineClass";
-    protected static final ProtectionDomain protectionDomain;
+    private static final LaLogger logger = LaLogger.getLogger(PropertyInterType.class);
+
+    protected static final String DEFINE_CLASS_METHOD_NAME = "defineClass"; // of ClassLoader
+    protected static final ProtectionDomain protectionDomain; // not null
 
     /**
-     * Reflection to ClassLoader@defineClass() as private-accessible. <br>
+     * Reflection to ClassLoader@defineClass() as private-accessible. (NotNull) <br>
      * but it may be not accessible when Java17 without add-opens option.
      */
     protected static final Method defineClassMethod;
+
+    /** Reflection to MethodHandles@privateLookupIn() for java9 or later. (NullAllowed: when java8) */
+    protected static final Method privateLookupInMethod;
+    protected static final Method lookupDefineClassMethod;
 
     // static initializer
     static {
         protectionDomain = (ProtectionDomain) AccessController.doPrivileged(createAspectWeaverPrivilegedAction());
         defineClassMethod = (Method) AccessController.doPrivileged(createDefineClassPrivilegedAction());
+
+        privateLookupInMethod = prepareMethodHandlesPrivateLookupInMethod();
+        lookupDefineClassMethod = prepareMethodHandlesLookupDefineClassMethod();
     }
 
+    // -----------------------------------------------------
+    //                                       ClassLoader Way
+    //                                       ---------------
     protected static PrivilegedAction<Object> createAspectWeaverPrivilegedAction() {
         return new PrivilegedAction<Object>() {
             public Object run() {
@@ -89,9 +108,52 @@ public class AbstractGenerator {
         try {
             final Class<?> typeByCurrentContext = LdiClassUtil.forName(typeAsResource.getName()); // for what? by jflute
             method = typeByCurrentContext.getDeclaredMethod(defineClassMethodName, paramTypes);
-            method.setAccessible(true); // depends on add-opens option since java17
+            try {
+                method.setAccessible(true); // depends on add-opens option since java17
+                logger.debug("ClassLoader@defineClass() can be called for AOP");
+            } catch (RuntimeException e) {
+                final String fqcn = e.getClass().getName();
+                if ("java.lang.reflect.InaccessibleObjectException".equals(fqcn)) { // means java9 or later
+                    // private access may not be allowed in the environment
+                    // so attempt other ways later so ignore the exception here
+                } else {
+                    throw e;
+                }
+            }
         } catch (final NoSuchMethodException e) { // basically framework mistake
             throw new NoSuchMethodRuntimeException(typeAsResource, defineClassMethodName, paramTypes, e);
+        }
+        return method;
+    }
+
+    // -----------------------------------------------------
+    //                                     MethodHandles Way
+    //                                     -----------------
+    // test this by copying to java9 or later environment
+    protected static Method prepareMethodHandlesPrivateLookupInMethod() {
+        final Class<?>[] argTypes = new Class[] { Class.class, MethodHandles.Lookup.class };
+        final Method method;
+        try {
+            method = LdiReflectionUtil.getMethod(MethodHandles.class, "privateLookupIn", argTypes);
+        } catch (NoSuchMethodRuntimeException ignored) { // when java8, basically no way (already checked)
+            return null;
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("MethodHandles@privateLookupIn() can be called for AOP: method=" + method);
+        }
+        return method;
+    }
+
+    protected static Method prepareMethodHandlesLookupDefineClassMethod() {
+        final Class<?>[] argTypes = new Class[] { byte[].class };
+        final Method method;
+        try {
+            method = LdiReflectionUtil.getMethod(MethodHandles.Lookup.class, "defineClass", argTypes);
+        } catch (NoSuchMethodRuntimeException ignored) { // when java8, basically no way (already checked)
+            return null;
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("MethodHandles.Lookup@defineClass() can be called for AOP: method=" + method);
         }
         return method;
     }
@@ -100,12 +162,14 @@ public class AbstractGenerator {
     //                                                                           Attribute
     //                                                                           =========
     protected final ClassPool classPool; // not null
+    protected final Class<?> targetClass; // before enhancement, not null
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    protected AbstractGenerator(final ClassPool classPool) {
+    protected AbstractGenerator(final ClassPool classPool, Class<?> targetClass) {
         this.classPool = classPool;
+        this.targetClass = targetClass;
     }
 
     // ===================================================================================
@@ -155,26 +219,95 @@ public class AbstractGenerator {
     //                                      Define the Class
     //                                      ----------------
     public Class<?> toClass(final ClassLoader classLoader, final CtClass ctClass) {
-        return invokeClassLoaderDefineClass(classLoader, ctClass);
+        Class<?> enhancedClass = null;
+
+        // java8 or add-opens option
+        if (defineClassMethod.isAccessible()) {
+            enhancedClass = invokeClassLoaderDefineClass(classLoader, ctClass);
+        }
+        if (enhancedClass != null) {
+            return enhancedClass;
+        }
+
+        // private-access not allowed here e.g. java9 or later
+        enhancedClass = invokeMethodHandlesDefineClass(classLoader, ctClass);
+        if (enhancedClass != null) {
+            return enhancedClass;
+        }
+
+        throw new CannotDefineClassException(buildCannotDefineClassMessage(classLoader, ctClass));
     }
 
     protected Class<?> invokeClassLoaderDefineClass(final ClassLoader classLoader, final CtClass ctClass) {
         try {
             final String className = ctClass.getName();
-            final byte[] bytecode = ctClass.toBytecode();
+            final byte[] bytecode = convertCtClassToBytecode(ctClass);
             final Integer off = 0;
             final Integer len = bytecode.length;
             final Object[] args = new Object[] { className, bytecode, off, len, protectionDomain };
             return (Class<?>) defineClassMethod.invoke(classLoader, args);
-        } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
-        } catch (final IOException e) {
-            throw new IORuntimeException(e);
         } catch (final IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(ClassLoader.class, e);
         } catch (final InvocationTargetException e) {
             throw new InvocationTargetRuntimeException(ClassLoader.class, e);
         }
+    }
+
+    protected Class<?> invokeMethodHandlesDefineClass(final ClassLoader classLoader, final CtClass ctClass) {
+        if (privateLookupInMethod == null) {
+            return null;
+        }
+        // java9 or later here
+        final MethodHandles.Lookup lookup =
+                LdiReflectionUtil.invoke(privateLookupInMethod, null, new Object[] { targetClass, MethodHandles.lookup() });
+        if (lookupDefineClassMethod == null) { // basically no way
+            String msg = "privateLookupInMethod exists but lookupDefineClassMethod is null: " + privateLookupInMethod;
+            throw new IllegalStateException(msg);
+        }
+        final byte[] bytecode = convertCtClassToBytecode(ctClass);
+        return LdiReflectionUtil.invoke(lookupDefineClassMethod, lookup, new Object[] { bytecode });
+    }
+
+    protected byte[] convertCtClassToBytecode(final CtClass ctClass) {
+        final byte[] bytecode;
+        try {
+            bytecode = ctClass.toBytecode();
+        } catch (CannotCompileException e) {
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot convert the class to bytecode by Javassist.");
+            br.addItem("CtClass");
+            br.addElement(ctClass);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
+        return bytecode;
+    }
+
+    protected String buildCannotDefineClassMessage(final ClassLoader classLoader, final CtClass ctClass) {
+        final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+        br.addNotice("Cannot define the class to class loader.");
+        br.addItem("Advice");
+        br.addElement("To define the class to class loader is required to enhance class.");
+        br.addElement("But both ClassLoader way and MethodHandles way don't work in your environment.");
+        br.addElement(" ClassLoader way: call ClassLoader@defineClass() by reflection private-access.");
+        br.addElement(" MethodHandles way: call MethodHandles.Lookup@defineClass() since java9.");
+        br.addElement("");
+        br.addElement("The private-access to java.lang is disabled as default since java16");
+        br.addElement("so MethodHandles way is implemented as secondary.");
+        br.addElement("But maybe the way does not always work...");
+        br.addElement("");
+        br.addElement("java8: no problem, ClassLoader way");
+        br.addElement("java9~15: basically no problem, ClassLoader way (permitted as default)");
+        br.addElement("java16~: MethodHandles way or ClassLoader way by option");
+        br.addElement("");
+        br.addElement("If you MethodHandles way does not work in your environment (since java16)");
+        br.addElement("consider 'add-opens' option of java command for ClassLoader way.");
+        br.addItem("ClassLoader");
+        br.addElement(classLoader);
+        br.addItem("CtClass");
+        br.addElement(ctClass);
+        return br.buildExceptionMessage();
     }
 
     // ===================================================================================
@@ -201,7 +334,11 @@ public class AbstractGenerator {
             clazz.addConstructor(ctConstructor);
             return ctConstructor;
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot make or add the default constructor to the class by Javassist.");
+            br.addItem("CtClass");
+            br.addElement(clazz);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -215,7 +352,15 @@ public class AbstractGenerator {
             clazz.addConstructor(ctConstructor);
             return ctConstructor;
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot make or add the constructor to the class by Javassist.");
+            br.addItem("CtClass");
+            br.addElement(clazz);
+            br.addItem("parameterTypes");
+            br.addElement(parameterTypes != null ? Arrays.asList(parameterTypes) : null);
+            br.addItem("exceptionTypes");
+            br.addElement(exceptionTypes != null ? Arrays.asList(exceptionTypes) : null);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -236,7 +381,13 @@ public class AbstractGenerator {
             clazz.addMethod(ctMethod);
             return ctMethod;
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot make or add the method to the class by Javassist.");
+            br.addItem("CtClass");
+            br.addElement(clazz);
+            br.addItem("Method Source");
+            br.addElement(src);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -247,13 +398,32 @@ public class AbstractGenerator {
 
     protected CtMethod createMethod(final CtClass clazz, final int modifier, final Class<?> returnType, final String methodName,
             final Class<?>[] parameterTypes, final Class<?>[] exceptionTypes, final String body) {
+        final int modifiers = modifier & ~(Modifier.ABSTRACT | Modifier.NATIVE);
+        final CtClass returnCtClass = toCtClass(returnType);
+        final CtClass[] paramCtClasses = toCtClassArray(parameterTypes);
+        final CtClass[] expCtClasses = toCtClassArray(exceptionTypes);
         try {
-            final CtMethod ctMethod = CtNewMethod.make(modifier & ~(Modifier.ABSTRACT | Modifier.NATIVE), toCtClass(returnType), methodName,
-                    toCtClassArray(parameterTypes), toCtClassArray(exceptionTypes), body, clazz);
+            final CtMethod ctMethod = CtNewMethod.make(modifiers, returnCtClass, methodName, paramCtClasses, expCtClasses, body, clazz);
             clazz.addMethod(ctMethod);
             return ctMethod;
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot make or add the method to the class by Javassist.");
+            br.addItem("CtClass");
+            br.addElement(clazz);
+            br.addItem("Modifiers");
+            br.addElement(modifiers);
+            br.addItem("Return Type");
+            br.addElement(returnType);
+            br.addItem("Method Name");
+            br.addElement(methodName);
+            br.addItem("Parameter Types");
+            br.addElement(parameterTypes != null ? Arrays.asList(parameterTypes) : null);
+            br.addItem("Exception Types");
+            br.addElement(exceptionTypes != null ? Arrays.asList(exceptionTypes) : null);
+            br.addItem("Method Body");
+            br.addElement(body);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -261,7 +431,13 @@ public class AbstractGenerator {
         try {
             method.setBody(src);
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot set the body to the method by Javassist.");
+            br.addItem("CtMethod");
+            br.addElement(method);
+            br.addItem("Method Source");
+            br.addElement(src);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -295,5 +471,9 @@ public class AbstractGenerator {
     //                                                                            ========
     public ClassPool getClassPool() {
         return classPool;
+    }
+
+    public Class<?> getTargetClass() {
+        return targetClass;
     }
 }

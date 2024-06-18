@@ -31,6 +31,7 @@ import org.lastaflute.di.exception.NoSuchFieldRuntimeException;
 import org.lastaflute.di.util.LdiClassLoaderUtil;
 import org.lastaflute.di.util.LdiFieldUtil;
 import org.lastaflute.di.util.LdiMethodUtil;
+import org.lastaflute.di.util.LdiSrl;
 
 import javassist.ClassPool;
 
@@ -98,7 +99,7 @@ public class AspectWeaver {
     //                                                                         Interceptor
     //                                                                         ===========
     public void setInterceptors(final Method method, final MethodInterceptor[] interceptors) {
-        final String methodInvocationClassName = getMethodInvocationClassName(method);
+        final String methodInvocationClassName = buildMethodInvocationClassName(method);
         final MethodInvocationClassGenerator methodInvocationClassGenerator =
                 createMethodInvocationClassGenerator(methodInvocationClassName);
 
@@ -118,8 +119,8 @@ public class AspectWeaver {
     }
 
     protected MethodInvocationClassGenerator newMethodInvocationClassGenerator(final ClassPool classPool, final String enhancedClassName,
-            final String invocationClassName) {
-        return new MethodInvocationClassGenerator(classPool, enhancedClassName, invocationClassName);
+            final String methodInvocationClassName) {
+        return new MethodInvocationClassGenerator(classPool, enhancedClassName, methodInvocationClassName);
     }
 
     // ===================================================================================
@@ -189,9 +190,29 @@ public class AspectWeaver {
         return name;
     }
 
-    public String getMethodInvocationClassName(final Method method) {
-        return enhancedClassName + SUFFIX_METHOD_INVOCATION_CLASS + method.getName() + SEPARATOR_METHOD_INVOCATION_CLASS
-                + methodInvocationClassList.size();
+    public String buildMethodInvocationClassName(final Method method) {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // MethodHandles way requires that lookup class's package is same as enhanced class's one:
+        // { @log
+        //  Caused by: java.lang.IllegalArgumentException:
+        //  org.docksidestage.unit.DemoTest$Sea$$EnhancedByLastaDi$$2d66530f$$MethodInvocation$$mystic$$0
+        //  not in same package as lookup class
+        //   at java.base/java.lang.invoke.MethodHandleStatics.newIllegalArgumentException(MethodHandleStatics.java:167)
+        //   at java.base/java.lang.invoke.MethodHandles$Lookup$ClassFile.newInstance(MethodHandles.java:2283)
+        // }
+        // so add the template class's package and convert enhanced class's package to name part
+        //  e.g. org.lastaflute.di.core.aop.javassist.OrgDocksidestageSea$$EnhancedByLastaDi$$2d66530f$$MethodInvocation$$mystic$$0
+        // _/_/_/_/_/_/_/_/_/_/
+        final String pkg = MethodInvocationClassGenerator.getTemplateClass().getPackage().getName(); // always has package
+        final String enhancedIdentity = LdiSrl.camelize(enhancedClassName, ".");
+        final String invocationSuffix = SUFFIX_METHOD_INVOCATION_CLASS;
+        final String methodName = method.getName();
+        final String invocationSeparator = SEPARATOR_METHOD_INVOCATION_CLASS;
+        final int classCount = methodInvocationClassList.size();
+        return pkg + "." + enhancedIdentity + invocationSuffix + methodName + invocationSeparator + classCount;
+        // before:
+        //return enhancedClassName + SUFFIX_METHOD_INVOCATION_CLASS + method.getName() + SEPARATOR_METHOD_INVOCATION_CLASS
+        //        + methodInvocationClassList.size();
     }
 
     public String createInvokeSuperMethod(final Method method) { // should be createInvokeSuperMethod[Name]()

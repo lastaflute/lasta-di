@@ -15,10 +15,13 @@
  */
 package org.lastaflute.di.core.aop.intertype;
 
+import java.util.Arrays;
+
 import org.lastaflute.di.core.aop.InterType;
 import org.lastaflute.di.core.util.ClassPoolUtil;
 import org.lastaflute.di.exception.CannotCompileRuntimeException;
 import org.lastaflute.di.exception.NotFoundRuntimeException;
+import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -56,7 +59,13 @@ public abstract class AbstractInterType implements InterType {
         try {
             introduce();
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot introduce the inter-type by Javassist.");
+            br.addItem("targetClass");
+            br.addElement(targetClass);
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         } catch (final NotFoundException e) {
             throw new NotFoundRuntimeException(e);
         } finally {
@@ -116,7 +125,17 @@ public abstract class AbstractInterType implements InterType {
             field.setModifiers(modifiers);
             enhancedClass.addField(field);
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot add the field to the class by Javassist.");
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            br.addItem("Field Modifiers");
+            br.addElement(modifiers);
+            br.addItem("Field Type");
+            br.addElement(type);
+            br.addItem("Field Name");
+            br.addElement(name);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -124,7 +143,13 @@ public abstract class AbstractInterType implements InterType {
         try {
             enhancedClass.addField(CtField.make(src, enhancedClass));
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot add the field to the class by Javassist.");
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            br.addItem("Field Source");
+            br.addElement(src);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -134,7 +159,19 @@ public abstract class AbstractInterType implements InterType {
             field.setModifiers(modifiers);
             enhancedClass.addField(field, init);
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot add the field to the class by Javassist.");
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            br.addItem("Field Modifiers");
+            br.addElement(modifiers);
+            br.addItem("Field Type");
+            br.addElement(type);
+            br.addItem("Field Name");
+            br.addElement(name);
+            br.addItem("Field DefaultValue");
+            br.addElement(init);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -144,7 +181,19 @@ public abstract class AbstractInterType implements InterType {
             field.setModifiers(modifiers);
             enhancedClass.addField(field, init);
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot add the field to the class by Javassist.");
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            br.addItem("Field Modifiers");
+            br.addElement(modifiers);
+            br.addItem("Field Type");
+            br.addElement(type);
+            br.addItem("Field Name");
+            br.addElement(name);
+            br.addItem("Field DefaultValue Initializer");
+            br.addElement(init);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -211,7 +260,23 @@ public abstract class AbstractInterType implements InterType {
                     CtNewMethod.make(modifiers, returnCtClass, name, paramCtClassArray, expCtClassArray, src, enhancedClass);
             enhancedClass.addMethod(ctMethod);
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot add the method to the class by Javassist.");
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            br.addItem("Method Modifiers");
+            br.addElement(modifiers);
+            br.addItem("Return Type");
+            br.addElement(returnType);
+            br.addItem("Method Name");
+            br.addElement(name);
+            br.addItem("Parameter Types");
+            br.addElement(paramTypes != null ? Arrays.asList(paramTypes) : null);
+            br.addItem("Exception Types");
+            br.addElement(exceptionTypes != null ? Arrays.asList(exceptionTypes) : null);
+            br.addItem("Method Source");
+            br.addElement(src);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 
@@ -219,7 +284,12 @@ public abstract class AbstractInterType implements InterType {
         try {
             enhancedClass.addMethod(CtNewMethod.make(src, enhancedClass));
         } catch (final CannotCompileException e) {
-            throw new CannotCompileRuntimeException(e);
+            final LdiExceptionMessageBuilder br = new LdiExceptionMessageBuilder();
+            br.addNotice("Cannot add the method to the class by Javassist.");
+            br.addItem("enhancedClass");
+            br.addElement(enhancedClass);
+            br.addElement(src);
+            throw new CannotCompileRuntimeException(br.buildExceptionMessage(), e);
         }
     }
 

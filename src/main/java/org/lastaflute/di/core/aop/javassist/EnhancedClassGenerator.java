@@ -43,7 +43,7 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     //                                                                         Constructor
     //                                                                         ===========
     public EnhancedClassGenerator(final ClassPool classPool, final Class<?> targetClass, final String enhancedClassName) {
-        super(classPool);
+        super(classPool, targetClass);
         this.targetClass = targetClass;
         this.enhancedClassName = enhancedClassName;
 

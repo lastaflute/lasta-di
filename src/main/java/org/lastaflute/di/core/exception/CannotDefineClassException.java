@@ -13,18 +13,16 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.lastaflute.di.exception;
-
-import javassist.CannotCompileException;
+package org.lastaflute.di.core.exception;
 
 /**
- * @author modified by jflute (originated in Seasar)
+ * @author jflute
  */
-public class CannotCompileRuntimeException extends RuntimeException {
+public class CannotDefineClassException extends RuntimeException {
 
-    private static final long serialVersionUID = 1329201462786753994L;
+    private static final long serialVersionUID = 1L;
 
-    public CannotCompileRuntimeException(String msg, CannotCompileException cause) {
-        super(msg, cause); // "ESSR0017" is used in old days
+    public CannotDefineClassException(String msg) {
+        super(msg);
     }
 }

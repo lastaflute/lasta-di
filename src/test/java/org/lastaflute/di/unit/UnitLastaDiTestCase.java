@@ -67,6 +67,16 @@ public abstract class UnitLastaDiTestCase extends TestCase {
     }
 
     @Override
+    protected void runTest() throws Throwable {
+        try {
+            super.runTest();
+        } catch (Throwable e) { // to record in application log
+            log("Failed to finish the test: " + xgetCaseDisp(), e);
+            throw e;
+        }
+    }
+
+    @Override
     protected void tearDown() throws Exception {
         SingletonLaContainerFactory.destroy();
         super.tearDown();

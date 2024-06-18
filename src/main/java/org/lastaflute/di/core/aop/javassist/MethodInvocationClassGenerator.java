@@ -36,16 +36,23 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected final String enhancedClassName; // not null
+    /** e.g. org.docksidestage.Sea$$EnhancedByLastaDi$$2d66530f (NotNull) */
+    protected final String enhancedClassName;
+
+    /**
+     * e.g. org.lastaflute.di.core.aop.javassist.OrgDocksidestageSea$$EnhancedByLastaDi$$2d66530f$$MethodInvocation$$mystic$$0
+     * (NotNull: after setup but null allowed after toClass())
+     */
     protected CtClass methodInvocationCtClass; // not null after setup but null allowed after toClass() 
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public MethodInvocationClassGenerator(final ClassPool classPool, final String enhancedClassName, final String invocationClassName) {
-        super(classPool);
+    public MethodInvocationClassGenerator(final ClassPool classPool, final String enhancedClassName,
+            final String methodInvocationClassName) {
+        super(classPool, /*targetClass*/getTemplateClass()); // you can use it as targetClass after here
         this.enhancedClassName = enhancedClassName;
-        this.methodInvocationCtClass = getAndRenameCtClass(MethodInvocationTemplate.class, invocationClassName);
+        this.methodInvocationCtClass = getAndRenameCtClass(targetClass, methodInvocationClassName);
     }
 
     // ===================================================================================
@@ -128,18 +135,22 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         return new String(sb);
     }
 
+    // ===================================================================================
+    //                                                                      Template Class
+    //                                                                      ==============
+    public static Class<?> getTemplateClass() { // is enhancement target class
+        return MethodInvocationTemplate.class;
+    }
+
+    // before enhancement
     public static class MethodInvocationTemplate implements LaMethodInvocation {
 
         private static Class<?> targetClass;
-
         private static Method method;
-
-        static MethodInterceptor[] interceptors;
-
+        static MethodInterceptor[] interceptors; // why not private?
         private static Map<String, Object> parameters;
 
         private Object target;
-
         private Object[] arguments;
 
         int interceptorsIndex;
@@ -147,6 +158,10 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         public MethodInvocationTemplate(final Object target, final Object[] arguments) {
             this.target = target;
             this.arguments = arguments;
+        }
+
+        public Object proceed() throws Throwable {
+            return null;
         }
 
         public Class<?> getTargetClass() {
@@ -174,10 +189,6 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
 
         public Object[] getArguments() {
             return arguments;
-        }
-
-        public Object proceed() throws Throwable {
-            return null;
         }
     }
 
