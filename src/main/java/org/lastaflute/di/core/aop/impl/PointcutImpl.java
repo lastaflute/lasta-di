@@ -31,30 +31,51 @@ import org.lastaflute.di.util.LdiModifierUtil;
  */
 public class PointcutImpl implements Pointcut, Serializable {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final long serialVersionUID = 0L;
 
-    private String[] methodNames;
-    private Pattern[] patterns;
-    private Method method;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private String[] methodNames; // used when multiple style, then not null
+    private Pattern[] patterns; // me too, then not null
 
-    public PointcutImpl(Class<?> targetClass) throws EmptyRuntimeException {
+    private Method method; // used when only-one style, null allowed
+
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    public PointcutImpl(Class<?> targetClass) throws EmptyRuntimeException { // multiple style
         if (targetClass == null) {
             throw new EmptyRuntimeException("targetClass");
         }
         setMethodNames(getMethodNames(targetClass));
     }
 
-    public PointcutImpl(String[] methodNames) throws EmptyRuntimeException {
+    public PointcutImpl(String[] methodNames) throws EmptyRuntimeException { // multiple style
         if (methodNames == null || methodNames.length == 0) {
             throw new EmptyRuntimeException("methodNames");
         }
         setMethodNames(methodNames);
     }
 
-    public PointcutImpl(Method method) {
+    public PointcutImpl(Method method) { // only-one style
         this.method = method;
     }
 
+    protected void setMethodNames(String[] methodNames) {
+        this.methodNames = methodNames;
+        patterns = new Pattern[methodNames.length];
+        for (int i = 0; i < patterns.length; ++i) {
+            patterns[i] = Pattern.compile(methodNames[i]);
+        }
+    }
+
+    // ===================================================================================
+    //                                                                Method Determination
+    //                                                                ====================
     public boolean isApplied(Method targetMethod) {
         if (method != null) {
             return method.equals(targetMethod);
@@ -68,18 +89,9 @@ public class PointcutImpl implements Pointcut, Serializable {
         return false;
     }
 
-    public String[] getMethodNames() {
-        return methodNames;
-    }
-
-    private void setMethodNames(String[] methodNames) {
-        this.methodNames = methodNames;
-        patterns = new Pattern[methodNames.length];
-        for (int i = 0; i < patterns.length; ++i) {
-            patterns[i] = Pattern.compile(methodNames[i]);
-        }
-    }
-
+    // ===================================================================================
+    //                                                                 Method Name Utility
+    //                                                                 ===================
     private static String[] getMethodNames(Class<?> targetClass) {
         final Set<String> methodNameSet = new HashSet<String>();
         if (targetClass.isInterface()) {
@@ -124,5 +136,12 @@ public class PointcutImpl implements Pointcut, Serializable {
             }
             methodNameSet.add(methods[i].getName());
         }
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public String[] getMethodNames() {
+        return methodNames;
     }
 }

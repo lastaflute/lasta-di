@@ -26,7 +26,6 @@ import org.lastaflute.di.util.LdiMethodUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public abstract class ThrowsInterceptor extends AbstractInterceptor {
 

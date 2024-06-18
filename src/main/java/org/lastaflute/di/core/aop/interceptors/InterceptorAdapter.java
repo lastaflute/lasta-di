@@ -31,19 +31,8 @@ public class InterceptorAdapter extends AbstractInterceptor {
     private static final long serialVersionUID = 1L;
 
     protected LaContainer container;
-
     protected ComponentDef[] interceptorDefs = new ComponentDef[0];
 
-    /**
-     * @param container
-     */
-    public void setContainer(final LaContainer container) {
-        this.container = container;
-    }
-
-    /**
-     * @param interceptorNames
-     */
     public void add(final String interceptorNames) {
         interceptorDefs = (ComponentDef[]) LdiArrayUtil.add(interceptorDefs, container.getComponentDef(interceptorNames));
     }
@@ -55,5 +44,9 @@ public class InterceptorAdapter extends AbstractInterceptor {
         }
         final MethodInvocation nestInvocation = new NestedMethodInvocation((LaMethodInvocation) invocation, interceptors);
         return nestInvocation.proceed();
+    }
+
+    public void setContainer(final LaContainer container) {
+        this.container = container;
     }
 }

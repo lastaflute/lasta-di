@@ -20,18 +20,30 @@ package org.lastaflute.di.core.aop.javassist;
  */
 public class TryBlockSupport {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     protected static final int STATUS_TRY = 0;
     protected static final int STATUS_CATCH = 1;
     protected static final int STATUS_FINALLY = 2;
 
-    protected int status;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected int status; // mutable in this class
     protected StringBuffer codeBuf = new StringBuffer(500);
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public TryBlockSupport(final String src) {
         codeBuf.append("try {").append(src).append("}");
         status = STATUS_TRY;
     }
 
+    // ===================================================================================
+    //                                                                 Expression Handling
+    //                                                                 ===================
     public void addCatchBlock(final Class<?> exceptionType, final String src) {
         if (!Throwable.class.isAssignableFrom(exceptionType)) {
             throw new IllegalArgumentException("exceptionType must be Throwable.");

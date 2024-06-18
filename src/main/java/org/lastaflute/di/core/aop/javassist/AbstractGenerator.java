@@ -47,61 +47,70 @@ import javassist.NotFoundException;
  */
 public class AbstractGenerator {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     protected static final String DEFINE_CLASS_METHOD_NAME = "defineClass";
     protected static final ProtectionDomain protectionDomain;
-    protected static Method defineClassMethod;
+
+    /**
+     * Reflection to ClassLoader@defineClass() as private-accessible. <br>
+     * but it may be not accessible when Java17 without add-opens option.
+     */
+    protected static final Method defineClassMethod;
 
     // static initializer
     static {
-        protectionDomain = (ProtectionDomain) AccessController.doPrivileged(new PrivilegedAction<Object>() {
+        protectionDomain = (ProtectionDomain) AccessController.doPrivileged(createAspectWeaverPrivilegedAction());
+        defineClassMethod = (Method) AccessController.doPrivileged(createDefineClassPrivilegedAction());
+    }
+
+    protected static PrivilegedAction<Object> createAspectWeaverPrivilegedAction() {
+        return new PrivilegedAction<Object>() {
             public Object run() {
                 return AspectWeaver.class.getProtectionDomain();
             }
-        });
+        };
+    }
 
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+    protected static PrivilegedAction<Object> createDefineClassPrivilegedAction() {
+        return new PrivilegedAction<Object>() {
             public Object run() {
-                final Class<?>[] paramTypes = new Class[] { String.class, byte[].class, int.class, int.class, ProtectionDomain.class };
-                try {
-                    final Class<?> loader = LdiClassUtil.forName(ClassLoader.class.getName());
-                    defineClassMethod = loader.getDeclaredMethod(DEFINE_CLASS_METHOD_NAME, paramTypes);
-                    defineClassMethod.setAccessible(true);
-                } catch (final NoSuchMethodException e) {
-                    throw new NoSuchMethodRuntimeException(ClassLoader.class, DEFINE_CLASS_METHOD_NAME, paramTypes, e);
-                }
-                return null;
+                return prepareClassLoaderDefineClassMethod();
             }
-        });
+        };
     }
 
-    protected final ClassPool classPool;
-
-    protected static String fromObject(final Class<?> type, final String expr) {
-        if (type.equals(void.class) || type.equals(Object.class)) {
-            return expr;
+    protected static Method prepareClassLoaderDefineClassMethod() {
+        final Class<ClassLoader> typeAsResource = ClassLoader.class;
+        final String defineClassMethodName = DEFINE_CLASS_METHOD_NAME;
+        final Class<?>[] paramTypes = new Class[] { String.class, byte[].class, int.class, int.class, ProtectionDomain.class };
+        final Method method;
+        try {
+            final Class<?> typeByCurrentContext = LdiClassUtil.forName(typeAsResource.getName()); // for what? by jflute
+            method = typeByCurrentContext.getDeclaredMethod(defineClassMethodName, paramTypes);
+            method.setAccessible(true); // depends on add-opens option since java17
+        } catch (final NoSuchMethodException e) { // basically framework mistake
+            throw new NoSuchMethodRuntimeException(typeAsResource, defineClassMethodName, paramTypes, e);
         }
-        if (type.equals(boolean.class) || type.equals(char.class)) {
-            final Class<?> wrapper = LdiClassUtil.getWrapperClass(type);
-            return "((" + wrapper.getName() + ") " + expr + ")." + type.getName() + "Value()";
-        }
-        if (type.isPrimitive()) {
-            return "((java.lang.Number) " + expr + ")." + type.getName() + "Value()";
-        }
-        return "(" + LdiClassUtil.getSimpleClassName(type) + ") " + expr;
+        return method;
     }
 
-    protected static String toObject(final Class<?> type, final String expr) {
-        if (type.isPrimitive()) {
-            final Class<?> wrapper = LdiClassUtil.getWrapperClass(type);
-            return "new " + wrapper.getName() + "(" + expr + ")";
-        }
-        return expr;
-    }
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected final ClassPool classPool; // not null
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     protected AbstractGenerator(final ClassPool classPool) {
         this.classPool = classPool;
     }
 
+    // ===================================================================================
+    //                                                                      Class Handling
+    //                                                                      ==============
     protected CtClass toCtClass(final Class<?> clazz) {
         return ClassPoolUtil.toCtClass(classPool, clazz);
     }
@@ -142,11 +151,21 @@ public class AbstractGenerator {
         }
     }
 
+    // -----------------------------------------------------
+    //                                      Define the Class
+    //                                      ----------------
     public Class<?> toClass(final ClassLoader classLoader, final CtClass ctClass) {
+        return invokeClassLoaderDefineClass(classLoader, ctClass);
+    }
+
+    protected Class<?> invokeClassLoaderDefineClass(final ClassLoader classLoader, final CtClass ctClass) {
         try {
+            final String className = ctClass.getName();
             final byte[] bytecode = ctClass.toBytecode();
-            return (Class<?>) defineClassMethod.invoke(classLoader,
-                    new Object[] { ctClass.getName(), bytecode, new Integer(0), new Integer(bytecode.length), protectionDomain });
+            final Integer off = 0;
+            final Integer len = bytecode.length;
+            final Object[] args = new Object[] { className, bytecode, off, len, protectionDomain };
+            return (Class<?>) defineClassMethod.invoke(classLoader, args);
         } catch (final CannotCompileException e) {
             throw new CannotCompileRuntimeException(e);
         } catch (final IOException e) {
@@ -158,6 +177,9 @@ public class AbstractGenerator {
         }
     }
 
+    // ===================================================================================
+    //                                                                  Interface Handling
+    //                                                                  ==================
     protected void setInterface(final CtClass clazz, final Class<?> interfaceType) {
         clazz.setInterfaces(new CtClass[] { toCtClass(interfaceType) });
     }
@@ -166,6 +188,9 @@ public class AbstractGenerator {
         clazz.setInterfaces(toCtClassArray(interfaces));
     }
 
+    // ===================================================================================
+    //                                                                Constructor Handling
+    //                                                                ====================
     protected CtConstructor createDefaultConstructor(final Class<?> clazz) {
         return createDefaultConstructor(toCtClass(clazz));
     }
@@ -194,6 +219,9 @@ public class AbstractGenerator {
         }
     }
 
+    // ===================================================================================
+    //                                                                     Method Handling
+    //                                                                     ===============
     protected CtMethod getDeclaredMethod(final CtClass clazz, final String name, final CtClass[] argTypes) {
         try {
             return clazz.getDeclaredMethod(name, argTypes);
@@ -235,5 +263,37 @@ public class AbstractGenerator {
         } catch (final CannotCompileException e) {
             throw new CannotCompileRuntimeException(e);
         }
+    }
+
+    // ===================================================================================
+    //                                                                  Expression Utility
+    //                                                                  ==================
+    protected static String fromObject(final Class<?> type, final String expr) {
+        if (type.equals(void.class) || type.equals(Object.class)) {
+            return expr;
+        }
+        if (type.equals(boolean.class) || type.equals(char.class)) {
+            final Class<?> wrapper = LdiClassUtil.getWrapperClass(type);
+            return "((" + wrapper.getName() + ") " + expr + ")." + type.getName() + "Value()";
+        }
+        if (type.isPrimitive()) {
+            return "((java.lang.Number) " + expr + ")." + type.getName() + "Value()";
+        }
+        return "(" + LdiClassUtil.getSimpleClassName(type) + ") " + expr;
+    }
+
+    protected static String toObject(final Class<?> type, final String expr) {
+        if (type.isPrimitive()) {
+            final Class<?> wrapper = LdiClassUtil.getWrapperClass(type);
+            return "new " + wrapper.getName() + "(" + expr + ")";
+        }
+        return expr;
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public ClassPool getClassPool() {
+        return classPool;
     }
 }

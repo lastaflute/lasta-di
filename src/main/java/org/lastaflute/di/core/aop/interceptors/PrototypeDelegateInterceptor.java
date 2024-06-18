@@ -43,14 +43,6 @@ public class PrototypeDelegateInterceptor extends AbstractInterceptor {
         this.container = container;
     }
 
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(final String targetName) {
-        this.targetName = targetName;
-    }
-
     public void addMethodNameMap(final String methodName, final String targetMethodName) {
         methodNameMap.put(methodName, targetMethodName);
     }
@@ -75,5 +67,13 @@ public class PrototypeDelegateInterceptor extends AbstractInterceptor {
             throw new BeanMethodNotFoundException(getTargetClass(invocation), methodName, invocation.getArguments());
         }
         return beanDesc.invoke(target, methodName, invocation.getArguments());
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(final String targetName) {
+        this.targetName = targetName;
     }
 }

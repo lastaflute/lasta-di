@@ -34,14 +34,21 @@ import javassist.NotFoundException;
  */
 public abstract class AbstractInterType implements InterType {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     public static final String COMPONENT = "instance = prototype";
 
-    protected Class<?> targetClass;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected Class<?> targetClass; // not null while introducing
+    protected CtClass enhancedClass; // me too
+    protected ClassPool classPool; // me too
 
-    protected CtClass enhancedClass;
-
-    protected ClassPool classPool;
-
+    // ===================================================================================
+    //                                                                           Introduce
+    //                                                                           =========
     public void introduce(final Class<?> targetClass, final CtClass enhancedClass) {
         this.targetClass = targetClass;
         this.enhancedClass = enhancedClass;
@@ -61,22 +68,16 @@ public abstract class AbstractInterType implements InterType {
 
     protected abstract void introduce() throws CannotCompileException, NotFoundException;
 
-    protected Class<?> getTargetClass() {
-        return targetClass;
-    }
-
-    protected CtClass getEnhancedClass() {
-        return enhancedClass;
-    }
-
-    protected ClassPool getClassPool() {
-        return classPool;
-    }
-
+    // ===================================================================================
+    //                                                                  Interface Handling
+    //                                                                  ==================
     protected void addInterface(final Class<?> clazz) {
         enhancedClass.addInterface(toCtClass(clazz));
     }
 
+    // ===================================================================================
+    //                                                                      Field Handling
+    //                                                                      ==============
     protected void addField(final Class<?> type, final String name) {
         addField(Modifier.PRIVATE, type, name);
     }
@@ -147,6 +148,9 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
+    // ===================================================================================
+    //                                                                     Method Handling
+    //                                                                     ===============
     protected void addMethod(final String name, final String src) {
         addMethod(Modifier.PUBLIC, void.class, name, null, null, src);
     }
@@ -200,8 +204,11 @@ public abstract class AbstractInterType implements InterType {
     protected void addMethod(final int modifiers, final Class<?> returnType, final String name, final Class<?>[] paramTypes,
             Class<?>[] exceptionTypes, final String src) {
         try {
-            final CtMethod ctMethod = CtNewMethod.make(modifiers, toCtClass(returnType), name, toCtClassArray(paramTypes),
-                    toCtClassArray(exceptionTypes), src, enhancedClass);
+            final CtClass returnCtClass = toCtClass(returnType);
+            final CtClass[] paramCtClassArray = toCtClassArray(paramTypes);
+            final CtClass[] expCtClassArray = toCtClassArray(exceptionTypes);
+            final CtMethod ctMethod =
+                    CtNewMethod.make(modifiers, returnCtClass, name, paramCtClassArray, expCtClassArray, src, enhancedClass);
             enhancedClass.addMethod(ctMethod);
         } catch (final CannotCompileException e) {
             throw new CannotCompileRuntimeException(e);
@@ -216,11 +223,29 @@ public abstract class AbstractInterType implements InterType {
         }
     }
 
+    // ===================================================================================
+    //                                                                    CtClass Handling
+    //                                                                    ================
     protected CtClass toCtClass(final Class<?> clazz) {
         return ClassPoolUtil.toCtClass(classPool, clazz);
     }
 
     protected CtClass[] toCtClassArray(final Class<?>[] classes) {
         return ClassPoolUtil.toCtClassArray(classPool, classes);
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    protected Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    protected CtClass getEnhancedClass() {
+        return enhancedClass;
+    }
+
+    protected ClassPool getClassPool() {
+        return classPool;
     }
 }

@@ -32,10 +32,16 @@ import javassist.CtClass;
  */
 public class EnhancedClassGenerator extends AbstractGenerator {
 
-    protected final Class<?> targetClass;
-    protected final String enhancedClassName;
-    protected CtClass enhancedClass;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected final Class<?> targetClass; // not null
+    protected final String enhancedClassName; // not null
+    protected CtClass enhancedCtClass; // not null after setup but null allowed after toClass()
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public EnhancedClassGenerator(final ClassPool classPool, final Class<?> targetClass, final String enhancedClassName) {
         super(classPool);
         this.targetClass = targetClass;
@@ -46,53 +52,76 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         setupConstructor();
     }
 
-    public void createTargetMethod(final Method method, final String methodInvocationClassName) {
-        createMethod(enhancedClass, method, createTargetMethodSource(method, methodInvocationClassName));
-    }
-
-    public void createInvokeSuperMethod(final Method method, final String invokeSuperMethodName) {
-        createMethod(enhancedClass, method.getModifiers(), method.getReturnType(), invokeSuperMethodName, method.getParameterTypes(),
-                method.getExceptionTypes(), createInvokeSuperMethodSource(method));
-    }
-
-    public void applyInterType(final InterType interType) {
-        interType.introduce(targetClass, enhancedClass);
-    }
-
-    public Class<?> toClass(final ClassLoader classLoader) {
-        final Class<?> clazz = toClass(classLoader, enhancedClass);
-        enhancedClass.detach();
-        enhancedClass = null;
-        return clazz;
-    }
-
+    // ===================================================================================
+    //                                                                        Set up Basic
+    //                                                                        ============
+    // #for_now jflute can these methods be protected? (2024/06/18)
     public void setupClass() {
         final Class<?> superClass = (targetClass.isInterface()) ? Object.class : targetClass;
-        enhancedClass = createCtClass(enhancedClassName, superClass);
+        enhancedCtClass = createCtClass(enhancedClassName, superClass);
     }
 
     public void setupInterface() {
         if (targetClass.isInterface()) {
-            setInterface(enhancedClass, targetClass);
+            setInterface(enhancedCtClass, targetClass);
         }
     }
 
     public void setupConstructor() {
         final Constructor<?>[] constructors = targetClass.getDeclaredConstructors();
         if (constructors.length == 0) {
-            createDefaultConstructor(enhancedClass);
-        } else {
+            createDefaultConstructor(enhancedCtClass);
+        } else { // has explicit constructor
             for (int i = 0; i < constructors.length; ++i) {
                 final int modifier = constructors[i].getModifiers();
                 final Package pkg = targetClass.getPackage();
-                if (Modifier.isPublic(modifier) || Modifier.isProtected(modifier) || (!Modifier.isPrivate(modifier)
-                        && !targetClass.getName().startsWith("java.") && (pkg == null || !pkg.isSealed()))) {
-                    createConstructor(enhancedClass, constructors[i]);
+                if (canCreateExplicitConstructor(modifier, pkg)) {
+                    createConstructor(enhancedCtClass, constructors[i]);
                 }
             }
         }
     }
 
+    protected boolean canCreateExplicitConstructor(final int modifier, final Package pkg) {
+        return Modifier.isPublic(modifier) || Modifier.isProtected(modifier)
+                || (!Modifier.isPrivate(modifier) && !targetClass.getName().startsWith("java.") && (pkg == null || !pkg.isSealed()));
+    }
+
+    // ===================================================================================
+    //                                                                       Create Method
+    //                                                                       =============
+    public void createTargetMethod(final Method method, final String methodInvocationClassName) {
+        final String methodSource = createTargetMethodSource(method, methodInvocationClassName);
+        createMethod(enhancedCtClass, method, methodSource);
+    }
+
+    public void createInvokeSuperMethod(final Method method, final String invokeSuperMethodName) {
+        final String methodSource = createInvokeSuperMethodSource(method);
+        createMethod(enhancedCtClass, method.getModifiers(), method.getReturnType(), invokeSuperMethodName, method.getParameterTypes(),
+                method.getExceptionTypes(), methodSource);
+    }
+
+    // ===================================================================================
+    //                                                                    Apply Inter Type
+    //                                                                    ================
+    // various members in class e.g. getter, setter
+    public void applyInterType(final InterType interType) {
+        interType.introduce(targetClass, enhancedCtClass);
+    }
+
+    // ===================================================================================
+    //                                                                    Define the Class
+    //                                                                    ================
+    public Class<?> toClass(final ClassLoader classLoader) { // with closing
+        final Class<?> clazz = toClass(classLoader, enhancedCtClass);
+        enhancedCtClass.detach();
+        enhancedCtClass = null;
+        return clazz;
+    }
+
+    // ===================================================================================
+    //                                                                  Expression Utility
+    //                                                                  ==================
     public static String createTargetMethodSource(final Method method, final String methodInvocationClassName) {
         final StringBuffer buf = new StringBuffer(200);
         buf.append("Object result = new ").append(methodInvocationClassName).append("(this, $args).proceed();");
@@ -168,5 +197,20 @@ public class EnhancedClassGenerator extends AbstractGenerator {
         tryBlock.addCatchBlock(Throwable.class, "throw new java.lang.reflect.UndeclaredThrowableException(e);");
 
         return tryBlock.getSourceCode();
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    public String getEnhancedClassName() {
+        return enhancedClassName;
+    }
+
+    public CtClass getEnhancedCtClass() { // null allowed depending on call timing
+        return enhancedCtClass;
     }
 }

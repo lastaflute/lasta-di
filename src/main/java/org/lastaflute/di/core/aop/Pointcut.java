@@ -19,13 +19,8 @@ import java.lang.reflect.Method;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public interface Pointcut {
 
-    /**
-     * @param method
-     * @return
-     */
     boolean isApplied(Method method);
 }

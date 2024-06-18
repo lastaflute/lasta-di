@@ -29,24 +29,9 @@ import org.lastaflute.di.util.LdiMethodUtil;
 public class HotAwareDelegateInterceptor implements MethodInterceptor {
 
     protected LaContainer container;
-
     protected String targetName;
 
     public HotAwareDelegateInterceptor() {
-    }
-
-    /**
-     * @param container
-     */
-    public void setContainer(LaContainer container) {
-        this.container = container.getRoot();
-    }
-
-    /**
-     * @param targetName
-     */
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
     }
 
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -62,4 +47,11 @@ public class HotAwareDelegateInterceptor implements MethodInterceptor {
         }
     }
 
+    public void setContainer(LaContainer container) {
+        this.container = container.getRoot();
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
 }

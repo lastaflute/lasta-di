@@ -33,27 +33,42 @@ import javassist.CtMethod;
  */
 public class MethodInvocationClassGenerator extends AbstractGenerator {
 
-    protected final String enhancedClassName;
-    protected CtClass methodInvocationClass;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected final String enhancedClassName; // not null
+    protected CtClass methodInvocationCtClass; // not null after setup but null allowed after toClass() 
 
-    public MethodInvocationClassGenerator(final ClassPool classPool, final String invocationClassName, final String targetClassName) {
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    public MethodInvocationClassGenerator(final ClassPool classPool, final String enhancedClassName, final String invocationClassName) {
         super(classPool);
-        this.enhancedClassName = targetClassName;
-        this.methodInvocationClass = getAndRenameCtClass(MethodInvocationTemplate.class, invocationClassName);
+        this.enhancedClassName = enhancedClassName;
+        this.methodInvocationCtClass = getAndRenameCtClass(MethodInvocationTemplate.class, invocationClassName);
     }
 
+    // ===================================================================================
+    //                                                                       Create Method
+    //                                                                       =============
     public void createProceedMethod(final Method targetMethod, final String invokeSuperMethodName) {
-        final CtMethod method = getDeclaredMethod(methodInvocationClass, "proceed", null);
+        final CtMethod method = getDeclaredMethod(methodInvocationCtClass, "proceed", null);
         setMethodBody(method, createProceedMethodSource(targetMethod, enhancedClassName, invokeSuperMethodName));
     }
 
-    public Class<?> toClass(final ClassLoader classLoader) {
-        final Class<?> clazz = toClass(classLoader, methodInvocationClass);
-        methodInvocationClass.detach();
-        methodInvocationClass = null;
+    // ===================================================================================
+    //                                                                    Define the Class
+    //                                                                    ================
+    public Class<?> toClass(final ClassLoader classLoader) { // with closing
+        final Class<?> clazz = toClass(classLoader, methodInvocationCtClass);
+        methodInvocationCtClass.detach();
+        methodInvocationCtClass = null;
         return clazz;
     }
 
+    // ===================================================================================
+    //                                                                  Expression Utility
+    //                                                                  ==================
     public static String createProceedMethodSource(final Method targetMethod, final String enhancedClassName,
             final String invokeSuperMethodName) {
         final StringBuffer buf = new StringBuffer(1000);
@@ -164,5 +179,16 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         public Object proceed() throws Throwable {
             return null;
         }
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public String getEnhancedClassName() {
+        return enhancedClassName;
+    }
+
+    public CtClass getMethodInvocationCtClass() { // null allowed depending on call timing
+        return methodInvocationCtClass;
     }
 }

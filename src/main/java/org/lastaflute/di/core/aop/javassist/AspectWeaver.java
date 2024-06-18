@@ -39,46 +39,92 @@ import javassist.ClassPool;
  */
 public class AspectWeaver {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     public static final String PREFIX_ENHANCED_CLASS = "$$";
     public static final String SUFFIX_ENHANCED_CLASS = "$$EnhancedByLastaDi$$";
     public static final String SUFFIX_METHOD_INVOCATION_CLASS = "$$MethodInvocation$$";
     public static final String SUFFIX_INVOKE_SUPER_METHOD = "$$invokeSuperMethod$$";
     public static final String SEPARATOR_METHOD_INVOCATION_CLASS = "$$";
 
+    // -----------------------------------------------------
+    //                                               Mutable
+    //                                               -------
     protected static final Set<String> enhancedClassNames = Collections.synchronizedSet(new HashSet<String>());
-    protected final Class<?> targetClass;
-    protected final Map<?, ?> parameters;
-    protected final String enhancedClassName;
-    protected final EnhancedClassGenerator enhancedClassGenerator;
-    protected final List<Class<?>> methodInvocationClassList = new ArrayList<Class<?>>();
-    protected Class<?> enhancedClass;
-    protected ClassPool classPool;
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected final Class<?> targetClass; // not null
+    protected final Map<?, ?> parameters; // null allowed, no modification here
+
+    protected final ClassPool classPool; // not null
+    protected final String enhancedClassName; // not null
+    protected final EnhancedClassGenerator enhancedClassGenerator; // not null
+
+    // -----------------------------------------------------
+    //                                               Mutable
+    //                                               -------
+    protected final List<Class<?>> methodInvocationClassList = new ArrayList<Class<?>>();
+    protected Class<?> enhancedClass; // null allowed as lazy loaded
+
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public AspectWeaver(final Class<?> targetClass, final Map<?, ?> parameters) {
         this.targetClass = targetClass;
         this.parameters = parameters;
 
-        classPool = ClassPoolUtil.getClassPool(targetClass);
-        enhancedClassName = getEnhancedClassName();
-        enhancedClassGenerator = new EnhancedClassGenerator(classPool, targetClass, enhancedClassName);
+        classPool = initializeClassPool(targetClass);
+        enhancedClassName = buildEnhancedClassName();
+        enhancedClassGenerator = createEnhancedClassGenerator(targetClass);
     }
 
+    protected ClassPool initializeClassPool(final Class<?> targetClass) {
+        return ClassPoolUtil.getClassPool(targetClass);
+    }
+
+    protected EnhancedClassGenerator createEnhancedClassGenerator(final Class<?> targetClass) {
+        return newEnhancedClassGenerator(classPool, targetClass, enhancedClassName);
+    }
+
+    protected EnhancedClassGenerator newEnhancedClassGenerator(final ClassPool classPool, final Class<?> targetClass,
+            final String enhancedClassName) {
+        return new EnhancedClassGenerator(classPool, targetClass, enhancedClassName);
+    }
+
+    // ===================================================================================
+    //                                                                         Interceptor
+    //                                                                         ===========
     public void setInterceptors(final Method method, final MethodInterceptor[] interceptors) {
         final String methodInvocationClassName = getMethodInvocationClassName(method);
-        final MethodInvocationClassGenerator methodInvocationGenerator =
-                new MethodInvocationClassGenerator(classPool, methodInvocationClassName, enhancedClassName);
+        final MethodInvocationClassGenerator methodInvocationClassGenerator =
+                createMethodInvocationClassGenerator(methodInvocationClassName);
 
         final String invokeSuperMethodName = createInvokeSuperMethod(method);
-        methodInvocationGenerator.createProceedMethod(method, invokeSuperMethodName);
+        methodInvocationClassGenerator.createProceedMethod(method, invokeSuperMethodName);
         enhancedClassGenerator.createTargetMethod(method, methodInvocationClassName);
 
-        final Class<?> methodInvocationClass = methodInvocationGenerator.toClass(LdiClassLoaderUtil.getClassLoader(targetClass));
+        final Class<?> methodInvocationClass = methodInvocationClassGenerator.toClass(LdiClassLoaderUtil.getClassLoader(targetClass));
         setStaticField(methodInvocationClass, "method", method);
         setStaticField(methodInvocationClass, "interceptors", interceptors);
         setStaticField(methodInvocationClass, "parameters", parameters);
         methodInvocationClassList.add(methodInvocationClass);
     }
 
+    protected MethodInvocationClassGenerator createMethodInvocationClassGenerator(final String methodInvocationClassName) {
+        return newMethodInvocationClassGenerator(classPool, enhancedClassName, methodInvocationClassName);
+    }
+
+    protected MethodInvocationClassGenerator newMethodInvocationClassGenerator(final ClassPool classPool, final String enhancedClassName,
+            final String invocationClassName) {
+        return new MethodInvocationClassGenerator(classPool, enhancedClassName, invocationClassName);
+    }
+
+    // ===================================================================================
+    //                                                                          Inter Type
+    //                                                                          ==========
     public void setInterTypes(final InterType[] interTypes) {
         if (interTypes == null) {
             return;
@@ -89,8 +135,12 @@ public class AspectWeaver {
         }
     }
 
+    // ===================================================================================
+    //                                                                    Define the Class
+    //                                                                    ================
     public Class<?> generateClass() {
         if (enhancedClass == null) {
+            // define the class to the class loader
             enhancedClass = enhancedClassGenerator.toClass(LdiClassLoaderUtil.getClassLoader(targetClass));
 
             for (int i = 0; i < methodInvocationClassList.size(); ++i) {
@@ -98,11 +148,27 @@ public class AspectWeaver {
                 setStaticField(methodInvocationClass, "targetClass", targetClass);
             }
         }
-
         return enhancedClass;
     }
 
-    public String getEnhancedClassName() {
+    // ===================================================================================
+    //                                                                        Static Field
+    //                                                                        ============
+    public void setStaticField(final Class<?> clazz, final String name, final Object value) {
+        try {
+            final Field field = clazz.getDeclaredField(name);
+            field.setAccessible(true);
+            LdiFieldUtil.set(field, name, value);
+            field.setAccessible(false);
+        } catch (final NoSuchFieldException e) {
+            throw new NoSuchFieldRuntimeException(enhancedClass, name, e);
+        }
+    }
+
+    // ===================================================================================
+    //                                                                       Name Handling
+    //                                                                       =============
+    public String buildEnhancedClassName() {
         final StringBuffer buf = new StringBuffer(200);
         final String targetClassName = targetClass.getName();
         final Package pkg = targetClass.getPackage();
@@ -111,6 +177,7 @@ public class AspectWeaver {
         }
         buf.append(targetClassName).append(SUFFIX_ENHANCED_CLASS).append(Integer.toHexString(hashCode()));
 
+        // #for_now jflute strictly not thread-safe? (2024/06/18)
         final int length = buf.length();
         for (int i = 0; enhancedClassNames.contains(new String(buf)); ++i) {
             buf.setLength(length);
@@ -127,7 +194,7 @@ public class AspectWeaver {
                 + methodInvocationClassList.size();
     }
 
-    public String createInvokeSuperMethod(final Method method) {
+    public String createInvokeSuperMethod(final Method method) { // should be createInvokeSuperMethod[Name]()
         final String invokeSuperMethodName = PREFIX_ENHANCED_CLASS + method.getName() + SUFFIX_INVOKE_SUPER_METHOD;
         if (!LdiMethodUtil.isAbstract(method)) {
             enhancedClassGenerator.createInvokeSuperMethod(method, invokeSuperMethodName);
@@ -135,14 +202,26 @@ public class AspectWeaver {
         return invokeSuperMethodName;
     }
 
-    public void setStaticField(final Class<?> clazz, final String name, final Object value) {
-        try {
-            final Field field = clazz.getDeclaredField(name);
-            field.setAccessible(true);
-            LdiFieldUtil.set(field, name, value);
-            field.setAccessible(false);
-        } catch (final NoSuchFieldException e) {
-            throw new NoSuchFieldRuntimeException(enhancedClass, name, e);
-        }
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    public Map<?, ?> getParameters() { // not null, read-only
+        return parameters != null ? Collections.unmodifiableMap(parameters) : Collections.emptyMap();
+    }
+
+    public ClassPool getClassPool() {
+        return classPool;
+    }
+
+    public String getEnhancedClassName() {
+        return enhancedClassName;
+    }
+
+    public EnhancedClassGenerator getEnhancedClassGenerator() {
+        return enhancedClassGenerator;
     }
 }

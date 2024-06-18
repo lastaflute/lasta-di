@@ -39,22 +39,6 @@ public class MockInterceptor extends AbstractInterceptor {
         setReturnValue(value);
     }
 
-    public void setReturnValue(Object returnValue) {
-        setReturnValue(null, returnValue);
-    }
-
-    public void setReturnValue(String methodName, Object returnValue) {
-        returnValueMap.put(methodName, returnValue);
-    }
-
-    public void setThrowable(Throwable throwable) {
-        setThrowable(null, throwable);
-    }
-
-    public void setThrowable(String methodName, Throwable throwable) {
-        throwableMap.put(methodName, throwable);
-    }
-
     public boolean isInvoked(String methodName) {
         return invokedMap.containsKey(methodName);
     }
@@ -76,5 +60,21 @@ public class MockInterceptor extends AbstractInterceptor {
         } else {
             return returnValueMap.get(null);
         }
+    }
+
+    public void setReturnValue(Object returnValue) {
+        setReturnValue(null, returnValue);
+    }
+
+    public void setReturnValue(String methodName, Object returnValue) {
+        returnValueMap.put(methodName, returnValue);
+    }
+
+    public void setThrowable(Throwable throwable) {
+        setThrowable(null, throwable);
+    }
+
+    public void setThrowable(String methodName, Throwable throwable) {
+        throwableMap.put(methodName, throwable);
     }
 }

@@ -23,7 +23,6 @@ import org.lastaflute.di.util.LdiArrayUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class InterceptorChain extends AbstractInterceptor {
 
@@ -31,9 +30,6 @@ public class InterceptorChain extends AbstractInterceptor {
 
     private MethodInterceptor[] interceptors = new MethodInterceptor[0];
 
-    /**
-     * @param interceptor
-     */
     public void add(MethodInterceptor interceptor) {
         interceptors = (MethodInterceptor[]) LdiArrayUtil.add(interceptors, interceptor);
     }

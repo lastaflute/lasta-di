@@ -35,11 +35,6 @@ public class TigerPropertyAnnotationHandler implements PropertyAnnotationHandler
         return getPropertyTypeInternal(field, defaultValue);
     }
 
-    /**
-     * @param element
-     * @param defaultValue
-     * @return 
-     */
     public int getPropertyTypeInternal(AnnotatedElement element, int defaultValue) {
         Property property = element.getAnnotation(Property.class);
         int propertyType = defaultValue;

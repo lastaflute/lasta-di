@@ -44,15 +44,6 @@ public class DelegateInterceptor extends AbstractInterceptor {
         setTarget(target);
     }
 
-    public Object getTarget() {
-        return target;
-    }
-
-    public void setTarget(Object target) {
-        this.target = target;
-        beanDesc = BeanDescFactory.getBeanDesc(target.getClass());
-    }
-
     public void addMethodNameMap(String methodName, String targetMethodName) {
         methodNameMap.put(methodName, targetMethodName);
     }
@@ -73,5 +64,14 @@ public class DelegateInterceptor extends AbstractInterceptor {
         } else {
             throw new BeanMethodNotFoundException(getTargetClass(invocation), methodName, invocation.getArguments());
         }
+    }
+
+    public Object getTarget() {
+        return target;
+    }
+
+    public void setTarget(Object target) {
+        this.target = target;
+        beanDesc = BeanDescFactory.getBeanDesc(target.getClass());
     }
 }

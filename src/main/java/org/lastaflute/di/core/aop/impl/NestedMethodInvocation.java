@@ -26,15 +26,24 @@ import org.lastaflute.di.core.aop.frame.MethodInterceptor;
  */
 public class NestedMethodInvocation implements LaMethodInvocation {
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     private final LaMethodInvocation parent;
     private final MethodInterceptor[] interceptors;
-    private int interceptorsIndex;
+    private int interceptorsIndex; // mutable
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public NestedMethodInvocation(LaMethodInvocation parent, MethodInterceptor[] interceptors) {
         this.parent = parent;
         this.interceptors = interceptors;
     }
 
+    // ===================================================================================
+    //                                                                             Proceed
+    //                                                                             =======
     public Object proceed() throws Throwable {
         if (interceptorsIndex < interceptors.length) {
             return interceptors[interceptorsIndex++].invoke(this);
@@ -42,6 +51,9 @@ public class NestedMethodInvocation implements LaMethodInvocation {
         return parent.proceed();
     }
 
+    // ===================================================================================
+    //                                                                            Delegate
+    //                                                                            ========
     public Object getThis() {
         return parent.getThis();
     }
