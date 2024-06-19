@@ -35,7 +35,6 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected final Class<?> targetClass; // not null
     protected final String enhancedClassName; // not null
     protected CtClass enhancedCtClass; // not null after setup but null allowed after toClass()
 
@@ -44,7 +43,6 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     //                                                                         ===========
     public EnhancedClassGenerator(final ClassPool classPool, final Class<?> targetClass, final String enhancedClassName) {
         super(classPool, targetClass);
-        this.targetClass = targetClass;
         this.enhancedClassName = enhancedClassName;
 
         setupClass();

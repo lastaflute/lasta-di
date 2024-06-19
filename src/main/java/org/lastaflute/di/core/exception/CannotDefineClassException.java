@@ -25,4 +25,8 @@ public class CannotDefineClassException extends RuntimeException {
     public CannotDefineClassException(String msg) {
         super(msg);
     }
+
+    public CannotDefineClassException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }
