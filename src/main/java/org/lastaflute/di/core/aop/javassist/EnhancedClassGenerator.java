@@ -121,23 +121,23 @@ public class EnhancedClassGenerator extends AbstractGenerator {
     //                                                                  Expression Utility
     //                                                                  ==================
     public static String createTargetMethodSource(final Method method, final String methodInvocationClassName) {
-        final StringBuffer buf = new StringBuffer(200);
-        buf.append("Object result = new ").append(methodInvocationClassName).append("(this, $args).proceed();");
+        final StringBuffer sb = new StringBuffer(200);
+        sb.append("Object result = new ").append(methodInvocationClassName).append("(this, $args).proceed();");
         final Class<?> returnType = method.getReturnType();
         if (returnType.equals(void.class)) {
-            buf.append("return;");
+            sb.append("return;");
         } else if (returnType.isPrimitive()) {
-            buf.append("return ($r) ((result == null) ? ");
+            sb.append("return ($r) ((result == null) ? ");
             if (returnType.equals(boolean.class)) {
-                buf.append("false : ");
+                sb.append("false : ");
             } else {
-                buf.append("0 : ");
+                sb.append("0 : ");
             }
-            buf.append(fromObject(returnType, "result")).append(");");
+            sb.append(fromObject(returnType, "result")).append(");");
         } else {
-            buf.append("return ($r) result;");
+            sb.append("return ($r) result;");
         }
-        String code = new String(buf);
+        String code = new String(sb);
 
         final Class<?>[] exceptionTypes = normalizeExceptionTypes(method.getExceptionTypes());
         if (exceptionTypes.length != 1 || !exceptionTypes[0].equals(Throwable.class)) {

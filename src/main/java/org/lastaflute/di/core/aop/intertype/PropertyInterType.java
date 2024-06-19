@@ -118,7 +118,7 @@ public class PropertyInterType extends AbstractInterType {
             logger.debug("[PropertyInterType] Creating getter " + targetClass.getName() + "#" + methodName);
         }
 
-        final StringBuffer src = new StringBuffer(512);
+        final StringBuilder src = new StringBuilder(512);
         src.append("{");
         src.append("return this.");
         src.append(targetFieldName);
@@ -138,7 +138,7 @@ public class PropertyInterType extends AbstractInterType {
             logger.debug("[PropertyInterType] Creating setter " + targetClass.getName() + "#" + methodName);
         }
 
-        final StringBuffer src = new StringBuffer(512);
+        final StringBuilder src = new StringBuilder(512);
         src.append("{");
         src.append("this.");
         src.append(targetFieldName);

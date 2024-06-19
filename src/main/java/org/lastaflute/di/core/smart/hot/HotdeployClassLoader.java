@@ -16,7 +16,9 @@
 package org.lastaflute.di.core.smart.hot;
 
 import java.io.InputStream;
+import java.security.ProtectionDomain;
 
+import org.lastaflute.di.core.aop.javassist.BytecodeClassDefiner;
 import org.lastaflute.di.helper.log.LaLogger;
 import org.lastaflute.di.naming.NamingConvention;
 import org.lastaflute.di.util.LdiClassUtil;
@@ -26,17 +28,29 @@ import org.lastaflute.di.util.LdiResourceUtil;
 /**
  * @author modified by jflute (originated in Seasar)
  */
-public class HotdeployClassLoader extends ClassLoader {
+public class HotdeployClassLoader extends ClassLoader implements BytecodeClassDefiner {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final LaLogger logger = LaLogger.getLogger(HotdeployClassLoader.class);
 
-    protected final NamingConvention namingConvention;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected final NamingConvention namingConvention; // not null
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public HotdeployClassLoader(ClassLoader classLoader, NamingConvention namingConvention) {
         super(classLoader);
         this.namingConvention = namingConvention;
     }
 
+    // ===================================================================================
+    //                                                                          Load Class
+    //                                                                          ==========
     @Override
     public Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         if (HotdeployUtil.REBUILDER_CLASS_NAME.equals(className)) {
@@ -64,6 +78,10 @@ public class HotdeployClassLoader extends ClassLoader {
         return super.loadClass(className, resolve);
     }
 
+    protected boolean isTargetClass(String className) {
+        return namingConvention.isHotdeployTargetClassName(className);
+    }
+
     protected Class<?> findLoadedClassFromParentLoader(String className) {
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // #for_now jflute illegal-access cannot be allowed in Java17, so remove it here (2021/07/30)
@@ -77,6 +95,9 @@ public class HotdeployClassLoader extends ClassLoader {
         return null;
     }
 
+    // ===================================================================================
+    //                                                              Original defineClass()
+    //                                                              ======================
     protected Class<?> defineClass(String className, boolean resolve) {
         final String path = LdiClassUtil.getResourcePath(className);
         final InputStream is = LdiResourceUtil.getResourceAsStreamNoException(path);
@@ -98,7 +119,11 @@ public class HotdeployClassLoader extends ClassLoader {
         return defineClass(className, bytes, 0, bytes.length);
     }
 
-    protected boolean isTargetClass(String className) {
-        return namingConvention.isHotdeployTargetClassName(className);
+    // ===================================================================================
+    //                                                                      Public Gateway
+    //                                                                      ==============
+    @Override
+    public Class<?> defineBytecodeClass(String className, byte[] bytecode, int off, int len, ProtectionDomain protectionDomain) {
+        return defineClass(className, bytecode, off, len, protectionDomain);
     }
 }

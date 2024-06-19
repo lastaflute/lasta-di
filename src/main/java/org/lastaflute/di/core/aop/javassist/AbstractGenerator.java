@@ -180,7 +180,11 @@ public class AbstractGenerator {
         Class<?> enhancedClass = null;
         final LinkedList<Throwable> currentCauseList = new LinkedList<>();
 
+        // _/_/_/_/_/_/_/_/_/_/
+        //  ClassLoader way
+        //
         // java8 or add-opens option
+        // _/_/_/_/
         if (defineClassMethod.isAccessible()) {
             try {
                 enhancedClass = invokeClassLoaderDefineClass(classLoader, ctClass);
@@ -191,8 +195,27 @@ public class AbstractGenerator {
         if (enhancedClass != null) {
             return enhancedClass;
         }
+        // private-access not allowed here
 
-        // private-access not allowed here e.g. java9 or later
+        // _/_/_/_/_/_/_/_/_/_/
+        //  Interface way
+        //
+        // original ClassLoader that implements provided interface (for e.g HotdeployClassLoader)
+        // _/_/_/_/
+        if (isInterfaceDefineEnabled()) { // e.g. MethodInvocation
+            if (classLoader instanceof BytecodeClassDefiner) {
+                enhancedClass = callInterfaceDefineClass(((BytecodeClassDefiner) classLoader), ctClass);
+            }
+            if (enhancedClass != null) {
+                return enhancedClass;
+            }
+        }
+
+        // _/_/_/_/_/_/_/_/_/_/
+        //  MethodHandles way
+        //
+        // using Lookup architecture e.g. java9 or later
+        // _/_/_/_/
         try {
             enhancedClass = invokeMethodHandlesDefineClass(classLoader, ctClass);
         } catch (Throwable cause) {
@@ -234,6 +257,37 @@ public class AbstractGenerator {
         } catch (final InvocationTargetException e) {
             throw new InvocationTargetRuntimeException(ClassLoader.class, e);
         }
+    }
+
+    // -----------------------------------------------------
+    //                                         Interface way
+    //                                         -------------
+    protected boolean isInterfaceDefineEnabled() {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // interface way is spot use because... by jflute (2024/06/19)
+        // actually only HotdeployClassLoader implements it so unrelated to cool deploy
+        // interface way is preferred to be disabled as possible to avoid different way
+        // between hot and cool as possible
+        //
+        // however MethodInvocation enhancement by MethodHandles way cannot work on Hotdeploy
+        // MethodHandles requires to define class to lookupClass's class-loader
+        // so enhanced invocation class is forcedly defined to system class-loader
+        // (lookupClass is fixed framework class in case of MethodInvocation)
+        // then system's invocation class cannot find hotodeploy's main component 
+        // (e.g. ClassNotFoundException from JDK's class-loader loadClass())
+        // 
+        // therefore, only MethodInvocation uses interface way instead of MethodHandles way when hotdeploy
+        // (only main component uses MethodHandles way to avoid hot and cool trouble)
+        // _/_/_/_/_/_/_/_/_/_/
+        return false; // as default
+    }
+
+    protected Class<?> callInterfaceDefineClass(final BytecodeClassDefiner definer, final CtClass ctClass) {
+        final String className = ctClass.getName();
+        final byte[] bytecode = convertCtClassToBytecode(ctClass);
+        final Integer off = 0;
+        final Integer len = bytecode.length;
+        return definer.defineBytecodeClass(className, bytecode, off, len, protectionDomain);
     }
 
     // -----------------------------------------------------

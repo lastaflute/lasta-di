@@ -73,12 +73,17 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         return clazz;
     }
 
+    @Override
+    protected boolean isInterfaceDefineEnabled() {
+        return true; // read comment on super class
+    }
+
     // ===================================================================================
     //                                                                  Expression Utility
     //                                                                  ==================
     public static String createProceedMethodSource(final Method targetMethod, final String enhancedClassName,
             final String invokeSuperMethodName) {
-        final StringBuffer buf = new StringBuffer(1000);
+        final StringBuilder buf = new StringBuilder(1000);
         buf.append("{");
         buf.append("if (interceptorsIndex < interceptors.length) {");
         buf.append("return interceptors[interceptorsIndex++].invoke(this);");

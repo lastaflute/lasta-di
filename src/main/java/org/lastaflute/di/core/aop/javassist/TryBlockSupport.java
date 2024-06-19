@@ -31,13 +31,13 @@ public class TryBlockSupport {
     //                                                                           Attribute
     //                                                                           =========
     protected int status; // mutable in this class
-    protected StringBuffer codeBuf = new StringBuffer(500);
+    protected StringBuilder codeSb = new StringBuilder(500);
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TryBlockSupport(final String src) {
-        codeBuf.append("try {").append(src).append("}");
+        codeSb.append("try {").append(src).append("}");
         status = STATUS_TRY;
     }
 
@@ -51,7 +51,7 @@ public class TryBlockSupport {
         if (status != STATUS_TRY && status != STATUS_CATCH) {
             throw new IllegalStateException("could't append catch block after finally block.");
         }
-        codeBuf.append("catch (").append(exceptionType.getName()).append(" e) {").append(src).append("}");
+        codeSb.append("catch (").append(exceptionType.getName()).append(" e) {").append(src).append("}");
         status = STATUS_CATCH;
     }
 
@@ -59,7 +59,7 @@ public class TryBlockSupport {
         if (status != STATUS_TRY && status != STATUS_CATCH) {
             throw new IllegalStateException("finally block is already appended.");
         }
-        codeBuf.append("finally {").append(src).append("}");
+        codeSb.append("finally {").append(src).append("}");
         status = STATUS_FINALLY;
     }
 
@@ -67,6 +67,6 @@ public class TryBlockSupport {
         if (status != STATUS_CATCH && status != STATUS_FINALLY) {
             throw new IllegalStateException("must set catch block or finally block.");
         }
-        return new String(codeBuf);
+        return new String(codeSb);
     }
 }

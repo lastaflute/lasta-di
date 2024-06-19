@@ -170,22 +170,22 @@ public class AspectWeaver {
     //                                                                       Name Handling
     //                                                                       =============
     public String buildEnhancedClassName() {
-        final StringBuffer buf = new StringBuffer(200);
+        final StringBuilder sb = new StringBuilder(200);
         final String targetClassName = targetClass.getName();
         final Package pkg = targetClass.getPackage();
         if (targetClassName.startsWith("java.") || (pkg != null && pkg.isSealed())) {
-            buf.append(PREFIX_ENHANCED_CLASS);
+            sb.append(PREFIX_ENHANCED_CLASS);
         }
-        buf.append(targetClassName).append(SUFFIX_ENHANCED_CLASS).append(Integer.toHexString(hashCode()));
+        sb.append(targetClassName).append(SUFFIX_ENHANCED_CLASS).append(Integer.toHexString(hashCode()));
 
         // #for_now jflute strictly not thread-safe? (2024/06/18)
-        final int length = buf.length();
-        for (int i = 0; enhancedClassNames.contains(new String(buf)); ++i) {
-            buf.setLength(length);
-            buf.append("_").append(i);
+        final int length = sb.length();
+        for (int i = 0; enhancedClassNames.contains(new String(sb)); ++i) {
+            sb.setLength(length);
+            sb.append("_").append(i);
         }
 
-        String name = new String(buf);
+        String name = new String(sb);
         enhancedClassNames.add(name);
         return name;
     }
