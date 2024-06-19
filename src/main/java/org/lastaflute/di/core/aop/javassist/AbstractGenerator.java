@@ -204,7 +204,11 @@ public class AbstractGenerator {
         // _/_/_/_/
         if (isInterfaceDefineEnabled()) { // e.g. MethodInvocation
             if (classLoader instanceof BytecodeClassDefiner) {
-                enhancedClass = callInterfaceDefineClass(((BytecodeClassDefiner) classLoader), ctClass);
+                try {
+                    enhancedClass = callInterfaceDefineClass(((BytecodeClassDefiner) classLoader), ctClass);
+                } catch (Throwable cause) {
+                    currentCauseList.add(cause);
+                }
             }
             if (enhancedClass != null) {
                 return enhancedClass;
