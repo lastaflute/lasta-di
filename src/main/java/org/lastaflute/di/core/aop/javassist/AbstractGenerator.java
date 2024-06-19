@@ -71,6 +71,7 @@ public class AbstractGenerator {
 
     /** Reflection to MethodHandles@privateLookupIn() for java9 or later. (NullAllowed: when java8) */
     protected static final Method privateLookupInMethod;
+    /** Reflection to MethodHandles.Lookup@defineClass() for java9 or later. (NullAllowed: when java8) */
     protected static final Method lookupDefineClassMethod;
 
     // static initializer
@@ -83,7 +84,7 @@ public class AbstractGenerator {
     }
 
     // -----------------------------------------------------
-    //                                       ClassLoader Way
+    //                                       ClassLoader way
     //                                       ---------------
     protected static PrivilegedAction<Object> createAspectWeaverPrivilegedAction() {
         return new PrivilegedAction<Object>() {
@@ -128,7 +129,7 @@ public class AbstractGenerator {
     }
 
     // -----------------------------------------------------
-    //                                     MethodHandles Way
+    //                                     MethodHandles way
     //                                     -----------------
     // test this by copying to java9 or later environment
     protected static Method prepareMethodHandlesPrivateLookupInMethod() {
@@ -177,6 +178,13 @@ public class AbstractGenerator {
     //                                                                    Define the Class
     //                                                                    ================
     public Class<?> toClass(final ClassLoader classLoader, final CtClass ctClass) {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // how to define class to class-loader:
+        //  ClassLoader way :: classic, ClassLoader@defineClass() by reflection private-access
+        //  Interface way :: original ClassLoader implements Lasta Di provided interface
+        //  MethodHandles way :: use MethodHandles.Lookup since java9
+        //  Javassist way :: CtClass.toClass(neighbor) which uses MethodHandles internally
+        // _/_/_/_/
         Class<?> enhancedClass = null;
         final LinkedList<Throwable> currentCauseList = new LinkedList<>();
 
