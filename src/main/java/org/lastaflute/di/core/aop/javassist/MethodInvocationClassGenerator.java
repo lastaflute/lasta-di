@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,30 +33,57 @@ import javassist.CtMethod;
  */
 public class MethodInvocationClassGenerator extends AbstractGenerator {
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    /** e.g. org.docksidestage.Sea$$EnhancedByLastaDi$$2d66530f (NotNull) */
     protected final String enhancedClassName;
-    protected CtClass methodInvocationClass;
 
-    public MethodInvocationClassGenerator(final ClassPool classPool, final String invocationClassName, final String targetClassName) {
-        super(classPool);
-        this.enhancedClassName = targetClassName;
-        this.methodInvocationClass = getAndRenameCtClass(MethodInvocationTemplate.class, invocationClassName);
+    /**
+     * e.g. org.lastaflute.di.core.aop.javassist.OrgDocksidestageSea$$EnhancedByLastaDi$$2d66530f$$MethodInvocation$$mystic$$0
+     * (NotNull: after setup but null allowed after toClass())
+     */
+    protected CtClass methodInvocationCtClass; // not null after setup but null allowed after toClass() 
+
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
+    public MethodInvocationClassGenerator(final ClassPool classPool, final String enhancedClassName,
+            final String methodInvocationClassName) {
+        super(classPool, /*targetClass*/getTemplateClass()); // you can use it as targetClass after here
+        this.enhancedClassName = enhancedClassName;
+        this.methodInvocationCtClass = getAndRenameCtClass(targetClass, methodInvocationClassName);
     }
 
+    // ===================================================================================
+    //                                                                       Create Method
+    //                                                                       =============
     public void createProceedMethod(final Method targetMethod, final String invokeSuperMethodName) {
-        final CtMethod method = getDeclaredMethod(methodInvocationClass, "proceed", null);
+        final CtMethod method = getDeclaredMethod(methodInvocationCtClass, "proceed", null);
         setMethodBody(method, createProceedMethodSource(targetMethod, enhancedClassName, invokeSuperMethodName));
     }
 
-    public Class<?> toClass(final ClassLoader classLoader) {
-        final Class<?> clazz = toClass(classLoader, methodInvocationClass);
-        methodInvocationClass.detach();
-        methodInvocationClass = null;
+    // ===================================================================================
+    //                                                                    Define the Class
+    //                                                                    ================
+    public Class<?> toClass(final ClassLoader classLoader) { // with closing
+        final Class<?> clazz = toClass(classLoader, methodInvocationCtClass);
+        methodInvocationCtClass.detach();
+        methodInvocationCtClass = null;
         return clazz;
     }
 
+    @Override
+    protected boolean isInterfaceDefineEnabled() {
+        return true; // read comment on super class
+    }
+
+    // ===================================================================================
+    //                                                                  Expression Utility
+    //                                                                  ==================
     public static String createProceedMethodSource(final Method targetMethod, final String enhancedClassName,
             final String invokeSuperMethodName) {
-        final StringBuffer buf = new StringBuffer(1000);
+        final StringBuilder buf = new StringBuilder(1000);
         buf.append("{");
         buf.append("if (interceptorsIndex < interceptors.length) {");
         buf.append("return interceptors[interceptorsIndex++].invoke(this);");
@@ -113,18 +140,22 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         return new String(sb);
     }
 
+    // ===================================================================================
+    //                                                                      Template Class
+    //                                                                      ==============
+    public static Class<?> getTemplateClass() { // is enhancement target class
+        return MethodInvocationTemplate.class;
+    }
+
+    // before enhancement
     public static class MethodInvocationTemplate implements LaMethodInvocation {
 
         private static Class<?> targetClass;
-
         private static Method method;
-
-        static MethodInterceptor[] interceptors;
-
+        static MethodInterceptor[] interceptors; // why not private?
         private static Map<String, Object> parameters;
 
         private Object target;
-
         private Object[] arguments;
 
         int interceptorsIndex;
@@ -132,6 +163,10 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         public MethodInvocationTemplate(final Object target, final Object[] arguments) {
             this.target = target;
             this.arguments = arguments;
+        }
+
+        public Object proceed() throws Throwable {
+            return null;
         }
 
         public Class<?> getTargetClass() {
@@ -160,9 +195,16 @@ public class MethodInvocationClassGenerator extends AbstractGenerator {
         public Object[] getArguments() {
             return arguments;
         }
+    }
 
-        public Object proceed() throws Throwable {
-            return null;
-        }
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public String getEnhancedClassName() {
+        return enhancedClassName;
+    }
+
+    public CtClass getMethodInvocationCtClass() { // null allowed depending on call timing
+        return methodInvocationCtClass;
     }
 }

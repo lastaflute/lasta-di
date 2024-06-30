@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,14 +40,23 @@ import org.lastaflute.di.util.LdiMethodUtil;
  */
 public class AopProxy implements Serializable {
 
-    static final long serialVersionUID = 0L;
-    private static LaLogger logger = LaLogger.getLogger(AopProxy.class);
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    private static final long serialVersionUID = 0L;
+    private static final LaLogger logger = LaLogger.getLogger(AopProxy.class);
 
-    private final Class<?> targetClass;
-    private final Class<?> enhancedClass;
-    private final Pointcut defaultPointcut;
-    private final AspectWeaver weaver;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected final Class<?> targetClass; // not null
+    protected final Class<?> enhancedClass; // not null
+    protected final Pointcut defaultPointcut; // not null
+    protected final AspectWeaver aspectWeaver; // not null, has state
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public AopProxy(final Class<?> targetClass, final Aspect[] aspects) {
         this(targetClass, aspects, null, null);
     }
@@ -60,21 +69,48 @@ public class AopProxy implements Serializable {
         this(targetClass, aspects, null, parameters);
     }
 
+    /**
+     * @param targetClass (NotNull)
+     * @param aspects (NullAllowed)
+     * @param interTypes (NullAllowed)
+     * @param parameters (NullAllowed)
+     * @throws EmptyRuntimeException When both the aspects and interTypes are null or empty.
+     */
     public AopProxy(final Class<?> targetClass, final Aspect[] aspects, final InterType[] interTypes, final Map<?, ?> parameters) {
-        if ((aspects == null || aspects.length == 0) && (interTypes == null || interTypes.length == 0)) {
+        // also targetClass is null-checked at pointcut implementation
+        if (isBothAspectInterTypeEmpty(aspects, interTypes)) {
             throw new EmptyRuntimeException("aspects and interTypes");
         }
 
         this.targetClass = targetClass;
-        defaultPointcut = new PointcutImpl(targetClass);
+        defaultPointcut = createDefaultPointcut(targetClass);
 
-        weaver = new AspectWeaver(targetClass, parameters);
+        aspectWeaver = createAspectWeaver(targetClass, parameters);
         setupAspects(aspects);
-        weaver.setInterTypes(interTypes);
-        enhancedClass = weaver.generateClass();
+        aspectWeaver.setInterTypes(interTypes);
+        enhancedClass = aspectWeaver.generateClass();
     }
 
-    private void setupAspects(Aspect[] aspects) {
+    protected boolean isBothAspectInterTypeEmpty(final Aspect[] aspects, final InterType[] interTypes) {
+        return (aspects == null || aspects.length == 0) && (interTypes == null || interTypes.length == 0);
+    }
+
+    protected Pointcut createDefaultPointcut(final Class<?> targetClass) {
+        return new PointcutImpl(targetClass);
+    }
+
+    // -----------------------------------------------------
+    //                                                Aspect
+    //                                                ------
+    protected AspectWeaver createAspectWeaver(final Class<?> targetClass, final Map<?, ?> parameters) {
+        return newAspectWeaver(targetClass, parameters);
+    }
+
+    protected AspectWeaver newAspectWeaver(final Class<?> targetClass, final Map<?, ?> parameters) {
+        return new AspectWeaver(targetClass, parameters);
+    }
+
+    protected void setupAspects(Aspect[] aspects) {
         if (aspects == null || aspects.length == 0) {
             return;
         }
@@ -86,9 +122,9 @@ public class AopProxy implements Serializable {
             }
         }
 
-        Method[] methods = targetClass.getMethods();
+        final Method[] methods = targetClass.getMethods();
         for (int i = 0; i < methods.length; ++i) {
-            Method method = methods[i];
+            final Method method = methods[i];
             if (LdiMethodUtil.isBridgeMethod(method) || LdiMethodUtil.isSyntheticMethod(method)) {
                 continue;
             }
@@ -107,14 +143,19 @@ public class AopProxy implements Serializable {
                 logger.log("WSSR0009", new Object[] { targetClass.getName(), method.getName() });
                 continue;
             }
-            weaver.setInterceptors(method, (MethodInterceptor[]) interceptorList.toArray(new MethodInterceptor[interceptorList.size()]));
+            aspectWeaver.setInterceptors(method,
+                    (MethodInterceptor[]) interceptorList.toArray(new MethodInterceptor[interceptorList.size()]));
         }
     }
 
-    public Class<?> getEnhancedClass() {
-        return enhancedClass;
+    protected boolean isApplicableAspect(Method method) {
+        int mod = method.getModifiers();
+        return !Modifier.isFinal(mod) && !Modifier.isStatic(mod);
     }
 
+    // ===================================================================================
+    //                                                                      Enhanced Class
+    //                                                                      ==============
     public Object create() {
         return LdiClassUtil.newInstance(enhancedClass);
     }
@@ -124,8 +165,22 @@ public class AopProxy implements Serializable {
         return LdiConstructorUtil.newInstance(constructor, args);
     }
 
-    private boolean isApplicableAspect(Method method) {
-        int mod = method.getModifiers();
-        return !Modifier.isFinal(mod) && !Modifier.isStatic(mod);
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public Class<?> getTargetClass() {
+        return targetClass;
+    }
+
+    public Class<?> getEnhancedClass() {
+        return enhancedClass;
+    }
+
+    public Pointcut getDefaultPointcut() {
+        return defaultPointcut;
+    }
+
+    public AspectWeaver getAspectWeaver() {
+        return aspectWeaver;
     }
 }

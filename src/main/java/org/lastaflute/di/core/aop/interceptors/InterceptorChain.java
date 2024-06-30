@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import org.lastaflute.di.util.LdiArrayUtil;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class InterceptorChain extends AbstractInterceptor {
 
@@ -31,9 +30,6 @@ public class InterceptorChain extends AbstractInterceptor {
 
     private MethodInterceptor[] interceptors = new MethodInterceptor[0];
 
-    /**
-     * @param interceptor
-     */
     public void add(MethodInterceptor interceptor) {
         interceptors = (MethodInterceptor[]) LdiArrayUtil.add(interceptors, interceptor);
     }

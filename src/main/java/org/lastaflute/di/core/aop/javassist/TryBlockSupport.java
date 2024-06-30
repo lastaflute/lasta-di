@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,30 @@ package org.lastaflute.di.core.aop.javassist;
  */
 public class TryBlockSupport {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     protected static final int STATUS_TRY = 0;
     protected static final int STATUS_CATCH = 1;
     protected static final int STATUS_FINALLY = 2;
 
-    protected int status;
-    protected StringBuffer codeBuf = new StringBuffer(500);
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected int status; // mutable in this class
+    protected StringBuilder codeSb = new StringBuilder(500);
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public TryBlockSupport(final String src) {
-        codeBuf.append("try {").append(src).append("}");
+        codeSb.append("try {").append(src).append("}");
         status = STATUS_TRY;
     }
 
+    // ===================================================================================
+    //                                                                 Expression Handling
+    //                                                                 ===================
     public void addCatchBlock(final Class<?> exceptionType, final String src) {
         if (!Throwable.class.isAssignableFrom(exceptionType)) {
             throw new IllegalArgumentException("exceptionType must be Throwable.");
@@ -39,7 +51,7 @@ public class TryBlockSupport {
         if (status != STATUS_TRY && status != STATUS_CATCH) {
             throw new IllegalStateException("could't append catch block after finally block.");
         }
-        codeBuf.append("catch (").append(exceptionType.getName()).append(" e) {").append(src).append("}");
+        codeSb.append("catch (").append(exceptionType.getName()).append(" e) {").append(src).append("}");
         status = STATUS_CATCH;
     }
 
@@ -47,7 +59,7 @@ public class TryBlockSupport {
         if (status != STATUS_TRY && status != STATUS_CATCH) {
             throw new IllegalStateException("finally block is already appended.");
         }
-        codeBuf.append("finally {").append(src).append("}");
+        codeSb.append("finally {").append(src).append("}");
         status = STATUS_FINALLY;
     }
 
@@ -55,6 +67,6 @@ public class TryBlockSupport {
         if (status != STATUS_CATCH && status != STATUS_FINALLY) {
             throw new IllegalStateException("must set catch block or finally block.");
         }
-        return new String(codeBuf);
+        return new String(codeSb);
     }
 }
