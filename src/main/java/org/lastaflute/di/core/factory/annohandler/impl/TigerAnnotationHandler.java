@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import org.lastaflute.di.core.factory.defbuilder.impl.AspectAnnotationAspectDefB
 import org.lastaflute.di.core.factory.defbuilder.impl.DestroyMethodDefBuilderImpl;
 import org.lastaflute.di.core.factory.defbuilder.impl.InitMethodDefBuilderImpl;
 import org.lastaflute.di.core.factory.defbuilder.impl.JakartaResourcePropertyDefBuilder;
-import org.lastaflute.di.core.factory.defbuilder.impl.JavaxResourcePropertyDefBuilder;
 import org.lastaflute.di.core.factory.defbuilder.impl.MetaAnnotationAspectDefBuilder;
 import org.lastaflute.di.core.factory.defbuilder.impl.S2IntertypeDefBuilder;
 import org.lastaflute.di.core.meta.AutoBindingDef;
@@ -162,9 +161,10 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         if (enableJakartaAnnotations) {
             propertyDefBuilders.add(new JakartaResourcePropertyDefBuilder());
         }
-        if (enableJavaxAnnotations) {
-            propertyDefBuilders.add(new JavaxResourcePropertyDefBuilder());
-        }
+        // #jakarta migration to jakarta annotation by jflute (2024/07/23)
+        //if (enableJavaxAnnotations) {
+        //    propertyDefBuilders.add(new JavaxResourcePropertyDefBuilder());
+        //}
     }
 
     public static void addPropertyDefBuilder(final PropertyDefBuilder builder) {

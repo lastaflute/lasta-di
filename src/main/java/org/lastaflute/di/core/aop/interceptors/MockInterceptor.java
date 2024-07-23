@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,22 +39,6 @@ public class MockInterceptor extends AbstractInterceptor {
         setReturnValue(value);
     }
 
-    public void setReturnValue(Object returnValue) {
-        setReturnValue(null, returnValue);
-    }
-
-    public void setReturnValue(String methodName, Object returnValue) {
-        returnValueMap.put(methodName, returnValue);
-    }
-
-    public void setThrowable(Throwable throwable) {
-        setThrowable(null, throwable);
-    }
-
-    public void setThrowable(String methodName, Throwable throwable) {
-        throwableMap.put(methodName, throwable);
-    }
-
     public boolean isInvoked(String methodName) {
         return invokedMap.containsKey(methodName);
     }
@@ -76,5 +60,21 @@ public class MockInterceptor extends AbstractInterceptor {
         } else {
             return returnValueMap.get(null);
         }
+    }
+
+    public void setReturnValue(Object returnValue) {
+        setReturnValue(null, returnValue);
+    }
+
+    public void setReturnValue(String methodName, Object returnValue) {
+        returnValueMap.put(methodName, returnValue);
+    }
+
+    public void setThrowable(Throwable throwable) {
+        setThrowable(null, throwable);
+    }
+
+    public void setThrowable(String methodName, Throwable throwable) {
+        throwableMap.put(methodName, throwable);
     }
 }

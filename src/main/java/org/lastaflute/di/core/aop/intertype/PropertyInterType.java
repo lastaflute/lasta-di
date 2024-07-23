@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,60 +32,58 @@ import org.lastaflute.di.util.LdiStringUtil;
  */
 public class PropertyInterType extends AbstractInterType {
 
-    private static final String SETTER_PREFIX = "set";
-    private static final String GETTER_PREFIX = "get";
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    private static final LaLogger logger = LaLogger.getLogger(PropertyInterType.class);
+
+    protected static final String SETTER_PREFIX = "set";
+    protected static final String GETTER_PREFIX = "get";
 
     protected static final int NONE = 0;
     protected static final int READ = 1;
     protected static final int WRITE = 2;
     protected static final int READWRITE = 3;
 
+    // #for_now jflute should it be public for setter argument? (or for setting on Di xml?) (2024/06/18)
     protected static final String STR_NONE = "none";
     protected static final String STR_READ = "read";
     protected static final String STR_WRITE = "write";
     protected static final String STR_READWRITE = "readwrite";
 
-    private static LaLogger logger = LaLogger.getLogger(PropertyInterType.class);
-
+    // -----------------------------------------------------
+    //                                    Annotation Handler
+    //                                    ------------------
+    // #for_now jflute always tiger handler is used, but keep it for now (2024/06/18)
     private static PropertyAnnotationHandler annotationHandler = new DefaultPropertyAnnotationHandler();
-
-    private int defaultPropertyType = READWRITE;
 
     static {
         setupAnnotationHandler();
-    }
-
-    protected static int valueOf(String type) {
-        int propertyType = NONE;
-        if (STR_READ.equals(type)) {
-            propertyType = READ;
-        } else if (STR_WRITE.equals(type)) {
-            propertyType = WRITE;
-        } else if (STR_READWRITE.equals(type)) {
-            propertyType = READWRITE;
-        }
-        return propertyType;
     }
 
     private static void setupAnnotationHandler() {
         annotationHandler = (PropertyAnnotationHandler) LdiClassUtil.newInstance(TigerPropertyAnnotationHandler.class);
     }
 
-    public void setDefaultPropertyType(String defaultPropertyType) {
-        this.defaultPropertyType = valueOf(defaultPropertyType);
-    }
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private int defaultPropertyType = READWRITE; // setter mutable
 
+    // ===================================================================================
+    //                                                                           Introduce
+    //                                                                           =========
     protected void introduce() {
         if (logger.isDebugEnabled()) {
             logger.debug("[PropertyInterType] Introducing... " + targetClass.getName());
         }
 
-        int defaultValue = annotationHandler.getPropertyType(getTargetClass(), defaultPropertyType);
-        List<Field> targetFields = getTargetFields(targetClass);
+        final int defaultValue = annotationHandler.getPropertyType(getTargetClass(), defaultPropertyType);
+        final List<Field> targetFields = getTargetFields(targetClass);
 
         for (Iterator<Field> iter = targetFields.iterator(); iter.hasNext();) {
-            Field field = (Field) iter.next();
-            int property = annotationHandler.getPropertyType(field, defaultValue);
+            final Field field = (Field) iter.next();
+            final int property = annotationHandler.getPropertyType(field, defaultValue);
             switch (property) {
             case READ:
                 createGetter(targetClass, field);
@@ -106,9 +104,12 @@ public class PropertyInterType extends AbstractInterType {
         }
     }
 
-    private void createGetter(Class<?> targetClass, Field targetField) {
-        String targetFieldName = targetField.getName();
-        String methodName = GETTER_PREFIX + createMethodName(targetFieldName);
+    // ===================================================================================
+    //                                                                       Getter/Setter
+    //                                                                       =============
+    protected void createGetter(Class<?> targetClass, Field targetField) {
+        final String targetFieldName = targetField.getName();
+        final String methodName = GETTER_PREFIX + createMethodName(targetFieldName);
         if (hasMethod(methodName, null)) {
             return;
         }
@@ -117,7 +118,7 @@ public class PropertyInterType extends AbstractInterType {
             logger.debug("[PropertyInterType] Creating getter " + targetClass.getName() + "#" + methodName);
         }
 
-        StringBuffer src = new StringBuffer(512);
+        final StringBuilder src = new StringBuilder(512);
         src.append("{");
         src.append("return this.");
         src.append(targetFieldName);
@@ -126,9 +127,9 @@ public class PropertyInterType extends AbstractInterType {
         addMethod(targetField.getType(), methodName, src.toString());
     }
 
-    private void createSetter(Class<?> targetClass, Field targetField) {
-        String targetFieldName = targetField.getName();
-        String methodName = SETTER_PREFIX + createMethodName(targetFieldName);
+    protected void createSetter(Class<?> targetClass, Field targetField) {
+        final String targetFieldName = targetField.getName();
+        final String methodName = SETTER_PREFIX + createMethodName(targetFieldName);
         if (hasMethod(methodName, targetField.getType())) {
             return;
         }
@@ -137,7 +138,7 @@ public class PropertyInterType extends AbstractInterType {
             logger.debug("[PropertyInterType] Creating setter " + targetClass.getName() + "#" + methodName);
         }
 
-        StringBuffer src = new StringBuffer(512);
+        final StringBuilder src = new StringBuilder(512);
         src.append("{");
         src.append("this.");
         src.append(targetFieldName);
@@ -146,7 +147,10 @@ public class PropertyInterType extends AbstractInterType {
         addMethod(methodName, new Class[] { targetField.getType() }, src.toString());
     }
 
-    private List<Field> getTargetFields(Class<?> targetClass) {
+    // ===================================================================================
+    //                                                                               Field
+    //                                                                               =====
+    protected List<Field> getTargetFields(Class<?> targetClass) {
         final Map<String, Field> nominationFields = new LinkedHashMap<String, Field>();
         gatherFields(targetClass, nominationFields);
         final List<Field> targetFields = new ArrayList<Field>(nominationFields.size());
@@ -160,7 +164,7 @@ public class PropertyInterType extends AbstractInterType {
         return targetFields;
     }
 
-    private void gatherFields(final Class<?> targetClass, final Map<String, Field> fields) {
+    protected void gatherFields(final Class<?> targetClass, final Map<String, Field> fields) {
         final Field[] declaredFields = targetClass.getDeclaredFields();
         for (int i = 0; i < declaredFields.length; ++i) {
             final Field field = declaredFields[i];
@@ -175,16 +179,18 @@ public class PropertyInterType extends AbstractInterType {
         }
     }
 
-    private String createMethodName(String fieldName) {
+    // ===================================================================================
+    //                                                                              Method
+    //                                                                              ======
+    protected String createMethodName(String fieldName) {
         String methodName = LdiStringUtil.capitalize(fieldName);
         if (methodName.endsWith("_")) {
             methodName = methodName.substring(0, methodName.length() - 1);
         }
-
         return methodName;
     }
 
-    private boolean hasMethod(String methodName, Class<?> paramType) {
+    protected boolean hasMethod(String methodName, Class<?> paramType) {
         Class<?>[] param = null;
         if (paramType != null) {
             param = new Class[] { paramType };
@@ -197,6 +203,9 @@ public class PropertyInterType extends AbstractInterType {
         }
     }
 
+    // ===================================================================================
+    //                                                                  Annotation Handler
+    //                                                                  ==================
     public interface PropertyAnnotationHandler {
 
         int getPropertyType(Class<?> clazz, int defaultValue);
@@ -213,5 +222,24 @@ public class PropertyInterType extends AbstractInterType {
         public int getPropertyType(Field field, int defaultValue) {
             return defaultValue;
         }
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public void setDefaultPropertyType(String defaultPropertyType) {
+        this.defaultPropertyType = valueOf(defaultPropertyType);
+    }
+
+    protected static int valueOf(String type) {
+        int propertyType = NONE;
+        if (STR_READ.equals(type)) {
+            propertyType = READ;
+        } else if (STR_WRITE.equals(type)) {
+            propertyType = WRITE;
+        } else if (STR_READWRITE.equals(type)) {
+            propertyType = READWRITE;
+        }
+        return propertyType;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,51 +23,44 @@ import org.lastaflute.di.core.aop.frame.MethodInterceptor;
 
 /**
  * @author modified by jflute (originated in Seasar)
- * 
  */
 public class AspectImpl implements Aspect, Serializable {
 
-    static final long serialVersionUID = 0L;
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    private static final long serialVersionUID = 0L;
 
-    private MethodInterceptor methodInterceptor;
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private final MethodInterceptor methodInterceptor; // not null
+    private Pointcut pointcut; // setter-mutable
 
-    private Pointcut pointcut;
-
-    /**
-     * @param methodInterceptor
-     */
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public AspectImpl(MethodInterceptor methodInterceptor) {
         this(methodInterceptor, null);
     }
 
-    /**
-     * @param methodInterceptor
-     * @param pointcut
-     */
     public AspectImpl(MethodInterceptor methodInterceptor, Pointcut pointcut) {
         this.methodInterceptor = methodInterceptor;
         this.pointcut = pointcut;
     }
 
-    /**
-     * @see org.lastaflute.di.core.aop.Aspect#getMethodInterceptor()
-     */
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
     public MethodInterceptor getMethodInterceptor() {
         return methodInterceptor;
     }
 
-    /**
-     * @see org.lastaflute.di.core.aop.Aspect#getPointcut()
-     */
     public Pointcut getPointcut() {
         return pointcut;
     }
 
-    /**
-     * @see org.lastaflute.di.core.aop.Aspect#setPointcut(org.lastaflute.di.core.aop.Pointcut)
-     */
     public void setPointcut(Pointcut pointcut) {
         this.pointcut = pointcut;
     }
-
 }

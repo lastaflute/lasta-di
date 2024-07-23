@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,6 +64,16 @@ public abstract class UnitLastaDiTestCase extends TestCase {
 
     protected String getConfigPath() {
         return "test_app.xml";
+    }
+
+    @Override
+    protected void runTest() throws Throwable {
+        try {
+            super.runTest();
+        } catch (Throwable e) { // to record in application log
+            log("Failed to finish the test: " + xgetCaseDisp(), e);
+            throw e;
+        }
     }
 
     @Override

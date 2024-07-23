@@ -1,6 +1,6 @@
 Lasta Di
 =======================
-simple DI container for LastaFlute, forked from Seasar as Java8
+simple DI container for LastaFlute, forked from Seasar as Java21
 
 ```java
 @Resource
@@ -50,7 +50,7 @@ public class HarborBoot {
 <dependency>
     <groupId>org.lastaflute</groupId>
     <artifactId>lasta-di</artifactId>
-    <version>0.9.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
