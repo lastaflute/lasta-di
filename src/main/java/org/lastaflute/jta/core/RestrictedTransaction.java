@@ -15,16 +15,17 @@
  */
 package org.lastaflute.jta.core;
 
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.Synchronization;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionSynchronizationRegistry;
-import javax.transaction.UserTransaction;
 import javax.transaction.xa.XAResource;
+
+import jakarta.transaction.HeuristicMixedException;
+import jakarta.transaction.HeuristicRollbackException;
+import jakarta.transaction.NotSupportedException;
+import jakarta.transaction.RollbackException;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.SystemException;
+import jakarta.transaction.Transaction;
+import jakarta.transaction.TransactionSynchronizationRegistry;
+import jakarta.transaction.UserTransaction;
 
 /**
  * @author modified by jflute (originated in Seasar)
@@ -35,8 +36,7 @@ public class RestrictedTransaction implements Transaction {
 
     protected TransactionSynchronizationRegistry synchronizationRegistry;
 
-    public RestrictedTransaction(final UserTransaction userTransaction,
-            final TransactionSynchronizationRegistry synchronizationRegistry) {
+    public RestrictedTransaction(final UserTransaction userTransaction, final TransactionSynchronizationRegistry synchronizationRegistry) {
         this.userTransaction = userTransaction;
         this.synchronizationRegistry = synchronizationRegistry;
     }

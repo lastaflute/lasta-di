@@ -34,8 +34,9 @@ import org.lastaflute.di.core.factory.defbuilder.PropertyDefBuilder;
 import org.lastaflute.di.core.factory.defbuilder.impl.AspectAnnotationAspectDefBuilder;
 import org.lastaflute.di.core.factory.defbuilder.impl.DestroyMethodDefBuilderImpl;
 import org.lastaflute.di.core.factory.defbuilder.impl.InitMethodDefBuilderImpl;
+import org.lastaflute.di.core.factory.defbuilder.impl.JakartaResourcePropertyDefBuilder;
+import org.lastaflute.di.core.factory.defbuilder.impl.JavaxResourcePropertyDefBuilder;
 import org.lastaflute.di.core.factory.defbuilder.impl.MetaAnnotationAspectDefBuilder;
-import org.lastaflute.di.core.factory.defbuilder.impl.ResourcePropertyDefBuilder;
 import org.lastaflute.di.core.factory.defbuilder.impl.S2IntertypeDefBuilder;
 import org.lastaflute.di.core.meta.AutoBindingDef;
 import org.lastaflute.di.core.meta.InstanceDef;
@@ -61,15 +62,26 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
     //    enableJPA = enable;
     //}
 
-    protected static final boolean enableCommonAnnotations;
+    protected static final boolean enableJakartaAnnotations;
 
     static {
         boolean enable = false;
         try {
-            Class.forName("javax.annotation.Resource"); // geronimo-annotation_1.0_spec-1.0.jar
+            Class.forName("jakarta.annotation.Resource"); // jakarta.annotation-api
             enable = true;
         } catch (final Throwable ignore) {}
-        enableCommonAnnotations = enable;
+        enableJakartaAnnotations = enable;
+    }
+
+    protected static final boolean enableJavaxAnnotations;
+
+    static {
+        boolean enable = false;
+        try {
+            Class.forName("javax.annotation.Resource"); // javax.annotation-api
+            enable = true;
+        } catch (final Throwable ignore) {}
+        enableJavaxAnnotations = enable;
     }
 
     protected static final List<ComponentDefBuilder> componentDefBuilders =
@@ -147,8 +159,11 @@ public class TigerAnnotationHandler extends ConstantAnnotationHandler {
         clearPropertyDefBuilder();
         // #lasta_di remove Binding annotation
         //propertyDefBuilders.add(new BindingPropertyDefBuilder());
-        if (enableCommonAnnotations) {
-            propertyDefBuilders.add(new ResourcePropertyDefBuilder());
+        if (enableJakartaAnnotations) {
+            propertyDefBuilders.add(new JakartaResourcePropertyDefBuilder());
+        }
+        if (enableJavaxAnnotations) {
+            propertyDefBuilders.add(new JavaxResourcePropertyDefBuilder());
         }
     }
 

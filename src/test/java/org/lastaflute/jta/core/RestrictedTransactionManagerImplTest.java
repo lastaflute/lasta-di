@@ -15,10 +15,10 @@
  */
 package org.lastaflute.jta.core;
 
-import javax.transaction.Status;
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
-import javax.transaction.UserTransaction;
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionManager;
+import jakarta.transaction.TransactionSynchronizationRegistry;
+import jakarta.transaction.UserTransaction;
 
 import org.lastaflute.jta.unit.UnitLastaJtaTest;
 

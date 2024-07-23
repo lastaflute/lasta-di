@@ -15,14 +15,15 @@
  */
 package org.lastaflute.jta.util;
 
-import javax.transaction.RollbackException;
-import javax.transaction.Synchronization;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
 import javax.transaction.xa.XAResource;
 
 import org.lastaflute.jta.exception.LjtRollbackRuntimeException;
 import org.lastaflute.jta.exception.LjtSystemRuntimeException;
+
+import jakarta.transaction.RollbackException;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.SystemException;
+import jakarta.transaction.Transaction;
 
 /**
  * @author modified by jflute (originated in Seasar)

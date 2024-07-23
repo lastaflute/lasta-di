@@ -27,13 +27,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.PreDestroy;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
-import javax.transaction.Status;
-import javax.transaction.Synchronization;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+import jakarta.transaction.Status;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.Transaction;
+import jakarta.transaction.TransactionManager;
 
 import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.jta.dbcp.exception.ConnectionPoolShortFreeSQLException;
@@ -50,6 +49,8 @@ import org.lastaflute.jta.util.LjtTransactionManagerUtil;
 import org.lastaflute.jta.util.LjtTransactionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.annotation.PreDestroy;
 
 /**
  * @author modified by jflute (originated in Seasar)
