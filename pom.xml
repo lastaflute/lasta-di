@@ -226,5 +226,12 @@
 			<version>1.2.13</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- expression (to test expression logic) -->
+		<dependency>
+			<groupId>org.codelibs</groupId>
+			<artifactId>sai</artifactId>
+			<version>0.2.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
