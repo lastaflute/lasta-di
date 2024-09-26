@@ -33,11 +33,18 @@ import org.lastaflute.di.util.LdiResourceUtil;
 import org.lastaflute.di.util.LdiSrl;
 import org.lastaflute.di.util.LdiStringUtil;
 import org.lastaflute.di.util.tiger.LdiReflectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jflute
  */
 public class SimpleExpressionPlainHook implements ExpressionPlainHook {
+
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    private static final Logger logger = LoggerFactory.getLogger(SimpleExpressionPlainHook.class);
 
     protected static final ExpressionCastResolver castResolver = new ExpressionCastResolver();
 
@@ -76,6 +83,10 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             return resovled;
         }
         resovled = resolveSimpleEqualEqual(exp, container, resultType); // e.g. 'hot' == 'cool'
+        if (isReallyResolved(resovled)) {
+            return resovled;
+        }
+        resovled = resolveSimpleNewExp(exp, container, resultType); // e.g. new org.docksidestage.Sea()
         if (isReallyResolved(resovled)) {
             return resovled;
         }
@@ -145,6 +156,32 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
                     }
                 }
             }
+        }
+        return null;
+    }
+
+    // ===================================================================================
+    //                                                                          Simple New
+    //                                                                          ==========
+    protected Object resolveSimpleNewExp(String exp, LaContainer container, Class<?> resultType) { // @since 1.0.0
+        if (exp.startsWith("new ") && exp.endsWith("()") && exp.contains(".")) {
+            final String rear = LdiSrl.substringFirstRear(exp, "new "); // e.g. org.docksidestage.Sea()
+            final String fqcn = LdiSrl.substringLastFront(rear, "()"); // e.g. org.docksidestage.Sea
+            final Class<Object> clazz;
+            try {
+                clazz = LdiReflectionUtil.forName(fqcn);
+            } catch (RuntimeException continued) { // may be framework bug
+                logger.debug("Failed to find class for the name: exp=" + exp + ", fqcn=" + fqcn, continued);
+                return null;
+            }
+            final Object instance;
+            try {
+                instance = LdiReflectionUtil.newInstance(clazz);
+            } catch (RuntimeException continued) { // may be framework bug
+                logger.debug("Failed to new instance (of expression): exp=" + exp + ", class=" + clazz, continued);
+                return null;
+            }
+            return instance;
         }
         return null;
     }
