@@ -35,6 +35,7 @@ public interface ExpressionPlainHook {
     String TYPE_BEGIN = "@"; // compatible with OGNL e.g. @org.dbflute.Entity@class, and for minor domain
     String TYPE_END = "@"; // me too
     String TYPE_END_CLASS = TYPE_END + "class"; // me too
+    String NEW_PREFIX = "new ";
     String METHOD_MARK = "()";
 
     // e.g. provider.config().getJdbcUrl()

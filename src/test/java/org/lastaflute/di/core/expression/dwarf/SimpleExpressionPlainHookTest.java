@@ -48,12 +48,12 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
     }
 
     // ===================================================================================
-    //                                                                        Method Chain
-    //                                                                        ============
+    //                                                                     Provider Config
+    //                                                                     ===============
     // -----------------------------------------------------
     //                                          Config get()
     //                                          ------------
-    public void test_hookPlainly_methodChain_config_get() {
+    public void test_hookPlainly_providerConfig_get() {
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
         String exp = "provider.config().getJdbcUrl()";
@@ -73,7 +73,7 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
     // -----------------------------------------------------
     //                                 Config getOrDefault()
     //                                 ---------------------
-    public void test_hookPlainly_methodChain_config_getOrDefault_null() {
+    public void test_hookPlainly_providerConfig_getOrDefault_null() {
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
         String exp = "provider.config().getOrDefault(\"jdbc.url\", null)";
@@ -93,7 +93,7 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
     // -----------------------------------------------------
     //                                  Config Determination
     //                                  --------------------
-    public void test_hookPlainly_methodChain_configDetermination() { // since 1.0.0
+    public void test_hookPlainly_providerConfig_isDetermination() { // since 1.0.0
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
         String exp = "provider.config().isDevelopmentHere()";

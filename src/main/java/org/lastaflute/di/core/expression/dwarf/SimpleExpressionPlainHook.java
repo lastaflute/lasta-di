@@ -164,9 +164,9 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                                          Simple New
     //                                                                          ==========
     protected Object resolveSimpleNewExp(String exp, LaContainer container, Class<?> resultType) { // @since 1.0.0
-        if (exp.startsWith("new ") && exp.endsWith("()") && exp.contains(".")) {
-            final String rear = LdiSrl.substringFirstRear(exp, "new "); // e.g. org.docksidestage.Sea()
-            final String fqcn = LdiSrl.substringLastFront(rear, "()"); // e.g. org.docksidestage.Sea
+        if (exp.startsWith(NEW_PREFIX) && exp.endsWith(METHOD_MARK)) {
+            final String rear = LdiSrl.substringFirstRear(exp, NEW_PREFIX); // e.g. org.docksidestage.Sea()
+            final String fqcn = LdiSrl.substringLastFront(rear, METHOD_MARK); // e.g. org.docksidestage.Sea
             final Class<Object> clazz;
             try {
                 clazz = LdiReflectionUtil.forName(fqcn);
