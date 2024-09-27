@@ -104,6 +104,22 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
         assertTrue(LjtTimeoutManager.class.equals(result));
     }
 
+    public void test_hookPlainly_simpleType_class_withoutAtmark() {
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String exp = "org.lastaflute.jta.helper.timer.LjtTimeoutManager.class";
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        assertNotNull(result);
+        assertTrue(LjtTimeoutManager.class.equals(result));
+    }
+
     public void test_hookPlainly_simpleType_field_basic() {
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
