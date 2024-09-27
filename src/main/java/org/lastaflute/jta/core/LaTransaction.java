@@ -639,7 +639,7 @@ public class LaTransaction implements ExtendedTransaction, SynchronizationRegist
     //                                                                      ==============
     @Override
     public String toString() {
-        return xid.toString();
+        return xid != null ? xid.toString() : "(the transaction not initialized yet)";
     }
 
     // ===================================================================================
