@@ -22,6 +22,7 @@ import org.lastaflute.di.core.LaContainer;
 import org.lastaflute.di.core.meta.impl.LaContainerImpl;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 import org.lastaflute.jta.core.LaTransaction;
+import org.lastaflute.jta.helper.timer.LjtTimeoutManager;
 
 /**
  * @author jflute
@@ -29,15 +30,15 @@ import org.lastaflute.jta.core.LaTransaction;
 public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
 
     // ===================================================================================
-    //                                                                     new Constructor
-    //                                                                     ===============
-    public void test_hookPlainly_newConstructor_basic() {
+    //                                                                          Simple new
+    //                                                                          ==========
+    public void test_hookPlainly_simpleNew_basic() {
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
         String exp = "new org.lastaflute.jta.core.LaTransaction()";
         Map<String, Object> contextMap = new HashMap<>();
-        LaContainer container = createProviderContainer(new MyMockProvider(false));
-        Class<?> resultType = LaTransaction.class; // however unused
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
 
         // ## Act ##
         Object result = hook.hookPlainly(exp, contextMap, container, resultType);
@@ -45,6 +46,41 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
         // ## Assert ##
         assertNotNull(result);
         assertTrue(result instanceof LaTransaction);
+    }
+
+    // ===================================================================================
+    //                                                                         Simple Type
+    //                                                                         ===========
+    public void test_hookPlainly_simpleType_class_basic() {
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String exp = "@org.lastaflute.jta.helper.timer.LjtTimeoutManager@class";
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        assertNotNull(result);
+        assertTrue(LjtTimeoutManager.class.equals(result));
+    }
+
+    public void test_hookPlainly_simpleType_method_basic() {
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String exp = "@org.lastaflute.jta.helper.timer.LjtTimeoutManager@getInstance()";
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        assertNotNull(result);
+        assertTrue(result instanceof LjtTimeoutManager);
     }
 
     // ===================================================================================
@@ -113,38 +149,65 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
     // ===================================================================================
     //                                                                        Hatena Colon
     //                                                                        ============
-    public void test_hookPlainly_hatenaColon_integer_false() { // since 1.0.0
+    public void test_hookPlainly_hatenaColon_false() { // since 1.0.0
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
-        String exp = "provider.config().isDevelopmentHere() ? new java.lang.Integer(1) : new java.lang.Integer(2)";
+        String determinationExp = "provider.config().isDevelopmentHere()";
+        String firstSelectionExp = "new org.lastaflute.jta.core.LaTransaction()";
+        String secondSelectionExp = "@org.lastaflute.jta.helper.timer.LjtTimeoutManager@getInstance()";
+        String exp = determinationExp + " ? " + firstSelectionExp + " : " + secondSelectionExp;
         Map<String, Object> contextMap = new HashMap<>();
         LaContainer container = createProviderContainer(new MyMockProvider(false));
-        Class<?> resultType = Integer.class;
+        Class<?> resultType = Object.class; // unused
 
         // ## Act ##
         Object result = hook.hookPlainly(exp, contextMap, container, resultType);
 
         // ## Assert ##
+        log("result: {}", result);
         assertNotNull(result);
-        assertTrue(result instanceof Integer);
-        assertEquals(2, (int) result);
+        assertTrue(result instanceof LjtTimeoutManager);
     }
 
-    public void test_hookPlainly_hatenaColon_integer_true() { // since 1.0.0
+    public void test_hookPlainly_hatenaColon_true() { // since 1.0.0
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
-        String exp = "provider.config().isDevelopmentHere() ? new java.lang.Integer(1) : new java.lang.Integer(2)";
-        Map<String, ? extends Object> contextMap = new HashMap<>();
+        String determinationExp = "provider.config().isDevelopmentHere()";
+        String firstSelectionExp = "new org.lastaflute.jta.core.LaTransaction()";
+        String secondSelectionExp = "@org.lastaflute.jta.helper.timer.LjtTimeoutManager@getInstance()";
+        String exp = determinationExp + " ? " + firstSelectionExp + " : " + secondSelectionExp;
+        Map<String, Object> contextMap = new HashMap<>();
         LaContainer container = createProviderContainer(new MyMockProvider(true));
-        Class<?> resultType = Integer.class;
+        Class<?> resultType = Object.class; // unused
 
         // ## Act ##
         Object result = hook.hookPlainly(exp, contextMap, container, resultType);
 
         // ## Assert ##
+        log("result: {}", result);
         assertNotNull(result);
-        assertTrue(result instanceof Integer);
-        assertEquals(1, (int) result);
+        assertTrue(result instanceof LaTransaction);
+    }
+
+    public void test_hookPlainly_hatenaColon_variousFormat() { // since 1.0.0
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String determinationExp = "provider.config().isDevelopmentHere()";
+        String firstSelectionExp = "provider.config().getJdbcUrl()";
+        String secondSelectionExp = "@org.lastaflute.jta.helper.timer.LjtTimeoutManager@class";
+        String exp = determinationExp + "\n    ? " + firstSelectionExp + "  \n: \n" + secondSelectionExp;
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createProviderContainer(new MyMockProvider(true));
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        log("result: {}", result);
+        assertNotNull(result);
+        assertTrue(result instanceof String);
+        assertEquals(MyMockConfig.JDBC_URL, result);
     }
 
     // ===================================================================================

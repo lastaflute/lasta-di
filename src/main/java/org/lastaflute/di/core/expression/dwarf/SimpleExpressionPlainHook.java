@@ -53,28 +53,33 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                                        ============
     @Override
     public Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
-        // same filter in JavaScript engine however cannot commonize easily because of OGNL-embedded
-        // no fix as small cost for now by jflute (2020/09/30)
-        final String resolvedExp = ExpressionEngine.resolveExpressionVariableSimply(exp, contextMap);
-        return doHookPlainly(resolvedExp, contextMap, container, resultType);
+        final Object hatenaColonResult = resolveHatenaColon(exp, contextMap, container, resultType); // e.g. ? :
+        if (isReallyResolved(hatenaColonResult)) {
+            return hatenaColonResult;
+        }
+        return doHookPlainly(exp, contextMap, container, resultType);
     }
 
     protected Object doHookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
-        final CastResolved resolved = castResolver.resolveCast(exp, resultType);
+        // same filter in JavaScript engine however cannot commonize easily because of OGNL-embedded
+        // no fix as small cost for now by jflute (2020/09/30)
+        final String resolvedExp = ExpressionEngine.resolveExpressionVariableSimply(exp, contextMap);
+
+        final CastResolved resolved = castResolver.resolveCast(resolvedExp, resultType);
         final String realExp;
         final Class<?> realType;
         if (resolved != null) {
             realExp = resolved.getFilteredExp();
             realType = resolved.getResolvedType();
         } else {
-            realExp = exp.trim();
+            realExp = resolvedExp.trim();
             realType = resultType;
         }
         return actuallyHookPlainly(realExp, container, realType);
     }
 
     protected Object actuallyHookPlainly(String exp, LaContainer container, Class<?> resultType) {
-        Object resovled = resolveSimpleString(exp, container, resultType); // "sea"
+        Object resovled = resolveSimpleString(exp, container, resultType); // e.g. "sea"
         if (isReallyResolved(resovled)) {
             return resovled;
         }
@@ -90,7 +95,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         if (isReallyResolved(resovled)) {
             return resovled;
         }
-        resovled = resolveSimpleTypeExp(exp, container, resultType); // e.g. @org.docksidestage.Sea@class
+        resovled = resolveSimpleTypeExp(exp, container, resultType); // e.g. @org.docksidestage.Sea@class or call()
         if (isReallyResolved(resovled)) {
             return resovled;
         }
@@ -115,6 +120,60 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
 
     protected boolean isReallyResolved(Object resovled) {
         return resovled != null; // includes null return object
+    }
+
+    // ===================================================================================
+    //                                                                        Hatena Colon
+    //                                                                        ============
+    // @since 1.0.0
+    protected Object resolveHatenaColon(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType) {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // treated as three expressions by hatena colon
+        // e.g.
+        //  provider.config().isDevelopmentHere()
+        //      ? new org.lastaflute.jta.core.LaTransaction()
+        //      : @org.lastaflute.jta.helper.timer.LjtTimeoutManager@getInstance()
+        // _/_/_/_/_/_/_/_/_/_/
+        if (mayBeSimpleHatenaColon(exp)) {
+            // e.g. sea ? over : mystic
+            final String determinationExp = LdiSrl.substringFirstFront(exp, HATENA).trim(); // e.g. sea
+            final String hatenaRear = LdiSrl.substringFirstRear(exp, HATENA).trim(); // e.g. over : mystic
+            final String firstSelectionExp = LdiSrl.substringFirstFront(hatenaRear, COLON).trim(); // e.g. over
+            final String secondSelectionExp = LdiSrl.substringFirstRear(hatenaRear, COLON).trim(); // e.g. mystic
+            if (isValidHatenaColonElement(determinationExp, firstSelectionExp, secondSelectionExp)) {
+                try {
+                    final Object determinationResult = doHookPlainly(determinationExp, contextMap, container, resultType);
+                    if (determinationResult instanceof Boolean) { // and not null
+                        final Object selectedResult;
+                        if ((Boolean) determinationResult) {
+                            selectedResult = doHookPlainly(firstSelectionExp, contextMap, container, resultType);
+                        } else {
+                            selectedResult = doHookPlainly(secondSelectionExp, contextMap, container, resultType);
+                        }
+                        return selectedResult; // may be null yet (caller check needed)
+                    }
+                } catch (RuntimeException continued) { // may be unexpected format? (give up)
+                    logger.debug("Cannot parse it as hatena colon (continued): exp=" + exp, continued);
+                }
+            }
+        }
+        return null;
+    }
+
+    protected boolean mayBeSimpleHatenaColon(String exp) {
+        if (exp.contains(HATENA) && exp.contains(COLON)) { // has hatena colon
+            if (exp.indexOf(HATENA) < exp.indexOf(COLON)) { // correct order (not : ?)
+                if (LdiSrl.count(exp, HATENA) == 1 && LdiSrl.count(exp, COLON) == 1) { // no nest (simple only)
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    protected boolean isValidHatenaColonElement(String determinationExp, String firstSelectionExp, String secondSelectionExp) {
+        // expcet empty expression e.g. sea ? : mystic
+        return !determinationExp.isEmpty() && !firstSelectionExp.isEmpty() && !secondSelectionExp.isEmpty();
     }
 
     // ===================================================================================
@@ -171,14 +230,14 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
             try {
                 clazz = LdiReflectionUtil.forName(fqcn);
             } catch (RuntimeException continued) { // may be framework bug
-                logger.debug("Failed to find class for the name: exp=" + exp + ", fqcn=" + fqcn, continued);
+                logger.debug("Failed to find class for the name of expression (continued): exp=" + exp + ", fqcn=" + fqcn, continued);
                 return null;
             }
             final Object instance;
             try {
                 instance = LdiReflectionUtil.newInstance(clazz);
             } catch (RuntimeException continued) { // may be framework bug
-                logger.debug("Failed to new instance (of expression): exp=" + exp + ", class=" + clazz, continued);
+                logger.debug("Failed to new instance of expression (continued): exp=" + exp + ", class=" + clazz, continued);
                 return null;
             }
             return instance;
@@ -355,7 +414,9 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
 
     protected boolean isProviderConfigNoArgMethod(String exp) { // LastaFlute uses
         // e.g. provider.config().getJdbcUrl()
-        return exp.startsWith(PROVIDER_GET) && exp.endsWith(METHOD_MARK) && !exp.contains("\"");
+        //      provider.config().isDevelopmentHere() // @since 1.0.0
+        final boolean configPrefix = exp.startsWith(PROVIDER_GET) || exp.startsWith(PROVIDER_IS);
+        return configPrefix && exp.endsWith(METHOD_MARK) && !exp.contains("\"");
     }
 
     protected boolean isProviderConfigOrDefaultMethod(String exp) { // LastaFlute uses

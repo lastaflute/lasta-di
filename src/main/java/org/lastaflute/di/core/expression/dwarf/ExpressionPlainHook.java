@@ -28,6 +28,8 @@ public interface ExpressionPlainHook {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    String HATENA = "?";
+    String COLON = ":";
     String DQ = "\"";
     String SQ = "'";
     String EXISTS_BEGIN = LdiResourceUtil.class.getName() + ".exists('";
@@ -41,6 +43,7 @@ public interface ExpressionPlainHook {
     // e.g. provider.config().getJdbcUrl()
     String PROVIDER_CONFIG = "provider.config()";
     String PROVIDER_GET = PROVIDER_CONFIG + ".get";
+    String PROVIDER_IS = PROVIDER_CONFIG + ".is";
 
     // e.g. provider.config().getOrDefault("jdbc.connection.pooling.min.size", null)
     String ORDEFAULT_METHOD_NAME = "getOrDefault";
