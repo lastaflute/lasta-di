@@ -32,13 +32,18 @@ public interface ExpressionPlainHook {
     String COLON = ":";
     String DQ = "\"";
     String SQ = "'";
+
     String EXISTS_BEGIN = LdiResourceUtil.class.getName() + ".exists('";
     String EXISTS_END = "')";
+
     String TYPE_BEGIN = "@"; // compatible with OGNL e.g. @org.dbflute.Entity@class, and for minor domain
     String TYPE_END = "@"; // me too
     String TYPE_END_CLASS = TYPE_END + "class"; // me too
+
     String NEW_PREFIX = "new ";
     String METHOD_MARK = "()";
+    String DQ_NEW_PREFIX = DQ + "new ";
+    String DQ_METHOD_SUFFIX = "()" + DQ;
 
     // e.g. provider.config().getJdbcUrl()
     String PROVIDER_CONFIG = "provider.config()";
@@ -53,8 +58,14 @@ public interface ExpressionPlainHook {
 
     Object NULL_RETURN = new Object();
 
+    // ===================================================================================
+    //                                                                               Hook
+    //                                                                              ======
     Object hookPlainly(String exp, Map<String, ? extends Object> contextMap, LaContainer container, Class<?> resultType);
 
+    // ===================================================================================
+    //                                                                          for Caller
+    //                                                                          ==========
     static Object resolveHookedReturn(Object hooked) {
         return NULL_RETURN.equals(hooked) ? null : hooked;
     }

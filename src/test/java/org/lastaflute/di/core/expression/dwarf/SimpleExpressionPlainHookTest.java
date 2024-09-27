@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.lastaflute.di.core.LaContainer;
+import org.lastaflute.di.core.LastaDiProperties;
 import org.lastaflute.di.core.meta.impl.LaContainerImpl;
 import org.lastaflute.di.unit.UnitLastaDiTestCase;
 import org.lastaflute.jta.core.LaTransaction;
@@ -30,12 +31,48 @@ import org.lastaflute.jta.helper.timer.LjtTimeoutManager;
 public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
 
     // ===================================================================================
+    //                                                                      Basic Handling
+    //                                                                      ==============
+    public void test_hookPlainly_simpleString_basic() {
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String exp = "\"sea\"";
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        assertNotNull(result);
+        assertTrue(result instanceof String);
+        assertEquals("sea", result);
+    }
+
+    // ===================================================================================
     //                                                                          Simple new
     //                                                                          ==========
     public void test_hookPlainly_simpleNew_basic() {
         // ## Arrange ##
         SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
         String exp = "new org.lastaflute.jta.core.LaTransaction()";
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        assertNotNull(result);
+        assertTrue(result instanceof LaTransaction);
+    }
+
+    public void test_hookPlainly_simpleNew_doubleQuoted() {
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String exp = "\"new org.lastaflute.jta.core.LaTransaction()\"";
         Map<String, Object> contextMap = new HashMap<>();
         LaContainer container = createContainer();
         Class<?> resultType = Object.class; // unused
@@ -65,6 +102,23 @@ public class SimpleExpressionPlainHookTest extends UnitLastaDiTestCase {
         // ## Assert ##
         assertNotNull(result);
         assertTrue(LjtTimeoutManager.class.equals(result));
+    }
+
+    public void test_hookPlainly_simpleType_field_basic() {
+        // ## Arrange ##
+        SimpleExpressionPlainHook hook = new SimpleExpressionPlainHook();
+        String exp = "@org.lastaflute.di.core.LastaDiProperties@LASTA_DI_PROPERTIES";
+        Map<String, Object> contextMap = new HashMap<>();
+        LaContainer container = createContainer();
+        Class<?> resultType = Object.class; // unused
+
+        // ## Act ##
+        Object result = hook.hookPlainly(exp, contextMap, container, resultType);
+
+        // ## Assert ##
+        assertNotNull(result);
+        assertTrue(result instanceof String);
+        assertEquals(LastaDiProperties.LASTA_DI_PROPERTIES, result);
     }
 
     public void test_hookPlainly_simpleType_method_basic() {

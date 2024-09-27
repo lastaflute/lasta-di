@@ -181,12 +181,21 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                                      ==============
     protected Object resolveSimpleString(String exp, LaContainer container, Class<?> resultType) {
         if (exp.startsWith(DQ) && exp.endsWith(DQ) && exp.length() > DQ.length()) {
+            if (mayBeDoubleQuotedStatement(exp)) { // except e.g. "new ...Sea()" @since 1.0.0
+                return null; // treated as statement (not simple string)
+            }
             final String unquoted = exp.substring(DQ.length(), exp.length() - DQ.length());
             if (!unquoted.contains(DQ)) { // simple string e.g. "sea"
                 return unquoted;
             }
         }
         return null;
+    }
+
+    protected boolean mayBeDoubleQuotedStatement(String exp) {
+        // not use resultType determination because of compatible for expected rare cases
+        // will be incrementaly added if new pattern is found
+        return isDoubleQuotedNewExp(exp);
     }
 
     protected Object resolveSimpleNumber(String exp, LaContainer container, Class<?> resultType) {
@@ -223,7 +232,7 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
     //                                                                          Simple New
     //                                                                          ==========
     protected Object resolveSimpleNewExp(String exp, LaContainer container, Class<?> resultType) { // @since 1.0.0
-        if (exp.startsWith(NEW_PREFIX) && exp.endsWith(METHOD_MARK)) {
+        if (canBeSimpleNewExp(exp)) {
             final String rear = LdiSrl.substringFirstRear(exp, NEW_PREFIX); // e.g. org.docksidestage.Sea()
             final String fqcn = LdiSrl.substringLastFront(rear, METHOD_MARK); // e.g. org.docksidestage.Sea
             final Class<Object> clazz;
@@ -245,25 +254,43 @@ public class SimpleExpressionPlainHook implements ExpressionPlainHook {
         return null;
     }
 
+    protected boolean canBeSimpleNewExp(String exp) {
+        if (isPlainNewExp(exp)) { // no quoted
+            return true;
+        }
+        if (mayBeDoubleQuotedStatement(exp)) { // e.g. "new ...Sea()"
+            return true; // Nashorn treats it as statement
+        }
+        return false;
+    }
+
+    protected boolean isPlainNewExp(String exp) {
+        return exp.startsWith(NEW_PREFIX) && exp.endsWith(METHOD_MARK);
+    }
+
+    protected boolean isDoubleQuotedNewExp(String exp) {
+        return exp.startsWith(DQ_NEW_PREFIX) && exp.endsWith(DQ_METHOD_SUFFIX);
+    }
+
     // ===================================================================================
     //                                                              Simple Type Expression
     //                                                              ======================
     protected Object resolveSimpleTypeExp(String exp, LaContainer container, Class<?> resultType) {
-        if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END_CLASS)) { // @org.docksidestage.Sea@class
+        if (exp.startsWith(TYPE_BEGIN) && exp.endsWith(TYPE_END_CLASS)) { // e.g. @org.docksidestage.Sea@class
             // mainly for OGNL compatibility
             final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END_CLASS));
             return LdiClassUtil.forName(className);
         }
-        if (exp.startsWith(TYPE_BEGIN) && exp.contains(TYPE_END)) { // @org.docksidestage.Sea@call()
+        if (exp.startsWith(TYPE_BEGIN) && exp.contains(TYPE_END)) { // e.g. @org.docksidestage.Sea@call() or @FIELD
             // minor domain, e.g. jp, cannot be parsed by Nashon so original logic here
             final String className = exp.substring(TYPE_BEGIN.length(), exp.lastIndexOf(TYPE_END));
             final String rear = exp.substring(exp.lastIndexOf(TYPE_END) + TYPE_END.length());
             final Class<?> clazz = LdiClassUtil.forName(className);
-            if (rear.endsWith(METHOD_MARK)) {
+            if (rear.endsWith(METHOD_MARK)) { // e.g. @org.docksidestage.Sea@call()
                 final String methodName = rear.substring(0, rear.lastIndexOf(METHOD_MARK));
                 final Method method = LdiReflectionUtil.getMethod(clazz, methodName, (Class<?>[]) null);
                 return LdiReflectionUtil.invoke(method, null, (Object[]) null);
-            } else {
+            } else { // e.g. @org.docksidestage.Sea@FIELD 
                 final Field field = LdiReflectionUtil.getField(clazz, rear);
                 return LdiReflectionUtil.getValue(field, null);
             }
