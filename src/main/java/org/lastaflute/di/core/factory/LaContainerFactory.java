@@ -65,7 +65,11 @@ public class LaContainerFactory {
     // ===================================================================================
     //                                                                              Create
     //                                                                              ======
-    // 
+    // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+    // called by entry point (as root container) and redefiner (as additional container)
+    // #for_now jflute not always root here so cool reading timing is varying (2024/10/22)
+    // https://github.com/lastaflute/lasta-di/issues/45
+    // _/_/_/_/_/_/_/_/_/_/
     public static synchronized LaContainer create(String path) {
         if (LdiStringUtil.isEmpty(path)) {
             throw new EmptyRuntimeException("path");
@@ -102,6 +106,7 @@ public class LaContainerFactory {
     // ===================================================================================
     //                                                                             Include
     //                                                                             =======
+    // also called by include tag
     public static LaContainer include(final LaContainer parent, final String path) {
         if (!initialized) {
             configure(); // same as create()

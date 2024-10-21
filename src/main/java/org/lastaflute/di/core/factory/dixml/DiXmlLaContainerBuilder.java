@@ -88,6 +88,12 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
     // ===================================================================================
     //                                                   Parse Di xml and Create Container
     //                                                   =================================
+    /**
+     * For both build() and include().
+     * @param parent The container including the path. (NullAllowed: when root container)
+     * @param path The path of included Di xml. (NotNull)
+     * @return The new-created container for the path. (NotNull)
+     */
     protected LaContainer parse(LaContainer parent, String path) {
         final SaxHandlerParser parser = createSaxHandlerParser(parent, path);
         final InputStream is = findDiXmlInputStream(parent, path);

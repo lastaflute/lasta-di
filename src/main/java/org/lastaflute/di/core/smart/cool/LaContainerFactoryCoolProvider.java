@@ -27,6 +27,8 @@ public class LaContainerFactoryCoolProvider extends LaContainerDefaultProvider {
 
     @Override
     public LaContainer create(final String path) {
+        // basically root container but may be redefiner additional container (2024/10/22)
+        // (probably redefiner behavior is unexpected)
         final LaContainer container = super.create(path);
         include(container, DICON_PATH); // has CoolComponentAutoRegister
         return container;
