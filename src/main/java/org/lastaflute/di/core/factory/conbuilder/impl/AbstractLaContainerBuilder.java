@@ -29,9 +29,19 @@ import org.lastaflute.di.helper.misc.LdiExceptionMessageBuilder;
  */
 public abstract class AbstractLaContainerBuilder implements LaContainerBuilder {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     public static final String resourceResolver_BINDING = "bindingType=may";
+
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     protected ResourceResolver resourceResolver = new ClassPathResourceResolver(); // as default
 
+    // ===================================================================================
+    //                                                                     Build Container
+    //                                                                     ===============
     public LaContainer build(String path, ClassLoader classLoader) {
         final ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
         try {
@@ -44,6 +54,9 @@ public abstract class AbstractLaContainerBuilder implements LaContainerBuilder {
         }
     }
 
+    // ===================================================================================
+    //                                                                       Di xml Finder
+    //                                                                       =============
     protected InputStream findDiXmlInputStream(LaContainer parent, String path) {
         final InputStream is = resourceResolver.getInputStream(path);
         if (is == null) {

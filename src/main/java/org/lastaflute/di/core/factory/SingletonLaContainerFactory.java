@@ -41,9 +41,9 @@ public class SingletonLaContainerFactory {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    private static ExternalContext externalContext;
-    private static ExternalContextComponentDefRegister externalContextComponentDefRegister;
-    private static LaContainer container;
+    private static ExternalContext externalContext; // e.g. HttpServletRequest, null allowed (setter option)
+    private static ExternalContextComponentDefRegister externalContextComponentDefRegister; // null allowed (setter option)
+    private static LaContainer container; // as root container of e.g. app.xml, null allowed until created in init()
 
     // ===================================================================================
     //                                                                         Constructor
@@ -54,16 +54,18 @@ public class SingletonLaContainerFactory {
     // ===================================================================================
     //                                                                          Initialize
     //                                                                          ==========
-    public static void init() {
+    public static void init() { // entry point of container boot
         if (container != null) {
-            return;
+            return; // stop duplicate boot
         }
-        setupScriptEngine();
-        setupSmartDeployMode();
-        container = createContainer();
-        setupExternalContext();
-        container.init();
-        showBoot();
+        setupScriptEngine(); // e.g. sai
+        setupSmartDeployMode(); // e.g. hot, warm, cool
+
+        container = createContainer(); // reading Di xml and creating container instances
+        setupExternalContext(); // e.g. HttpServletRequest
+        container.init(); // creating component instances here
+
+        showBoot(); // to tell success
     }
 
     // -----------------------------------------------------
@@ -96,6 +98,10 @@ public class SingletonLaContainerFactory {
     //                                             Container
     //                                             ---------
     protected static LaContainer createContainer() {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // Configurator@configure() // creating configuration container e.g. lasta_di.xml
+        // LaContainerProvider@create() // creating application container e.g. app.xml
+        // _/_/_/_/_/_/_/_/_/_/
         return LaContainerFactory.create(configPath);
     }
 

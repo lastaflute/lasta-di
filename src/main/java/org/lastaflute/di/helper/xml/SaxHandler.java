@@ -34,24 +34,24 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class SaxHandler extends DefaultHandler {
 
-    private TagHandlerRule tagHandlerRule;
-    private TagHandlerContext context = new TagHandlerContext();
-    private Map<String, String> dtdPaths = new HashMap<String, String>();
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private final TagHandlerRule tagHandlerRule; // not null
+    private final TagHandlerContext context = new TagHandlerContext(); // not null
+    private final Map<String, String> dtdPaths = new HashMap<String, String>(); // not null
     private Locator locator;
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public SaxHandler(TagHandlerRule tagHandlerRule) {
         this.tagHandlerRule = tagHandlerRule;
     }
 
-    public TagHandlerContext getTagHandlerContext() {
-        return context;
-    }
-
-    @Override
-    public void setDocumentLocator(Locator locator) {
-        this.locator = locator;
-    }
-
+    // ===================================================================================
+    //                                                                            Handling
+    //                                                                            ========
     @Override
     public void startDocument() throws SAXException {
         context.setLocator(locator);
@@ -211,5 +211,17 @@ public class SaxHandler extends DefaultHandler {
 
     private void reportDetailPath() {
         System.err.println("Exception occured at " + context.getDetailPath());
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public TagHandlerContext getTagHandlerContext() {
+        return context;
+    }
+
+    @Override
+    public void setDocumentLocator(Locator locator) {
+        this.locator = locator;
     }
 }

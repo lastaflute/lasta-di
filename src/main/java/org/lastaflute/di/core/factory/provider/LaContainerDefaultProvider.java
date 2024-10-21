@@ -64,9 +64,10 @@ public class LaContainerDefaultProvider implements LaContainerProvider {
         } else {
             classLoader = Thread.currentThread().getContextClassLoader();
         }
+        // basicallly the path exists so build() called
         final LaContainer container = LdiStringUtil.isEmpty(path) ? new LaContainerImpl() : build(path, classLoader);
-        if (container.isInitializeOnCreate()) {
-            container.init();
+        if (container.isInitializeOnCreate()) { // option (almost unused)
+            container.init(); // creating component instances
         }
         return container;
     }
@@ -103,12 +104,27 @@ public class LaContainerDefaultProvider implements LaContainerProvider {
         }
     }
 
+    // ===================================================================================
+    //                                                                     Build Container
+    //                                                                     ===============
     protected LaContainer build(String path, ClassLoader classLoader) {
         final String realPath = pathResolver.resolvePath(null, path);
         showReadingLog(null, path, realPath, false);
         enter(realPath);
         try {
-            final String ext = getExtension(realPath);
+            // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+            // LaContainerBuilder // interface for e.g. build(), include()
+            //  ^
+            // AbstractLaContainerBuilder // resolving class loader for component types
+            //  ^
+            // DiXmlLaContainerBuilder // reading Di xml and creating container 
+            //  ^
+            // RedefinableXmlLaContainerBuilder // merge additional container
+            //
+            // and the object actually creating container instance is
+            //  ComponentsTagHandler in DiXmlTagHandlerRule in SaxHandler in SaxHandlerParser
+            // _/_/_/_/_/_/_/_/_/_/
+            final String ext = getExtension(realPath); // basically "xml"
             final LaContainer container = getBuilder(ext).build(realPath, classLoader);
             container.setExternalContext(externalContext);
             container.setExternalContextComponentDefRegister(externalContextComponentDefRegister);
@@ -127,12 +143,16 @@ public class LaContainerDefaultProvider implements LaContainerProvider {
     }
 
     protected LaContainerBuilder getBuilder(String ext) {
-        final String componentName = ext + "Redefined";
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // Lasta Di uses redefiner fixly so basically always redefiner's builder here
+        // redefiner.xml (included lasta_di.xml) has the component
+        // _/_/_/_/_/_/_/_/_/_/
+        final String componentName = ext + "Redefined"; // basically "xmlRedefined"
         final LaContainer configurationContainer = LaContainerFactory.getConfigurationContainer();
         if (configurationContainer != null && configurationContainer.hasComponentDef(componentName)) {
             return (LaContainerBuilder) configurationContainer.getComponent(componentName);
         }
-        return LaContainerFactory.getDefaultBuilder();
+        return LaContainerFactory.getDefaultBuilder(); // Seasar behavior
     }
 
     // ===================================================================================

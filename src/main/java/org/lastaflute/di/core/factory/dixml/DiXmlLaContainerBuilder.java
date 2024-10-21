@@ -39,16 +39,28 @@ import org.lastaflute.di.util.LdiSAXParserFactoryUtil;
  */
 public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     public static final String PUBLIC_ID10 = "-//DBFLUTE//DTD LastaDi 1.0//EN";
     public static final String DTD_PATH10 = "org/lastaflute/di/lastadi10.dtd";
 
-    protected DiXmlTagHandlerRule rule = new DiXmlTagHandlerRule();
-    protected final Map<String, String> dtdMap = new HashMap<String, String>();
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    protected DiXmlTagHandlerRule rule = new DiXmlTagHandlerRule(); // not null, switchable
+    protected final Map<String, String> dtdMap = new HashMap<String, String>(); // not null
 
+    // ===================================================================================
+    //                                                                         Constructor
+    //                                                                         ===========
     public DiXmlLaContainerBuilder() {
         dtdMap.put(PUBLIC_ID10, DTD_PATH10);
     }
 
+    // ===================================================================================
+    //                                                                          DTD Option
+    //                                                                          ==========
     public void addDtd(final String publicId, final String systemId) {
         dtdMap.put(publicId, systemId);
     }
@@ -57,21 +69,30 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
         dtdMap.clear();
     }
 
+    // ===================================================================================
+    //                                                                     Build Container
+    //                                                                     ===============
     public LaContainer build(String path) {
         return parse(null, path);
     }
 
+    // ===================================================================================
+    //                                                                   Include Container
+    //                                                                   =================
     public LaContainer include(LaContainer parent, final String path) {
         final LaContainer child = parse(parent, path);
         parent.include(child);
         return child;
     }
 
+    // ===================================================================================
+    //                                                   Parse Di xml and Create Container
+    //                                                   =================================
     protected LaContainer parse(LaContainer parent, String path) {
         final SaxHandlerParser parser = createSaxHandlerParser(parent, path);
         final InputStream is = findDiXmlInputStream(parent, path);
         try {
-            return (LaContainer) parser.parse(is, path);
+            return (LaContainer) parser.parse(is, path); // root tag creates container
         } catch (Throwable cause) { // contains e.g. NoSuchMethodError
             if (cause instanceof DiXmlParseFailureException) {
                 throw (DiXmlParseFailureException) cause;
@@ -92,28 +113,53 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
         throw new DiXmlParseFailureException(msg, cause);
     }
 
+    // -----------------------------------------------------
+    //                                      SaxHandlerParser
+    //                                      ----------------
     protected SaxHandlerParser createSaxHandlerParser(final LaContainer parent, final String path) {
+        final SAXParserFactory factory = createSAXParserFactory();
+        final SAXParser saxParser = LdiSAXParserFactoryUtil.newSAXParser(factory);
+
+        final SaxHandler handler = createSaxHandler();
+        setupHandlerDtd(handler);
+        setupTagHandlerContext(handler, parent, path);
+
+        return newSaxHandlerParser(handler, saxParser);
+    }
+
+    protected SAXParserFactory createSAXParserFactory() {
         final SAXParserFactory factory = LdiSAXParserFactoryUtil.newInstance();
         factory.setValidating(true);
         factory.setNamespaceAware(true);
         // to avoid warning of JDK-internal access at Java11 by jflute (2019/04/21)
         // Lasta Di does not need xinclude because of Di xml redefiner
         //LdiSAXParserFactoryUtil.setXIncludeAware(factory, true);
+        return factory;
+    }
 
-        final SAXParser saxParser = LdiSAXParserFactoryUtil.newSAXParser(factory);
+    protected SaxHandler createSaxHandler() {
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // the rule creates Di xml meta instances (also container instances)
+        // _/_/_/_/_/_/_/_/_/_/
+        return new SaxHandler(rule);
+    }
 
-        final SaxHandler handler = new SaxHandler(rule);
+    protected void setupHandlerDtd(SaxHandler handler) {
         for (final Iterator<Entry<String, String>> it = dtdMap.entrySet().iterator(); it.hasNext();) {
             final Entry<String, String> entry = (Entry<String, String>) it.next();
             final String publicId = entry.getKey();
             final String systemId = entry.getValue();
             handler.registerDtdPath(publicId, systemId);
         }
+    }
 
+    protected void setupTagHandlerContext(SaxHandler handler, LaContainer parent, String path) {
         final TagHandlerContext ctx = handler.getTagHandlerContext();
         ctx.addParameter("parent", parent);
         ctx.addParameter("path", path);
+    }
 
+    protected SaxHandlerParser newSaxHandlerParser(SaxHandler handler, SAXParser saxParser) {
         return new SaxHandlerParser(handler, saxParser);
     }
 
@@ -124,7 +170,7 @@ public class DiXmlLaContainerBuilder extends AbstractLaContainerBuilder {
         return rule;
     }
 
-    public void setRule(final DiXmlTagHandlerRule rule) {
+    public void setRule(final DiXmlTagHandlerRule rule) { // not null
         this.rule = rule;
     }
 }

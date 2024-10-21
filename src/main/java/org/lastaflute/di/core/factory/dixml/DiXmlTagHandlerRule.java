@@ -35,7 +35,7 @@ public class DiXmlTagHandlerRule extends TagHandlerRule {
     private static final long serialVersionUID = 1L;
 
     public DiXmlTagHandlerRule() {
-        addTagHandler("/components", new ComponentsTagHandler());
+        addTagHandler("/components", new ComponentsTagHandler()); // creating container
         addTagHandler("component", new ComponentTagHandler());
         addTagHandler("arg", new ArgTagHandler());
         addTagHandler("property", new PropertyTagHandler());

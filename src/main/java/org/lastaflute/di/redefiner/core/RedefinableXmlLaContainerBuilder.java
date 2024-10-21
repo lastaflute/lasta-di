@@ -31,7 +31,7 @@ import org.lastaflute.di.helper.xml.TagHandlerContext;
 import org.lastaflute.di.redefiner.util.LaContainerBuilderUtils;
 
 /**
- * used in DefaultProvider#getBuilder()
+ * The redefiner main component, used in DefaultProvider#getBuilder()
  * @author modified by jflute (originated in Ymir)
  */
 public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder { // for e.g. ++jta.xml, ++jta.xml
@@ -85,24 +85,6 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder { 
     // ===================================================================================
     //                                                                          Path Stack
     //                                                                          ==========
-    protected void popPath(String path) {
-        if (path.equals(getCurrentBasePath())) {
-            final LinkedList<String> pathStack = basePathStack_.get();
-            pathStack.removeFirst();
-            if (pathStack.isEmpty()) {
-                basePathStack_.set(null);
-            }
-        }
-    }
-
-    protected String getCurrentBasePath() {
-        final LinkedList<String> pathStack = basePathStack_.get();
-        if (pathStack == null || pathStack.isEmpty()) {
-            return null;
-        }
-        return pathStack.peek();
-    }
-
     protected void pushPath(String path) {
         LinkedList<String> pathStack = basePathStack_.get();
         if (pathStack == null) {
@@ -119,6 +101,24 @@ public class RedefinableXmlLaContainerBuilder extends DiXmlLaContainerBuilder { 
             return true;
         }
         return path.indexOf(DELIMITER + NAME_ADDITIONAL) < 0 && path.indexOf(NAME_ADDITIONAL + DELIMITER) < 0;
+    }
+
+    protected void popPath(String path) {
+        if (path.equals(getCurrentBasePath())) {
+            final LinkedList<String> pathStack = basePathStack_.get();
+            pathStack.removeFirst();
+            if (pathStack.isEmpty()) {
+                basePathStack_.set(null);
+            }
+        }
+    }
+
+    protected String getCurrentBasePath() {
+        final LinkedList<String> pathStack = basePathStack_.get();
+        if (pathStack == null || pathStack.isEmpty()) {
+            return null;
+        }
+        return pathStack.peek();
     }
 
     // ===================================================================================

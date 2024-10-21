@@ -44,6 +44,7 @@ import org.lastaflute.di.redefiner.util.ClassBuilderUtils;
 import org.lastaflute.di.redefiner.util.CompositeClassLoader;
 import org.lastaflute.di.redefiner.util.LaContainerBuilderUtils;
 
+// #for_now jflute unused as instance? only definitions are used now (2024/10/22)
 /**
  * @author modified by jflute (originated in Ymir)
  */
@@ -239,7 +240,7 @@ public class ClassS2ContainerBuilder extends AbstractLaContainerBuilder {
         String[] classNames;
         int jarSuffix = path.indexOf(JAR_SUFFIX);
         if (jarSuffix >= 0) {
-            
+
             classNames =
                     new String[] { path.substring(jarSuffix + JAR_SUFFIX.length(), path.length() - SUFFIX.length()).replace('/', '.') };
         } else {
@@ -272,7 +273,7 @@ public class ClassS2ContainerBuilder extends AbstractLaContainerBuilder {
 
     ClassLoader getClassLoaderForLoadingPreparer() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        
+
         return new CompositeClassLoader(new ClassLoader[] { classLoader, getClass().getClassLoader() });
     }
 

@@ -20,5 +20,6 @@ package org.lastaflute.di.core.factory.pathresolver;
  */
 public interface PathResolver {
 
+    // rare function? probably you can switch path expression by the resolver as DI component
     String resolvePath(String context, String path);
 }

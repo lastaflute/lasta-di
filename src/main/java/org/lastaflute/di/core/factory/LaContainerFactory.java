@@ -65,6 +65,7 @@ public class LaContainerFactory {
     // ===================================================================================
     //                                                                              Create
     //                                                                              ======
+    // 
     public static synchronized LaContainer create(String path) {
         if (LdiStringUtil.isEmpty(path)) {
             throw new EmptyRuntimeException("path");
@@ -74,8 +75,27 @@ public class LaContainerFactory {
 
     protected static LaContainer doCreate(String path) {
         if (!initialized) {
+            // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+            // at first, reading e.g. lasta_di.xml as configuration container
+            // and switching container provider here e.g. LaContainerFactoryCoolProvider (if cool)
+            //
+            // Configurator
+            //  ^
+            // DefaultConfigurator // if hot, warm
+            //  ^
+            // LaContainerFactoryCoolConfigurator // if cool (defined at cooldeploy.xml)
+            // _/_/_/_/_/_/_/_/_/_/
             configure();
         }
+        // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+        // then, reading e.g. app.xml as application container
+        // 
+        // LaContainerProvider
+        //  ^
+        // LaContainerDefaultProvider // if hot, warm
+        //  ^
+        // LaContainerFactoryCoolProvider // if cool (created by cool configurator)
+        // _/_/_/_/_/_/_/_/_/_/
         return getProvider().create(path);
     }
 
@@ -84,7 +104,7 @@ public class LaContainerFactory {
     //                                                                             =======
     public static LaContainer include(final LaContainer parent, final String path) {
         if (!initialized) {
-            configure();
+            configure(); // same as create()
         }
         return getProvider().include(parent, path);
     }

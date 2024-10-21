@@ -26,7 +26,7 @@ public class TagHandlerRule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Map<String, TagHandler> tagHandlers = new HashMap<String, TagHandler>();
+    private final Map<String, TagHandler> tagHandlers = new HashMap<String, TagHandler>();
 
     public TagHandlerRule() {
     }

@@ -28,7 +28,7 @@ public class LaContainerFactoryCoolProvider extends LaContainerDefaultProvider {
     @Override
     public LaContainer create(final String path) {
         final LaContainer container = super.create(path);
-        include(container, DICON_PATH);
+        include(container, DICON_PATH); // has CoolComponentAutoRegister
         return container;
     }
 }
