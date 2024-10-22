@@ -49,9 +49,9 @@ public class LaContainerDefaultProvider implements LaContainerProvider {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected PathResolver pathResolver = new SimplePathResolver();
-    protected ExternalContext externalContext;
-    protected ExternalContextComponentDefRegister externalContextComponentDefRegister;
+    protected PathResolver pathResolver = new SimplePathResolver(); // not null but switchable
+    protected ExternalContext externalContext; // null allowed (option)
+    protected ExternalContextComponentDefRegister externalContextComponentDefRegister; // null allowed (option)
 
     // ===================================================================================
     //                                                                              Create
@@ -238,7 +238,7 @@ public class LaContainerDefaultProvider implements LaContainerProvider {
         return pathResolver;
     }
 
-    public void setPathResolver(final PathResolver pathResolver) {
+    public void setPathResolver(final PathResolver pathResolver) { // not null
         this.pathResolver = pathResolver;
     }
 

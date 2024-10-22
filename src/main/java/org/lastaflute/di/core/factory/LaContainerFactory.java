@@ -52,13 +52,16 @@ public class LaContainerFactory {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // static singleton pattern here so these are attributes
     protected static boolean initialized;
     protected static boolean configuring = false;
-    protected static LaContainer configurationContainer;
-    protected static LaContainerProvider provider;
-    protected static LaContainerBuilder defaultBuilder;
 
-    static {
+    // immediately configured in static initializer so basially not null 
+    protected static LaContainer configurationContainer; // for e.g. lasta_di.xml
+    protected static LaContainerProvider provider; // default or cool
+    protected static LaContainerBuilder defaultBuilder; // default or redefiner
+
+    static { // immediately
         configure();
     }
 
@@ -209,7 +212,7 @@ public class LaContainerFactory {
     // ===================================================================================
     //                                                                       Configuration
     //                                                                       =============
-    public interface Configurator {
+    public interface Configurator { // using e.g. lasta_di.xml container
 
         void configure(LaContainer configurationContainer);
     }
@@ -217,17 +220,17 @@ public class LaContainerFactory {
     public static class DefaultConfigurator implements Configurator {
 
         public void configure(final LaContainer configurationContainer) {
-            provider = createProvider(configurationContainer);
-            defaultBuilder = createDefaultBuilder(configurationContainer);
+            provider = createProvider(configurationContainer); // overwrite default (or same)
+            defaultBuilder = createDefaultBuilder(configurationContainer); // me too
             setupBehavior(configurationContainer);
             setupDeployer(configurationContainer);
             setupAssembler(configurationContainer);
         }
 
         protected LaContainerProvider createProvider(final LaContainer configurationContainer) {
-            if (configurationContainer.hasComponentDef(LaContainerProvider.class)) {
+            if (configurationContainer.hasComponentDef(LaContainerProvider.class)) { // extension point
                 return (LaContainerProvider) configurationContainer.getComponent(LaContainerProvider.class);
-            } else if (provider instanceof LaContainerDefaultProvider) {
+            } else if (provider instanceof LaContainerDefaultProvider) { // not found in configuration
                 final LaContainerDefaultProvider dp = (LaContainerDefaultProvider) provider;
                 if (configurationContainer.hasComponentDef(PathResolver.class)) {
                     dp.setPathResolver((PathResolver) configurationContainer.getComponent(PathResolver.class));
@@ -244,12 +247,12 @@ public class LaContainerFactory {
         }
 
         protected LaContainerBuilder createDefaultBuilder(final LaContainer configurationContainer) {
-            if (configurationContainer.hasComponentDef(DEFAULT_BUILDER_NAME)) {
+            if (configurationContainer.hasComponentDef(DEFAULT_BUILDER_NAME)) { // rare case? (2024/10/22)
                 return (LaContainerBuilder) configurationContainer.getComponent(DEFAULT_BUILDER_NAME);
             }
             if (configurationContainer.hasComponentDef(ResourceResolver.class) && defaultBuilder instanceof AbstractLaContainerBuilder) {
                 final ResourceResolver resolver = (ResourceResolver) configurationContainer.getComponent(ResourceResolver.class);
-                ((AbstractLaContainerBuilder) defaultBuilder).setResourceResolver(resolver);
+                ((AbstractLaContainerBuilder) defaultBuilder).setResourceResolver(resolver); // e.g. redefiner
             }
             return defaultBuilder;
         }
@@ -287,7 +290,7 @@ public class LaContainerFactory {
         return provider;
     }
 
-    protected static void setProvider(LaContainerProvider vider) {
+    protected static void setProvider(LaContainerProvider vider) { // basically unused? (2024/10/22)
         provider = vider;
     }
 
@@ -295,7 +298,7 @@ public class LaContainerFactory {
         return defaultBuilder;
     }
 
-    protected static void setDefaultBuilder(LaContainerBuilder builder) {
+    protected static void setDefaultBuilder(LaContainerBuilder builder) { // basically unused? (2024/10/22)
         defaultBuilder = builder;
     }
 }

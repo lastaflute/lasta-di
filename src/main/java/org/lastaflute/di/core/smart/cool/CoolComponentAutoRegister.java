@@ -36,9 +36,16 @@ import org.lastaflute.di.util.LdiResourcesUtil.Resources;
  */
 public class CoolComponentAutoRegister implements ClassHandler {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
+    // see ConstantAnnotationHandler
     public static final String INIT_METHOD = "registerAll";
     public static final String container_BINDING = "bindingType=must";
 
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     @Resource
     private LaContainer container;
     @Resource
@@ -46,9 +53,13 @@ public class CoolComponentAutoRegister implements ClassHandler {
     @Resource
     private NamingConvention namingConvention;
 
-    protected Set<Class<?>> registeredClasses = new HashSet<Class<?>>();
+    // to avoid duplicate registration
+    protected final Set<Class<?>> registeredClasses = new HashSet<Class<?>>();
 
-    public void registerAll() {
+    // ===================================================================================
+    //                                                                          Initialize
+    //                                                                          ==========
+    public void registerAll() { // called as constant annotation
         try {
             final String[] rootPackageNames = namingConvention.getRootPackageNames();
             if (rootPackageNames != null) {
@@ -69,6 +80,9 @@ public class CoolComponentAutoRegister implements ClassHandler {
         }
     }
 
+    // ===================================================================================
+    //                                                                  Class Registration
+    //                                                                  ==================
     public void processClass(final String packageName, final String shortClassName) {
         if (shortClassName.indexOf('$') != -1) {
             return;
@@ -90,22 +104,25 @@ public class CoolComponentAutoRegister implements ClassHandler {
                 return;
             }
         }
-        ComponentDef cd = createComponentDef(clazz);
+        final ComponentDef cd = createComponentDef(clazz);
         if (cd == null) {
             return;
         }
         if (registeredClasses.contains(cd.getComponentClass())) {
             return;
         }
+
+        // cool components are always registered to root container
         container.getRoot().register(cd);
+
         registeredClasses.add(cd.getComponentClass());
         ComponentUtil.putRegisterLog(cd);
     }
 
     protected ComponentDef createComponentDef(final Class<?> componentClass) {
         for (int i = 0; i < creators.length; ++i) {
-            ComponentCreator creator = creators[i];
-            ComponentDef cd = creator.createComponentDef(componentClass);
+            final ComponentCreator creator = creators[i];
+            final ComponentDef cd = creator.createComponentDef(componentClass);
             if (cd != null) {
                 return cd;
             }

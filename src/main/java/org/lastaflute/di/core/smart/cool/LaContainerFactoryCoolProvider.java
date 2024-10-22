@@ -23,6 +23,7 @@ import org.lastaflute.di.core.factory.provider.LaContainerDefaultProvider;
  */
 public class LaContainerFactoryCoolProvider extends LaContainerDefaultProvider {
 
+    // the word 'dicon' is very nostalgic
     protected static final String DICON_PATH = "smart/cooldeploy-autoregister.xml";
 
     @Override

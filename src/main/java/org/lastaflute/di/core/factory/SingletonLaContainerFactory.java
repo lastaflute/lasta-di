@@ -28,6 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * The factory of Lasta Di container as singleton. <br>
+ * 
+ * <p>This is entry point of initialization without web.
+ * The web resources can be treated as external context instead.
+ * For example, LastaFlute uses this factory
+ * via its own initializer e.g. WebLastaContainerInitializer.</p>
+ * 
  * @author modified by jflute (originated in Seasar)
  */
 public class SingletonLaContainerFactory {
@@ -41,8 +48,10 @@ public class SingletonLaContainerFactory {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // static singleton pattern here so these are attributes
     private static ExternalContext externalContext; // e.g. HttpServletRequest, null allowed (setter option)
     private static ExternalContextComponentDefRegister externalContextComponentDefRegister; // null allowed (setter option)
+
     private static LaContainer container; // as root container of e.g. app.xml, null allowed until created in init()
 
     // ===================================================================================
@@ -156,14 +165,14 @@ public class SingletonLaContainerFactory {
         return container != null;
     }
 
-    public static LaContainer getContainer() {
+    public static LaContainer getContainer() { // root container
         if (container == null) {
             throw new IllegalStateException("Not initialized the container when getContainer().");
         }
         return container;
     }
 
-    public static void setContainer(LaContainer ner) {
+    public static void setContainer(LaContainer ner) { // basically unused? (2024/10/22)
         container = ner;
     }
 
@@ -174,7 +183,7 @@ public class SingletonLaContainerFactory {
         return configPath;
     }
 
-    public static void setConfigPath(String path) {
+    public static void setConfigPath(String path) { // not null
         configPath = path;
     }
 

@@ -169,7 +169,7 @@ public class HotdeployBehavior extends DefaultProvider {
     }
 
     protected void register(ComponentDef componentDef) {
-        componentDef.setContainer(SingletonLaContainerFactory.getContainer());
+        componentDef.setContainer(SingletonLaContainerFactory.getContainer()); // root container
         registerByClass(componentDef);
         registerByName(componentDef);
     }
