@@ -30,6 +30,8 @@ public class LaContainerFactoryCoolConfigurator extends DefaultConfigurator {
     @Override
     protected LaContainerProvider createProvider(LaContainer configurationContainer) {
         final LaContainerFactoryCoolProvider provider = newLaContainerFactoryCoolProvider();
+
+        // setup optional resources if those exist in DI world
         if (configurationContainer.hasComponentDef(PathResolver.class)) {
             provider.setPathResolver((PathResolver) configurationContainer.getComponent(PathResolver.class));
         }
@@ -40,6 +42,7 @@ public class LaContainerFactoryCoolConfigurator extends DefaultConfigurator {
             provider.setExternalContextComponentDefRegister(
                     (ExternalContextComponentDefRegister) configurationContainer.getComponent(ExternalContextComponentDefRegister.class));
         }
+
         return provider;
     }
 

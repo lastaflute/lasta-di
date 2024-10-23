@@ -29,36 +29,30 @@ import org.lastaflute.di.naming.NamingConvention;
  */
 public class WarmdeployBehavior extends DefaultProvider {
 
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final LaLogger logger = LaLogger.getLogger(WarmdeployBehavior.class);
 
-    private NamingConvention namingConvention;
-    private ComponentCreator[] creators = new ComponentCreator[0];
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
+    private NamingConvention namingConvention; // not null after setup, unused? (2024/10/23)
+    private ComponentCreator[] creators = new ComponentCreator[0]; // not null but switchable
 
-    public NamingConvention getNamingConvention() {
-        return namingConvention;
-    }
-
-    public void setNamingConvention(NamingConvention namingConvention) {
-        this.namingConvention = namingConvention;
-    }
-
-    public ComponentCreator[] getCreators() {
-        return creators;
-    }
-
-    public void setCreators(ComponentCreator[] creators) {
-        this.creators = creators;
-    }
-
+    // ===================================================================================
+    //                                                                           Component
+    //                                                                           =========
     protected ComponentDef getComponentDef(LaContainer container, Object key) {
         synchronized (container.getRoot()) {
             ComponentDef cd = super.getComponentDef(container, key);
-            if (cd != null) {
+            if (cd != null) { // already exists
                 return cd;
             }
-            if (container != container.getRoot()) {
+            if (container != container.getRoot()) { // should argument be root?
                 return null;
             }
+            // simply dynamic creating as warm deploy
             if (key instanceof Class) {
                 cd = createComponentDef((Class<?>) key);
             } else if (key instanceof String) {
@@ -68,10 +62,10 @@ public class WarmdeployBehavior extends DefaultProvider {
                     cd = null;
                 }
             } else {
-                throw new IllegalArgumentException("key");
+                throw new IllegalArgumentException("key: " + key);
             }
             if (cd != null) {
-                SingletonLaContainerFactory.getContainer().register(cd);
+                SingletonLaContainerFactory.getContainer().register(cd); // to root container
                 ComponentUtil.putRegisterLog(cd);
                 cd.init();
             }
@@ -99,5 +93,24 @@ public class WarmdeployBehavior extends DefaultProvider {
             }
         }
         return null;
+    }
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public NamingConvention getNamingConvention() {
+        return namingConvention;
+    }
+
+    public void setNamingConvention(NamingConvention namingConvention) { // not null
+        this.namingConvention = namingConvention;
+    }
+
+    public ComponentCreator[] getCreators() {
+        return creators;
+    }
+
+    public void setCreators(ComponentCreator[] creators) { // not null
+        this.creators = creators;
     }
 }

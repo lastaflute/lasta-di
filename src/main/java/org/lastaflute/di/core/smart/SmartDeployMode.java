@@ -26,9 +26,9 @@ public enum SmartDeployMode {
     COOL("cool"), HOT("hot"), WARM("warm");
 
     private static final Logger logger = LoggerFactory.getLogger(SmartDeployMode.class);
-    private static SmartDeployMode value;
+    private static SmartDeployMode currentMode; // null allowed
 
-    private final String code;
+    private final String code; // not null
 
     private SmartDeployMode(String code) {
         this.code = code;
@@ -40,7 +40,7 @@ public enum SmartDeployMode {
 
     public static SmartDeployMode codeOf(String code) {
         if (code == null) {
-            return COOL;
+            return getDefaultMode();
         }
         for (SmartDeployMode mode : values()) {
             if (mode.code().equalsIgnoreCase(code)) {
@@ -51,16 +51,20 @@ public enum SmartDeployMode {
     }
 
     public static boolean isCool() {
-        return SmartDeployMode.COOL.equals(value);
+        return SmartDeployMode.COOL.equals(currentMode);
     }
 
     public static SmartDeployMode getValue() {
-        return value != null ? value : SmartDeployMode.COOL;
+        return currentMode != null ? currentMode : getDefaultMode();
     }
 
     public static void setValue(SmartDeployMode newValue) { // called by e.g. container factory, unit test
         logger.info("...Setting smart deploy mode: {}", newValue);
-        value = newValue;
+        currentMode = newValue;
+    }
+
+    protected static SmartDeployMode getDefaultMode() {
+        return SmartDeployMode.COOL;
     }
 
     @Override

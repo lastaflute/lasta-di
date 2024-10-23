@@ -83,43 +83,45 @@ public class CoolComponentAutoRegister implements ClassHandler {
     // ===================================================================================
     //                                                                  Class Registration
     //                                                                  ==================
+    // callback from resources structure
     public void processClass(final String packageName, final String shortClassName) {
-        if (shortClassName.indexOf('$') != -1) {
+        if (shortClassName.indexOf('$') != -1) { // inner class
             return;
         }
         final String className = LdiClassUtil.concatName(packageName, shortClassName);
-        if (!namingConvention.isTargetClassName(className)) {
+        if (!namingConvention.isTargetClassName(className)) { // non quick target
             return;
         }
         final Class<?> clazz = LdiClassUtil.forName(className);
-        if (namingConvention.isSkipClass(clazz)) {
+        if (namingConvention.isSkipClass(clazz)) { // special skip
             return;
         }
-        if (container.getRoot().hasComponentDef(clazz)) {
+        if (container.getRoot().hasComponentDef(clazz)) { // already exists
             if (clazz.isInterface() || LdiModifierUtil.isAbstract(clazz)) {
                 return;
             }
             final ComponentDef cd = container.getRoot().getComponentDef(clazz);
-            if (clazz == cd.getComponentClass()) {
+            if (clazz == cd.getComponentClass()) { // same as registered
                 return;
             }
         }
         final ComponentDef cd = createComponentDef(clazz);
-        if (cd == null) {
+        if (cd == null) { // not found creator for the type
             return;
         }
-        if (registeredClasses.contains(cd.getComponentClass())) {
+        if (registeredClasses.contains(cd.getComponentClass())) { // already registered
             return;
         }
 
         // cool components are always registered to root container
         container.getRoot().register(cd);
 
-        registeredClasses.add(cd.getComponentClass());
+        registeredClasses.add(cd.getComponentClass()); // goal
         ComponentUtil.putRegisterLog(cd);
     }
 
     protected ComponentDef createComponentDef(final Class<?> componentClass) {
+        // chain of responsibility?
         for (int i = 0; i < creators.length; ++i) {
             final ComponentCreator creator = creators[i];
             final ComponentDef cd = creator.createComponentDef(componentClass);

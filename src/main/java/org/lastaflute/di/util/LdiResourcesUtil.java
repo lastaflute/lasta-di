@@ -39,8 +39,15 @@ import org.lastaflute.di.util.ResourceTraversal.ResourceHandler;
  */
 public class LdiResourcesUtil {
 
-    protected static final Resources[] EMPTY_ARRAY = new Resources[0];
+    // ===================================================================================
+    //                                                                          Definition
+    //                                                                          ==========
     private static final LaLogger logger = LaLogger.getLogger(LdiResourcesUtil.class);
+    protected static final Resources[] EMPTY_ARRAY = new Resources[0];
+
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     protected static final Map<String, ResourcesFactory> resourcesTypeFactories = new HashMap<String, ResourcesFactory>();
 
     static {
@@ -71,10 +78,19 @@ public class LdiResourcesUtil {
         });
     }
 
+    // ===================================================================================
+    //                                                                   Resources Factory
+    //                                                                   =================
     public static void addResourcesFactory(final String protocol, ResourcesFactory factory) {
         resourcesTypeFactories.put(protocol, factory);
     }
 
+    // ===================================================================================
+    //                                                                      Resources Type
+    //                                                                      ==============
+    // -----------------------------------------------------
+    //                                              by Class
+    //                                              --------
     public static Resources getResourcesType(final Class<?> referenceClass) {
         final URL url = LdiResourceUtil.getResource(toClassFile(referenceClass.getName()));
         final String path[] = referenceClass.getName().split("\\.");
@@ -86,11 +102,17 @@ public class LdiResourcesUtil {
         return getResourcesType(LdiURLUtil.create(baseUrl + '/'), null, null);
     }
 
+    // -----------------------------------------------------
+    //                                          by Directory
+    //                                          ------------
     public static Resources getResourcesType(final String rootDir) {
         final URL url = LdiResourceUtil.getResource(rootDir.endsWith("/") ? rootDir : rootDir + '/');
         return getResourcesType(url, null, rootDir);
     }
 
+    // -----------------------------------------------------
+    //                                            by Package
+    //                                            ----------
     public static Resources[] getResourcesTypes(final String rootPackage) {
         if (LdiStringUtil.isEmpty(rootPackage)) {
             return EMPTY_ARRAY;
@@ -112,6 +134,9 @@ public class LdiResourcesUtil {
         return (Resources[]) list.toArray(new Resources[list.size()]);
     }
 
+    // -----------------------------------------------------
+    //                                       by URL and Root
+    //                                       ---------------
     protected static Resources getResourcesType(final URL url, final String rootPackage, final String rootDir) {
         final ResourcesFactory factory = (ResourcesFactory) resourcesTypeFactories.get(LdiURLUtil.toCanonicalProtocol(url.getProtocol()));
         if (factory != null) {
@@ -121,6 +146,9 @@ public class LdiResourcesUtil {
         return null;
     }
 
+    // ===================================================================================
+    //                                                                          File Logic
+    //                                                                          ==========
     protected static String toDirectoryName(final String packageName) {
         if (LdiStringUtil.isEmpty(packageName)) {
             return null;
@@ -145,6 +173,9 @@ public class LdiResourcesUtil {
         Resources create(URL url, String rootPackage, String rootDir);
     }
 
+    // ===================================================================================
+    //                                                                 Resources Structure
+    //                                                                 ===================
     public interface Resources {
 
         boolean isExistClass(final String className);
@@ -156,6 +187,9 @@ public class LdiResourcesUtil {
         void close();
     }
 
+    // -----------------------------------------------------
+    //                                            FileSystem
+    //                                            ----------
     /**
      * @author modified by jflute (originated in Seasar)
      */
@@ -192,6 +226,9 @@ public class LdiResourcesUtil {
         }
     }
 
+    // -----------------------------------------------------
+    //                                              Jar File
+    //                                              --------
     /**
      * @author modified by jflute (originated in Seasar)
      */
@@ -240,6 +277,9 @@ public class LdiResourcesUtil {
         }
     }
 
+    // -----------------------------------------------------
+    //                                               VFS ZIP
+    //                                               -------
     /**
      * @author modified by jflute (originated in Seasar)
      */

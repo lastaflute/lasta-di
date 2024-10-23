@@ -62,7 +62,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
     protected Map<LaContainer, Integer> childPositions = new HashMap<LaContainer, Integer>();
     protected List<LaContainer> parents = new ArrayList<LaContainer>();
     protected CaseInsensitiveMap descendants = new CaseInsensitiveMap();
-    protected LaContainer root;
+    protected LaContainer root; // not null, root has root
     protected ExternalContext externalContext;
     protected ExternalContextComponentDefRegister externalContextComponentDefRegister;
     protected MetaDefSupport metaDefSupport = new MetaDefSupport(this);
@@ -84,7 +84,7 @@ public class LaContainerImpl implements LaContainer, ContainerConstants {
         classLoader = Thread.currentThread().getContextClassLoader();
     }
 
-    public LaContainer getRoot() {
+    public LaContainer getRoot() { // not null, root returns root
         return root;
     }
 
