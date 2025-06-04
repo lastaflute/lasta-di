@@ -60,22 +60,22 @@ public class HotdeployClassLoader extends ClassLoader implements BytecodeClassDe
             }
             return defineClass(className, resolve);
         }
-        if (isTargetClass(className)) {
+        if (isTargetClass(className)) { // basically under "app" package
             Class<?> clazz = findLoadedClass(className);
-            if (clazz != null) { // already in hotdeploy
+            if (clazz != null) { // already read by hotdeploy loader
                 return clazz;
             }
             clazz = findLoadedClassFromParentLoader(className);
-            if (clazz != null) { // non-hotdeploy reference
+            if (clazz != null) { // already read by other loader (non-hotdeploy reference)
                 logger.log("WSSR0015", new Object[] { className });
                 return clazz;
             }
-            clazz = defineClass(className, resolve);
+            clazz = defineClass(className, resolve); // actually read .class file here
             if (clazz != null) { // new hotdeply here
                 return clazz;
             }
         }
-        return super.loadClass(className, resolve);
+        return super.loadClass(className, resolve); // non-hot class
     }
 
     protected boolean isTargetClass(String className) {
